@@ -9,11 +9,17 @@ inspecode:
 
     unused:
     - options: [--single-occurrence, --all-likelihoods]
-      input:  "Runtime/Export/[0-H]*/"
+      # machine: {cpu: 0.5}   # default
       thresholds: {num-issues: 999}
     - options: [--single-occurrence, --all-likelihoods]
-      input:  "Runtime/Export/[I-Z]*/"
+      machine: {cpu: 0.75}
       thresholds: {num-issues: 999}
     - options: [--single-occurrence, --all-likelihoods]
-      ignore: "Runtime/Export/"
+      machine: {cpu: 1.0}
+      thresholds: {num-issues: 999}
+    - options: [--single-occurrence, --all-likelihoods]
+      machine: {cpu: 1.5}
+      thresholds: {num-issues: 999}
+    - options: [--single-occurrence, --all-likelihoods]
+      machine: {cpu: 2.0}
       thresholds: {num-issues: 999}
