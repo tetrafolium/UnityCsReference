@@ -8,4 +8,13 @@ inspecode:
   tools:
 
     stylecop:
+    - input: "Editor/Mono/[A-H]*"
+      thresholds: {num-issues: 999}
+    - input: "Editor/Mono/[I-Z]*"
+      thresholds: {num-issues: 999}
+    - input: "Modules/[A-P]*"
+      thresholds: {num-issues: 999}
+    - input: "Modules/[Q-Z]*"
+      thresholds: {num-issues: 999}
+    - ignore: ["Editor/Mono/[A-Z]*", "Modules/[A-Z]*"]
       thresholds: {num-issues: 999}
