@@ -8,7 +8,10 @@ inspecode:
   tools:
 
     astyle:
-    - input: "Editor/Mono/*/"
+    - input: "Editor/Mono/[A-H]*"
+      auto-fix: true
+      thresholds: {num-issues: 999}
+    - input: "Editor/Mono/[I-Z]*"
       auto-fix: true
       thresholds: {num-issues: 999}
     - input: "Modules/[A-P]*"
@@ -17,7 +20,7 @@ inspecode:
     - input: "Modules/[Q-Z]*"
       auto-fix: true
       thresholds: {num-issues: 999}
-    - ignore: ["Editor/Mono/*/", "Modules/"]
+    - ignore: ["Editor/Mono/[A-Z]*", "Modules/[A-Z]*"]
       auto-fix: true
       thresholds: {num-issues: 999}
 
