@@ -8,10 +8,21 @@ inspecode:
   tools:
 
     astyle:
+    - input: "Editor/Mono/*/"
+      auto-fix: true
+      thresholds: {num-issues: 999}
+    - input: "Modules/[A-P]*"
+      auto-fix: true
+      thresholds: {num-issues: 999}
+    - input: "Modules/[Q-Z]*"
+      auto-fix: true
+      thresholds: {num-issues: 999}
+    - ignore: ["Editor/Mono/*/", "Modules/"]
       auto-fix: true
       thresholds: {num-issues: 999}
 
     cpd:
+      options: [--skip-lexical-errors]
       thresholds: {num-issues: 999}
 
     clang-format:
@@ -24,6 +35,9 @@ inspecode:
     grep:
       thresholds: {num-issues: 999}
 
+    markdownlint:
+      thresholds: {num-issues: 999}
+
     misspell:
       auto-fix: true
       thresholds: {num-issues: 999}
@@ -31,7 +45,15 @@ inspecode:
     jscpd:
       thresholds: {num-issues: 999}
 
-    stylecop:
+    prettier:
+      auto-fix: true
+      thresholds: {num-issues: 999}
+
+    # stylecop:
+    #   thresholds: {num-issues: 999}
+
+    stylelint:
+      auto-fix: true
       thresholds: {num-issues: 999}
 
     uncrustify:
@@ -42,4 +64,5 @@ inspecode:
     #   thresholds: {num-issues: 999}
 
     unused:
+      options: [--single-occurrence, --all-likelihoods]
       thresholds: {num-issues: 999}
