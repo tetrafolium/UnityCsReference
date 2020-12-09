@@ -93,7 +93,7 @@ inspecode:
     # understand:
     #   thresholds: {num-issues: 999}
 
-    #### Unused timed out.
-    # unused:
-    #   options: [--single-occurrence, --all-likelihoods]
-    #   thresholds: {num-issues: 999}
+    unused:
+      options: [--single-occurrence, --all-likelihoods]
+      machine: {cpu: 1.0}             # to avoid Timed-Out
+      thresholds: {num-issues: 999}   # too many issues detected: 2596 > 1000
