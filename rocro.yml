@@ -9,5 +9,5 @@ inspecode:
 
     stylecop:
       # machine: {cpu: 0.25}    # (default)
-      machine: {cpu: 1.0}
+      machine: {cpu: 0.5}
       thresholds: {num-issues: 999}
