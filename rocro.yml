@@ -15,8 +15,8 @@ inspecode:
     #   thresholds: {num-issues: 999}   # Failed / StyleCop finished with errors.
     # - config-file: inspecode_stylecop-empty_rules.json
     #   thresholds: {num-issues: 999}   # Failed / StyleCop finished with errors.
-    # - config-file: inspecode_stylecop-default_rules.json
-    #   thresholds: {num-issues: 999}   # Failed / StyleCop finished with errors.
+    - config-file: inspecode_stylecop-default_rules.json
+      thresholds: {num-issues: 999}   # Failed / StyleCop finished with errors.
 
     ##### use option `/property` with single string value
     # - options:
