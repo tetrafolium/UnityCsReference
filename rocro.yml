@@ -8,39 +8,54 @@ inspecode:
   tools:
 
     stylecop:
+    ##### using `config-file:`
     # - config-file: ""   # no config-file
     #   thresholds: {num-issues: 999}
-    - config-file: "inspecode_stylecop-empty_settings.json"
-      thresholds: {num-issues: 999}
-    - config-file: "inspecode_stylecop-empty_rules.json"
-      thresholds: {num-issues: 999}
-    - config-file: "inspecode_stylecop-default_rules.json"
-      thresholds: {num-issues: 999}
-    # - options:
-    #     /property: StyleCopOverrideSettingsFile=
+    # - config-file: "inspecode_stylecop-empty_settings.json"
     #   thresholds: {num-issues: 999}
+    # - config-file: "inspecode_stylecop-empty_rules.json"
+    #   thresholds: {num-issues: 999}
+    # - config-file: "inspecode_stylecop-default_rules.json"
+    #   thresholds: {num-issues: 999}
+
+      ##### using option `/property` with single string value
+    # - options:
+    #     /property: 'StyleCopOverrideSettingsFile=""'
+    #   thresholds: {num-issues: 999}
+    # - options:
+    #     /p:        StyleCopOverrideSettingsFile=inspecode_stylecop-empty_settings.json
+    #   thresholds: {num-issues: 999}
+    # - options:
+    #     /property: StyleCopOverrideSettingsFile=inspecode_stylecop-empty_rules.json
+    #   thresholds: {num-issues: 999}
+    # - options:
+    #     /property: StyleCopOverrideSettingsFile=inspecode_stylecop-default_rules.json
+    #   thresholds: {num-issues: 999}
+
+    ##### using option `/property` with string list value
     - options:
-        /p:        StyleCopOverrideSettingsFile=inspecode_stylecop-empty_settings.json
+        /property: ['StyleCopOverrideSettingsFile=""']
       thresholds: {num-issues: 999}
     - options:
-        /property: StyleCopOverrideSettingsFile=inspecode_stylecop-empty_rules.json
+        /property: [StyleCopOverrideSettingsFile=inspecode_stylecop-empty_settings.json]
       thresholds: {num-issues: 999}
     - options:
-        /property: StyleCopOverrideSettingsFile=inspecode_stylecop-default_rules.json
+        /property: [StyleCopOverrideSettingsFile=inspecode_stylecop-empty_rules.json]
       thresholds: {num-issues: 999}
+    - options:
+        /p:        [StyleCopOverrideSettingsFile=inspecode_stylecop-default_rules.json]
+      thresholds: {num-issues: 999}
+
+    ##### using option `/property` with `name: value` map value
     # - options:
-    #     /property:
-    #       StyleCopOverrideSettingsFile: ""
+    #     /property: {StyleCopOverrideSettingsFile: ""}
     #   thresholds: {num-issues: 999}
     # - options:
-    #     /property:
-    #       StyleCopOverrideSettingsFile: "inspecode_stylecop-empty_settings.json"
+    #     /property: {StyleCopOverrideSettingsFile: "inspecode_stylecop-empty_settings.json"}
     #   thresholds: {num-issues: 999}
     # - options:
-    #     /p:
-    #       StyleCopOverrideSettingsFile: "inspecode_stylecop-empty_rules.json"
+    #     /p:        {StyleCopOverrideSettingsFile: "inspecode_stylecop-empty_rules.json"}
     #   thresholds: {num-issues: 999}
     # - options:
-    #     /property:
-    #       StyleCopOverrideSettingsFile: "inspecode_stylecop-default_rules.json"
+    #     /property: {StyleCopOverrideSettingsFile: "inspecode_stylecop-default_rules.json"}
     #   thresholds: {num-issues: 999}
