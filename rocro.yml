@@ -42,9 +42,9 @@ inspecode:
     # - options:
     #     /p:        [StyleCopOverrideSettingsFile=inspecode_stylecop-empty_rules.json]
     #   thresholds: {num-issues: 999}
-    # - options:
-    #     /property: [StyleCopOverrideSettingsFile=inspecode_stylecop-default_rules.json]
-    #   thresholds: {num-issues: 999}
+    - options:
+        /property: [StyleCopOverrideSettingsFile=inspecode_stylecop-default_rules.json]
+      thresholds: {num-issues: 999}
 
     ##### use option `/property` with `name: value` map value
     # - options:
