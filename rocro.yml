@@ -8,8 +8,8 @@ inspecode:
   tools:
 
     stylecop:
-    - config-file: ""   # no config-file
-      thresholds: {num-issues: 999}
+    # - config-file: ""   # no config-file
+    #   thresholds: {num-issues: 999}
     - config-file: "inspecode_stylecop-empty_settings.json"
       thresholds: {num-issues: 999}
     - config-file: "inspecode_stylecop-empty_rules.json"
