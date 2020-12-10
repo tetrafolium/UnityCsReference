@@ -8,4 +8,6 @@ inspecode:
   tools:
 
     stylecop:
+      # machine: {cpu: 0.25}    # (default)
+      machine: {cpu: 1.0}
       thresholds: {num-issues: 999}
