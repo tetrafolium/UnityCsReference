@@ -5,31 +5,30 @@
 using UnityEngine;
 using UnityEngine.Bindings;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [NativeHeader("Modules/AssetPipelineEditor/Public/MonoImporter.h")]
 [NativeHeader("Modules/AssetPipelineEditor/Public/MonoImporter.bindings.h")]
 [ExcludeFromPreset]
-public class MonoImporter : AssetImporter
-{
-    public extern void SetDefaultReferences(string[] name, Object[] target);
+public class MonoImporter : AssetImporter {
+  public extern void SetDefaultReferences(string[] name, Object[] target);
 
-    [FreeFunction("MonoImporterBindings::GetAllRuntimeMonoScripts")]
-    public static extern MonoScript[] GetAllRuntimeMonoScripts();
+  [FreeFunction("MonoImporterBindings::GetAllRuntimeMonoScripts")]
+  public static extern MonoScript[] GetAllRuntimeMonoScripts();
 
-    [FreeFunction("MonoImporterBindings::SetMonoScriptExecutionOrder")]
-    public static extern void SetExecutionOrder(MonoScript script, int order);
+  [FreeFunction("MonoImporterBindings::SetMonoScriptExecutionOrder")]
+  public static extern void SetExecutionOrder(MonoScript script, int order);
 
-    // Call when icon set by SetIconForObject should be copied to monoImporter for persistence across project reloads
-    // This function will reimport the asset and is therefore slow.
-    [FreeFunction("MonoImporterBindings::CopyMonoScriptIconToImporters")]
-    internal static extern void CopyMonoScriptIconToImporters(MonoScript script);
+  // Call when icon set by SetIconForObject should be copied to monoImporter for
+  // persistence across project reloads This function will reimport the asset
+  // and is therefore slow.
+  [FreeFunction("MonoImporterBindings::CopyMonoScriptIconToImporters")]
+  internal static extern void CopyMonoScriptIconToImporters(MonoScript script);
 
-    [FreeFunction("MonoImporterBindings::GetExecutionOrder")]
-    public static extern int GetExecutionOrder(MonoScript script);
+  [FreeFunction("MonoImporterBindings::GetExecutionOrder")]
+  public static extern int GetExecutionOrder(MonoScript script);
 
-    public extern MonoScript GetScript();
+  public extern MonoScript GetScript();
 
-    public extern Object GetDefaultReference(string name);
+  public extern Object GetDefaultReference(string name);
 }
 }

@@ -7,44 +7,30 @@ using System.Runtime.InteropServices;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace UnityEditor.Build.Content
-{
-[Serializable]
-[UsedByNativeCode]
-[StructLayout(LayoutKind.Sequential)]
-public struct ResourceFile
-{
+namespace UnityEditor.Build.Content {
+  [Serializable]
+  [UsedByNativeCode]
+  [StructLayout(LayoutKind.Sequential)]
+  public struct ResourceFile {
     [NativeName("fileName")]
     internal string m_FileName;
     public string fileName {
-        get {
-            return m_FileName;
-        }
-        set {
-            m_FileName = value;
-        }
+      get { return m_FileName; }
+      set { m_FileName = value; }
     }
 
     [NativeName("fileAlias")]
     internal string m_FileAlias;
     public string fileAlias {
-        get {
-            return m_FileAlias;
-        }
-        set {
-            m_FileAlias = value;
-        }
+      get { return m_FileAlias; }
+      set { m_FileAlias = value; }
     }
 
     [NativeName("serializedFile")]
     internal bool m_SerializedFile;
     public bool serializedFile {
-        get {
-            return m_SerializedFile;
-        }
-        set {
-            m_SerializedFile = value;
-        }
+      get { return m_SerializedFile; }
+      set { m_SerializedFile = value; }
     }
-}
+  }
 }

@@ -8,19 +8,15 @@ using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEditor;
 
-namespace UnityEditorInternal.Profiling
-{
-[Serializable]
-internal class VideoProfilerModule : ProfilerModuleBase
-{
-    public override void DrawToolbar(Rect position)
-    {
-        DrawOtherToolbar(ProfilerArea.Video);
+namespace UnityEditorInternal.Profiling {
+  [Serializable]
+  internal class VideoProfilerModule : ProfilerModuleBase {
+    public override void DrawToolbar(Rect position) {
+      DrawOtherToolbar(ProfilerArea.Video);
     }
 
-    public override void DrawView(Rect position)
-    {
-        DrawOverviewText(ProfilerArea.Video, position);
+    public override void DrawView(Rect position) {
+      DrawOverviewText(ProfilerArea.Video, position);
     }
-}
+  }
 }

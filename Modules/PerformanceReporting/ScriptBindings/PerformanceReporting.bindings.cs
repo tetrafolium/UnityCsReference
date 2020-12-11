@@ -10,20 +10,17 @@ using UnityEngine;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace UnityEngine.Analytics
-{
-[NativeHeader("Modules/PerformanceReporting/PerformanceReportingManager.h")]
-[StaticAccessor("GetPerformanceReportingManager()", StaticAccessorType.Dot)]
-public static class PerformanceReporting
-{
+namespace UnityEngine.Analytics {
+  [NativeHeader("Modules/PerformanceReporting/PerformanceReportingManager.h")]
+  [StaticAccessor("GetPerformanceReportingManager()", StaticAccessorType.Dot)]
+  public static class PerformanceReporting {
     public extern static bool enabled {
-        get;
-        set;
+      get;
+      set;
     }
 
-    public extern static long graphicsInitializationFinishTime
-    {
-        [NativeMethod("GetGfxDoneTime")] get;
+    public extern static long graphicsInitializationFinishTime {
+      [NativeMethod("GetGfxDoneTime")] get;
     }
-}
+  }
 }

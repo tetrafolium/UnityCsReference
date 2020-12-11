@@ -7,18 +7,16 @@ using UnityEngine;
 using UnityEngine.Bindings;
 using UnityEngine.Playables;
 
-namespace UnityEngine.Audio
-{
-public static class AudioPlayableBinding
-{
-    public static PlayableBinding Create(string name, UnityEngine.Object key)
-    {
-        return PlayableBinding.CreateInternal(name, key, typeof(AudioSource), CreateAudioOutput);
+namespace UnityEngine.Audio {
+  public static class AudioPlayableBinding {
+    public static PlayableBinding Create(string name, UnityEngine.Object key) {
+      return PlayableBinding.CreateInternal(name, key, typeof(AudioSource),
+                                            CreateAudioOutput);
     }
 
-    private static PlayableOutput CreateAudioOutput(PlayableGraph graph, string name)
-    {
-        return (PlayableOutput)AudioPlayableOutput.Create(graph, name, null);
+    private static PlayableOutput CreateAudioOutput(PlayableGraph graph,
+                                                    string name) {
+      return (PlayableOutput) AudioPlayableOutput.Create(graph, name, null);
     }
-}
+  }
 }

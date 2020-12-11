@@ -5,13 +5,11 @@
 using UnityEngine.Bindings;
 using UnityEngine.Scripting.APIUpdating;
 
-namespace UnityEngine.AI
-{
-// Keep this enum in sync with the one defined in "NavMeshBindingTypes.h"
-// Link type specifier.
-[MovedFrom("UnityEngine")]
-public enum OffMeshLinkType
-{
+namespace UnityEngine.AI {
+  // Keep this enum in sync with the one defined in "NavMeshBindingTypes.h"
+  // Link type specifier.
+  [MovedFrom("UnityEngine")]
+  public enum OffMeshLinkType {
     // Manually specified type of link.
     LinkTypeManual = 0,
 
@@ -20,14 +18,13 @@ public enum OffMeshLinkType
 
     // Horizontal jump.
     LinkTypeJumpAcross = 2
-}
+  }
 
-// Keep this struct in sync with the one defined in "NavMeshBindingTypes.h"
-// State of OffMeshLink.
-[MovedFrom("UnityEngine")]
-[NativeHeader("Modules/AI/Components/OffMeshLink.bindings.h")]
-public struct OffMeshLinkData
-{
+  // Keep this struct in sync with the one defined in "NavMeshBindingTypes.h"
+  // State of OffMeshLink.
+  [MovedFrom("UnityEngine")]
+  [NativeHeader("Modules/AI/Components/OffMeshLink.bindings.h")]
+  public struct OffMeshLinkData {
     internal int m_Valid;
     internal int m_Activated;
     internal int m_InstanceID;
@@ -50,69 +47,63 @@ public struct OffMeshLinkData
     // Link end world position (RO).
     public Vector3 endPos => m_EndPos;
 
-    // The [[OffMeshLink]] if the link type is a manually placed Offmeshlink (RO).
+    // The [[OffMeshLink]] if the link type is a manually placed Offmeshlink
+    // (RO).
     public OffMeshLink offMeshLink => GetOffMeshLinkInternal(m_InstanceID);
 
     [FreeFunction("OffMeshLinkScriptBindings::GetOffMeshLinkInternal")]
     internal static extern OffMeshLink GetOffMeshLinkInternal(int instanceID);
-}
+  }
 
-// Link allowing movement outside the planar navigation mesh.
-[MovedFrom("UnityEngine")]
-public sealed class OffMeshLink : Behaviour
-{
+  // Link allowing movement outside the planar navigation mesh.
+  [MovedFrom("UnityEngine")]
+  public sealed class OffMeshLink : Behaviour {
     // Is link active.
     public extern bool activated {
-        get;
-        set;
+      get;
+      set;
     }
 
     // Is link occupied. (RO)
-    public extern bool occupied {
-        get;
-    }
+    public extern bool occupied { get; }
 
     // Modify pathfinding cost for the link.
     public extern float costOverride {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern bool biDirectional {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern void UpdatePositions();
 
     [System.Obsolete("Use area instead.")]
     public int navMeshLayer {
-        get {
-            return area;
-        }
-        set {
-            area = value;
-        }
+      get { return area; }
+      set { area = value; }
     }
 
     public extern int area {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern bool autoUpdatePositions {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern Transform startTransform {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern Transform endTransform {
-        get;
-        set;
+      get;
+      set;
     }
-}
+  }
 }

@@ -8,16 +8,15 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Bindings;
-using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCodeAttribute;
+using RequiredByNativeCodeAttribute =
+    UnityEngine.Scripting.RequiredByNativeCodeAttribute;
 
-namespace UnityEditor.PackageManager
-{
-[Serializable]
-[StructLayout(LayoutKind.Sequential)]
-[RequiredByNativeCode]
-[NativeAsStruct]
-public class VersionsInfo
-{
+namespace UnityEditor.PackageManager {
+  [Serializable]
+  [StructLayout(LayoutKind.Sequential)]
+  [RequiredByNativeCode]
+  [NativeAsStruct]
+  public class VersionsInfo {
     [SerializeField]
     [NativeName("all")]
     private string[] m_All;
@@ -31,53 +30,40 @@ public class VersionsInfo
 
     private VersionsInfo() {}
 
-    internal VersionsInfo(
-        IEnumerable<string> all,
-        IEnumerable<string> compatible,
-        string verified)
-    {
-        m_All = (all ?? new string[] {}).ToArray();
-        m_Compatible = (compatible ?? new string[] {}).ToArray();
-        m_Verified = verified ?? string.Empty;
+    internal VersionsInfo(IEnumerable<string> all,
+                          IEnumerable<string> compatible, string verified) {
+      m_All = (all ?? new string[]{}).ToArray();
+      m_Compatible = (compatible ?? new string[]{}).ToArray();
+      m_Verified = verified ?? string.Empty;
     }
 
     public string[] all {
-        get {
-            return m_All;
-        }
+      get { return m_All; }
     }
     public string[] compatible {
-        get {
-            return m_Compatible;
-        }
+      get { return m_Compatible; }
     }
     public string verified {
-        get {
-            return m_Verified;
-        }
+      get { return m_Verified; }
     }
 
-    [Obsolete("'recommended' is obsolete; use 'verified' instead. (UnityUpgradable) -> verified", false)]
+    [Obsolete(
+        "'recommended' is obsolete; use 'verified' instead. (UnityUpgradable) -> verified",
+        false)]
     public string recommended {
-        get {
-            return m_Verified;
-        }
+      get { return m_Verified; }
     }
 
-    public string latest
-    {
-        get
-        {
+    public string latest {
+      get {
             return (all.LastOrDefault() ?? string.Empty);
-        }
+      }
     }
 
-    public string latestCompatible
-    {
-        get
-        {
+    public string latestCompatible {
+      get {
             return (compatible.LastOrDefault() ?? string.Empty);
-        }
+      }
     }
-}
+  }
 }

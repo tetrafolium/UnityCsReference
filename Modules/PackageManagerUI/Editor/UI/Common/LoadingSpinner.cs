@@ -5,60 +5,54 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace UnityEditor.PackageManager.UI
-{
-internal class LoadingSpinner : VisualElement
-{
+namespace UnityEditor.PackageManager.UI {
+  internal class LoadingSpinner : VisualElement {
     internal new class UxmlFactory : UxmlFactory<LoadingSpinner> {}
 
     public bool started {
-        get;
-        private set;
+      get;
+      private set;
     }
 
     private int m_Rotation;
 
-    public LoadingSpinner()
-    {
-        started = false;
-        UIUtils.SetElementDisplay(this, false);
+    public LoadingSpinner() {
+      started = false;
+      UIUtils.SetElementDisplay(this, false);
 
-        // add child elements to set up centered spinner rotation
-        var innerElement = new VisualElement();
-        innerElement.AddToClassList("image");
-        Add(innerElement);
+      // add child elements to set up centered spinner rotation
+      var innerElement = new VisualElement();
+      innerElement.AddToClassList("image");
+      Add(innerElement);
     }
 
-    private void UpdateProgress()
-    {
-        transform.rotation = Quaternion.Euler(0, 0, m_Rotation);
-        m_Rotation += 3;
-        if (m_Rotation > 360)
-            m_Rotation -= 360;
+    private void UpdateProgress() {
+      transform.rotation = Quaternion.Euler(0, 0, m_Rotation);
+      m_Rotation += 3;
+      if (m_Rotation > 360)
+        m_Rotation -= 360;
     }
 
-    public void Start()
-    {
-        if (started)
-            return;
+    public void Start() {
+      if (started)
+        return;
 
-        m_Rotation = 0;
+      m_Rotation = 0;
 
-        EditorApplication.update += UpdateProgress;
+      EditorApplication.update += UpdateProgress;
 
-        started = true;
-        UIUtils.SetElementDisplay(this, true);
+      started = true;
+      UIUtils.SetElementDisplay(this, true);
     }
 
-    public void Stop()
-    {
-        if (!started)
-            return;
+    public void Stop() {
+      if (!started)
+        return;
 
-        EditorApplication.update -= UpdateProgress;
+      EditorApplication.update -= UpdateProgress;
 
-        started = false;
-        UIUtils.SetElementDisplay(this, false);
+      started = false;
+      UIUtils.SetElementDisplay(this, false);
     }
-}
+  }
 }

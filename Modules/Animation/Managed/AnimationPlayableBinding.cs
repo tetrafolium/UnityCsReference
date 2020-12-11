@@ -7,18 +7,16 @@ using UnityEngine;
 using UnityEngine.Bindings;
 using UnityEngine.Playables;
 
-namespace UnityEngine.Animations
-{
-public static class AnimationPlayableBinding
-{
-    public static PlayableBinding Create(string name, UnityEngine.Object key)
-    {
-        return PlayableBinding.CreateInternal(name, key, typeof(Animator), CreateAnimationOutput);
+namespace UnityEngine.Animations {
+  public static class AnimationPlayableBinding {
+    public static PlayableBinding Create(string name, UnityEngine.Object key) {
+      return PlayableBinding.CreateInternal(name, key, typeof(Animator),
+                                            CreateAnimationOutput);
     }
 
-    private static PlayableOutput CreateAnimationOutput(PlayableGraph graph, string name)
-    {
-        return (PlayableOutput)AnimationPlayableOutput.Create(graph, name, null);
+    private static PlayableOutput CreateAnimationOutput(PlayableGraph graph,
+                                                        string name) {
+      return (PlayableOutput) AnimationPlayableOutput.Create(graph, name, null);
     }
-}
+  }
 }

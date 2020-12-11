@@ -5,18 +5,16 @@
 using UnityEngine.Scripting;
 using System.Runtime.InteropServices;
 
-namespace UnityEditorInternal
-{
+namespace UnityEditorInternal {
 [System.Serializable]
 [StructLayout(LayoutKind.Sequential)]
 [RequiredByNativeCode]
-public sealed class ObjectMemoryStackInfo
-{
-    public bool expanded;
-    public bool sorted;
-    public int allocated;
-    public int ownedAllocated;
-    public ObjectMemoryStackInfo[] callerSites;
-    public string name;
+public sealed class ObjectMemoryStackInfo {
+  public bool expanded;
+  public bool sorted;
+  public int allocated;
+  public int ownedAllocated;
+  public ObjectMemoryStackInfo[] callerSites;
+  public string name;
 }
 }

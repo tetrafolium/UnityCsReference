@@ -6,21 +6,19 @@ using UnityEngine;
 using UnityEngine.Bindings;
 using UnityEngine.Internal;
 
-namespace UnityEngine.Audio
-{
-[NativeHeader("Modules/Audio/Public/AudioMixerSnapshot.h")]
-public partial class AudioMixerSnapshot : Object, ISubAssetNotDuplicatable
-{
+namespace UnityEngine.Audio {
+  [NativeHeader("Modules/Audio/Public/AudioMixerSnapshot.h")]
+  public partial class AudioMixerSnapshot : Object,
+                                            ISubAssetNotDuplicatable {
     internal AudioMixerSnapshot() {}
 
     [NativeProperty]
     public extern AudioMixer audioMixer {
-        get;
+      get;
     }
 
-    public void TransitionTo(float timeToReach)
-    {
-        audioMixer.TransitionToSnapshot(this, timeToReach);
+    public void TransitionTo(float timeToReach) {
+      audioMixer.TransitionToSnapshot(this, timeToReach);
     }
-}
+  }
 }

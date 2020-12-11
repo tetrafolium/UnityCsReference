@@ -10,15 +10,12 @@ using Unity.Profiling.LowLevel;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace UnityEditor.Profiling
-{
-[NativeHeader("Modules/ProfilerEditor/ProfilerHistory/RawFrameDataView.h")]
-[StructLayout(LayoutKind.Sequential)]
-public class RawFrameDataView : FrameDataView
-{
-    internal RawFrameDataView(int frameIndex, int threadIndex)
-    {
-        m_Ptr = Internal_Create(frameIndex, threadIndex);
+namespace UnityEditor.Profiling {
+  [NativeHeader("Modules/ProfilerEditor/ProfilerHistory/RawFrameDataView.h")]
+  [StructLayout(LayoutKind.Sequential)]
+  public class RawFrameDataView : FrameDataView {
+    internal RawFrameDataView(int frameIndex, int threadIndex) {
+      m_Ptr = Internal_Create(frameIndex, threadIndex);
     }
 
     [ThreadSafe]
@@ -58,68 +55,71 @@ public class RawFrameDataView : FrameDataView
     public extern int GetSampleMetadataCount(int sampleIndex);
 
     [NativeMethod(IsThreadSafe = true, ThrowsException = true)]
-    internal extern ProfilerMarkerDataType GetSampleMetadataType(int sampleIndex, int metadataIndex);
+    internal extern ProfilerMarkerDataType
+    GetSampleMetadataType(int sampleIndex, int metadataIndex);
 
     [NativeMethod(IsThreadSafe = true, ThrowsException = true)]
-    public extern string GetSampleMetadataAsString(int sampleIndex, int metadataIndex);
+    public extern string GetSampleMetadataAsString(int sampleIndex,
+                                                   int metadataIndex);
 
     [NativeMethod(IsThreadSafe = true, ThrowsException = true)]
-    public extern int GetSampleMetadataAsInt(int sampleIndex, int metadataIndex);
+    public extern int GetSampleMetadataAsInt(int sampleIndex,
+                                             int metadataIndex);
 
     [NativeMethod(IsThreadSafe = true, ThrowsException = true)]
-    public extern long GetSampleMetadataAsLong(int sampleIndex, int metadataIndex);
+    public extern long GetSampleMetadataAsLong(int sampleIndex,
+                                               int metadataIndex);
 
     [NativeMethod(IsThreadSafe = true, ThrowsException = true)]
-    public extern float GetSampleMetadataAsFloat(int sampleIndex, int metadataIndex);
+    public extern float GetSampleMetadataAsFloat(int sampleIndex,
+                                                 int metadataIndex);
 
     [NativeMethod(IsThreadSafe = true, ThrowsException = true)]
-    public extern double GetSampleMetadataAsDouble(int sampleIndex, int metadataIndex);
+    public extern double GetSampleMetadataAsDouble(int sampleIndex,
+                                                   int metadataIndex);
 
-    public void GetSampleCallstack(int sampleIndex, List<ulong> outCallstack)
-    {
-        if (outCallstack == null)
-            throw new ArgumentNullException(nameof(outCallstack));
+    public void GetSampleCallstack(int sampleIndex, List<ulong> outCallstack) {
+      if (outCallstack == null)
+        throw new ArgumentNullException(nameof(outCallstack));
 
-        GetSampleCallstackInternal(sampleIndex, outCallstack);
+      GetSampleCallstackInternal(sampleIndex, outCallstack);
     }
 
-    [NativeMethod(Name = "GetSampleCallstack", IsThreadSafe = true, ThrowsException = true)]
-    extern void GetSampleCallstackInternal(int sampleIndex, List<ulong> outCallstack);
+    [NativeMethod(Name = "GetSampleCallstack", IsThreadSafe = true,
+                  ThrowsException = true)] extern void
+    GetSampleCallstackInternal(int sampleIndex, List<ulong> outCallstack);
 
     [StructLayout(LayoutKind.Sequential)]
     [RequiredByNativeCode]
-    public struct FlowEvent
-    {
-        public int ParentSampleIndex;
-        public uint FlowId;
-        public ProfilerFlowEventType FlowEventType;
+    public struct FlowEvent {
+      public int ParentSampleIndex;
+      public uint FlowId;
+      public ProfilerFlowEventType FlowEventType;
     }
 
     [NativeMethod(IsThreadSafe = true, ThrowsException = true)]
-    public extern void GetSampleFlowEvents(int sampleIndex, List<FlowEvent> outFlowEvents);
+    public extern void GetSampleFlowEvents(int sampleIndex,
+                                           List<FlowEvent> outFlowEvents);
 
     [NativeMethod(IsThreadSafe = true, ThrowsException = true)]
     public extern void GetFlowEvents(List<FlowEvent> outFlowEvents);
 
-    public override bool Equals(object obj)
-    {
-        var dataViewObj = obj as RawFrameDataView;
-        if (dataViewObj == null)
-            return false;
+    public override bool Equals(object obj) {
+      var dataViewObj = obj as RawFrameDataView;
+      if (dataViewObj == null)
+        return false;
 
-        if (m_Ptr == dataViewObj.m_Ptr)
-            return true;
-        if (m_Ptr == IntPtr.Zero || dataViewObj.m_Ptr == IntPtr.Zero)
-            return false;
+      if (m_Ptr == dataViewObj.m_Ptr)
+        return true;
+      if (m_Ptr == IntPtr.Zero || dataViewObj.m_Ptr == IntPtr.Zero)
+        return false;
 
-        return frameIndex.Equals(dataViewObj.frameIndex) &&
-               threadIndex.Equals(dataViewObj.threadIndex);
+      return frameIndex.Equals(dataViewObj.frameIndex) &&
+             threadIndex.Equals(dataViewObj.threadIndex);
     }
 
-    public override int GetHashCode()
-    {
-        return frameIndex.GetHashCode() ^
-               (threadIndex.GetHashCode() << 8);
+    public override int GetHashCode() {
+      return frameIndex.GetHashCode() ^ (threadIndex.GetHashCode() << 8);
     }
-}
+  }
 }

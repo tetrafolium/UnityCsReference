@@ -6,17 +6,16 @@ using UnityEngine;
 using UnityEngine.Bindings;
 using UnityEngine.Internal;
 
-namespace UnityEngine.Audio
-{
-[NativeHeader("Modules/Audio/Public/AudioMixerGroup.h")]
-public class AudioMixerGroup : Object, ISubAssetNotDuplicatable
-{
+namespace UnityEngine.Audio {
+  [NativeHeader("Modules/Audio/Public/AudioMixerGroup.h")]
+  public class AudioMixerGroup : Object,
+                                 ISubAssetNotDuplicatable {
     // Make constructor internal
     internal AudioMixerGroup() {}
 
     [NativeProperty]
     public extern AudioMixer audioMixer {
-        get;
+      get;
     }
-}
+  }
 }

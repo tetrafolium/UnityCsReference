@@ -6,16 +6,15 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Bindings;
-using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCodeAttribute;
+using RequiredByNativeCodeAttribute =
+    UnityEngine.Scripting.RequiredByNativeCodeAttribute;
 
-namespace UnityEditor.PackageManager
-{
-[Serializable]
-[StructLayout(LayoutKind.Sequential)]
-[RequiredByNativeCode]
-[NativeAsStruct]
-public class RegistryInfo
-{
+namespace UnityEditor.PackageManager {
+  [Serializable]
+  [StructLayout(LayoutKind.Sequential)]
+  [RequiredByNativeCode]
+  [NativeAsStruct]
+  public class RegistryInfo {
     [SerializeField]
     [NativeName("id")]
     private string m_Id;
@@ -36,41 +35,32 @@ public class RegistryInfo
     [NativeName("capabilities")]
     private SearchCapabilities m_Capabilities;
 
-    internal RegistryInfo() : this("", "", "", false, SearchCapabilities.None) {}
+    internal RegistryInfo()
+        : this("", "", "", false, SearchCapabilities.None) {}
 
-    internal RegistryInfo(string id, string name, string url, bool isDefault, SearchCapabilities capabilities)
-    {
-        m_Id = id;
-        m_Name = name;
-        m_Url = url;
-        m_IsDefault = isDefault;
-        m_Capabilities = capabilities;
+    internal RegistryInfo(string id, string name, string url, bool isDefault,
+                          SearchCapabilities capabilities) {
+      m_Id = id;
+      m_Name = name;
+      m_Url = url;
+      m_IsDefault = isDefault;
+      m_Capabilities = capabilities;
     }
 
     internal string id {
-        get {
-            return m_Id;
-        }
+      get { return m_Id; }
     }
     public string name {
-        get {
-            return m_Name;
-        }
+      get { return m_Name; }
     }
     public string url {
-        get {
-            return m_Url;
-        }
+      get { return m_Url; }
     }
     public bool isDefault {
-        get {
-            return m_IsDefault;
-        }
+      get { return m_IsDefault; }
     }
     internal SearchCapabilities capabilities {
-        get {
-            return m_Capabilities;
-        }
+      get { return m_Capabilities; }
     }
-}
+  }
 }

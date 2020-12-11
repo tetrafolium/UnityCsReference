@@ -5,4 +5,4 @@
 using System.Runtime.CompilerServices;
 
 // needed for UnityEngine.IStylePainter
-[assembly: InternalsVisibleTo("UnityEngine.UIElementsModule")]
+[assembly:InternalsVisibleTo("UnityEngine.UIElementsModule")]

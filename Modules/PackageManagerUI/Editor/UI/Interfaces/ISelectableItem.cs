@@ -4,18 +4,10 @@
 
 using UnityEngine.UIElements;
 
-namespace UnityEditor.PackageManager.UI
-{
-internal interface ISelectableItem
-{
-    IPackage package {
-        get;
-    }
-    IPackageVersion targetVersion {
-        get;
-    }
-    VisualElement element {
-        get;
-    }
-}
+namespace UnityEditor.PackageManager.UI {
+  internal interface ISelectableItem {
+    IPackage package { get; }
+    IPackageVersion targetVersion { get; }
+    VisualElement element { get; }
+  }
 }

@@ -4,91 +4,76 @@
 
 using UnityEngine.UIElements;
 
-namespace UnityEditor.PackageManager.UI
-{
-internal class PackageVersionItem : VisualElement, ISelectableItem
-{
+namespace UnityEditor.PackageManager.UI {
+  internal class PackageVersionItem : VisualElement, ISelectableItem {
     public IPackage package {
-        get;
-        set;
+      get;
+      set;
     }
     public IPackageVersion version {
-        get;
-        set;
+      get;
+      set;
     }
 
     private ResourceLoader m_ResourceLoader;
     private PageManager m_PageManager;
-    private void ResolveDependencies()
-    {
-        var container = ServicesContainer.instance;
-        m_ResourceLoader = container.Resolve<ResourceLoader>();
-        m_PageManager = container.Resolve<PageManager>();
+    private void ResolveDependencies() {
+      var container = ServicesContainer.instance;
+      m_ResourceLoader = container.Resolve<ResourceLoader>();
+      m_PageManager = container.Resolve<PageManager>();
     }
 
-    public PackageVersionItem(IPackage package, IPackageVersion version)
-    {
-        ResolveDependencies();
+    public PackageVersionItem(IPackage package, IPackageVersion version) {
+      ResolveDependencies();
 
-        var root = m_ResourceLoader.GetTemplate("PackageVersionItem.uxml");
-        Add(root);
-        cache = new VisualElementCache(root);
+      var root = m_ResourceLoader.GetTemplate("PackageVersionItem.uxml");
+      Add(root);
+      cache = new VisualElementCache(root);
 
-        this.package = package;
-        this.version = version;
-        RefreshLabel();
-        this.OnLeftClick(() => m_PageManager.SetSelected(package, version, true));
+      this.package = package;
+      this.version = version;
+      RefreshLabel();
+      this.OnLeftClick(() => m_PageManager.SetSelected(package, version, true));
     }
 
     public IPackageVersion targetVersion {
-        get {
-            return version;
-        }
+      get { return version; }
     }
     public VisualElement element {
-        get {
-            return this;
-        }
+      get { return this; }
     }
 
-    private void RefreshLabel()
-    {
-        versionLabel.text = version.version?.ToString() ?? version.versionString;
-        var primary = package.versions.primary;
-        Label stateLabel = null;
-        if (version == primary)
-        {
-            if (version.isInstalled)
-                stateLabel = new Label(L10n.Tr("Currently Installed"));
-            else if (version.HasTag(PackageTag.Downloadable) && version.isAvailableOnDisk)
-                stateLabel = new Label(L10n.Tr("Currently Downloaded"));
-        }
-        else if (version == package.versions.recommended)
-            stateLabel = new Label(L10n.Tr("Update Available"));
-        if (stateLabel != null)
-        {
-            stateLabel.tooltip = stateLabel.text;
-            stateContainer.Add(stateLabel);
-        }
+    private void RefreshLabel() {
+      versionLabel.text = version.version?.ToString() ?? version.versionString;
+      var primary = package.versions.primary;
+      Label stateLabel = null;
+      if (version == primary) {
+        if (version.isInstalled)
+          stateLabel = new Label(L10n.Tr("Currently Installed"));
+        else if (version.HasTag(PackageTag.Downloadable) &&
+                 version.isAvailableOnDisk)
+          stateLabel = new Label(L10n.Tr("Currently Downloaded"));
+      } else if (version == package.versions.recommended)
+        stateLabel = new Label(L10n.Tr("Update Available"));
+      if (stateLabel != null) {
+        stateLabel.tooltip = stateLabel.text;
+        stateContainer.Add(stateLabel);
+      }
 
-        var tagLabel = PackageTagLabel.CreateTagLabel(version, true);
-        if (tagLabel != null)
-            stateContainer.Add(tagLabel);
+      var tagLabel = PackageTagLabel.CreateTagLabel(version, true);
+      if (tagLabel != null)
+        stateContainer.Add(tagLabel);
     }
 
     private VisualElementCache cache {
-        get;
-        set;
+      get;
+      set;
     }
     private Label versionLabel {
-        get {
-            return cache.Get<Label>("versionLabel");
-        }
+      get { return cache.Get<Label>("versionLabel"); }
     }
     private VisualElement stateContainer {
-        get {
-            return cache.Get<VisualElement>("stateContainer");
-        }
+      get { return cache.Get<VisualElement>("stateContainer"); }
     }
-}
+  }
 }

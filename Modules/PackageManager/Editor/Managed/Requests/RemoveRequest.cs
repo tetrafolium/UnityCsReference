@@ -5,39 +5,31 @@
 using System;
 using UnityEngine;
 
-namespace UnityEditor.PackageManager.Requests
-{
-[Serializable]
-public sealed class RemoveRequest : Request
-{
+namespace UnityEditor.PackageManager.Requests {
+  [Serializable]
+  public sealed class RemoveRequest : Request {
     [SerializeField]
     private string m_PackageIdOrName;
 
     /// <summary>
     /// Id or name of the package to be removed
     /// </summary>
-    public string PackageIdOrName
-    {
-        get
-        {
-            return m_PackageIdOrName;
-        }
+    public string PackageIdOrName {
+      get { return m_PackageIdOrName; }
     }
 
     /// <summary>
     /// Constructor to support serialization
     /// </summary>
-    private RemoveRequest()
-    {
-    }
+    private RemoveRequest() {}
 
-    internal RemoveRequest(long operationId, NativeStatusCode initialStatus, string packageName)
-        : base(operationId, initialStatus)
-    {
-        if (String.IsNullOrEmpty(packageName?.Trim()))
-            throw new ArgumentNullException(nameof(packageName));
+    internal RemoveRequest(long operationId, NativeStatusCode initialStatus,
+                           string packageName)
+        : base(operationId, initialStatus) {
+      if (String.IsNullOrEmpty(packageName?.Trim()))
+        throw new ArgumentNullException(nameof(packageName));
 
-        m_PackageIdOrName = packageName;
+      m_PackageIdOrName = packageName;
     }
-}
+  }
 }

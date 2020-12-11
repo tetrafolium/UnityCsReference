@@ -7,16 +7,10 @@ using UnityEngine;
 using UnityEngine.Bindings;
 using Object = UnityEngine.Object;
 
-namespace UnityEditor.Build.Reporting
-{
-[NativeType(Header = "Modules/BuildReportingEditor/Public/BuildReport.h")]
-public struct BuildStepMessage
-{
-    public LogType type {
-        get;
-    }
-    public string content {
-        get;
-    }
-}
+namespace UnityEditor.Build.Reporting {
+  [NativeType(Header = "Modules/BuildReportingEditor/Public/BuildReport.h")]
+  public struct BuildStepMessage {
+    public LogType type { get; }
+    public string content { get; }
+  }
 }

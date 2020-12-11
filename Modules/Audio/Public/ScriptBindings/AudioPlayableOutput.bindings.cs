@@ -7,94 +7,78 @@ using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 using UnityEngine.Playables;
 
-namespace UnityEngine.Audio
-{
-[NativeHeader("Modules/Audio/Public/ScriptBindings/AudioPlayableOutput.bindings.h")]
-[NativeHeader("Modules/Audio/Public/Director/AudioPlayableOutput.h")]
-[NativeHeader("Modules/Audio/Public/AudioSource.h")]
-[StaticAccessor("AudioPlayableOutputBindings", StaticAccessorType.DoubleColon)]
-[RequiredByNativeCode]
-public struct AudioPlayableOutput : IPlayableOutput
-{
+namespace UnityEngine.Audio {
+  [NativeHeader(
+      "Modules/Audio/Public/ScriptBindings/AudioPlayableOutput.bindings.h")]
+  [NativeHeader("Modules/Audio/Public/Director/AudioPlayableOutput.h")]
+  [NativeHeader("Modules/Audio/Public/AudioSource.h")]
+  [StaticAccessor("AudioPlayableOutputBindings",
+                  StaticAccessorType.DoubleColon)]
+  [RequiredByNativeCode]
+  public struct AudioPlayableOutput : IPlayableOutput {
     private PlayableOutputHandle m_Handle;
 
-    public static AudioPlayableOutput Create(PlayableGraph graph, string name, AudioSource target)
-    {
-        PlayableOutputHandle handle;
-        if (!AudioPlayableGraphExtensions.InternalCreateAudioOutput(ref graph, name, out handle))
-            return AudioPlayableOutput.Null;
+    public static AudioPlayableOutput Create(PlayableGraph graph, string name,
+                                             AudioSource target) {
+      PlayableOutputHandle handle;
+      if (!AudioPlayableGraphExtensions.InternalCreateAudioOutput(
+              ref graph, name, out handle))
+        return AudioPlayableOutput.Null;
 
-        AudioPlayableOutput output = new AudioPlayableOutput(handle);
-        output.SetTarget(target);
+      AudioPlayableOutput output = new AudioPlayableOutput(handle);
+      output.SetTarget(target);
 
-        return output;
+      return output;
     }
 
-    internal AudioPlayableOutput(PlayableOutputHandle handle)
-    {
-        if (handle.IsValid())
-        {
-            if (!handle.IsPlayableOutputOfType<AudioPlayableOutput>())
-                throw new InvalidCastException("Can't set handle: the playable is not an AudioPlayableOutput.");
-        }
+    internal AudioPlayableOutput(PlayableOutputHandle handle) {
+      if (handle.IsValid()) {
+        if (!handle.IsPlayableOutputOfType<AudioPlayableOutput>())
+          throw new InvalidCastException(
+              "Can't set handle: the playable is not an AudioPlayableOutput.");
+      }
 
-        m_Handle = handle;
+      m_Handle = handle;
     }
 
-    public static AudioPlayableOutput Null
-    {
-        get {
-            return new AudioPlayableOutput(PlayableOutputHandle.Null);
-        }
+    public static AudioPlayableOutput Null {
+      get { return new AudioPlayableOutput(PlayableOutputHandle.Null); }
     }
 
-    public PlayableOutputHandle GetHandle()
-    {
-        return m_Handle;
+    public PlayableOutputHandle GetHandle() { return m_Handle; }
+
+    public static implicit operator PlayableOutput(AudioPlayableOutput output) {
+      return new PlayableOutput(output.GetHandle());
     }
 
-    public static implicit operator PlayableOutput(AudioPlayableOutput output)
-    {
-        return new PlayableOutput(output.GetHandle());
+    public static explicit operator AudioPlayableOutput(PlayableOutput output) {
+      return new AudioPlayableOutput(output.GetHandle());
     }
 
-    public static explicit operator AudioPlayableOutput(PlayableOutput output)
-    {
-        return new AudioPlayableOutput(output.GetHandle());
+    public AudioSource GetTarget() { return InternalGetTarget(ref m_Handle); }
+
+    public void SetTarget(AudioSource value) {
+      InternalSetTarget(ref m_Handle, value);
     }
 
-
-    public AudioSource GetTarget()
-    {
-        return InternalGetTarget(ref m_Handle);
+    public bool GetEvaluateOnSeek() {
+      return InternalGetEvaluateOnSeek(ref m_Handle);
     }
 
-    public void SetTarget(AudioSource value)
-    {
-        InternalSetTarget(ref m_Handle, value);
+    public void SetEvaluateOnSeek(bool value) {
+      InternalSetEvaluateOnSeek(ref m_Handle, value);
     }
 
-    public bool GetEvaluateOnSeek()
-    {
-        return InternalGetEvaluateOnSeek(ref m_Handle);
-    }
+    [NativeThrows] extern private static AudioSource
+    InternalGetTarget(ref PlayableOutputHandle output);
 
-    public void SetEvaluateOnSeek(bool value)
-    {
-        InternalSetEvaluateOnSeek(ref m_Handle, value);
-    }
+    [NativeThrows] extern private static void
+    InternalSetTarget(ref PlayableOutputHandle output, AudioSource target);
 
-    [NativeThrows]
-    extern private static AudioSource InternalGetTarget(ref PlayableOutputHandle output);
+    [NativeThrows] extern private static bool
+    InternalGetEvaluateOnSeek(ref PlayableOutputHandle output);
 
-    [NativeThrows]
-    extern private static void InternalSetTarget(ref PlayableOutputHandle output, AudioSource target);
-
-    [NativeThrows]
-    extern private static bool InternalGetEvaluateOnSeek(ref PlayableOutputHandle output);
-
-    [NativeThrows]
-    extern private static void InternalSetEvaluateOnSeek(ref PlayableOutputHandle output, bool value);
-
-}
+    [NativeThrows] extern private static void
+    InternalSetEvaluateOnSeek(ref PlayableOutputHandle output, bool value);
+  }
 }

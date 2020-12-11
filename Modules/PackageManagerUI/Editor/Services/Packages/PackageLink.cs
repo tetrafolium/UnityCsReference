@@ -4,12 +4,10 @@
 
 using System;
 
-namespace UnityEditor.PackageManager.UI
-{
-[Serializable]
-internal class PackageLink
-{
+namespace UnityEditor.PackageManager.UI {
+  [Serializable]
+  internal class PackageLink {
     public string name;
     public string url;
-}
+  }
 }

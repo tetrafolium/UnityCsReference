@@ -6,11 +6,8 @@ using System;
 using UnityEngine;
 using UnityEngine.Scripting;
 
-namespace UnityEngine.Animations
-{
-[RequiredByNativeCode]
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Class)]
-public class NotKeyableAttribute : Attribute
-{
-}
+namespace UnityEngine.Animations {
+  [RequiredByNativeCode]
+  [AttributeUsage(AttributeTargets.Field | AttributeTargets.Class)]
+  public class NotKeyableAttribute : Attribute {}
 }

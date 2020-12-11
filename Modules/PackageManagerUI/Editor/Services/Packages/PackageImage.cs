@@ -4,22 +4,13 @@
 
 using System;
 
-namespace UnityEditor.PackageManager.UI
-{
-[Serializable]
-internal class PackageImage
-{
-    public enum ImageType
-    {
-        Main,
-        Screenshot,
-        Sketchfab,
-        Youtube,
-        Vimeo
-    }
+namespace UnityEditor.PackageManager.UI {
+  [Serializable]
+  internal class PackageImage {
+    public enum ImageType { Main, Screenshot, Sketchfab, Youtube, Vimeo }
 
     public ImageType type;
     public string thumbnailUrl;
     public string url;
-}
+  }
 }

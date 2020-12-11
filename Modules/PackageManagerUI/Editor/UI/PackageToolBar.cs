@@ -4,25 +4,21 @@
 
 using UnityEngine.UIElements;
 
-namespace UnityEditor.PackageManager.UI
-{
-internal class PackageToolbar : VisualElement
-{
+namespace UnityEditor.PackageManager.UI {
+  internal class PackageToolbar : VisualElement {
     internal new class UxmlFactory : UxmlFactory<PackageToolbar> {}
 
     private ResourceLoader m_ResourceLoader;
-    private void ResolveDependencies()
-    {
-        var container = ServicesContainer.instance;
-        m_ResourceLoader = container.Resolve<ResourceLoader>();
+    private void ResolveDependencies() {
+      var container = ServicesContainer.instance;
+      m_ResourceLoader = container.Resolve<ResourceLoader>();
     }
 
-    public PackageToolbar()
-    {
-        ResolveDependencies();
+    public PackageToolbar() {
+      ResolveDependencies();
 
-        var root = m_ResourceLoader.GetTemplate("PackageToolbar.uxml");
-        Add(root);
+      var root = m_ResourceLoader.GetTemplate("PackageToolbar.uxml");
+      Add(root);
     }
-}
+  }
 }

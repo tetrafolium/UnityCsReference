@@ -12,165 +12,170 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 
-namespace UnityEngine
-{
-public struct HumanPose
-{
-    public Vector3 bodyPosition;
-    public Quaternion bodyRotation;
-    public float[] muscles;
+namespace UnityEngine {
+public struct HumanPose {
+  public Vector3 bodyPosition;
+  public Quaternion bodyRotation;
+  public float[] muscles;
 
-    internal void Init()
-    {
-        if (muscles != null)
-        {
-            if (muscles.Length != HumanTrait.MuscleCount)
-            {
-                throw new InvalidOperationException("Bad array size for HumanPose.muscles. Size must equal HumanTrait.MuscleCount");
-            }
-        }
-
-        if (muscles == null)
-        {
-            muscles = new float[HumanTrait.MuscleCount];
-
-            if (bodyRotation.x == 0 && bodyRotation.y == 0 && bodyRotation.z == 0 && bodyRotation.w == 0)
-            {
-                bodyRotation.w = 1;
-            }
-        }
+  internal void Init() {
+    if (muscles != null) {
+      if (muscles.Length != HumanTrait.MuscleCount) {
+        throw new InvalidOperationException(
+            "Bad array size for HumanPose.muscles. Size must equal HumanTrait.MuscleCount");
+      }
     }
+
+    if (muscles == null) {
+      muscles = new float[HumanTrait.MuscleCount];
+
+      if (bodyRotation.x == 0 && bodyRotation.y == 0 && bodyRotation.z == 0 &&
+          bodyRotation.w == 0) {
+        bodyRotation.w = 1;
+      }
+    }
+  }
 }
 
 [NativeHeader("Modules/Animation/HumanPoseHandler.h")]
 [NativeHeader("Modules/Animation/ScriptBindings/Animation.bindings.h")]
-public class HumanPoseHandler : IDisposable
-{
-    internal IntPtr m_Ptr;
+public class HumanPoseHandler : IDisposable {
+  internal IntPtr m_Ptr;
 
-    [FreeFunction("AnimationBindings::CreateHumanPoseHandler")]
-    extern private static IntPtr Internal_CreateFromRoot(Avatar avatar, Transform root);
+  [FreeFunction(
+      "AnimationBindings::CreateHumanPoseHandler")] extern private static IntPtr
+  Internal_CreateFromRoot(Avatar avatar, Transform root);
 
-    [FreeFunction("AnimationBindings::CreateHumanPoseHandler", IsThreadSafe = true)]
-    extern private static IntPtr Internal_CreateFromJointPaths(Avatar avatar, string[] jointPaths);
+  [FreeFunction("AnimationBindings::CreateHumanPoseHandler",
+                IsThreadSafe = true)] extern private static IntPtr
+  Internal_CreateFromJointPaths(Avatar avatar, string[] jointPaths);
 
-    [FreeFunction("AnimationBindings::DestroyHumanPoseHandler")]
-    extern private static void Internal_Destroy(IntPtr ptr);
+  [FreeFunction(
+      "AnimationBindings::DestroyHumanPoseHandler")] extern private static void
+  Internal_Destroy(IntPtr ptr);
 
-    extern private void GetHumanPose(out Vector3 bodyPosition, out Quaternion bodyRotation, [Out] float[] muscles);
-    extern private void SetHumanPose(ref Vector3 bodyPosition, ref Quaternion bodyRotation, float[] muscles);
+  extern private void GetHumanPose(out Vector3 bodyPosition,
+                                   out Quaternion bodyRotation,
+                                   [ Out ] float[] muscles);
+  extern private void SetHumanPose(ref Vector3 bodyPosition,
+                                   ref Quaternion bodyRotation,
+                                   float[] muscles);
 
-    [ThreadSafe]
-    extern private void GetInternalHumanPose(out Vector3 bodyPosition, out Quaternion bodyRotation, [Out] float[] muscles);
+  [ThreadSafe] extern private void
+  GetInternalHumanPose(out Vector3 bodyPosition, out Quaternion bodyRotation,
+                       [ Out ] float[] muscles);
 
-    [ThreadSafe]
-    extern private void SetInternalHumanPose(ref Vector3 bodyPosition, ref Quaternion bodyRotation, float[] muscles);
+  [ThreadSafe] extern private void
+  SetInternalHumanPose(ref Vector3 bodyPosition, ref Quaternion bodyRotation,
+                       float[] muscles);
 
-    [ThreadSafe]
-    extern private unsafe void GetInternalAvatarPose(void* avatarPose, int avatarPoseLength);
+  [ThreadSafe] extern private unsafe void
+  GetInternalAvatarPose(void *avatarPose, int avatarPoseLength);
 
-    [ThreadSafe]
-    extern private unsafe void SetInternalAvatarPose(void* avatarPose, int avatarPoseLength);
+  [ThreadSafe] extern private unsafe void
+  SetInternalAvatarPose(void *avatarPose, int avatarPoseLength);
 
-    public void Dispose()
-    {
-        if (m_Ptr != IntPtr.Zero)
-        {
-            Internal_Destroy(m_Ptr);
-            m_Ptr = IntPtr.Zero;
-        }
-
-        GC.SuppressFinalize(this);
+  public void Dispose() {
+    if (m_Ptr != IntPtr.Zero) {
+      Internal_Destroy(m_Ptr);
+      m_Ptr = IntPtr.Zero;
     }
 
-    public HumanPoseHandler(Avatar avatar, Transform root)
-    {
-        m_Ptr = IntPtr.Zero;
+    GC.SuppressFinalize(this);
+  }
 
-        if (root == null)
-            throw new ArgumentNullException("HumanPoseHandler root Transform is null");
+  public HumanPoseHandler(Avatar avatar, Transform root) {
+    m_Ptr = IntPtr.Zero;
 
-        if (avatar == null)
-            throw new ArgumentNullException("HumanPoseHandler avatar is null");
+    if (root == null)
+      throw new ArgumentNullException(
+          "HumanPoseHandler root Transform is null");
 
-        if (!avatar.isValid)
-            throw new ArgumentException("HumanPoseHandler avatar is invalid");
+    if (avatar == null)
+      throw new ArgumentNullException("HumanPoseHandler avatar is null");
 
-        if (!avatar.isHuman)
-            throw new ArgumentException("HumanPoseHandler avatar is not human");
+    if (!avatar.isValid)
+      throw new ArgumentException("HumanPoseHandler avatar is invalid");
 
-        m_Ptr = Internal_CreateFromRoot(avatar, root);
-    }
+    if (!avatar.isHuman)
+      throw new ArgumentException("HumanPoseHandler avatar is not human");
 
-    public HumanPoseHandler(Avatar avatar, string[] jointPaths)
-    {
-        m_Ptr = IntPtr.Zero;
+    m_Ptr = Internal_CreateFromRoot(avatar, root);
+  }
 
-        if (jointPaths == null)
-            throw new ArgumentNullException("HumanPoseHandler jointPaths array is null");
+  public HumanPoseHandler(Avatar avatar, string[] jointPaths) {
+    m_Ptr = IntPtr.Zero;
 
-        if (avatar == null)
-            throw new ArgumentNullException("HumanPoseHandler avatar is null");
+    if (jointPaths == null)
+      throw new ArgumentNullException(
+          "HumanPoseHandler jointPaths array is null");
 
-        if (!avatar.isValid)
-            throw new ArgumentException("HumanPoseHandler avatar is invalid");
+    if (avatar == null)
+      throw new ArgumentNullException("HumanPoseHandler avatar is null");
 
-        if (!avatar.isHuman)
-            throw new ArgumentException("HumanPoseHandler avatar is not human");
+    if (!avatar.isValid)
+      throw new ArgumentException("HumanPoseHandler avatar is invalid");
 
-        m_Ptr = Internal_CreateFromJointPaths(avatar, jointPaths);
-    }
+    if (!avatar.isHuman)
+      throw new ArgumentException("HumanPoseHandler avatar is not human");
 
-    public void GetHumanPose(ref HumanPose humanPose)
-    {
-        if (m_Ptr == IntPtr.Zero)
-            throw new NullReferenceException("HumanPoseHandler is not initialized properly");
+    m_Ptr = Internal_CreateFromJointPaths(avatar, jointPaths);
+  }
 
-        humanPose.Init();
-        GetHumanPose(out humanPose.bodyPosition, out humanPose.bodyRotation, humanPose.muscles);
-    }
+  public void GetHumanPose(ref HumanPose humanPose) {
+    if (m_Ptr == IntPtr.Zero)
+      throw new NullReferenceException(
+          "HumanPoseHandler is not initialized properly");
 
-    public void SetHumanPose(ref HumanPose humanPose)
-    {
-        if (m_Ptr == IntPtr.Zero)
-            throw new NullReferenceException("HumanPoseHandler is not initialized properly");
+    humanPose.Init();
+    GetHumanPose(out humanPose.bodyPosition, out humanPose.bodyRotation,
+                 humanPose.muscles);
+  }
 
-        humanPose.Init();
-        SetHumanPose(ref humanPose.bodyPosition, ref humanPose.bodyRotation, humanPose.muscles);
-    }
+  public void SetHumanPose(ref HumanPose humanPose) {
+    if (m_Ptr == IntPtr.Zero)
+      throw new NullReferenceException(
+          "HumanPoseHandler is not initialized properly");
 
-    public void GetInternalHumanPose(ref HumanPose humanPose)
-    {
-        if (m_Ptr == IntPtr.Zero)
-            throw new NullReferenceException("HumanPoseHandler is not initialized properly");
+    humanPose.Init();
+    SetHumanPose(ref humanPose.bodyPosition, ref humanPose.bodyRotation,
+                 humanPose.muscles);
+  }
 
-        humanPose.Init();
-        GetInternalHumanPose(out humanPose.bodyPosition, out humanPose.bodyRotation, humanPose.muscles);
-    }
+  public void GetInternalHumanPose(ref HumanPose humanPose) {
+    if (m_Ptr == IntPtr.Zero)
+      throw new NullReferenceException(
+          "HumanPoseHandler is not initialized properly");
 
-    public void SetInternalHumanPose(ref HumanPose humanPose)
-    {
-        if (m_Ptr == IntPtr.Zero)
-            throw new NullReferenceException("HumanPoseHandler is not initialized properly");
+    humanPose.Init();
+    GetInternalHumanPose(out humanPose.bodyPosition, out humanPose.bodyRotation,
+                         humanPose.muscles);
+  }
 
-        humanPose.Init();
-        SetInternalHumanPose(ref humanPose.bodyPosition, ref humanPose.bodyRotation, humanPose.muscles);
-    }
+  public void SetInternalHumanPose(ref HumanPose humanPose) {
+    if (m_Ptr == IntPtr.Zero)
+      throw new NullReferenceException(
+          "HumanPoseHandler is not initialized properly");
 
-    public unsafe void GetInternalAvatarPose(NativeArray<float> avatarPose)
-    {
-        if (m_Ptr == IntPtr.Zero)
-            throw new NullReferenceException("HumanPoseHandler is not initialized properly");
+    humanPose.Init();
+    SetInternalHumanPose(ref humanPose.bodyPosition, ref humanPose.bodyRotation,
+                         humanPose.muscles);
+  }
 
-        GetInternalAvatarPose(avatarPose.GetUnsafePtr(), avatarPose.Length);
-    }
+  public unsafe void GetInternalAvatarPose(NativeArray<float> avatarPose) {
+    if (m_Ptr == IntPtr.Zero)
+      throw new NullReferenceException(
+          "HumanPoseHandler is not initialized properly");
 
-    public unsafe void SetInternalAvatarPose(NativeArray<float> avatarPose)
-    {
-        if (m_Ptr == IntPtr.Zero)
-            throw new NullReferenceException("HumanPoseHandler is not initialized properly");
+    GetInternalAvatarPose(avatarPose.GetUnsafePtr(), avatarPose.Length);
+  }
 
-        SetInternalAvatarPose(avatarPose.GetUnsafeReadOnlyPtr(), avatarPose.Length);
-    }
+  public unsafe void SetInternalAvatarPose(NativeArray<float> avatarPose) {
+    if (m_Ptr == IntPtr.Zero)
+      throw new NullReferenceException(
+          "HumanPoseHandler is not initialized properly");
+
+    SetInternalAvatarPose(avatarPose.GetUnsafeReadOnlyPtr(), avatarPose.Length);
+  }
 }
 }

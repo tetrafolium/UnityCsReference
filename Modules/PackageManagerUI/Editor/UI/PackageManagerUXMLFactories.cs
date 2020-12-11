@@ -4,42 +4,35 @@
 
 using UnityEngine.UIElements;
 
-namespace UnityEditor.PackageManager.UI
-{
-[InitializeOnLoad]
-internal class PackageManagerUXMLFactories
-{
+namespace UnityEditor.PackageManager.UI {
+  [InitializeOnLoad]
+  internal class PackageManagerUXMLFactories {
     private static readonly bool k_Registered;
 
-    static PackageManagerUXMLFactories()
-    {
-        if (k_Registered)
-            return;
+    static PackageManagerUXMLFactories() {
+      if (k_Registered)
+        return;
 
-        k_Registered = true;
+      k_Registered = true;
 
-        IUxmlFactory[] factories =
-        {
-            new Alert.UxmlFactory(),
-            new DropdownButton.UxmlFactory(),
-            new LoadingSpinner.UxmlFactory(),
-            new PackageDependencies.UxmlFactory(),
-            new PackageDetails.UxmlFactory(),
-            new PackageTagLabel.UxmlFactory(),
-            new PackageList.UxmlFactory(),
-            new PackageLoadBar.UxmlFactory(),
-            new PackageManagerToolbar.UxmlFactory(),
-            new PackageSampleList.UxmlFactory(),
-            new PackageStatusBar.UxmlFactory(),
-            new PackageToolbar.UxmlFactory(),
-            new ProgressBar.UxmlFactory(),
-            new ToolbarWindowMenu.UxmlFactory()
-        };
+      IUxmlFactory[] factories = {new Alert.UxmlFactory(),
+                                  new DropdownButton.UxmlFactory(),
+                                  new LoadingSpinner.UxmlFactory(),
+                                  new PackageDependencies.UxmlFactory(),
+                                  new PackageDetails.UxmlFactory(),
+                                  new PackageTagLabel.UxmlFactory(),
+                                  new PackageList.UxmlFactory(),
+                                  new PackageLoadBar.UxmlFactory(),
+                                  new PackageManagerToolbar.UxmlFactory(),
+                                  new PackageSampleList.UxmlFactory(),
+                                  new PackageStatusBar.UxmlFactory(),
+                                  new PackageToolbar.UxmlFactory(),
+                                  new ProgressBar.UxmlFactory(),
+                                  new ToolbarWindowMenu.UxmlFactory()};
 
-        foreach (IUxmlFactory factory in factories)
-        {
-            VisualElementFactoryRegistry.RegisterFactory(factory);
-        }
+      foreach (IUxmlFactory factory in factories) {
+        VisualElementFactoryRegistry.RegisterFactory(factory);
+      }
     }
-}
+  }
 }

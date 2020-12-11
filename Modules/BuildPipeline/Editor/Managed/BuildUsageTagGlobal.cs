@@ -7,13 +7,11 @@ using System.Runtime.InteropServices;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace UnityEditor.Build.Content
-{
-[Serializable]
-[UsedByNativeCode]
-[StructLayout(LayoutKind.Sequential)]
-public struct BuildUsageTagGlobal
-{
+namespace UnityEditor.Build.Content {
+  [Serializable]
+  [UsedByNativeCode]
+  [StructLayout(LayoutKind.Sequential)]
+  public struct BuildUsageTagGlobal {
     internal uint m_LightmapModesUsed;
     internal uint m_LegacyLightmapModesUsed;
     internal uint m_DynamicLightmapsUsed;
@@ -24,19 +22,25 @@ public struct BuildUsageTagGlobal
     internal bool m_SubtractiveUsed;
     internal bool m_HybridRendererPackageUsed;
 
-    public static BuildUsageTagGlobal operator|(BuildUsageTagGlobal x, BuildUsageTagGlobal y)
-    {
-        var results = new BuildUsageTagGlobal();
-        results.m_LightmapModesUsed = x.m_LightmapModesUsed | y.m_LightmapModesUsed;
-        results.m_LegacyLightmapModesUsed = x.m_LegacyLightmapModesUsed | y.m_LegacyLightmapModesUsed;
-        results.m_DynamicLightmapsUsed = x.m_LightmapModesUsed | y.m_DynamicLightmapsUsed;
-        results.m_FogModesUsed = x.m_FogModesUsed | y.m_FogModesUsed;
-        results.m_ForceInstancingStrip = x.m_ForceInstancingStrip | y.m_ForceInstancingStrip;
-        results.m_ForceInstancingKeep = x.m_ForceInstancingKeep | y.m_ForceInstancingKeep;
-        results.m_ShadowMasksUsed = x.m_ShadowMasksUsed | y.m_ShadowMasksUsed;
-        results.m_SubtractiveUsed = x.m_SubtractiveUsed | y.m_SubtractiveUsed;
-        results.m_HybridRendererPackageUsed = x.m_HybridRendererPackageUsed | y.m_HybridRendererPackageUsed;
-        return results;
+    public static BuildUsageTagGlobal operator |(BuildUsageTagGlobal x,
+                                                 BuildUsageTagGlobal y) {
+      var results = new BuildUsageTagGlobal();
+      results.m_LightmapModesUsed =
+          x.m_LightmapModesUsed | y.m_LightmapModesUsed;
+      results.m_LegacyLightmapModesUsed =
+          x.m_LegacyLightmapModesUsed | y.m_LegacyLightmapModesUsed;
+      results.m_DynamicLightmapsUsed =
+          x.m_LightmapModesUsed | y.m_DynamicLightmapsUsed;
+      results.m_FogModesUsed = x.m_FogModesUsed | y.m_FogModesUsed;
+      results.m_ForceInstancingStrip =
+          x.m_ForceInstancingStrip | y.m_ForceInstancingStrip;
+      results.m_ForceInstancingKeep =
+          x.m_ForceInstancingKeep | y.m_ForceInstancingKeep;
+      results.m_ShadowMasksUsed = x.m_ShadowMasksUsed | y.m_ShadowMasksUsed;
+      results.m_SubtractiveUsed = x.m_SubtractiveUsed | y.m_SubtractiveUsed;
+      results.m_HybridRendererPackageUsed =
+          x.m_HybridRendererPackageUsed | y.m_HybridRendererPackageUsed;
+      return results;
     }
-}
+  }
 }

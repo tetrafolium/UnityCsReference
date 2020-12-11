@@ -6,16 +6,15 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Bindings;
-using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCodeAttribute;
+using RequiredByNativeCodeAttribute =
+    UnityEngine.Scripting.RequiredByNativeCodeAttribute;
 
-namespace UnityEditor.PackageManager
-{
-[Serializable]
-[StructLayout(LayoutKind.Sequential)]
-[RequiredByNativeCode]
-[NativeAsStruct]
-internal class CachedPackageInfo
-{
+namespace UnityEditor.PackageManager {
+  [Serializable]
+  [StructLayout(LayoutKind.Sequential)]
+  [RequiredByNativeCode]
+  [NativeAsStruct]
+  internal class CachedPackageInfo {
     [SerializeField]
     [NativeName("name")]
     private string m_Name = "";
@@ -36,44 +35,24 @@ internal class CachedPackageInfo
     [NativeName("versions")]
     private string[] m_Versions;
 
-    public string name
-    {
-        get
-        {
-            return m_Name;
-        }
+    public string name {
+      get { return m_Name; }
     }
 
-    public string displayName
-    {
-        get
-        {
-            return m_DisplayName;
-        }
+    public string displayName {
+      get { return m_DisplayName; }
     }
 
-    public string description
-    {
-        get
-        {
-            return m_Description;
-        }
+    public string description {
+      get { return m_Description; }
     }
 
-    public string latest
-    {
-        get
-        {
-            return m_Latest;
-        }
+    public string latest {
+      get { return m_Latest; }
     }
 
-    public string[] versions
-    {
-        get
-        {
-            return m_Versions;
-        }
+    public string[] versions {
+      get { return m_Versions; }
     }
-}
+  }
 }

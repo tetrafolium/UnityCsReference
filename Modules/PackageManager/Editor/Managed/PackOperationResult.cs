@@ -6,16 +6,15 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Bindings;
-using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCodeAttribute;
+using RequiredByNativeCodeAttribute =
+    UnityEngine.Scripting.RequiredByNativeCodeAttribute;
 
-namespace UnityEditor.PackageManager
-{
-[Serializable]
-[StructLayout(LayoutKind.Sequential)]
-[RequiredByNativeCode]
-[NativeAsStruct]
-public sealed class PackOperationResult
-{
+namespace UnityEditor.PackageManager {
+  [Serializable]
+  [StructLayout(LayoutKind.Sequential)]
+  [RequiredByNativeCode]
+  [NativeAsStruct]
+  public sealed class PackOperationResult {
     [SerializeField]
     [NativeName("tarballPath")]
     private string m_TarballPath = "";
@@ -23,9 +22,7 @@ public sealed class PackOperationResult
     internal PackOperationResult() {}
 
     public string tarballPath {
-        get {
-            return m_TarballPath;
-        }
+      get { return m_TarballPath; }
     }
-}
+  }
 }

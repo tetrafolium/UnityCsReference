@@ -6,16 +6,15 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Bindings;
-using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCodeAttribute;
+using RequiredByNativeCodeAttribute =
+    UnityEngine.Scripting.RequiredByNativeCodeAttribute;
 
-namespace UnityEditor.PackageManager
-{
-[Serializable]
-[RequiredByNativeCode]
-[StructLayout(LayoutKind.Sequential)]
-[NativeAsStruct]
-public class GitInfo
-{
+namespace UnityEditor.PackageManager {
+  [Serializable]
+  [RequiredByNativeCode]
+  [StructLayout(LayoutKind.Sequential)]
+  [NativeAsStruct]
+  public class GitInfo {
     [SerializeField]
     [NativeName("hash")]
     private string m_Hash;
@@ -26,21 +25,16 @@ public class GitInfo
 
     internal GitInfo() {}
 
-    internal GitInfo(string hash, string revision)
-    {
-        m_Hash = hash;
-        m_Revision = revision;
+    internal GitInfo(string hash, string revision) {
+      m_Hash = hash;
+      m_Revision = revision;
     }
 
     public string hash {
-        get {
-            return m_Hash;
-        }
+      get { return m_Hash; }
     }
     public string revision {
-        get {
-            return m_Revision;
-        }
+      get { return m_Revision; }
     }
-}
+  }
 }

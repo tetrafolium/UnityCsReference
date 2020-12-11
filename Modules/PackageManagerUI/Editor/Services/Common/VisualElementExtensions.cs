@@ -5,25 +5,21 @@
 using System;
 using UnityEngine.UIElements;
 
-namespace UnityEditor.PackageManager.UI
-{
-internal static class VisualElementExtensions
-{
-    public static void OnLeftClick(this VisualElement element, Action action)
-    {
-        element.RegisterCallback<MouseDownEvent>(e =>
-        {
-            if (e.button == 0)
-                action?.Invoke();
-        });
+namespace UnityEditor.PackageManager.UI {
+  internal static class VisualElementExtensions {
+    public static void OnLeftClick(this VisualElement element, Action action) {
+      element.RegisterCallback<MouseDownEvent>(e => {
+        if (e.button == 0)
+          action?.Invoke();
+      });
     }
 
-    public static void EnableClass(this VisualElement element, string classname, bool enable)
-    {
-        element.RemoveFromClassList(classname);
+    public static void EnableClass(this VisualElement element, string classname,
+                                   bool enable) {
+      element.RemoveFromClassList(classname);
 
-        if (enable)
-            element.AddToClassList(classname);
+      if (enable)
+        element.AddToClassList(classname);
     }
 
     /// <summary>
@@ -33,15 +29,16 @@ internal static class VisualElementExtensions
     /// <param name="classnameA">Class to set if enabled</param>
     /// <param name="classnameB">Class to set if disabled</param>
     /// <param name="enable">State to set classes from</param>
-    public static void EnableClassToggle(this VisualElement element, string classnameA, string classnameB, bool enable)
-    {
-        element.RemoveFromClassList(classnameA);
-        element.RemoveFromClassList(classnameB);
+    public static void EnableClassToggle(this VisualElement element,
+                                         string classnameA, string classnameB,
+                                         bool enable) {
+      element.RemoveFromClassList(classnameA);
+      element.RemoveFromClassList(classnameB);
 
-        if (enable)
-            element.AddToClassList(classnameA);
-        else
-            element.AddToClassList(classnameB);
+      if (enable)
+        element.AddToClassList(classnameA);
+      else
+        element.AddToClassList(classnameB);
     }
 
     /// <summary>
@@ -49,11 +46,11 @@ internal static class VisualElementExtensions
     /// </summary>
     /// <param name="element">Extension element</param>
     /// <param name="classnames">Space-separated list of classes to add</param>
-    public static void AddClasses(this VisualElement element, string classnames)
-    {
-        if (!string.IsNullOrEmpty(classnames))
-            foreach (var classname in classnames.Split(' '))
-                element.AddToClassList(classname);
+    public static void AddClasses(this VisualElement element,
+                                  string classnames) {
+      if (!string.IsNullOrEmpty(classnames))
+        foreach (var classname in classnames.Split(' '))
+          element.AddToClassList(classname);
     }
-}
+  }
 }

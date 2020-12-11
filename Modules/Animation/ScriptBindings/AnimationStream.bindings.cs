@@ -8,25 +8,22 @@ using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 using UnityEngine.Scripting.APIUpdating;
 
-namespace UnityEngine.Animations
-{
-internal enum AnimatorBindingsVersion
-{
+namespace UnityEngine.Animations {
+  internal enum AnimatorBindingsVersion {
     // Invalid.
-    kInvalidNotNative = 0,       // Created in C# (with new)
-    kInvalidUnresolved = 1,      // Created in C++, but still unresolved
+    kInvalidNotNative = 0,  // Created in C# (with new)
+    kInvalidUnresolved = 1, // Created in C++, but still unresolved
 
     // Valid.
-    kValidMinVersion = 2         // Minimum valid version
-}
+    kValidMinVersion = 2 // Minimum valid version
+  }
 
-[MovedFrom("UnityEngine.Experimental.Animations")]
-[NativeHeader("Modules/Animation/ScriptBindings/AnimationStream.bindings.h")]
-[NativeHeader("Modules/Animation/Director/AnimationStream.h")]
-[RequiredByNativeCode]
-[StructLayout(LayoutKind.Sequential)]
-public struct AnimationStream
-{
+  [MovedFrom("UnityEngine.Experimental.Animations")]
+  [NativeHeader("Modules/Animation/ScriptBindings/AnimationStream.bindings.h")]
+  [NativeHeader("Modules/Animation/Director/AnimationStream.h")]
+  [RequiredByNativeCode]
+  [StructLayout(LayoutKind.Sequential)]
+  public struct AnimationStream {
     private UInt32 m_AnimatorBindingsVersion;
 
     private System.IntPtr constant;
@@ -38,126 +35,110 @@ public struct AnimationStream
 
     internal const int InvalidIndex = ~0;
 
-    internal UInt32 animatorBindingsVersion
-    {
-        get {
-            return m_AnimatorBindingsVersion;
-        }
+    internal UInt32 animatorBindingsVersion {
+      get { return m_AnimatorBindingsVersion; }
     }
 
-    public bool isValid
-    {
-        get
-        {
-            return m_AnimatorBindingsVersion >= (UInt32)AnimatorBindingsVersion.kValidMinVersion &&
-                   constant != System.IntPtr.Zero &&
-                   input != System.IntPtr.Zero &&
-                   output != System.IntPtr.Zero &&
-                   workspace != System.IntPtr.Zero &&
-                   animationHandleBinder != System.IntPtr.Zero;
-        }
+    public bool isValid {
+      get {
+        return m_AnimatorBindingsVersion >=
+                   (UInt32) AnimatorBindingsVersion.kValidMinVersion &&
+               constant != System.IntPtr.Zero && input != System.IntPtr.Zero &&
+               output != System.IntPtr.Zero &&
+               workspace != System.IntPtr.Zero &&
+               animationHandleBinder != System.IntPtr.Zero;
+      }
     }
 
-    internal void CheckIsValid()
-    {
-        if (!isValid)
-            throw new InvalidOperationException("The AnimationStream is invalid.");
+    internal void CheckIsValid() {
+      if (!isValid)
+        throw new InvalidOperationException("The AnimationStream is invalid.");
     }
 
-    public float deltaTime
-    {
-        get {
-            CheckIsValid();
-            return GetDeltaTime();
-        }
-    }
-
-    public Vector3 velocity
-    {
-        get {
-            CheckIsValid();
-            return GetVelocity();
-        }
-        set {
-            CheckIsValid();
-            SetVelocity(value);
-        }
-    }
-
-    public Vector3 angularVelocity
-    {
-        get {
-            CheckIsValid();
-            return GetAngularVelocity();
-        }
-        set {
-            CheckIsValid();
-            SetAngularVelocity(value);
-        }
-    }
-
-    public Vector3 rootMotionPosition
-    {
-        get {
-            CheckIsValid();
-            return GetRootMotionPosition();
-        }
-    }
-
-    public Quaternion rootMotionRotation
-    {
-        get {
-            CheckIsValid();
-            return GetRootMotionRotation();
-        }
-    }
-
-    public bool isHumanStream
-    {
-        get {
-            CheckIsValid();
-            return GetIsHumanStream();
-        }
-    }
-
-    public AnimationHumanStream AsHuman()
-    {
+    public float deltaTime {
+      get {
         CheckIsValid();
-        if (!GetIsHumanStream())
-            throw new InvalidOperationException("Cannot create an AnimationHumanStream for a generic rig.");
-
-        return GetHumanStream();
+        return GetDeltaTime();
+      }
     }
 
-    public int inputStreamCount
-    {
-        get {
-            CheckIsValid();
-            return GetInputStreamCount();
-        }
-    }
-
-    public AnimationStream GetInputStream(int index)
-    {
+    public Vector3 velocity {
+      get {
         CheckIsValid();
-        return InternalGetInputStream(index);
+        return GetVelocity();
+      }
+      set {
+        CheckIsValid();
+        SetVelocity(value);
+      }
     }
 
-    public float GetInputWeight(int index)
-    {
+    public Vector3 angularVelocity {
+      get {
         CheckIsValid();
-        return InternalGetInputWeight(index);
+        return GetAngularVelocity();
+      }
+      set {
+        CheckIsValid();
+        SetAngularVelocity(value);
+      }
+    }
+
+    public Vector3 rootMotionPosition {
+      get {
+        CheckIsValid();
+        return GetRootMotionPosition();
+      }
+    }
+
+    public Quaternion rootMotionRotation {
+      get {
+        CheckIsValid();
+        return GetRootMotionRotation();
+      }
+    }
+
+    public bool isHumanStream {
+      get {
+        CheckIsValid();
+        return GetIsHumanStream();
+      }
+    }
+
+    public AnimationHumanStream AsHuman() {
+      CheckIsValid();
+      if (!GetIsHumanStream())
+        throw new InvalidOperationException(
+            "Cannot create an AnimationHumanStream for a generic rig.");
+
+      return GetHumanStream();
+    }
+
+    public int inputStreamCount {
+      get {
+        CheckIsValid();
+        return GetInputStreamCount();
+      }
+    }
+
+    public AnimationStream GetInputStream(int index) {
+      CheckIsValid();
+      return InternalGetInputStream(index);
+    }
+
+    public float GetInputWeight(int index) {
+      CheckIsValid();
+      return InternalGetInputWeight(index);
     }
 
     private void ReadSceneTransforms() {
-        CheckIsValid();
-        InternalReadSceneTransforms();
+      CheckIsValid();
+      InternalReadSceneTransforms();
     }
     private void WriteSceneTransforms() {
-        CheckIsValid();
-        InternalWriteSceneTransforms();
+      CheckIsValid();
+      InternalWriteSceneTransforms();
     }
-
 
     [NativeMethod(IsThreadSafe = true)]
     private extern float GetDeltaTime();
@@ -165,22 +146,34 @@ public struct AnimationStream
     [NativeMethod(IsThreadSafe = true)]
     private extern bool GetIsHumanStream();
 
-    [NativeMethod(Name = "AnimationStreamBindings::GetVelocity", IsFreeFunction = true, IsThreadSafe = true, HasExplicitThis = true)]
+    [NativeMethod(Name = "AnimationStreamBindings::GetVelocity",
+                  IsFreeFunction = true, IsThreadSafe = true,
+                  HasExplicitThis = true)]
     private extern Vector3 GetVelocity();
 
-    [NativeMethod(Name = "AnimationStreamBindings::SetVelocity", IsFreeFunction = true, IsThreadSafe = true, HasExplicitThis = true)]
+    [NativeMethod(Name = "AnimationStreamBindings::SetVelocity",
+                  IsFreeFunction = true, IsThreadSafe = true,
+                  HasExplicitThis = true)]
     private extern void SetVelocity(Vector3 velocity);
 
-    [NativeMethod(Name = "AnimationStreamBindings::GetAngularVelocity", IsFreeFunction = true, IsThreadSafe = true, HasExplicitThis = true)]
+    [NativeMethod(Name = "AnimationStreamBindings::GetAngularVelocity",
+                  IsFreeFunction = true, IsThreadSafe = true,
+                  HasExplicitThis = true)]
     private extern Vector3 GetAngularVelocity();
 
-    [NativeMethod(Name = "AnimationStreamBindings::SetAngularVelocity", IsFreeFunction = true, IsThreadSafe = true, HasExplicitThis = true)]
+    [NativeMethod(Name = "AnimationStreamBindings::SetAngularVelocity",
+                  IsFreeFunction = true, IsThreadSafe = true,
+                  HasExplicitThis = true)]
     private extern void SetAngularVelocity(Vector3 velocity);
 
-    [NativeMethod(Name = "AnimationStreamBindings::GetRootMotionPosition", IsFreeFunction = true, IsThreadSafe = true, HasExplicitThis = true)]
+    [NativeMethod(Name = "AnimationStreamBindings::GetRootMotionPosition",
+                  IsFreeFunction = true, IsThreadSafe = true,
+                  HasExplicitThis = true)]
     private extern Vector3 GetRootMotionPosition();
 
-    [NativeMethod(Name = "AnimationStreamBindings::GetRootMotionRotation", IsFreeFunction = true, IsThreadSafe = true, HasExplicitThis = true)]
+    [NativeMethod(Name = "AnimationStreamBindings::GetRootMotionRotation",
+                  IsFreeFunction = true, IsThreadSafe = true,
+                  HasExplicitThis = true)]
     private extern Quaternion GetRootMotionRotation();
 
     [NativeMethod(IsThreadSafe = true)]
@@ -200,5 +193,5 @@ public struct AnimationStream
 
     [NativeMethod(Name = "WriteSceneTransforms", IsThreadSafe = true)]
     private extern void InternalWriteSceneTransforms();
-}
+  }
 }

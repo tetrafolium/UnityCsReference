@@ -10,17 +10,16 @@ using UnityEngine;
 using UnityEngine.Bindings;
 using UnityEditor.Compilation;
 using Assembly = System.Reflection.Assembly;
-using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCodeAttribute;
+using RequiredByNativeCodeAttribute =
+    UnityEngine.Scripting.RequiredByNativeCodeAttribute;
 
-namespace UnityEditor.PackageManager
-{
-[Serializable]
-[StructLayout(LayoutKind.Sequential)]
-[RequiredByNativeCode]
-[NativeAsStruct]
-[NativeType(IntermediateScriptingStructName = "PackageManager_PackageInfo")]
-public sealed partial class PackageInfo
-{
+namespace UnityEditor.PackageManager {
+  [Serializable]
+  [StructLayout(LayoutKind.Sequential)]
+  [RequiredByNativeCode]
+  [NativeAsStruct]
+  [NativeType(IntermediateScriptingStructName = "PackageManager_PackageInfo")]
+  public sealed partial class PackageInfo {
     [SerializeField]
     [NativeName("packageId")]
     private string m_PackageId = "";
@@ -144,228 +143,172 @@ public sealed partial class PackageInfo
     internal PackageInfo() {}
 
     public string packageId {
-        get {
-            return m_PackageId;
-        }
+      get { return m_PackageId; }
     }
     public bool isDirectDependency {
-        get {
-            return m_IsDirectDependency;
-        }
+      get { return m_IsDirectDependency; }
     }
     public string version {
-        get {
-            return m_Version;
-        }
+      get { return m_Version; }
     }
     public PackageSource source {
-        get {
-            return m_Source;
-        }
+      get { return m_Source; }
     }
     public string resolvedPath {
-        get {
-            return m_ResolvedPath;
-        }
+      get { return m_ResolvedPath; }
     }
     public string assetPath {
-        get {
-            return m_AssetPath;
-        }
+      get { return m_AssetPath; }
     }
     public string name {
-        get {
-            return m_Name;
-        }
+      get { return m_Name; }
     }
     public string displayName {
-        get {
-            return m_DisplayName;
-        }
+      get { return m_DisplayName; }
     }
     public string category {
-        get {
-            return m_Category;
-        }
+      get { return m_Category; }
     }
     public string type {
-        get {
-            return m_Type;
-        }
+      get { return m_Type; }
     }
     public string description {
-        get {
-            return m_Description;
-        }
+      get { return m_Description; }
     }
     public PackageStatus status {
-        get {
-            return m_Status;
-        }
+      get { return m_Status; }
     }
     public Error[] errors {
-        get {
-            return m_Errors;
-        }
+      get { return m_Errors; }
     }
     public VersionsInfo versions {
-        get {
-            return m_Versions;
-        }
+      get { return m_Versions; }
     }
     public DependencyInfo[] dependencies {
-        get {
-            return m_Dependencies;
-        }
+      get { return m_Dependencies; }
     }
     public DependencyInfo[] resolvedDependencies {
-        get {
-            return m_ResolvedDependencies;
-        }
+      get { return m_ResolvedDependencies; }
     }
     public string[] keywords {
-        get {
-            return m_Keywords;
-        }
+      get { return m_Keywords; }
     }
     public AuthorInfo author {
-        get {
-            return m_Author;
-        }
+      get { return m_Author; }
     }
     internal bool hideInEditor {
-        get {
-            return m_HideInEditor;
-        }
+      get { return m_HideInEditor; }
     }
     internal EntitlementsInfo entitlements {
-        get {
-            return m_Entitlements;
-        }
+      get { return m_Entitlements; }
     }
     internal bool isAssetStorePackage {
-        get {
-            return m_IsAssetStorePackage;
-        }
+      get { return m_IsAssetStorePackage; }
     }
     public string documentationUrl {
-        get {
-            return m_DocumentationUrl;
-        }
+      get { return m_DocumentationUrl; }
     }
     public string changelogUrl {
-        get {
-            return m_ChangelogUrl;
-        }
+      get { return m_ChangelogUrl; }
     }
     public string licensesUrl {
-        get {
-            return m_LicensesUrl;
-        }
+      get { return m_LicensesUrl; }
     }
 
-    public RegistryInfo registry
-    {
-        get
-        {
-            return m_HasRegistry ? m_Registry : null;
-        }
+    public RegistryInfo registry {
+      get { return m_HasRegistry ? m_Registry : null; }
     }
 
-    public DateTime? datePublished
-    {
-        get
-        {
-            return m_DatePublishedTicks == 0 ? (DateTime?)null : new DateTime(m_DatePublishedTicks, DateTimeKind.Utc);
-        }
+    public DateTime? datePublished {
+      get {
+        return m_DatePublishedTicks == 0
+                   ? (DateTime?) null
+                   : new DateTime(m_DatePublishedTicks, DateTimeKind.Utc);
+      }
     }
 
-    public GitInfo git
-    {
-        get
-        {
-            return m_Source  == PackageSource.Git ? m_Git : null;
-        }
+    public GitInfo git {
+      get { return m_Source == PackageSource.Git ? m_Git : null; }
     }
 
-    public RepositoryInfo repository
-    {
-        get
-        {
-            return m_HasRepository ? m_Repository : null;
-        }
+    public RepositoryInfo repository {
+      get { return m_HasRepository ? m_Repository : null; }
     }
 
-    public static PackageInfo FindForAssetPath(string assetPath)
-    {
-        if (string.IsNullOrEmpty(assetPath))
-            throw new ArgumentException("Asset path cannot be null or empty.", "assetPath");
+    public static PackageInfo FindForAssetPath(string assetPath) {
+      if (string.IsNullOrEmpty(assetPath))
+        throw new ArgumentException("Asset path cannot be null or empty.",
+                                    "assetPath");
 
-        var packageInfo = GetPackageByAssetPath(assetPath);
+      var packageInfo = GetPackageByAssetPath(assetPath);
 
-        // We assume the package is found only if the name field is set.
-        // This is because there is no straightforward way to make this nullable in native and,
-        // returning extra arguments with the [Out] attribute has expensive unmarshalling costs.
-        return string.IsNullOrEmpty(packageInfo.name) ? null : packageInfo;
+      // We assume the package is found only if the name field is set.
+      // This is because there is no straightforward way to make this nullable
+      // in native and, returning extra arguments with the [Out] attribute has
+      // expensive unmarshalling costs.
+      return string.IsNullOrEmpty(packageInfo.name) ? null : packageInfo;
     }
 
-    public static PackageInfo FindForAssembly(Assembly assembly)
-    {
-        if (assembly == null)
-            throw new ArgumentNullException("assembly");
+    public static PackageInfo FindForAssembly(Assembly assembly) {
+      if (assembly == null)
+        throw new ArgumentNullException("assembly");
 
-        string fullPath = assembly.Location;
+      string fullPath = assembly.Location;
 
+      // See if there is an asmdef file for this assembly - use it if so
+      var asmdefPath =
+          CompilationPipeline.GetAssemblyDefinitionFilePathFromAssemblyName(
+              fullPath);
+      if (!String.IsNullOrEmpty(asmdefPath))
+        return FindForAssetPath(asmdefPath);
+
+      // No asmdef - this is a precompiled DLL.
+      // Do a scan through all packages for one that owns the directory in which
+      // it is.
+      foreach (var package in GetAll()) {
+        if (fullPath.StartsWith(package.resolvedPath +
+                                Path.DirectorySeparatorChar))
+          return package;
+      }
+
+      return null;
+    }
+
+    internal static List<PackageInfo>
+    GetForAssemblyFilePaths(List<string> assemblyPaths) {
+      // We will first get all the relative asmdef paths from assembly paths
+      var pathsToProcess = new HashSet<string>();
+      foreach (string assemblyPath in assemblyPaths) {
         // See if there is an asmdef file for this assembly - use it if so
-        var asmdefPath = CompilationPipeline.GetAssemblyDefinitionFilePathFromAssemblyName(fullPath);
-        if (!String.IsNullOrEmpty(asmdefPath))
-            return FindForAssetPath(asmdefPath);
+        var asmdefPath =
+            CompilationPipeline.GetAssemblyDefinitionFilePathFromAssemblyName(
+                assemblyPath);
+        pathsToProcess.Add(String.IsNullOrEmpty(asmdefPath) ? assemblyPath
+                                                            : asmdefPath);
+      }
 
-        // No asmdef - this is a precompiled DLL.
-        // Do a scan through all packages for one that owns the directory in which it is.
-        foreach (var package in GetAll())
-        {
-            if (fullPath.StartsWith(package.resolvedPath + Path.DirectorySeparatorChar))
-                return package;
+      // We will loop through all the packages and see if they match the
+      // relative or absolute paths of asmdefs or assemblies
+      List<PackageInfo> matchingPackages = new List<PackageInfo>();
+      foreach (var package in GetAll()) {
+        foreach (var path in pathsToProcess) {
+          bool found;
+          if (Path.IsPathRooted(path))
+            found = path.StartsWith(package.resolvedPath +
+                                    Path.DirectorySeparatorChar);
+          else
+            found = path.StartsWith(package.assetPath + '/');
+
+          if (found) {
+            matchingPackages.Add(package);
+            pathsToProcess.Remove(path);
+            break;
+          }
         }
-
-        return null;
+        if (pathsToProcess.Count == 0)
+          break;
+      }
+      return matchingPackages;
     }
-
-    internal static List<PackageInfo> GetForAssemblyFilePaths(List<string> assemblyPaths)
-    {
-        // We will first get all the relative asmdef paths from assembly paths
-        var pathsToProcess = new HashSet<string>();
-        foreach (string assemblyPath in assemblyPaths)
-        {
-            // See if there is an asmdef file for this assembly - use it if so
-            var asmdefPath = CompilationPipeline.GetAssemblyDefinitionFilePathFromAssemblyName(assemblyPath);
-            pathsToProcess.Add(String.IsNullOrEmpty(asmdefPath) ? assemblyPath : asmdefPath);
-        }
-
-        // We will loop through all the packages and see if they match the relative or absolute paths of asmdefs or assemblies
-        List<PackageInfo> matchingPackages = new List<PackageInfo>();
-        foreach (var package in GetAll())
-        {
-            foreach (var path in pathsToProcess)
-            {
-                bool found;
-                if (Path.IsPathRooted(path))
-                    found = path.StartsWith(package.resolvedPath + Path.DirectorySeparatorChar);
-                else
-                    found = path.StartsWith(package.assetPath + '/');
-
-                if (found)
-                {
-                    matchingPackages.Add(package);
-                    pathsToProcess.Remove(path);
-                    break;
-                }
-            }
-            if (pathsToProcess.Count == 0)
-                break;
-        }
-        return matchingPackages;
-    }
-}
+  }
 }

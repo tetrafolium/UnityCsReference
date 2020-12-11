@@ -8,11 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace UnityEditor.PackageManager.UI
-{
-[Serializable]
-internal class PlaceholderVersionList : IVersionList
-{
+namespace UnityEditor.PackageManager.UI {
+  [Serializable]
+  internal class PlaceholderVersionList : IVersionList {
     [SerializeField]
     private PlaceholderPackageVersion[] m_Versions;
 
@@ -30,19 +28,16 @@ internal class PlaceholderVersionList : IVersionList
 
     public IPackageVersion primary => m_Versions[0];
 
-    public PlaceholderVersionList(PlaceholderPackageVersion version)
-    {
-        m_Versions = new[] { version };
+    public PlaceholderVersionList(PlaceholderPackageVersion version) {
+      m_Versions = new[]{version};
     }
 
-    public IEnumerator<IPackageVersion> GetEnumerator()
-    {
-        return m_Versions.Cast<IPackageVersion>().GetEnumerator();
+    public IEnumerator<IPackageVersion> GetEnumerator() {
+      return m_Versions.Cast<IPackageVersion>().GetEnumerator();
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return m_Versions.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() {
+      return m_Versions.GetEnumerator();
     }
-}
+  }
 }

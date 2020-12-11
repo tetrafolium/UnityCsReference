@@ -8,88 +8,76 @@ using System.Globalization;
 using System.Linq;
 using UnityEngine.UIElements;
 
-namespace UnityEditor.PackageManager.UI
-{
-internal class PackageReleaseDetailsItem : VisualElement
-{
+namespace UnityEditor.PackageManager.UI {
+  internal class PackageReleaseDetailsItem : VisualElement {
     internal new class UxmlFactory : UxmlFactory<PackageReleaseDetailsItem> {}
 
     private ResourceLoader m_ResourceLoader;
-    private void ResolveDependencies()
-    {
-        var container = ServicesContainer.instance;
-        m_ResourceLoader = container.Resolve<ResourceLoader>();
+    private void ResolveDependencies() {
+      var container = ServicesContainer.instance;
+      m_ResourceLoader = container.Resolve<ResourceLoader>();
     }
 
-    public PackageReleaseDetailsItem()
-    {
-        ResolveDependencies();
+    public PackageReleaseDetailsItem() {
+      ResolveDependencies();
 
-        var root = m_ResourceLoader.GetTemplate("PackageReleaseDetailsItem.uxml");
-        Add(root);
-        cache = new VisualElementCache(root);
+      var root = m_ResourceLoader.GetTemplate("PackageReleaseDetailsItem.uxml");
+      Add(root);
+      cache = new VisualElementCache(root);
 
-        root.Query<TextField>().ForEach(t =>
-        {
-            t.isReadOnly = true;
-        });
+      root.Query<TextField>().ForEach(t => { t.isReadOnly = true; });
     }
 
-    public PackageReleaseDetailsItem(string versionString, DateTime? publishedDate, string releaseNotes) : this()
-    {
-        var releaseDateString = publishedDate?.ToString("MMMM dd, yyyy", CultureInfo.CreateSpecificCulture("en-US"));
+    public PackageReleaseDetailsItem(string versionString,
+                                     DateTime? publishedDate,
+                                     string releaseNotes)
+        : this() {
+      var releaseDateString = publishedDate?.ToString(
+          "MMMM dd, yyyy", CultureInfo.CreateSpecificCulture("en-US"));
 
-        versionAndReleaseDateLabel.SetValueWithoutNotify(versionString + (releaseDateString != null ? $" - released on {releaseDateString}" : string.Empty));
+      versionAndReleaseDateLabel.SetValueWithoutNotify(
+          versionString +
+          (releaseDateString != null ? $" - released on {releaseDateString}"
+           : string.Empty));
 
-        releaseNotesLabel.SetValueWithoutNotify(releaseNotes);
+      releaseNotesLabel.SetValueWithoutNotify(releaseNotes);
 
-        lessButton.clicked += OnLessButtonClicked;
-        moreButton.clicked += OnMoreButtonClicked;
+      lessButton.clicked += OnLessButtonClicked;
+      moreButton.clicked += OnMoreButtonClicked;
 
-        UIUtils.SetElementDisplay(releaseNotesContainer, false);
-        UIUtils.SetElementDisplay(moreButton, !string.IsNullOrEmpty(releaseNotes));
+      UIUtils.SetElementDisplay(releaseNotesContainer, false);
+      UIUtils.SetElementDisplay(moreButton,
+                                !string.IsNullOrEmpty(releaseNotes));
     }
 
-    public void OnLessButtonClicked()
-    {
-        UIUtils.SetElementDisplay(releaseNotesContainer, false);
-        UIUtils.SetElementDisplay(moreButton, true);
+    public void OnLessButtonClicked() {
+      UIUtils.SetElementDisplay(releaseNotesContainer, false);
+      UIUtils.SetElementDisplay(moreButton, true);
     }
 
-    public void OnMoreButtonClicked()
-    {
-        UIUtils.SetElementDisplay(releaseNotesContainer, true);
-        UIUtils.SetElementDisplay(moreButton, false);
+    public void OnMoreButtonClicked() {
+      UIUtils.SetElementDisplay(releaseNotesContainer, true);
+      UIUtils.SetElementDisplay(moreButton, false);
     }
 
     private VisualElementCache cache {
-        get;
-        set;
+      get;
+      set;
     }
     private TextField versionAndReleaseDateLabel {
-        get {
-            return cache.Get<TextField>("versionAndReleaseDate");
-        }
+      get { return cache.Get<TextField>("versionAndReleaseDate"); }
     }
     private VisualElement releaseNotesContainer {
-        get {
-            return cache.Get<VisualElement>("releaseNotesContainer");
-        }
+      get { return cache.Get<VisualElement>("releaseNotesContainer"); }
     }
     private TextField releaseNotesLabel {
-        get {
-            return cache.Get<TextField>("releaseNotes");
-        }
+      get { return cache.Get<TextField>("releaseNotes"); }
     }
     private Button moreButton {
-        get {
-            return cache.Get<Button>("releaseDetailMore");
-        }
+      get { return cache.Get<Button>("releaseDetailMore"); }
     }
     private Button lessButton {
-        get {
-            return cache.Get<Button>("releaseDetailLess");
-        }
+      get { return cache.Get<Button>("releaseDetailLess"); }
     }
-}
+  }
 }

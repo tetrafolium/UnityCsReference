@@ -6,17 +6,13 @@ using UnityEngine;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace UnityEngine
-{
+namespace UnityEngine {
 [NativeHeader("Modules/Animation/RuntimeAnimatorController.h")]
 [UsedByNativeCode]
 [ExcludeFromObjectFactory]
-public partial class RuntimeAnimatorController : Object
-{
-    protected RuntimeAnimatorController() {}
+public partial class RuntimeAnimatorController : Object {
+  protected RuntimeAnimatorController() {}
 
-    extern public AnimationClip[] animationClips {
-        get;
-    }
+  extern public AnimationClip[] animationClips { get; }
 }
 }

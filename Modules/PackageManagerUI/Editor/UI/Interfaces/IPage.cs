@@ -5,40 +5,26 @@
 using System;
 using System.Collections.Generic;
 
-namespace UnityEditor.PackageManager.UI
-{
-internal interface IPage
-{
+namespace UnityEditor.PackageManager.UI {
+  internal interface IPage {
     event Action<IPackageVersion> onSelectionChanged;
-    // triggered when the state of the UI item is updated (expanded, hidden, see all versions toggled)
+    // triggered when the state of the UI item is updated (expanded, hidden, see
+    // all versions toggled)
     event Action<IEnumerable<VisualState>> onVisualStateChange;
     // triggered when packages are added/updated or removed
-    event Action<IPage, IEnumerable<IPackage>, IEnumerable<IPackage>, bool> onListUpdate;
+    event Action<IPage, IEnumerable<IPackage>, IEnumerable<IPackage>, bool>
+        onListUpdate;
     event Action<IPage> onListRebuild;
-    PageFilters filters {
-        get;
-    }
-    PackageFilterTab tab {
-        get;
-    }
-    PageCapability capability {
-        get;
-    }
+    PageFilters filters { get; }
+    PackageFilterTab tab { get; }
+    PageCapability capability { get; }
 
-    long numTotalItems {
-        get;
-    }
-    long numCurrentItems {
-        get;
-    }
+    long numTotalItems { get; }
+    long numCurrentItems { get; }
 
     // an ordered list of `packageUniqueIds`
-    IEnumerable<VisualState> visualStates {
-        get;
-    }
-    bool isFullyLoaded {
-        get;
-    }
+    IEnumerable<VisualState> visualStates { get; }
+    bool isFullyLoaded { get; }
 
     VisualState GetVisualState(string packageUniqueId);
     void LoadMore(int numberOfPackages);
@@ -47,9 +33,12 @@ internal interface IPage
 
     IPackageVersion GetSelectedVersion();
 
-    void GetSelectedPackageAndVersion(out IPackage package, out IPackageVersion version);
+    void GetSelectedPackageAndVersion(out IPackage package,
+                                      out IPackageVersion version);
 
-    void OnPackagesChanged(IEnumerable<IPackage> added, IEnumerable<IPackage> removed, IEnumerable<IPackage> preUpdate, IEnumerable<IPackage> postUpdate);
+    void OnPackagesChanged(
+        IEnumerable<IPackage> added, IEnumerable<IPackage> removed,
+        IEnumerable<IPackage> preUpdate, IEnumerable<IPackage> postUpdate);
 
     void Rebuild();
     void Load(IPackage package, IPackageVersion version = null);
@@ -63,5 +52,5 @@ internal interface IPage
 
     bool Contains(IPackage package);
     bool Contains(string packageUniqueId);
-}
+  }
 }

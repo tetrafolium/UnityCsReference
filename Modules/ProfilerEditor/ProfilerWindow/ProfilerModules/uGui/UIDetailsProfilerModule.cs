@@ -7,10 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace UnityEditorInternal.Profiling
-{
-[Serializable]
-internal class UIDetailsProfilerModule : UIProfilerModule
-{
-}
+namespace UnityEditorInternal.Profiling {
+  [Serializable]
+  internal class UIDetailsProfilerModule : UIProfilerModule {}
 }

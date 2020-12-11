@@ -4,11 +4,9 @@
 
 using System;
 
-namespace UnityEditor.Experimental.GraphView
-{
-[Flags]
-public enum Capabilities
-{
+namespace UnityEditor.Experimental.GraphView {
+  [Flags]
+  public enum Capabilities {
     Selectable = 1 << 0,
     Collapsible = 1 << 1,
     Resizable = 1 << 2,
@@ -19,11 +17,7 @@ public enum Capabilities
     Renamable = 1 << 7,
     Copiable = 1 << 8,
     Snappable = 1 << 9,
-}
+  }
 
-internal enum ResizeRestriction
-{
-    None,
-    FlexDirection
-}
+  internal enum ResizeRestriction { None, FlexDirection }
 }

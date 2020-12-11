@@ -6,15 +6,13 @@ using System;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace UnityEngine
-{
+namespace UnityEngine {
 [NativeHeader("Modules/Animation/OptimizeTransformHierarchy.h")]
-public class AnimatorUtility
-{
-    [FreeFunction]
-    extern public static void OptimizeTransformHierarchy(GameObject go, string[] exposedTransforms);
+public class AnimatorUtility {
+  [FreeFunction] extern public static void
+  OptimizeTransformHierarchy(GameObject go, string[] exposedTransforms);
 
-    [FreeFunction]
-    extern public static void DeoptimizeTransformHierarchy(GameObject go);
+  [FreeFunction] extern public static void
+  DeoptimizeTransformHierarchy(GameObject go);
 }
 }

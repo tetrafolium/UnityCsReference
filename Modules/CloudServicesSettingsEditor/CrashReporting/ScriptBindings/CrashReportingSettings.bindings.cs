@@ -6,28 +6,25 @@ using System;
 using UnityEngine;
 using UnityEngine.Bindings;
 
-namespace UnityEditor.CrashReporting
-{
+namespace UnityEditor.CrashReporting {
 
-[NativeHeader("Modules/UnityConnect/CrashReporting/CrashReportingSettings.h")]
-[StaticAccessor("GetCrashReportingSettings()")]
-public static partial class CrashReportingSettings
-{
-    public static extern bool enabled
-    {
-        [ThreadSafe] get;
-        [ThreadSafe] set;
+  [NativeHeader("Modules/UnityConnect/CrashReporting/CrashReportingSettings.h")]
+  [StaticAccessor("GetCrashReportingSettings()")]
+  public static partial class CrashReportingSettings {
+    public static extern bool enabled {
+      [ThreadSafe] get;
+      [ThreadSafe] set;
     }
 
     public static extern bool captureEditorExceptions {
-        get;
-        set;
+      get;
+      set;
     }
 
     [NativeThrows]
     public static extern UInt32 logBufferSize {
-        get;
-        set;
+      get;
+      set;
     }
 
     internal static extern void SetEnabledServiceWindow(bool enabled);
@@ -36,6 +33,6 @@ public static partial class CrashReportingSettings
     internal static extern void SetEventUrl(string eventUrl);
 
     internal static extern void EnsureConnectReady();
-}
+  }
 
 }

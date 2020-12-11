@@ -5,20 +5,14 @@
 using System;
 using UnityEngine.Bindings;
 
-namespace UnityEngine
-{
+namespace UnityEngine {
 [NativeHeader("Modules/ClusterRenderer/ClusterNetwork.h")]
-public class ClusterNetwork
-{
-    public static extern bool isMasterOfCluster {
-        get;
-    }
-    public static extern bool isDisconnected {
-        get;
-    }
-    public static extern int nodeIndex {
-        get;
-        set;
-    }
+public class ClusterNetwork {
+  public static extern bool isMasterOfCluster { get; }
+  public static extern bool isDisconnected { get; }
+  public static extern int nodeIndex {
+    get;
+    set;
+  }
 }
 }

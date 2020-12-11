@@ -2,10 +2,8 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
-namespace UnityEditor.PackageManager
-{
-internal enum NativeErrorCode
-{
+namespace UnityEditor.PackageManager {
+  internal enum NativeErrorCode {
     Unknown,
     NotFound,
     Forbidden,
@@ -13,5 +11,5 @@ internal enum NativeErrorCode
     Conflict,
     Cancelled,
     Success
-}
+  }
 }

@@ -7,66 +7,54 @@ using System.Collections.Generic;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace UnityEngine.Animations
-{
-[NativeType("Modules/Animation/Constraints/ConstraintEnums.h")]
-[Flags]
-public enum Axis
-{
+namespace UnityEngine.Animations {
+  [NativeType("Modules/Animation/Constraints/ConstraintEnums.h")]
+  [Flags]
+  public enum Axis {
     None = 0,
     X = 1,
     Y = 2,
     Z = 4
-}
+  }
 
-[System.Serializable]
-[NativeType(CodegenOptions = CodegenOptions.Custom, Header = "Modules/Animation/Constraints/ConstraintSource.h", IntermediateScriptingStructName = "MonoConstraintSource")]
-[NativeHeader("Modules/Animation/Constraints/Constraint.bindings.h")]
-[UsedByNativeCode]
-public struct ConstraintSource
-{
+  [System.Serializable]
+  [NativeType(CodegenOptions = CodegenOptions.Custom,
+              Header = "Modules/Animation/Constraints/ConstraintSource.h",
+              IntermediateScriptingStructName = "MonoConstraintSource")]
+  [NativeHeader("Modules/Animation/Constraints/Constraint.bindings.h")]
+  [UsedByNativeCode]
+  public struct ConstraintSource {
     [NativeName("sourceTransform")]
     private Transform m_SourceTransform;
     [NativeName("weight")]
     private float m_Weight;
 
     public Transform sourceTransform {
-        get {
-            return m_SourceTransform;
-        }
-        set {
-            m_SourceTransform = value;
-        }
+      get { return m_SourceTransform; }
+      set { m_SourceTransform = value; }
     }
     public float weight {
-        get {
-            return m_Weight;
-        }
-        set {
-            m_Weight = value;
-        }
+      get { return m_Weight; }
+      set { m_Weight = value; }
     }
-}
+  }
 
-public interface IConstraint
-{
+  public interface IConstraint {
     float weight {
-        get;
-        set;
+      get;
+      set;
     }
 
     bool constraintActive {
-        get;
-        set;
+      get;
+      set;
     }
     bool locked {
-        get;
-        set;
+      get;
+      set;
     }
 
-    int sourceCount {
-        get;
-    }
+    int sourceCount { get; }
 
     int AddSource(ConstraintSource source);
     void RemoveSource(int index);
@@ -75,413 +63,383 @@ public interface IConstraint
 
     void GetSources(List<ConstraintSource> sources);
     void SetSources(List<ConstraintSource> sources);
-}
+  }
 
-internal interface IConstraintInternal
-{
+  internal interface IConstraintInternal {
     void ActivateAndPreserveOffset();
     void ActivateWithZeroOffset();
     void UserUpdateOffset();
-    Transform transform {
-        get;
-    }
-}
+    Transform transform { get; }
+  }
 
-[UsedByNativeCode]
-[RequireComponent(typeof(Transform))]
-[NativeHeader("Modules/Animation/Constraints/PositionConstraint.h")]
-[NativeHeader("Modules/Animation/Constraints/Constraint.bindings.h")]
-public sealed partial class PositionConstraint : Behaviour, IConstraint, IConstraintInternal
-{
-    PositionConstraint()
-    {
-        Internal_Create(this);
-    }
+  [UsedByNativeCode]
+  [RequireComponent(typeof(Transform))]
+  [NativeHeader("Modules/Animation/Constraints/PositionConstraint.h")]
+  [NativeHeader("Modules/Animation/Constraints/Constraint.bindings.h")]
+  public sealed partial class PositionConstraint : Behaviour,
+                                                   IConstraint,
+                                                   IConstraintInternal {
+    PositionConstraint() { Internal_Create(this); }
 
-    private static extern void Internal_Create([Writable] PositionConstraint self);
+    private static extern void
+    Internal_Create([ Writable ] PositionConstraint self);
 
     public extern float weight {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern Vector3 translationAtRest {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern Vector3 translationOffset {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern Axis translationAxis {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern bool constraintActive {
-        get;
-        set;
+      get;
+      set;
     }
     public extern bool locked {
-        get;
-        set;
+      get;
+      set;
     }
 
     public int sourceCount {
-        get {
-            return GetSourceCountInternal(this);
-        }
+      get { return GetSourceCountInternal(this); }
     }
     [FreeFunction("ConstraintBindings::GetSourceCount")]
-    private static extern int GetSourceCountInternal([NotNull] PositionConstraint self);
+    private static extern int
+    GetSourceCountInternal([ NotNull ] PositionConstraint self);
 
-    [FreeFunction(Name = "ConstraintBindings::GetSources", HasExplicitThis = true)]
-    public extern void GetSources([NotNull] List<ConstraintSource> sources);
+    [FreeFunction(Name = "ConstraintBindings::GetSources",
+                  HasExplicitThis = true)]
+    public extern void GetSources([ NotNull ] List<ConstraintSource> sources);
 
-    public void SetSources(List<ConstraintSource> sources)
-    {
-        if (sources == null)
-            throw new ArgumentNullException("sources");
+    public void SetSources(List<ConstraintSource> sources) {
+      if (sources == null)
+        throw new ArgumentNullException("sources");
 
-        SetSourcesInternal(this, sources);
+      SetSourcesInternal(this, sources);
     }
 
     [FreeFunction("ConstraintBindings::SetSources", ThrowsException = true)]
-    private static extern void SetSourcesInternal([NotNull] PositionConstraint self, List<ConstraintSource> sources);
+    private static extern void
+    SetSourcesInternal([ NotNull ] PositionConstraint self,
+                       List<ConstraintSource> sources);
 
     public extern int AddSource(ConstraintSource source);
 
-    public void RemoveSource(int index)
-    {
-        ValidateSourceIndex(index);
-        RemoveSourceInternal(index);
+    public void RemoveSource(int index) {
+      ValidateSourceIndex(index);
+      RemoveSourceInternal(index);
     }
 
     [NativeName("RemoveSource")]
     private extern void RemoveSourceInternal(int index);
 
-    public ConstraintSource GetSource(int index)
-    {
-        ValidateSourceIndex(index);
-        return GetSourceInternal(index);
+    public ConstraintSource GetSource(int index) {
+      ValidateSourceIndex(index);
+      return GetSourceInternal(index);
     }
 
     [NativeName("GetSource")]
     private extern ConstraintSource GetSourceInternal(int index);
 
-    public void SetSource(int index, ConstraintSource source)
-    {
-        ValidateSourceIndex(index);
-        SetSourceInternal(index, source);
+    public void SetSource(int index, ConstraintSource source) {
+      ValidateSourceIndex(index);
+      SetSourceInternal(index, source);
     }
 
     [NativeName("SetSource")]
     private extern void SetSourceInternal(int index, ConstraintSource source);
 
-    private void ValidateSourceIndex(int index)
-    {
-        if (sourceCount == 0)
-        {
-            throw new InvalidOperationException("The PositionConstraint component has no sources.");
-        }
+    private void ValidateSourceIndex(int index) {
+      if (sourceCount == 0) {
+        throw new InvalidOperationException(
+            "The PositionConstraint component has no sources.");
+      }
 
-        if (index < 0 || index >= sourceCount)
-        {
-            throw new ArgumentOutOfRangeException("index", string.Format("Constraint source index {0} is out of bounds (0-{1}).", index, sourceCount));
-        }
+      if (index < 0 || index >= sourceCount) {
+        throw new ArgumentOutOfRangeException(
+            "index",
+            string.Format(
+                "Constraint source index {0} is out of bounds (0-{1}).", index,
+                sourceCount));
+      }
     }
 
     extern void ActivateAndPreserveOffset();
     extern void ActivateWithZeroOffset();
     extern void UserUpdateOffset();
 
-    void IConstraintInternal.ActivateAndPreserveOffset()
-    {
-        ActivateAndPreserveOffset();
+    void IConstraintInternal.ActivateAndPreserveOffset() {
+      ActivateAndPreserveOffset();
     }
 
-    void IConstraintInternal.ActivateWithZeroOffset()
-    {
-        ActivateWithZeroOffset();
+    void IConstraintInternal.ActivateWithZeroOffset() {
+      ActivateWithZeroOffset();
     }
 
-    void IConstraintInternal.UserUpdateOffset()
-    {
-        UserUpdateOffset();
-    }
+    void IConstraintInternal.UserUpdateOffset() { UserUpdateOffset(); }
 
-    Transform IConstraintInternal.transform
-    {
-        get {
-            return this.transform;
-        }
+    Transform IConstraintInternal.transform {
+      get { return this.transform; }
     }
-}
+  }
 
-[UsedByNativeCode]
-[RequireComponent(typeof(Transform))]
-[NativeHeader("Modules/Animation/Constraints/RotationConstraint.h")]
-[NativeHeader("Modules/Animation/Constraints/Constraint.bindings.h")]
-public sealed partial class RotationConstraint : Behaviour, IConstraint, IConstraintInternal
-{
-    RotationConstraint()
-    {
-        Internal_Create(this);
-    }
+  [UsedByNativeCode]
+  [RequireComponent(typeof(Transform))]
+  [NativeHeader("Modules/Animation/Constraints/RotationConstraint.h")]
+  [NativeHeader("Modules/Animation/Constraints/Constraint.bindings.h")]
+  public sealed partial class RotationConstraint : Behaviour,
+                                                   IConstraint,
+                                                   IConstraintInternal {
+    RotationConstraint() { Internal_Create(this); }
 
-    private static extern void Internal_Create([Writable] RotationConstraint self);
+    private static extern void
+    Internal_Create([ Writable ] RotationConstraint self);
 
     public extern float weight {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern Vector3 rotationAtRest {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern Vector3 rotationOffset {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern Axis rotationAxis {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern bool constraintActive {
-        get;
-        set;
+      get;
+      set;
     }
     public extern bool locked {
-        get;
-        set;
+      get;
+      set;
     }
 
     public int sourceCount {
-        get {
-            return GetSourceCountInternal(this);
-        }
+      get { return GetSourceCountInternal(this); }
     }
     [FreeFunction("ConstraintBindings::GetSourceCount")]
-    private static extern int GetSourceCountInternal([NotNull] RotationConstraint self);
+    private static extern int
+    GetSourceCountInternal([ NotNull ] RotationConstraint self);
 
-    [FreeFunction(Name = "ConstraintBindings::GetSources", HasExplicitThis = true)]
-    public extern void GetSources([NotNull] List<ConstraintSource> sources);
+    [FreeFunction(Name = "ConstraintBindings::GetSources",
+                  HasExplicitThis = true)]
+    public extern void GetSources([ NotNull ] List<ConstraintSource> sources);
 
-    public void SetSources(List<ConstraintSource> sources)
-    {
-        if (sources == null)
-            throw new ArgumentNullException("sources");
+    public void SetSources(List<ConstraintSource> sources) {
+      if (sources == null)
+        throw new ArgumentNullException("sources");
 
-        SetSourcesInternal(this, sources);
+      SetSourcesInternal(this, sources);
     }
 
     [FreeFunction("ConstraintBindings::SetSources", ThrowsException = true)]
-    private static extern void SetSourcesInternal([NotNull] RotationConstraint self, List<ConstraintSource> sources);
+    private static extern void
+    SetSourcesInternal([ NotNull ] RotationConstraint self,
+                       List<ConstraintSource> sources);
 
     public extern int AddSource(ConstraintSource source);
 
-    public void RemoveSource(int index)
-    {
-        ValidateSourceIndex(index);
-        RemoveSourceInternal(index);
+    public void RemoveSource(int index) {
+      ValidateSourceIndex(index);
+      RemoveSourceInternal(index);
     }
 
     [NativeName("RemoveSource")]
     private extern void RemoveSourceInternal(int index);
 
-    public ConstraintSource GetSource(int index)
-    {
-        ValidateSourceIndex(index);
-        return GetSourceInternal(index);
+    public ConstraintSource GetSource(int index) {
+      ValidateSourceIndex(index);
+      return GetSourceInternal(index);
     }
 
     [NativeName("GetSource")]
     private extern ConstraintSource GetSourceInternal(int index);
 
-    public void SetSource(int index, ConstraintSource source)
-    {
-        ValidateSourceIndex(index);
-        SetSourceInternal(index, source);
+    public void SetSource(int index, ConstraintSource source) {
+      ValidateSourceIndex(index);
+      SetSourceInternal(index, source);
     }
 
     [NativeName("SetSource")]
     private extern void SetSourceInternal(int index, ConstraintSource source);
-    private void ValidateSourceIndex(int index)
-    {
-        if (sourceCount == 0)
-        {
-            throw new InvalidOperationException("The RotationConstraint component has no sources.");
-        }
+    private void ValidateSourceIndex(int index) {
+      if (sourceCount == 0) {
+        throw new InvalidOperationException(
+            "The RotationConstraint component has no sources.");
+      }
 
-        if (index < 0 || index >= sourceCount)
-        {
-            throw new ArgumentOutOfRangeException("index", string.Format("Constraint source index {0} is out of bounds (0-{1}).", index, sourceCount));
-        }
+      if (index < 0 || index >= sourceCount) {
+        throw new ArgumentOutOfRangeException(
+            "index",
+            string.Format(
+                "Constraint source index {0} is out of bounds (0-{1}).", index,
+                sourceCount));
+      }
     }
 
     extern void ActivateAndPreserveOffset();
     extern void ActivateWithZeroOffset();
     extern void UserUpdateOffset();
 
-    void IConstraintInternal.ActivateAndPreserveOffset()
-    {
-        this.ActivateAndPreserveOffset();
+    void IConstraintInternal.ActivateAndPreserveOffset() {
+      this.ActivateAndPreserveOffset();
     }
 
-    void IConstraintInternal.ActivateWithZeroOffset()
-    {
-        this.ActivateWithZeroOffset();
+    void IConstraintInternal.ActivateWithZeroOffset() {
+      this.ActivateWithZeroOffset();
     }
 
-    void IConstraintInternal.UserUpdateOffset()
-    {
-        this.UserUpdateOffset();
-    }
+    void IConstraintInternal.UserUpdateOffset() { this.UserUpdateOffset(); }
 
-    Transform IConstraintInternal.transform
-    {
-        get {
-            return this.transform;
-        }
+    Transform IConstraintInternal.transform {
+      get { return this.transform; }
     }
-}
+  }
 
-[UsedByNativeCode]
-[RequireComponent(typeof(Transform))]
-[NativeHeader("Modules/Animation/Constraints/ScaleConstraint.h")]
-[NativeHeader("Modules/Animation/Constraints/Constraint.bindings.h")]
-public sealed partial class ScaleConstraint : Behaviour, IConstraint, IConstraintInternal
-{
-    ScaleConstraint()
-    {
-        Internal_Create(this);
-    }
+  [UsedByNativeCode]
+  [RequireComponent(typeof(Transform))]
+  [NativeHeader("Modules/Animation/Constraints/ScaleConstraint.h")]
+  [NativeHeader("Modules/Animation/Constraints/Constraint.bindings.h")]
+  public sealed partial class ScaleConstraint : Behaviour,
+                                                IConstraint,
+                                                IConstraintInternal {
+    ScaleConstraint() { Internal_Create(this); }
 
-    private static extern void Internal_Create([Writable] ScaleConstraint self);
+    private static extern void
+    Internal_Create([ Writable ] ScaleConstraint self);
 
     public extern float weight {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern Vector3 scaleAtRest {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern Vector3 scaleOffset {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern Axis scalingAxis {
-        get;
-        set;
+      get;
+      set;
     }
 
     public extern bool constraintActive {
-        get;
-        set;
+      get;
+      set;
     }
     public extern bool locked {
-        get;
-        set;
+      get;
+      set;
     }
 
     public int sourceCount {
-        get {
-            return GetSourceCountInternal(this);
-        }
+      get { return GetSourceCountInternal(this); }
     }
     [FreeFunction("ConstraintBindings::GetSourceCount")]
-    private static extern int GetSourceCountInternal([NotNull] ScaleConstraint self);
+    private static extern int
+    GetSourceCountInternal([ NotNull ] ScaleConstraint self);
 
-    [FreeFunction(Name = "ConstraintBindings::GetSources", HasExplicitThis = true)]
-    public extern void GetSources([NotNull] List<ConstraintSource> sources);
+    [FreeFunction(Name = "ConstraintBindings::GetSources",
+                  HasExplicitThis = true)]
+    public extern void GetSources([ NotNull ] List<ConstraintSource> sources);
 
-    public void SetSources(List<ConstraintSource> sources)
-    {
-        if (sources == null)
-            throw new ArgumentNullException("sources");
+    public void SetSources(List<ConstraintSource> sources) {
+      if (sources == null)
+        throw new ArgumentNullException("sources");
 
-        SetSourcesInternal(this, sources);
+      SetSourcesInternal(this, sources);
     }
 
     [FreeFunction("ConstraintBindings::SetSources", ThrowsException = true)]
-    private static extern void SetSourcesInternal([NotNull] ScaleConstraint self, List<ConstraintSource> sources);
+    private static extern void
+    SetSourcesInternal([ NotNull ] ScaleConstraint self,
+                       List<ConstraintSource> sources);
 
     public extern int AddSource(ConstraintSource source);
 
-    public void RemoveSource(int index)
-    {
-        ValidateSourceIndex(index);
-        RemoveSourceInternal(index);
+    public void RemoveSource(int index) {
+      ValidateSourceIndex(index);
+      RemoveSourceInternal(index);
     }
 
     [NativeName("RemoveSource")]
     private extern void RemoveSourceInternal(int index);
 
-    public ConstraintSource GetSource(int index)
-    {
-        ValidateSourceIndex(index);
-        return GetSourceInternal(index);
+    public ConstraintSource GetSource(int index) {
+      ValidateSourceIndex(index);
+      return GetSourceInternal(index);
     }
 
     [NativeName("GetSource")]
     private extern ConstraintSource GetSourceInternal(int index);
 
-    public void SetSource(int index, ConstraintSource source)
-    {
-        ValidateSourceIndex(index);
-        SetSourceInternal(index, source);
+    public void SetSource(int index, ConstraintSource source) {
+      ValidateSourceIndex(index);
+      SetSourceInternal(index, source);
     }
 
     [NativeName("SetSource")]
     private extern void SetSourceInternal(int index, ConstraintSource source);
 
-    private void ValidateSourceIndex(int index)
-    {
-        if (sourceCount == 0)
-        {
-            throw new InvalidOperationException("The ScaleConstraint component has no sources.");
-        }
+    private void ValidateSourceIndex(int index) {
+      if (sourceCount == 0) {
+        throw new InvalidOperationException(
+            "The ScaleConstraint component has no sources.");
+      }
 
-        if (index < 0 || index >= sourceCount)
-        {
-            throw new ArgumentOutOfRangeException("index", string.Format("Constraint source index {0} is out of bounds (0-{1}).", index, sourceCount));
-        }
+      if (index < 0 || index >= sourceCount) {
+        throw new ArgumentOutOfRangeException(
+            "index",
+            string.Format(
+                "Constraint source index {0} is out of bounds (0-{1}).", index,
+                sourceCount));
+      }
     }
 
     extern void ActivateAndPreserveOffset();
     extern void ActivateWithZeroOffset();
     extern void UserUpdateOffset();
 
-    void IConstraintInternal.ActivateAndPreserveOffset()
-    {
-        this.ActivateAndPreserveOffset();
+    void IConstraintInternal.ActivateAndPreserveOffset() {
+      this.ActivateAndPreserveOffset();
     }
 
-    void IConstraintInternal.ActivateWithZeroOffset()
-    {
-        this.ActivateWithZeroOffset();
+    void IConstraintInternal.ActivateWithZeroOffset() {
+      this.ActivateWithZeroOffset();
     }
 
-    void IConstraintInternal.UserUpdateOffset()
-    {
-        this.UserUpdateOffset();
-    }
+    void IConstraintInternal.UserUpdateOffset() { this.UserUpdateOffset(); }
 
-    Transform IConstraintInternal.transform
-    {
-        get {
-            return this.transform;
-        }
+    Transform IConstraintInternal.transform {
+      get { return this.transform; }
     }
-}
+  }
 }

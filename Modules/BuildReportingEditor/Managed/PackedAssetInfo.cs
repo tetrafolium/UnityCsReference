@@ -5,30 +5,20 @@
 using System;
 using UnityEngine.Bindings;
 
-namespace UnityEditor.Build.Reporting
-{
-[NativeType(Header = "Modules/BuildReportingEditor/Public/PackedAssets.h")]
-public struct PackedAssetInfo
-{
+namespace UnityEditor.Build.Reporting {
+  [NativeType(Header = "Modules/BuildReportingEditor/Public/PackedAssets.h")]
+  public struct PackedAssetInfo {
     [NativeName("fileID")]
     public long id {
-        get;
+      get;
     }
-    public Type type {
-        get;
-    }
-    public ulong packedSize {
-        get;
-    }
-    public ulong offset {
-        get;
-    }
-    public GUID sourceAssetGUID {
-        get;
-    }
+    public Type type { get; }
+    public ulong packedSize { get; }
+    public ulong offset { get; }
+    public GUID sourceAssetGUID { get; }
     [NativeName("buildTimeAssetPath")]
     public string sourceAssetPath {
-        get;
+      get;
     }
-}
+  }
 }

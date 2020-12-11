@@ -4,66 +4,55 @@
 
 using UnityEngine;
 
-namespace UnityEditor
-{
-internal class SerializedModule
-{
-    protected string m_ModuleName;
-    protected SerializedObject m_Object;
+namespace UnityEditor {
+internal class SerializedModule {
+  protected string m_ModuleName;
+  protected SerializedObject m_Object;
 
-    public SerializedModule(SerializedObject o, string name)
-    {
-        m_Object = o;
-        m_ModuleName = name;
-    }
+  public SerializedModule(SerializedObject o, string name) {
+    m_Object = o;
+    m_ModuleName = name;
+  }
 
-    public SerializedProperty GetProperty0(string name)
-    {
-        SerializedProperty prop = m_Object.FindProperty(name);
-        if (prop == null)
-            Debug.LogError("GetProperty0: not found: " + name);
-        return prop;
-    }
+  public SerializedProperty GetProperty0(string name) {
+    SerializedProperty prop = m_Object.FindProperty(name);
+    if (prop == null)
+      Debug.LogError("GetProperty0: not found: " + name);
+    return prop;
+  }
 
-    public SerializedProperty GetProperty(string name)
-    {
-        SerializedProperty prop = m_Object.FindProperty(Concat(m_ModuleName, name));
-        if (prop == null)
-            Debug.LogError("GetProperty: not found: " + Concat(m_ModuleName, name));
-        return prop;
-    }
+  public SerializedProperty GetProperty(string name) {
+    SerializedProperty prop = m_Object.FindProperty(Concat(m_ModuleName, name));
+    if (prop == null)
+      Debug.LogError("GetProperty: not found: " + Concat(m_ModuleName, name));
+    return prop;
+  }
 
-    public SerializedProperty GetProperty0(string structName, string propName)
-    {
-        SerializedProperty prop = m_Object.FindProperty(Concat(structName, propName));
-        if (prop == null)
-            Debug.LogError("GetProperty: not found: " + Concat(structName, propName));
-        return prop;
-    }
+  public SerializedProperty GetProperty0(string structName, string propName) {
+    SerializedProperty prop =
+        m_Object.FindProperty(Concat(structName, propName));
+    if (prop == null)
+      Debug.LogError("GetProperty: not found: " + Concat(structName, propName));
+    return prop;
+  }
 
-    public SerializedProperty GetProperty(string structName, string propName)
-    {
-        SerializedProperty prop = m_Object.FindProperty(Concat(Concat(m_ModuleName, structName), propName));
-        if (prop == null)
-            Debug.LogError("GetProperty: not found: " + Concat(Concat(m_ModuleName, structName), propName));
-        return prop;
-    }
+  public SerializedProperty GetProperty(string structName, string propName) {
+    SerializedProperty prop = m_Object.FindProperty(
+        Concat(Concat(m_ModuleName, structName), propName));
+    if (prop == null)
+      Debug.LogError("GetProperty: not found: " +
+                     Concat(Concat(m_ModuleName, structName), propName));
+    return prop;
+  }
 
-    public static string Concat(string a, string b)
-    {
-        return a + "." + b;
-    }
+  public static string Concat(string a, string b) { return a + "." + b; }
 
-    public string GetUniqueModuleName(Object o)
-    {
-        return Concat("" + o.GetInstanceID(), m_ModuleName);
-    }
+  public string GetUniqueModuleName(Object o) {
+    return Concat("" + o.GetInstanceID(), m_ModuleName);
+  }
 
-    internal SerializedObject serializedObject
-    {
-        get {
-            return m_Object;
-        }
-    }
+  internal SerializedObject serializedObject {
+    get { return m_Object; }
+  }
 }
 } // namespace UnityEditor

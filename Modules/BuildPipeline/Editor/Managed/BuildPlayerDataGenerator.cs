@@ -10,95 +10,88 @@ using System.Text;
 using UnityEditor.Scripting;
 using UnityEditor.Utils;
 
-namespace UnityEditor.Build.Player
-{
-internal class BuildPlayerDataGeneratorOptions
-{
+namespace UnityEditor.Build.Player {
+  internal class BuildPlayerDataGeneratorOptions {
     public string[] Assemblies {
-        get;
-        set;
+      get;
+      set;
     }
     public string[] SearchPaths {
-        get;
-        set;
+      get;
+      set;
     }
     public string OutputPath {
-        get;
-        set;
+      get;
+      set;
     }
     public string GeneratedTypeDbName {
-        get;
-        set;
+      get;
+      set;
     }
     public string GeneratedRuntimeInitializeOnLoadName {
-        get;
-        set;
+      get;
+      set;
     }
-}
+  }
 
-internal class BuildPlayerDataGenerator
-{
+  internal class BuildPlayerDataGenerator {
     private const string buildDataGenerator = "BuildPlayerDataGenerator";
-    private const string buildDataGeneratorPathExe = buildDataGenerator + ".exe";
+    private const string buildDataGeneratorPathExe =
+        buildDataGenerator + ".exe";
 
-    private static string buildDataGeneratorPath = Paths.Combine(EditorApplication.applicationContentsPath, "Tools",
-            buildDataGenerator, buildDataGeneratorPathExe);
+    private static string buildDataGeneratorPath =
+        Paths.Combine(EditorApplication.applicationContentsPath, "Tools",
+                      buildDataGenerator, buildDataGeneratorPathExe);
 
     private static List<Program> runningProcesses = new List<Program>();
 
-    public void ExecuteAsync(BuildPlayerDataGeneratorOptions options)
-    {
-        Program typeDbGeneratorProcess;
-        var arguments = OptionsToStringArgument(options);
+    public void ExecuteAsync(BuildPlayerDataGeneratorOptions options) {
+      Program typeDbGeneratorProcess;
+      var arguments = OptionsToStringArgument(options);
 
-        if (NetCoreRunProgram.IsSupported())
-        {
-            typeDbGeneratorProcess = new NetCoreRunProgram(buildDataGeneratorPath, arguments, null);
-        }
-        else
-        {
-            typeDbGeneratorProcess =
-                new ManagedProgram(MonoInstallationFinder.GetMonoInstallation("MonoBleedingEdge"), null,
-                                   buildDataGeneratorPath, arguments, false, null);
-        }
+      if (NetCoreRunProgram.IsSupported()) {
+        typeDbGeneratorProcess =
+            new NetCoreRunProgram(buildDataGeneratorPath, arguments, null);
+      } else {
+        typeDbGeneratorProcess = new ManagedProgram(
+            MonoInstallationFinder.GetMonoInstallation("MonoBleedingEdge"),
+            null, buildDataGeneratorPath, arguments, false, null);
+      }
 
-        typeDbGeneratorProcess.Start((s, e) =>
-        {
-            ProcessExit(typeDbGeneratorProcess);
-        });
-        runningProcesses.Add(typeDbGeneratorProcess);
+      typeDbGeneratorProcess.Start(
+          (s, e) => { ProcessExit(typeDbGeneratorProcess); });
+      runningProcesses.Add(typeDbGeneratorProcess);
     }
 
-    private void ProcessExit(Program typeDbGeneratorProcess)
-    {
-        if (typeDbGeneratorProcess.ExitCode == 0)
-        {
-            return;
+    private void ProcessExit(Program typeDbGeneratorProcess) {
+      if (typeDbGeneratorProcess.ExitCode == 0) {
+        return;
+      }
+      Console.WriteLine(
+          $"Failure running BuildPlayerGenerator\nArguments:\n{typeDbGeneratorProcess.GetProcessStartInfo().Arguments}{Environment.NewLine}{typeDbGeneratorProcess.GetAllOutput()}");
+    }
+
+    public string
+    OptionsToStringArgument(BuildPlayerDataGeneratorOptions options) {
+      string
+          result = $"-a \"{string.Join(",
+          ", options.Assemblies)}\" -s \"{string.Join(",
+          ", options.SearchPaths)}\" -o \"{options.OutputPath}\" -rn={options.GeneratedRuntimeInitializeOnLoadName} -tn={options.GeneratedTypeDbName}";
+      return result;
+    }
+
+    public void WaitToAllDone() {
+      const int timeoutMilliseconds = 5000;
+      foreach (var runningProcess in runningProcesses) {
+        if (!runningProcess.WaitForExit(timeoutMilliseconds)) {
+          Console.WriteLine(
+              "BuildPlayerGenerator running for a long time. Trying to stop it.");
+          ProcessExit(runningProcess);
+          runningProcess.Kill();
         }
-        Console.WriteLine($"Failure running BuildPlayerGenerator\nArguments:\n{typeDbGeneratorProcess.GetProcessStartInfo().Arguments}{Environment.NewLine}{typeDbGeneratorProcess.GetAllOutput()}");
-    }
+      }
 
-    public string OptionsToStringArgument(BuildPlayerDataGeneratorOptions options)
-    {
-        string result =
-            $"-a \"{string.Join(",", options.Assemblies)}\" -s \"{string.Join(",", options.SearchPaths)}\" -o \"{options.OutputPath}\" -rn={options.GeneratedRuntimeInitializeOnLoadName} -tn={options.GeneratedTypeDbName}";
-        return result;
+      runningProcesses.Clear();
     }
-
-    public void WaitToAllDone()
-    {
-        const int timeoutMilliseconds = 5000;
-        foreach (var runningProcess in runningProcesses)
-        {
-            if (!runningProcess.WaitForExit(timeoutMilliseconds))
-            {
-                Console.WriteLine("BuildPlayerGenerator running for a long time. Trying to stop it.");
-                ProcessExit(runningProcess);
-                runningProcess.Kill();
-            }
-        }
-
-        runningProcesses.Clear();
-    }
-}
+  }
 }

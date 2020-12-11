@@ -6,16 +6,15 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Bindings;
-using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCodeAttribute;
+using RequiredByNativeCodeAttribute =
+    UnityEngine.Scripting.RequiredByNativeCodeAttribute;
 
-namespace UnityEditor.PackageManager
-{
-[Serializable]
-[StructLayout(LayoutKind.Sequential)]
-[RequiredByNativeCode]
-[NativeAsStruct]
-public class AuthorInfo
-{
+namespace UnityEditor.PackageManager {
+  [Serializable]
+  [StructLayout(LayoutKind.Sequential)]
+  [RequiredByNativeCode]
+  [NativeAsStruct]
+  public class AuthorInfo {
     [SerializeField]
     [NativeName("name")]
     private string m_Name;
@@ -30,27 +29,20 @@ public class AuthorInfo
 
     internal AuthorInfo() : this("", "", "") {}
 
-    internal AuthorInfo(string name, string email, string url)
-    {
-        m_Name = name;
-        m_Email = email;
-        m_Url = url;
+    internal AuthorInfo(string name, string email, string url) {
+      m_Name = name;
+      m_Email = email;
+      m_Url = url;
     }
 
     public string name {
-        get {
-            return m_Name;
-        }
+      get { return m_Name; }
     }
     public string email {
-        get {
-            return m_Email;
-        }
+      get { return m_Email; }
     }
     public string url {
-        get {
-            return m_Url;
-        }
+      get { return m_Url; }
     }
-}
+  }
 }

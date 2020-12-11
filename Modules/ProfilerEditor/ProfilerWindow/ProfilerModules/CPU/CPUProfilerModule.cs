@@ -8,60 +8,51 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.Profiling;
 
-namespace UnityEditorInternal.Profiling
-{
-[Serializable]
-internal class CPUProfilerModule : CPUorGPUProfilerModule
-{
-    [SerializeField]
-    ProfilerTimelineGUI m_TimelineGUI;
+namespace UnityEditorInternal.Profiling {
+  [Serializable]
+  internal class CPUProfilerModule : CPUorGPUProfilerModule {
+    [SerializeField] ProfilerTimelineGUI m_TimelineGUI;
 
     const string k_SettingsKeyPrefix = "Profiler.CPUProfilerModule.";
     protected override string SettingsKeyPrefix => k_SettingsKeyPrefix;
-    protected override ProfilerViewType DefaultViewTypeSetting => ProfilerViewType.Timeline;
+    protected override ProfilerViewType DefaultViewTypeSetting =>
+        ProfilerViewType.Timeline;
 
-    public override void OnEnable(IProfilerWindowController profilerWindow)
-    {
-        base.OnEnable(profilerWindow);
+    public override void OnEnable(IProfilerWindowController profilerWindow) {
+      base.OnEnable(profilerWindow);
 
-        m_TimelineGUI = new ProfilerTimelineGUI();
-        m_TimelineGUI.OnEnable(this, profilerWindow, false);
-        m_TimelineGUI.viewTypeChanged += CPUOrGPUViewTypeChanged;
+      m_TimelineGUI = new ProfilerTimelineGUI();
+      m_TimelineGUI.OnEnable(this, profilerWindow, false);
+      m_TimelineGUI.viewTypeChanged += CPUOrGPUViewTypeChanged;
     }
 
-    public override void DrawToolbar(Rect position)
-    {
-        if (m_TimelineGUI != null && m_ViewType == ProfilerViewType.Timeline)
-        {
-            base.DrawToolbar(position);
-        }
-        else
-        {
-            base.DrawToolbar(position);
-        }
+    public override void DrawToolbar(Rect position) {
+      if (m_TimelineGUI != null && m_ViewType == ProfilerViewType.Timeline) {
+        base.DrawToolbar(position);
+      } else {
+        base.DrawToolbar(position);
+      }
     }
 
-    public override void DrawView(Rect position)
-    {
-        if (m_TimelineGUI != null && m_ViewType == ProfilerViewType.Timeline)
-        {
-            m_TimelineGUI.DoGUI(m_ProfilerWindow.GetActiveVisibleFrameIndex(), position, fetchData, ref updateViewLive);
-        }
-        else
-        {
-            base.DrawView(position);
-        }
+    public override void DrawView(Rect position) {
+      if (m_TimelineGUI != null && m_ViewType == ProfilerViewType.Timeline) {
+        m_TimelineGUI.DoGUI(m_ProfilerWindow.GetActiveVisibleFrameIndex(),
+                            position, fetchData, ref updateViewLive);
+      } else {
+        base.DrawView(position);
+      }
     }
 
-    protected override HierarchyFrameDataView.ViewModes GetFilteringMode()
-    {
-        return (((int)ViewOptions & (int)ProfilerViewFilteringOptions.CollapseEditorBoundarySamples) != 0) ? HierarchyFrameDataView.ViewModes.HideEditorOnlySamples : HierarchyFrameDataView.ViewModes.Default;
+    protected override HierarchyFrameDataView.ViewModes GetFilteringMode() {
+      return (((int) ViewOptions & (int) ProfilerViewFilteringOptions
+                                       .CollapseEditorBoundarySamples) != 0)
+                 ? HierarchyFrameDataView.ViewModes.HideEditorOnlySamples
+                 : HierarchyFrameDataView.ViewModes.Default;
     }
 
-    protected override void ToggleOption(ProfilerViewFilteringOptions option)
-    {
-        base.ToggleOption(option);
-        m_TimelineGUI?.Clear();
+    protected override void ToggleOption(ProfilerViewFilteringOptions option) {
+      base.ToggleOption(option);
+      m_TimelineGUI?.Clear();
     }
-}
+  }
 }

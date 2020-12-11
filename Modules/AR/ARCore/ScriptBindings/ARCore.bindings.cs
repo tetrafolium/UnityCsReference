@@ -11,20 +11,12 @@ using UnityEngine.Internal;
 using UnityEngine.Scripting;
 using UnityEngine.XR;
 
-namespace UnityEngine.XR.Tango
-{
-internal enum PoseStatus
-{
-    Initializing = 0,
-    Valid,
-    Invalid,
-    Unknown
-}
+namespace UnityEngine.XR.Tango {
+  internal enum PoseStatus { Initializing = 0, Valid, Invalid, Unknown }
 
-[UsedByNativeCode]
-[NativeHeader("ARScriptingClasses.h")]
-internal struct PoseData
-{
+  [UsedByNativeCode]
+  [NativeHeader("ARScriptingClasses.h")]
+  internal struct PoseData {
     public double orientation_x;
     public double orientation_y;
     public double orientation_z;
@@ -34,30 +26,28 @@ internal struct PoseData
     public double translation_z;
     public PoseStatus statusCode;
 
-    public Quaternion rotation
-    {
-        get {
-            return new Quaternion((float)orientation_x, (float)orientation_y, (float)orientation_z, (float)orientation_w);
-        }
+    public Quaternion rotation {
+      get {
+        return new Quaternion((float) orientation_x, (float) orientation_y,
+                              (float) orientation_z, (float) orientation_w);
+      }
     }
 
-    public Vector3 position
-    {
-        get {
-            return new Vector3((float)translation_x, (float)translation_y, (float)translation_z);
-        }
+    public Vector3 position {
+      get {
+        return new Vector3((float) translation_x, (float) translation_y,
+                           (float) translation_z);
+      }
     }
-}
+  }
 
-[NativeHeader("Modules/AR/ARCore/ARCoreScriptApi.h")]
-[NativeConditional("PLATFORM_ANDROID")]
-internal static partial class TangoInputTracking
-{
+  [NativeHeader("Modules/AR/ARCore/ARCoreScriptApi.h")]
+  [NativeConditional("PLATFORM_ANDROID")]
+  internal static partial class TangoInputTracking {
     extern private static bool Internal_TryGetPoseAtTime(out PoseData pose);
 
-    internal static bool TryGetPoseAtTime(out PoseData pose)
-    {
-        return Internal_TryGetPoseAtTime(out pose);
+    internal static bool TryGetPoseAtTime(out PoseData pose) {
+      return Internal_TryGetPoseAtTime(out pose);
     }
-}
+  }
 }

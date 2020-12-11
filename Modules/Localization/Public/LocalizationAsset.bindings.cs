@@ -7,36 +7,32 @@ using UnityEngine.Bindings;
 using UnityEngine.Internal;
 using UnityEngine.Scripting.APIUpdating;
 
-namespace UnityEngine
-{
+namespace UnityEngine {
 [NativeHeader("Modules/Localization/Public/LocalizationAsset.h")]
 [NativeHeader("Modules/Localization/Public/LocalizationAsset.bindings.h")]
 [NativeClass("LocalizationAsset")]
 [ExcludeFromPreset]
 [MovedFrom("UnityEditor")]
-public sealed class LocalizationAsset : Object
-{
-    public LocalizationAsset()
-    {
-        Internal_CreateInstance(this);
-    }
+public sealed class LocalizationAsset : Object {
+  public LocalizationAsset() { Internal_CreateInstance(this); }
 
-    [FreeFunction("Internal_CreateInstance")]
-    private static extern void Internal_CreateInstance([Writable] LocalizationAsset locAsset);
+  [FreeFunction("Internal_CreateInstance")]
+  private static extern void
+  Internal_CreateInstance([ Writable ] LocalizationAsset locAsset);
 
-    [NativeMethod("StoreLocalizedString")]
-    extern public void SetLocalizedString(string original, string localized);
+  [NativeMethod("StoreLocalizedString")] extern public void
+  SetLocalizedString(string original, string localized);
 
-    [NativeMethod("GetLocalized")]
-    extern public string GetLocalizedString(string original);
+  [NativeMethod("GetLocalized")] extern public string
+  GetLocalizedString(string original);
 
-    extern public string localeIsoCode {
-        get;
-        set;
-    }
-    extern public bool isEditorAsset {
-        get;
-        set;
-    }
+  extern public string localeIsoCode {
+    get;
+    set;
+  }
+  extern public bool isEditorAsset {
+    get;
+    set;
+  }
 }
 }

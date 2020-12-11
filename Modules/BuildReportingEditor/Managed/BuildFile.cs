@@ -5,32 +5,19 @@
 using System;
 using UnityEngine.Bindings;
 
-namespace UnityEditor.Build.Reporting
-{
-[NativeType(Header = "Modules/BuildReportingEditor/Public/BuildReport.h")]
-public struct BuildFile
-{
-    public uint id {
-        get;
-    }
-    public string path {
-        get;
-    }
-    public string role {
-        get;
-    }
-    internal bool isOverridingUnityAssembly {
-        get;
-    }
+namespace UnityEditor.Build.Reporting {
+  [NativeType(Header = "Modules/BuildReportingEditor/Public/BuildReport.h")]
+  public struct BuildFile {
+    public uint id { get; }
+    public string path { get; }
+    public string role { get; }
+    internal bool isOverridingUnityAssembly { get; }
 
     [NativeName("totalSize")]
     public ulong size {
-        get;
+      get;
     }
 
-    public override string ToString()
-    {
-        return path;
-    }
-}
+    public override string ToString() { return path; }
+  }
 }

@@ -6,11 +6,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityEditor.PackageManager.UI
-{
-[Serializable]
-internal class UpmPackage : BasePackage
-{
+namespace UnityEditor.PackageManager.UI {
+  [Serializable]
+  internal class UpmPackage : BasePackage {
     public override string uniqueId => name;
 
     [SerializeField]
@@ -22,41 +20,39 @@ internal class UpmPackage : BasePackage
 
     public override IVersionList versions => m_VersionList;
 
-    public UpmPackage(string name, bool isDiscoverable, PackageType type = PackageType.None)
-    {
-        m_Progress = PackageProgress.None;
-        m_Name = name;
-        m_IsDiscoverable = isDiscoverable;
-        m_VersionList = new UpmVersionList();
-        m_Errors = new List<UIError>();
-        m_Type = type;
+    public UpmPackage(string name, bool isDiscoverable,
+                      PackageType type = PackageType.None) {
+      m_Progress = PackageProgress.None;
+      m_Name = name;
+      m_IsDiscoverable = isDiscoverable;
+      m_VersionList = new UpmVersionList();
+      m_Errors = new List<UIError>();
+      m_Type = type;
     }
 
-    public UpmPackage(PackageInfo info, bool isInstalled, bool isDiscoverable)
-    {
-        m_Progress = PackageProgress.None;
-        m_Name = info.name;
-        m_Errors = new List<UIError>();
-        m_IsDiscoverable = isDiscoverable;
-        m_VersionList = new UpmVersionList(info, isInstalled);
-        m_Type = versions.primary.HasTag(PackageTag.BuiltIn) ? PackageType.BuiltIn : PackageType.Installable;
+    public UpmPackage(PackageInfo info, bool isInstalled, bool isDiscoverable) {
+      m_Progress = PackageProgress.None;
+      m_Name = info.name;
+      m_Errors = new List<UIError>();
+      m_IsDiscoverable = isDiscoverable;
+      m_VersionList = new UpmVersionList(info, isInstalled);
+      m_Type = versions.primary.HasTag(PackageTag.BuiltIn)
+                   ? PackageType.BuiltIn
+                   : PackageType.Installable;
     }
 
-    internal void UpdateVersions(IEnumerable<UpmPackageVersion> updatedVersions)
-    {
-        m_VersionList = new UpmVersionList(updatedVersions);
-        ClearErrors();
+    internal void
+    UpdateVersions(IEnumerable<UpmPackageVersion> updatedVersions) {
+      m_VersionList = new UpmVersionList(updatedVersions);
+      ClearErrors();
     }
 
-    // This function is only used to update the object, not to actually perform the add operation
-    public void AddInstalledVersion(UpmPackageVersion newVersion)
-    {
-        m_VersionList.AddInstalledVersion(newVersion);
+    // This function is only used to update the object, not to actually perform
+    // the add operation
+    public void AddInstalledVersion(UpmPackageVersion newVersion) {
+      m_VersionList.AddInstalledVersion(newVersion);
     }
 
-    public override IPackage Clone()
-    {
-        return (IPackage)MemberwiseClone();
-    }
-}
+    public override IPackage Clone() { return (IPackage) MemberwiseClone(); }
+  }
 }

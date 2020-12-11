@@ -4,10 +4,7 @@
 
 using UnityEngine.Bindings;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [NativeHeader("Modules/AssetPipelineEditor/Public/TextScriptImporter.h")]
-internal class TextScriptImporter : AssetImporter
-{
-}
+internal class TextScriptImporter : AssetImporter {}
 }

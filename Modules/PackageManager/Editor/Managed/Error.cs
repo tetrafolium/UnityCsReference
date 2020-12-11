@@ -6,16 +6,15 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Bindings;
-using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCodeAttribute;
+using RequiredByNativeCodeAttribute =
+    UnityEngine.Scripting.RequiredByNativeCodeAttribute;
 
-namespace UnityEditor.PackageManager
-{
-[Serializable]
-[StructLayout(LayoutKind.Sequential)]
-[RequiredByNativeCode]
-[NativeAsStruct]
-public class Error
-{
+namespace UnityEditor.PackageManager {
+  [Serializable]
+  [StructLayout(LayoutKind.Sequential)]
+  [RequiredByNativeCode]
+  [NativeAsStruct]
+  public class Error {
     [SerializeField]
     [NativeName("errorCode")]
     private NativeErrorCode m_ErrorCode;
@@ -26,22 +25,17 @@ public class Error
 
     private Error() {}
 
-    internal Error(NativeErrorCode errorCode, string message)
-    {
-        m_ErrorCode = errorCode;
-        m_Message = message;
+    internal Error(NativeErrorCode errorCode, string message) {
+      m_ErrorCode = errorCode;
+      m_Message = message;
     }
 
     public ErrorCode errorCode {
-        get {
-            return m_ErrorCode.ConvertToManaged();
-        }
+      get { return m_ErrorCode.ConvertToManaged(); }
     }
 
     public string message {
-        get {
-            return m_Message;
-        }
+      get { return m_Message; }
     }
-}
+  }
 }

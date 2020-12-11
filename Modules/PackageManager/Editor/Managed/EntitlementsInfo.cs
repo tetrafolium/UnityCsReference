@@ -6,24 +6,21 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Bindings;
-using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCodeAttribute;
+using RequiredByNativeCodeAttribute =
+    UnityEngine.Scripting.RequiredByNativeCodeAttribute;
 
-namespace UnityEditor.PackageManager
-{
-[Serializable]
-[StructLayout(LayoutKind.Sequential)]
-[RequiredByNativeCode]
-[NativeAsStruct]
-internal class EntitlementsInfo
-{
+namespace UnityEditor.PackageManager {
+  [Serializable]
+  [StructLayout(LayoutKind.Sequential)]
+  [RequiredByNativeCode]
+  [NativeAsStruct]
+  internal class EntitlementsInfo {
     [SerializeField]
     [NativeName("isAllowed")]
     private bool m_IsAllowed;
 
     public bool isAllowed {
-        get {
-            return m_IsAllowed;
-        }
+      get { return m_IsAllowed; }
     }
-}
+  }
 }

@@ -5,41 +5,33 @@
 using System;
 using UnityEngine;
 
-namespace UnityEditor.PackageManager.Requests
-{
-[Serializable]
-internal sealed partial class PerformSearchRequest : Request<SearchResults>
-{
+namespace UnityEditor.PackageManager.Requests {
+  [Serializable]
+  internal sealed partial class PerformSearchRequest : Request<SearchResults> {
     [SerializeField]
     private SearchOptions m_Options;
 
     /// <summary>
     /// Gets the search options.
     /// </summary>
-    public SearchOptions Options
-    {
-        get
-        {
-            return m_Options;
-        }
+    public SearchOptions Options {
+      get { return m_Options; }
     }
 
     /// <summary>
     /// Constructor to support serialization
     /// </summary>
-    private PerformSearchRequest()
-    {
+    private PerformSearchRequest() {}
+
+    internal PerformSearchRequest(long operationId,
+                                  NativeStatusCode initialStatus,
+                                  SearchOptions options)
+        : base(operationId, initialStatus) {
+      m_Options = options;
     }
 
-    internal PerformSearchRequest(long operationId, NativeStatusCode initialStatus, SearchOptions options)
-        : base(operationId, initialStatus)
-    {
-        m_Options = options;
+    protected override SearchResults GetResult() {
+      return GetOperationData(Id);
     }
-
-    protected override SearchResults GetResult()
-    {
-        return GetOperationData(Id);
-    }
-}
+  }
 }

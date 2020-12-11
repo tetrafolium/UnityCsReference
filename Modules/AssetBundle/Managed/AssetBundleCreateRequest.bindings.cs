@@ -11,25 +11,20 @@ using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 using UnityEngineInternal;
 
-namespace UnityEngine
-{
+namespace UnityEngine {
 // Asynchronous create request for an [[AssetBundle]].
 [StructLayout(LayoutKind.Sequential)]
 [RequiredByNativeCode]
 [NativeHeader("Modules/AssetBundle/Public/AssetBundleLoadFromAsyncOperation.h")]
-public class AssetBundleCreateRequest : AsyncOperation
-{
-    public extern UnityEngine.AssetBundle assetBundle
-    {
-        [NativeMethod("GetAssetBundleBlocking")]
-        get;
-    }
+public class AssetBundleCreateRequest : AsyncOperation {
+  public extern UnityEngine.AssetBundle assetBundle {
+    [NativeMethod("GetAssetBundleBlocking")] get;
+  }
 
-    [NativeMethod("SetEnableCompatibilityChecks")]
-    private extern void SetEnableCompatibilityChecks(bool set);
-    internal void DisableCompatibilityChecks()
-    {
-        SetEnableCompatibilityChecks(false);
-    }
+  [NativeMethod("SetEnableCompatibilityChecks")]
+  private extern void SetEnableCompatibilityChecks(bool set);
+  internal void DisableCompatibilityChecks() {
+    SetEnableCompatibilityChecks(false);
+  }
 }
 }

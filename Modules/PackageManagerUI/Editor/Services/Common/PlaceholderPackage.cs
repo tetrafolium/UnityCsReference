@@ -6,11 +6,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityEditor.PackageManager.UI
-{
-[Serializable]
-internal class PlaceholderPackage : BasePackage
-{
+namespace UnityEditor.PackageManager.UI {
+  [Serializable]
+  internal class PlaceholderPackage : BasePackage {
     [SerializeField]
     private string m_UniqueId;
     public override string uniqueId => m_UniqueId;
@@ -20,18 +18,19 @@ internal class PlaceholderPackage : BasePackage
 
     public override IVersionList versions => m_VersionList;
 
-    public PlaceholderPackage(string uniqueId, string displayName, PackageType type = PackageType.None, PackageTag tag = PackageTag.None, PackageProgress progress = PackageProgress.None, UIError error = null)
-    {
-        m_Type = type;
-        m_UniqueId = uniqueId;
-        m_Progress = progress;
-        m_VersionList = new PlaceholderVersionList(new PlaceholderPackageVersion(uniqueId, uniqueId, displayName, tag, error));
-        m_Errors = new List<UIError>();
+    public PlaceholderPackage(string uniqueId, string displayName,
+                              PackageType type = PackageType.None,
+                              PackageTag tag = PackageTag.None,
+                              PackageProgress progress = PackageProgress.None,
+                              UIError error = null) {
+      m_Type = type;
+      m_UniqueId = uniqueId;
+      m_Progress = progress;
+      m_VersionList = new PlaceholderVersionList(new PlaceholderPackageVersion(
+          uniqueId, uniqueId, displayName, tag, error));
+      m_Errors = new List<UIError>();
     }
 
-    public override IPackage Clone()
-    {
-        return (IPackage)MemberwiseClone();
-    }
-}
+    public override IPackage Clone() { return (IPackage) MemberwiseClone(); }
+  }
 }

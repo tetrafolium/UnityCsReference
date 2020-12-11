@@ -4,10 +4,8 @@
 
 using System;
 
-namespace UnityEditor.PackageManager.UI
-{
-internal enum DownloadState
-{
+namespace UnityEditor.PackageManager.UI {
+  internal enum DownloadState {
     None,
     Connecting,
     DownloadRequested,
@@ -19,5 +17,5 @@ internal enum DownloadState
     Decrypting,
     Aborted,
     Error
-}
+  }
 }

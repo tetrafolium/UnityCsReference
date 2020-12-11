@@ -8,11 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace UnityEditor.PackageManager
-{
-[Serializable]
-public class PackageCollection : IEnumerable<PackageInfo>
-{
+namespace UnityEditor.PackageManager {
+  [Serializable]
+  public class PackageCollection : IEnumerable<PackageInfo> {
     [SerializeField]
     private PackageInfo[] m_PackageList;
 
@@ -28,29 +26,22 @@ public class PackageCollection : IEnumerable<PackageInfo>
 
     private PackageCollection() {}
 
-    internal PackageCollection(
-        IEnumerable<PackageInfo> packages,
-        Error error)
-    {
-        m_PackageList = (packages ?? new PackageInfo[] {}).ToArray();
-        m_Error = error;
-        m_HasError = (m_Error != null);
+    internal PackageCollection(IEnumerable<PackageInfo> packages, Error error) {
+      m_PackageList = (packages ?? new PackageInfo[]{}).ToArray();
+      m_Error = error;
+      m_HasError = (m_Error != null);
     }
 
-    IEnumerator<PackageInfo> IEnumerable<PackageInfo>.GetEnumerator()
-    {
-        return ((IEnumerable<PackageInfo>)m_PackageList).GetEnumerator();
+    IEnumerator<PackageInfo> IEnumerable<PackageInfo>.GetEnumerator() {
+      return ((IEnumerable<PackageInfo>) m_PackageList).GetEnumerator();
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return m_PackageList.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() {
+      return m_PackageList.GetEnumerator();
     }
 
     public Error error {
-        get {
-            return m_HasError ? m_Error : null;
-        }
+      get { return m_HasError ? m_Error : null; }
     }
-}
+  }
 }

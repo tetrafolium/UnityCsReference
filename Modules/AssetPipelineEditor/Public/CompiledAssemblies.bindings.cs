@@ -5,17 +5,20 @@
 using UnityEngine;
 using UnityEngine.Bindings;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 // This class will be needed by the Roslyn analysis runner
 [NativeHeader("Editor/Src/ScriptCompilation/CompiledAssemblies.bindings.h")]
 [ExcludeFromPreset]
-internal sealed class CompiledAssemblyCache
-{
-    [FreeFunction] internal static extern string[] GetAllPaths();
-    [FreeFunction] internal static extern void AddPaths(string[] paths);
-    [FreeFunction] internal static extern void AddPath(string path);
-    [FreeFunction] internal static extern void RemovePath(string path);
-    [FreeFunction("RemoveAllPaths")] internal static extern void Clear();
+internal sealed class CompiledAssemblyCache {
+  [FreeFunction]
+  internal static extern string[] GetAllPaths();
+  [FreeFunction]
+  internal static extern void AddPaths(string[] paths);
+  [FreeFunction]
+  internal static extern void AddPath(string path);
+  [FreeFunction]
+  internal static extern void RemovePath(string path);
+  [FreeFunction("RemoveAllPaths")]
+  internal static extern void Clear();
 }
 }

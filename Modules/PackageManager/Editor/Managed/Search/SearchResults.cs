@@ -6,17 +6,16 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Bindings;
-using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCodeAttribute;
+using RequiredByNativeCodeAttribute =
+    UnityEngine.Scripting.RequiredByNativeCodeAttribute;
 
-namespace UnityEditor.PackageManager
-{
-[Serializable]
-[RequiredByNativeCode]
-[StructLayout(LayoutKind.Sequential)]
-[NativeAsStruct]
-[NativeType(IntermediateScriptingStructName = "PackageManager_SearchResults")]
-internal sealed class SearchResults
-{
+namespace UnityEditor.PackageManager {
+  [Serializable]
+  [RequiredByNativeCode]
+  [StructLayout(LayoutKind.Sequential)]
+  [NativeAsStruct]
+  [NativeType(IntermediateScriptingStructName = "PackageManager_SearchResults")]
+  internal sealed class SearchResults {
     [SerializeField]
     [NativeName("capabilities")]
     private SearchCapabilities m_Capabilities = new SearchCapabilities();
@@ -32,25 +31,15 @@ internal sealed class SearchResults
     internal SearchResults() {}
 
     public ulong total {
-        get {
-            return m_Total;
-        }
+      get { return m_Total; }
     }
 
-    public SearchCapabilities capabilities
-    {
-        get
-        {
-            return m_Capabilities;
-        }
+    public SearchCapabilities capabilities {
+      get { return m_Capabilities; }
     }
 
-    public SearchResultEntry[] packages
-    {
-        get
-        {
-            return m_Packages;
-        }
+    public SearchResultEntry[] packages {
+      get { return m_Packages; }
     }
-}
+  }
 }

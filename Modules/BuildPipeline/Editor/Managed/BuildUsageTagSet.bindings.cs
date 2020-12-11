@@ -9,38 +9,28 @@ using UnityEngine.Scripting;
 using System.Runtime.Serialization;
 using UnityEngine;
 
-namespace UnityEditor.Build.Content
-{
-[Serializable]
-[UsedByNativeCode]
-[NativeHeader("Modules/BuildPipeline/Editor/Public/BuildUsageTagSet.h")]
-public class BuildUsageTagSet : ISerializable, IDisposable
-{
+namespace UnityEditor.Build.Content {
+  [Serializable]
+  [UsedByNativeCode]
+  [NativeHeader("Modules/BuildPipeline/Editor/Public/BuildUsageTagSet.h")]
+  public class BuildUsageTagSet : ISerializable,
+                                  IDisposable {
     private IntPtr m_Ptr;
 
-    public BuildUsageTagSet()
-    {
-        m_Ptr = Internal_Create();
+    public BuildUsageTagSet() { m_Ptr = Internal_Create(); }
+
+    ~BuildUsageTagSet() { Dispose(false); }
+
+    public void Dispose() {
+      Dispose(true);
+      GC.SuppressFinalize(this);
     }
 
-    ~BuildUsageTagSet()
-    {
-        Dispose(false);
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (m_Ptr != IntPtr.Zero)
-        {
-            Internal_Destroy(m_Ptr);
-            m_Ptr = IntPtr.Zero;
-        }
+    protected virtual void Dispose(bool disposing) {
+      if (m_Ptr != IntPtr.Zero) {
+        Internal_Destroy(m_Ptr);
+        m_Ptr = IntPtr.Zero;
+      }
     }
 
     [NativeMethod(IsThreadSafe = true)]
@@ -58,7 +48,7 @@ public class BuildUsageTagSet : ISerializable, IDisposable
     [ThreadSafe]
     internal extern byte[] SerializeToBinary();
     [ThreadSafe]
-    internal extern void DeserializeFromBinary([Out] byte[] data);
+    internal extern void DeserializeFromBinary([ Out ] byte[] data);
 
     internal extern string GetBuildUsageJson(ObjectIdentifier objectId);
 
@@ -66,30 +56,28 @@ public class BuildUsageTagSet : ISerializable, IDisposable
 
     public extern void UnionWith(BuildUsageTagSet other);
 
-    public override bool Equals(object obj)
-    {
-        BuildUsageTagSet other = obj as BuildUsageTagSet;
-        if (other == null)
-            return false;
-        return other.GetHash128() == GetHash128();
+    public override bool Equals(object obj) {
+      BuildUsageTagSet other = obj as BuildUsageTagSet;
+      if (other == null)
+        return false;
+      return other.GetHash128() == GetHash128();
     }
 
-    public override int GetHashCode()
-    {
-        return GetHash128().GetHashCode();
+    public override int GetHashCode() { return GetHash128().GetHashCode(); }
+
+    public void
+    GetObjectData(System.Runtime.Serialization.SerializationInfo info,
+                  StreamingContext context) {
+      byte[] data = SerializeToBinary();
+      info.AddValue("tags", data);
     }
 
-    public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, StreamingContext context)
-    {
-        byte[] data = SerializeToBinary();
-        info.AddValue("tags", data);
+    protected BuildUsageTagSet(
+        System.Runtime.Serialization.SerializationInfo info,
+        StreamingContext context) {
+      m_Ptr = Internal_Create();
+      byte[] data = (byte[]) info.GetValue("tags", typeof(byte[]));
+      DeserializeFromBinary(data);
     }
-
-    protected BuildUsageTagSet(System.Runtime.Serialization.SerializationInfo info, StreamingContext context)
-    {
-        m_Ptr = Internal_Create();
-        byte[] data = (byte[])info.GetValue("tags", typeof(byte[]));
-        DeserializeFromBinary(data);
-    }
-}
+  }
 }

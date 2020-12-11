@@ -8,28 +8,30 @@ using UnityEditor.Utils;
 using UnityEngine;
 using UnityEngine.Bindings;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [NativeHeader("Editor/Src/ScriptCompilation/RuleSetFiles.h")]
 [ExcludeFromPreset]
-internal sealed class RuleSetFileCache
-{
-    [FreeFunction("GetAllRuleSetFilePaths")]
-    internal static extern string[] GetAllPaths();
+internal sealed class RuleSetFileCache {
+  [FreeFunction("GetAllRuleSetFilePaths")]
+  internal static extern string[] GetAllPaths();
 
-    internal static string GetPathForAssembly(string scriptAssemblyOriginPath)
-    {
-        if (Path.IsPathRooted(scriptAssemblyOriginPath)
-                || !scriptAssemblyOriginPath.StartsWith("assets\\", StringComparison.InvariantCultureIgnoreCase)
-                && !scriptAssemblyOriginPath.StartsWith("assets/", StringComparison.InvariantCultureIgnoreCase))
-        {
-            throw new ArgumentException($"{nameof(scriptAssemblyOriginPath)} must be relative to the project directory and inside the Assets folder.");
-        }
-        scriptAssemblyOriginPath = scriptAssemblyOriginPath.ConvertSeparatorsToUnity().TrimTrailingSlashes();
-        return GetPathForScriptAssembly(scriptAssemblyOriginPath);
+  internal static string GetPathForAssembly(string scriptAssemblyOriginPath) {
+    if (Path.IsPathRooted(scriptAssemblyOriginPath) ||
+        !scriptAssemblyOriginPath.StartsWith(
+            "assets\\", StringComparison.InvariantCultureIgnoreCase) &&
+            !scriptAssemblyOriginPath.StartsWith(
+                "assets/", StringComparison.InvariantCultureIgnoreCase)) {
+      throw new ArgumentException(
+          $"{nameof(scriptAssemblyOriginPath)} must be relative to the project directory and inside the Assets folder.");
     }
+    scriptAssemblyOriginPath =
+        scriptAssemblyOriginPath.ConvertSeparatorsToUnity()
+            .TrimTrailingSlashes();
+    return GetPathForScriptAssembly(scriptAssemblyOriginPath);
+  }
 
-    [FreeFunction("GetRuleSetFilePath")]
-    internal static extern string GetPathForScriptAssembly(string scriptAssemblyOriginPath);
+  [FreeFunction("GetRuleSetFilePath")]
+  internal static extern string
+  GetPathForScriptAssembly(string scriptAssemblyOriginPath);
 }
 }
