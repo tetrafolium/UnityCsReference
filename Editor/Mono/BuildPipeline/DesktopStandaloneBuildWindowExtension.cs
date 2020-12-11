@@ -8,231 +8,234 @@ using UnityEditor;
 using UnityEditor.Modules;
 using UnityEngine;
 
-internal abstract class DesktopStandaloneBuildWindowExtension : DefaultBuildWindowExtension
-{
-    private GUIContent m_StandaloneTarget = EditorGUIUtility.TrTextContent("Target Platform", "Destination platform for standalone build");
-    private GUIContent m_Architecture = EditorGUIUtility.TrTextContent("Architecture", "Build m_Architecture for standalone");
-    private GUIContent m_HeadlessMode = EditorGUIUtility.TrTextContent("Server Build", "Headless player build tailored for server environments");
-    private BuildTarget[] m_StandaloneSubtargets;
-    private GUIContent[] m_StandaloneSubtargetStrings;
+internal abstract class DesktopStandaloneBuildWindowExtension
+    : DefaultBuildWindowExtension {
+  private GUIContent m_StandaloneTarget = EditorGUIUtility.TrTextContent(
+      "Target Platform", "Destination platform for standalone build");
+  private GUIContent m_Architecture = EditorGUIUtility.TrTextContent(
+      "Architecture", "Build m_Architecture for standalone");
+  private GUIContent m_HeadlessMode = EditorGUIUtility.TrTextContent(
+      "Server Build", "Headless player build tailored for server environments");
+  private BuildTarget[] m_StandaloneSubtargets;
+  private GUIContent[] m_StandaloneSubtargetStrings;
 
-    protected bool m_HasIl2CppPlayers;
-    protected bool m_IsRunningOnHostPlatform;
+  protected bool m_HasIl2CppPlayers;
+  protected bool m_IsRunningOnHostPlatform;
 
-    public DesktopStandaloneBuildWindowExtension(bool hasIl2CppPlayers)
-    {
-        SetupStandaloneSubtargets();
+  public DesktopStandaloneBuildWindowExtension(bool hasIl2CppPlayers) {
+    SetupStandaloneSubtargets();
 
-        m_IsRunningOnHostPlatform = Application.platform == GetHostPlatform();
-        m_HasIl2CppPlayers = hasIl2CppPlayers;
+    m_IsRunningOnHostPlatform = Application.platform == GetHostPlatform();
+    m_HasIl2CppPlayers = hasIl2CppPlayers;
+  }
+
+  private void SetupStandaloneSubtargets() {
+    List<BuildTarget> standaloneSubtargetsList = new List<BuildTarget>();
+    List<GUIContent> standaloneSubtargetStringsList = new List<GUIContent>();
+
+    if (ModuleManager.IsPlatformSupportLoadedByBuildTarget(
+            BuildTarget.StandaloneWindows)) {
+      standaloneSubtargetsList.Add(BuildTarget.StandaloneWindows);
+      standaloneSubtargetStringsList.Add(
+          EditorGUIUtility.TrTextContent("Windows"));
+    }
+    if (ModuleManager.IsPlatformSupportLoadedByBuildTarget(
+            BuildTarget.StandaloneOSX)) {
+      standaloneSubtargetsList.Add(BuildTarget.StandaloneOSX);
+      standaloneSubtargetStringsList.Add(
+          EditorGUIUtility.TrTextContent("Mac OS X"));
+    }
+    if (ModuleManager.IsPlatformSupportLoadedByBuildTarget(
+            BuildTarget.StandaloneLinux64)) {
+      standaloneSubtargetsList.Add(BuildTarget.StandaloneLinux64);
+      standaloneSubtargetStringsList.Add(
+          EditorGUIUtility.TrTextContent("Linux"));
     }
 
-    private void SetupStandaloneSubtargets()
-    {
-        List<BuildTarget> standaloneSubtargetsList = new List<BuildTarget>();
-        List<GUIContent> standaloneSubtargetStringsList = new List<GUIContent>();
+    m_StandaloneSubtargets = standaloneSubtargetsList.ToArray();
+    m_StandaloneSubtargetStrings = standaloneSubtargetStringsList.ToArray();
+  }
 
-        if (ModuleManager.IsPlatformSupportLoadedByBuildTarget(BuildTarget.StandaloneWindows))
-        {
-            standaloneSubtargetsList.Add(BuildTarget.StandaloneWindows);
-            standaloneSubtargetStringsList.Add(EditorGUIUtility.TrTextContent("Windows"));
-        }
-        if (ModuleManager.IsPlatformSupportLoadedByBuildTarget(BuildTarget.StandaloneOSX))
-        {
-            standaloneSubtargetsList.Add(BuildTarget.StandaloneOSX);
-            standaloneSubtargetStringsList.Add(EditorGUIUtility.TrTextContent("Mac OS X"));
-        }
-        if (ModuleManager.IsPlatformSupportLoadedByBuildTarget(BuildTarget.StandaloneLinux64))
-        {
-            standaloneSubtargetsList.Add(BuildTarget.StandaloneLinux64);
-            standaloneSubtargetStringsList.Add(EditorGUIUtility.TrTextContent("Linux"));
-        }
+  internal static BuildTarget
+  GetBestStandaloneTarget(BuildTarget selectedTarget) {
+    if (ModuleManager.IsPlatformSupportLoadedByBuildTarget(selectedTarget))
+      return selectedTarget;
+    if (RuntimePlatform.WindowsEditor == Application.platform &&
+        ModuleManager.IsPlatformSupportLoadedByBuildTarget(
+            BuildTarget.StandaloneWindows))
+      return BuildTarget.StandaloneWindows;
+    if (RuntimePlatform.OSXEditor == Application.platform &&
+        ModuleManager.IsPlatformSupportLoadedByBuildTarget(
+            BuildTarget.StandaloneOSX))
+      return BuildTarget.StandaloneOSX;
+    if (ModuleManager.IsPlatformSupportLoadedByBuildTarget(
+            BuildTarget.StandaloneOSX))
+      return BuildTarget.StandaloneOSX;
+    if (ModuleManager.IsPlatformSupportLoadedByBuildTarget(
+            BuildTarget.StandaloneLinux64))
+      return BuildTarget.StandaloneLinux64;
+    return BuildTarget.StandaloneWindows;
+  }
 
-        m_StandaloneSubtargets = standaloneSubtargetsList.ToArray();
-        m_StandaloneSubtargetStrings = standaloneSubtargetStringsList.ToArray();
+  private static Dictionary<GUIContent, BuildTarget>
+  GetArchitecturesForPlatform(BuildTarget target) {
+    switch (target) {
+    case BuildTarget.StandaloneWindows:
+    case BuildTarget.StandaloneWindows64:
+      return new Dictionary<GUIContent, BuildTarget>(){
+          {EditorGUIUtility.TrTextContent("x86"),
+           BuildTarget.StandaloneWindows},
+          {EditorGUIUtility.TrTextContent("x86_64"),
+           BuildTarget.StandaloneWindows64},
+      };
+    case BuildTarget.StandaloneLinux64:
+      return new Dictionary<GUIContent, BuildTarget>(){
+          {EditorGUIUtility.TrTextContent("x86_64"),
+           BuildTarget.StandaloneLinux64},
+      };
+    default:
+      return null;
     }
+  }
 
-    internal static BuildTarget GetBestStandaloneTarget(BuildTarget selectedTarget)
-    {
-        if (ModuleManager.IsPlatformSupportLoadedByBuildTarget(selectedTarget))
-            return selectedTarget;
-        if (RuntimePlatform.WindowsEditor == Application.platform && ModuleManager.IsPlatformSupportLoadedByBuildTarget(BuildTarget.StandaloneWindows))
-            return BuildTarget.StandaloneWindows;
-        if (RuntimePlatform.OSXEditor == Application.platform && ModuleManager.IsPlatformSupportLoadedByBuildTarget(BuildTarget.StandaloneOSX))
-            return BuildTarget.StandaloneOSX;
-        if (ModuleManager.IsPlatformSupportLoadedByBuildTarget(BuildTarget.StandaloneOSX))
-            return BuildTarget.StandaloneOSX;
-        if (ModuleManager.IsPlatformSupportLoadedByBuildTarget(BuildTarget.StandaloneLinux64))
-            return BuildTarget.StandaloneLinux64;
-        return BuildTarget.StandaloneWindows;
-    }
-
-    private static Dictionary<GUIContent, BuildTarget> GetArchitecturesForPlatform(BuildTarget target)
-    {
-        switch (target)
-        {
-        case BuildTarget.StandaloneWindows:
-        case BuildTarget.StandaloneWindows64:
-            return new Dictionary<GUIContent, BuildTarget>()
-            {
-                { EditorGUIUtility.TrTextContent("x86"), BuildTarget.StandaloneWindows },
-                { EditorGUIUtility.TrTextContent("x86_64"), BuildTarget.StandaloneWindows64 },
-            };
-        case BuildTarget.StandaloneLinux64:
-            return new Dictionary<GUIContent, BuildTarget>()
-            {
-                { EditorGUIUtility.TrTextContent("x86_64"), BuildTarget.StandaloneLinux64 },
-            };
-        default:
-            return null;
-        }
-    }
-
-    private static BuildTarget DefaultTargetForPlatform(BuildTarget target)
-    {
-        switch (target)
-        {
-        case BuildTarget.StandaloneWindows:
-        case BuildTarget.StandaloneWindows64:
-            return BuildTarget.StandaloneWindows;
-            // Deprecated
+  private static BuildTarget DefaultTargetForPlatform(BuildTarget target) {
+    switch (target) {
+    case BuildTarget.StandaloneWindows:
+    case BuildTarget.StandaloneWindows64:
+      return BuildTarget.StandaloneWindows;
+      // Deprecated
 #pragma warning disable 612, 618
-        case BuildTarget.StandaloneLinux:
-        case BuildTarget.StandaloneLinuxUniversal:
+    case BuildTarget.StandaloneLinux:
+    case BuildTarget.StandaloneLinuxUniversal:
 #pragma warning restore 612, 618
-        case BuildTarget.StandaloneLinux64:
-            return BuildTarget.StandaloneLinux64;
-        case BuildTarget.StandaloneOSX:
-            // Deprecated
+    case BuildTarget.StandaloneLinux64:
+      return BuildTarget.StandaloneLinux64;
+    case BuildTarget.StandaloneOSX:
+      // Deprecated
 #pragma warning disable 612, 618
-        case BuildTarget.StandaloneOSXIntel:
-        case BuildTarget.StandaloneOSXIntel64:
+    case BuildTarget.StandaloneOSXIntel:
+    case BuildTarget.StandaloneOSXIntel64:
 #pragma warning restore 612, 618
-            return BuildTarget.StandaloneOSX;
-        default:
-            return target;
-        }
+      return BuildTarget.StandaloneOSX;
+    default:
+      return target;
     }
+  }
 
-    private static BuildTarget DefaultArchitectureForTarget(BuildTarget target)
-    {
-        switch (target)
-        {
-        case BuildTarget.StandaloneWindows:
-        case BuildTarget.StandaloneWindows64:
-            return BuildTarget.StandaloneWindows64;
-            // Deprecated
+  private static BuildTarget DefaultArchitectureForTarget(BuildTarget target) {
+    switch (target) {
+    case BuildTarget.StandaloneWindows:
+    case BuildTarget.StandaloneWindows64:
+      return BuildTarget.StandaloneWindows64;
+      // Deprecated
 #pragma warning disable 612, 618
-        case BuildTarget.StandaloneLinux:
-        case BuildTarget.StandaloneLinuxUniversal:
+    case BuildTarget.StandaloneLinux:
+    case BuildTarget.StandaloneLinuxUniversal:
 #pragma warning restore 612, 618
-        case BuildTarget.StandaloneLinux64:
-            return BuildTarget.StandaloneLinux64;
-        case BuildTarget.StandaloneOSX:
-            // Deprecated
+    case BuildTarget.StandaloneLinux64:
+      return BuildTarget.StandaloneLinux64;
+    case BuildTarget.StandaloneOSX:
+      // Deprecated
 #pragma warning disable 612, 618
-        case BuildTarget.StandaloneOSXIntel:
-        case BuildTarget.StandaloneOSXIntel64:
+    case BuildTarget.StandaloneOSXIntel:
+    case BuildTarget.StandaloneOSXIntel64:
 #pragma warning restore 612, 618
-            return BuildTarget.StandaloneOSX;
-        default:
-            return target;
-        }
+      return BuildTarget.StandaloneOSX;
+    default:
+      return target;
     }
+  }
 
-    protected virtual void ShowArchitectureSpecificOptions() {}
+  protected virtual void ShowArchitectureSpecificOptions() {}
 
-    public override void ShowPlatformBuildOptions()
-    {
-        BuildTarget selectedTarget = GetBestStandaloneTarget(EditorUserBuildSettings.selectedStandaloneTarget);
-        BuildTarget newTarget = EditorUserBuildSettings.selectedStandaloneTarget;
+  public override void ShowPlatformBuildOptions() {
+    BuildTarget selectedTarget = GetBestStandaloneTarget(
+        EditorUserBuildSettings.selectedStandaloneTarget);
+    BuildTarget newTarget = EditorUserBuildSettings.selectedStandaloneTarget;
 
-        int selectedIndex = Math.Max(0, Array.IndexOf(m_StandaloneSubtargets, DefaultTargetForPlatform(selectedTarget)));
-        int newIndex = EditorGUILayout.Popup(m_StandaloneTarget, selectedIndex, m_StandaloneSubtargetStrings);
+    int selectedIndex =
+        Math.Max(0, Array.IndexOf(m_StandaloneSubtargets,
+                                  DefaultTargetForPlatform(selectedTarget)));
+    int newIndex = EditorGUILayout.Popup(m_StandaloneTarget, selectedIndex,
+                                         m_StandaloneSubtargetStrings);
 
-        if (newIndex == selectedIndex)
-        {
-            Dictionary<GUIContent, BuildTarget> architectures = GetArchitecturesForPlatform(selectedTarget);
-            if (null != architectures)
-            {
-                // Display architectures for the current target platform
-                GUIContent[] architectureNames = new List<GUIContent>(architectures.Keys).ToArray();
-                int selectedArchitecture = 0;
+    if (newIndex == selectedIndex) {
+      Dictionary<GUIContent, BuildTarget> architectures =
+          GetArchitecturesForPlatform(selectedTarget);
+      if (null != architectures) {
+        // Display architectures for the current target platform
+        GUIContent[] architectureNames =
+            new List<GUIContent>(architectures.Keys).ToArray();
+        int selectedArchitecture = 0;
 
-                // Grab m_Architecture index for currently selected target
-                foreach (var architecture in architectures)
-                {
-                    if (architecture.Value == selectedTarget)
-                    {
-                        selectedArchitecture = System.Math.Max(0, System.Array.IndexOf(architectureNames, architecture.Key));
-                        break;
-                    }
-                }
-
-                selectedArchitecture = EditorGUILayout.Popup(m_Architecture, selectedArchitecture, architectureNames);
-                newTarget = architectures[architectureNames[selectedArchitecture]];
-            }
-        }
-        else
-        {
-            newTarget = DefaultArchitectureForTarget(m_StandaloneSubtargets[newIndex]);
+        // Grab m_Architecture index for currently selected target
+        foreach (var architecture in architectures) {
+          if (architecture.Value == selectedTarget) {
+            selectedArchitecture = System.Math.Max(
+                0, System.Array.IndexOf(architectureNames, architecture.Key));
+            break;
+          }
         }
 
-        if (newTarget != EditorUserBuildSettings.selectedStandaloneTarget)
-        {
-            // setting selectedStandaloneTarget has side-effect: stops playmode
-            EditorUserBuildSettings.selectedStandaloneTarget = newTarget;
-            GUIUtility.ExitGUI();
-        }
-
-        ShowArchitectureSpecificOptions();
-
-        EditorUserBuildSettings.enableHeadlessMode = EditorGUILayout.Toggle(m_HeadlessMode, EditorUserBuildSettings.enableHeadlessMode);
-
-        ShowIl2CppErrorIfNeeded();
+        selectedArchitecture = EditorGUILayout.Popup(
+            m_Architecture, selectedArchitecture, architectureNames);
+        newTarget = architectures[architectureNames[selectedArchitecture]];
+      }
+    } else {
+      newTarget =
+          DefaultArchitectureForTarget(m_StandaloneSubtargets[newIndex]);
     }
 
-    private void ShowIl2CppErrorIfNeeded()
-    {
-        if (PlayerSettings.GetScriptingBackend(BuildTargetGroup.Standalone) != ScriptingImplementation.IL2CPP)
-            return;
-
-        var error = GetCannotBuildIl2CppPlayerInCurrentSetupError();
-        if (string.IsNullOrEmpty(error))
-            return;
-
-        EditorGUILayout.HelpBox(error, MessageType.Error);
+    if (newTarget != EditorUserBuildSettings.selectedStandaloneTarget) {
+      // setting selectedStandaloneTarget has side-effect: stops playmode
+      EditorUserBuildSettings.selectedStandaloneTarget = newTarget;
+      GUIUtility.ExitGUI();
     }
 
-    public override bool EnabledBuildButton()
-    {
-        if (PlayerSettings.GetScriptingBackend(BuildTargetGroup.Standalone) == ScriptingImplementation.Mono2x)
-            return true;
+    ShowArchitectureSpecificOptions();
 
-        return string.IsNullOrEmpty(GetCannotBuildIl2CppPlayerInCurrentSetupError());
-    }
+    EditorUserBuildSettings.enableHeadlessMode = EditorGUILayout.Toggle(
+        m_HeadlessMode, EditorUserBuildSettings.enableHeadlessMode);
 
-    protected virtual string GetCannotBuildIl2CppPlayerInCurrentSetupError()
-    {
-        if (!m_IsRunningOnHostPlatform)
-            return string.Format("{0} IL2CPP player can only be built on {0}.", GetHostPlatformName());
+    ShowIl2CppErrorIfNeeded();
+  }
 
-        if (!m_HasIl2CppPlayers)
-            return "Currently selected scripting backend (IL2CPP) is not installed."; // Note: error should match UWP player error message for consistency.
+  private void ShowIl2CppErrorIfNeeded() {
+    if (PlayerSettings.GetScriptingBackend(BuildTargetGroup.Standalone) !=
+        ScriptingImplementation.IL2CPP)
+      return;
 
-        return null;
-    }
+    var error = GetCannotBuildIl2CppPlayerInCurrentSetupError();
+    if (string.IsNullOrEmpty(error))
+      return;
 
-    protected abstract RuntimePlatform GetHostPlatform();
-    protected abstract string GetHostPlatformName();
+    EditorGUILayout.HelpBox(error, MessageType.Error);
+  }
 
-    public override bool EnabledBuildAndRunButton()
-    {
-        return true;
-    }
+  public override bool EnabledBuildButton() {
+    if (PlayerSettings.GetScriptingBackend(BuildTargetGroup.Standalone) ==
+        ScriptingImplementation.Mono2x)
+      return true;
 
-    public override bool ShouldDrawWaitForManagedDebugger()
-    {
-        return true;
-    }
+    return string.IsNullOrEmpty(
+        GetCannotBuildIl2CppPlayerInCurrentSetupError());
+  }
+
+  protected virtual string GetCannotBuildIl2CppPlayerInCurrentSetupError() {
+    if (!m_IsRunningOnHostPlatform)
+      return string.Format("{0} IL2CPP player can only be built on {0}.",
+                           GetHostPlatformName());
+
+    if (!m_HasIl2CppPlayers)
+      return "Currently selected scripting backend (IL2CPP) is not installed."; // Note: error should match UWP player error message for consistency.
+
+    return null;
+  }
+
+  protected abstract RuntimePlatform GetHostPlatform();
+  protected abstract string GetHostPlatformName();
+
+  public override bool EnabledBuildAndRunButton() { return true; }
+
+  public override bool ShouldDrawWaitForManagedDebugger() { return true; }
 }

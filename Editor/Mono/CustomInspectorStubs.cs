@@ -6,105 +6,103 @@ using UnityEngine;
 using UnityEditorInternal;
 using UnityEngine.Bindings;
 
-namespace UnityEditor
-{
-// Exposed as internal, editor-only, because we only need it do make a custom inspector
+namespace UnityEditor {
+// Exposed as internal, editor-only, because we only need it do make a custom
+// inspector
 [NativeClass(null)]
-internal sealed class PhysicsManager : ProjectSettingsBase
-{
-    private PhysicsManager() {}
+internal sealed class PhysicsManager : ProjectSettingsBase {
+  private PhysicsManager() {}
 }
 
-// Exposed as internal, editor-only, because we only need it do make a custom inspector
+// Exposed as internal, editor-only, because we only need it do make a custom
+// inspector
 [NativeClass(null)]
 [ExcludeFromPreset]
-internal sealed class AudioManager : ProjectSettingsBase
-{
-    private AudioManager() {}
+internal sealed class AudioManager : ProjectSettingsBase {
+  private AudioManager() {}
 }
 
-// Exposed as internal, editor-only, because we only need it do make a custom inspector
+// Exposed as internal, editor-only, because we only need it do make a custom
+// inspector
 [NativeClass(null)]
-internal sealed class Physics2DSettings : ProjectSettingsBase
-{
-    private Physics2DSettings() {}
+internal sealed class Physics2DSettings : ProjectSettingsBase {
+  private Physics2DSettings() {}
 }
 
-// Exposed as internal, editor-only, because we only need it do make a custom inspector
-[NativeClass(null)]
-[ExcludeFromPreset]
-internal sealed class MonoManager : ProjectSettingsBase
-{
-    private MonoManager() {}
-}
-
-// Exposed as internal, editor-only, because we only need it do make a custom inspector
+// Exposed as internal, editor-only, because we only need it do make a custom
+// inspector
 [NativeClass(null)]
 [ExcludeFromPreset]
-internal sealed class VFXManager : ProjectSettingsBase
-{
-    private VFXManager()
-    {
-    }
-
-    [SettingsProvider]
-    internal static SettingsProvider CreateProjectSettingsProvider()
-    {
-        if (!UnityEngine.VFX.VFXManager.activateVFX)
-            return null;
-        var provider = AssetSettingsProvider.CreateProviderFromAssetPath(
-                           "Project/VFX", "ProjectSettings/VFXManager.asset",
-                           SettingsProvider.GetSearchKeywordsFromPath("ProjectSettings/VFXManager.asset"));
-        return provider;
-    }
+internal sealed class MonoManager : ProjectSettingsBase {
+  private MonoManager() {}
 }
 
-// Exposed as internal, editor-only, because we only need it do make a custom inspector
+// Exposed as internal, editor-only, because we only need it do make a custom
+// inspector
 [NativeClass(null)]
-internal sealed class InputManager : ProjectSettingsBase
-{
-    private InputManager() {}
+[ExcludeFromPreset]
+internal sealed class VFXManager : ProjectSettingsBase {
+  private VFXManager() {}
 
-    [SettingsProvider]
-    internal static SettingsProvider CreateProjectSettingsProvider()
-    {
-        var provider = AssetSettingsProvider.CreateProviderFromAssetPath(
-                           "Project/Input Manager", "ProjectSettings/InputManager.asset",
-                           SettingsProvider.GetSearchKeywordsFromPath("ProjectSettings/InputManager.asset"));
-        return provider;
-    }
+  [SettingsProvider]
+  internal static SettingsProvider CreateProjectSettingsProvider() {
+    if (!UnityEngine.VFX.VFXManager.activateVFX)
+      return null;
+    var provider = AssetSettingsProvider.CreateProviderFromAssetPath(
+        "Project/VFX", "ProjectSettings/VFXManager.asset",
+        SettingsProvider.GetSearchKeywordsFromPath(
+            "ProjectSettings/VFXManager.asset"));
+    return provider;
+  }
+}
+
+// Exposed as internal, editor-only, because we only need it do make a custom
+// inspector
+[NativeClass(null)]
+internal sealed class InputManager : ProjectSettingsBase {
+  private InputManager() {}
+
+  [SettingsProvider]
+  internal static SettingsProvider CreateProjectSettingsProvider() {
+    var provider = AssetSettingsProvider.CreateProviderFromAssetPath(
+        "Project/Input Manager", "ProjectSettings/InputManager.asset",
+        SettingsProvider.GetSearchKeywordsFromPath(
+            "ProjectSettings/InputManager.asset"));
+    return provider;
+  }
 }
 
 [CustomEditor(typeof(InputManager))]
-internal sealed class InputManagerEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        if (PlayerSettings.disableOldInputManagerSupport)
-            EditorGUILayout.HelpBox("This is where you can configure the controls to use with the UnityEngine.Input API. But you have switched input handling to \"Input System Package\" in your Player Settings. The Input Manager will not be used.", MessageType.Error);
-        else
-            EditorGUILayout.HelpBox("This is where you can configure the controls to use with the UnityEngine.Input API. Consider using the new Input System Package instead.", MessageType.Info);
-        DrawDefaultInspector();
-    }
+internal sealed class InputManagerEditor : Editor {
+  public override void OnInspectorGUI() {
+    if (PlayerSettings.disableOldInputManagerSupport)
+      EditorGUILayout.HelpBox(
+          "This is where you can configure the controls to use with the UnityEngine.Input API. But you have switched input handling to \"Input System Package\" in your Player Settings. The Input Manager will not be used.",
+          MessageType.Error);
+    else
+      EditorGUILayout.HelpBox(
+          "This is where you can configure the controls to use with the UnityEngine.Input API. Consider using the new Input System Package instead.",
+          MessageType.Info);
+    DrawDefaultInspector();
+  }
 }
 
-// Exposed as internal, editor-only, because we only need it do make a custom inspector
+// Exposed as internal, editor-only, because we only need it do make a custom
+// inspector
 [NativeClass(null)]
-internal sealed class TimeManager : ProjectSettingsBase
-{
-    private TimeManager() {}
+internal sealed class TimeManager : ProjectSettingsBase {
+  private TimeManager() {}
 }
 
-// Exposed as internal, editor-only, because we only need it do make a custom inspector
+// Exposed as internal, editor-only, because we only need it do make a custom
+// inspector
 [NativeClass(null)]
-internal sealed class UnityConnectSettings : ProjectSettingsBase
-{
-    private UnityConnectSettings() {}
+internal sealed class UnityConnectSettings : ProjectSettingsBase {
+  private UnityConnectSettings() {}
 }
 
 [NativeConditional("ENABLE_CLUSTERINPUT")]
-internal sealed class ClusterInputSettings
-{
-    private ClusterInputSettings() {}
+internal sealed class ClusterInputSettings {
+  private ClusterInputSettings() {}
 }
 }

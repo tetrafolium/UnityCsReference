@@ -6,56 +6,54 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine.Bindings;
 
-namespace UnityEditor.Collaboration
-{
-[StructLayout(LayoutKind.Sequential)]
-[NativeType(CodegenOptions = CodegenOptions.Custom, Header = "Editor/Src/Collab/CollabClient.h",
-            IntermediateScriptingStructName = "ScriptingCollabChangeItem")]
-[NativeHeader("Editor/Src/Collab/Collab.bindings.h")]
-[NativeAsStruct]
-internal class ChangeItem
-{
+namespace UnityEditor.Collaboration {
+  [StructLayout(LayoutKind.Sequential)]
+  [NativeType(CodegenOptions = CodegenOptions.Custom,
+              Header = "Editor/Src/Collab/CollabClient.h",
+              IntermediateScriptingStructName = "ScriptingCollabChangeItem")]
+  [NativeHeader("Editor/Src/Collab/Collab.bindings.h")]
+  [NativeAsStruct]
+  internal class ChangeItem {
     public string Path {
-        get;
-        set;
+      get;
+      set;
     }
     public Change.RevertableStates RevertableState {
-        get;
-        set;
+      get;
+      set;
     }
     public string RelatedTo {
-        get;
-        set;
+      get;
+      set;
     }
     public string RevisionId {
-        get;
-        set;
+      get;
+      set;
     }
     public string Hash {
-        get;
-        set;
+      get;
+      set;
     }
     public Collab.CollabStates State {
-        get;
-        set;
+      get;
+      set;
     }
     public long Size {
-        get;
-        set;
+      get;
+      set;
     }
     public string DownloadPath {
-        get;
-        set;
+      get;
+      set;
     }
     public string FromPath {
-        get;
-        set;
+      get;
+      set;
     }
-}
+  }
 
-internal class PublishInfo_V2
-{
+  internal class PublishInfo_V2 {
     public ChangeItem[] changes;
     public bool filter;
-}
+  }
 }

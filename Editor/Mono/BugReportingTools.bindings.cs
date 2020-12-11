@@ -6,16 +6,22 @@ using UnityEngine;
 using UnityEngine.Bindings;
 using uei = UnityEngine.Internal;
 
-namespace UnityEditor.BugReporting
-{
-// Keep in sync with "Editor/Platform/Interface/BugReportingTools.h"
-internal enum BugReportMode { ManualOpen, CrashBug, FatalError, CocoaExceptionOrAssertion, ManualSimple }
+namespace UnityEditor.BugReporting {
+  // Keep in sync with "Editor/Platform/Interface/BugReportingTools.h"
+  internal enum BugReportMode {
+    ManualOpen,
+    CrashBug,
+    FatalError,
+    CocoaExceptionOrAssertion,
+    ManualSimple
+  }
 
-[NativeHeader("Editor/Mono/BugReportingTools.bindings.h")]
-internal sealed class BugReportingTools
-{
-    [StaticAccessor("BugReportingToolsBindings", StaticAccessorType.DoubleColon)]
+  [NativeHeader("Editor/Mono/BugReportingTools.bindings.h")]
+  internal sealed class BugReportingTools {
+    [StaticAccessor("BugReportingToolsBindings",
+                    StaticAccessorType.DoubleColon)]
     [NativeMethod("LaunchBugReportingTool")]
-    public static extern void LaunchBugReporter(BugReportMode mode, string[] additionalArguments);
-}
+    public static extern void LaunchBugReporter(BugReportMode mode,
+                                                string[] additionalArguments);
+  }
 }

@@ -6,33 +6,27 @@ using System;
 using UnityEngine;
 using UnityEngine.Bindings;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [NativeHeader("Modules/AssetPipelineEditor/Public/DefaultImporter.h")]
-// This class is public for users to be able to make custom editors for this type (see case 656580)
-public class DefaultAsset : UnityEngine.Object
-{
-    private DefaultAsset() {}
-    internal extern string message {
-        get;
-    }
-    internal extern bool isWarning {
-        [NativeName("IsWarning")] get;
-    }
+    // This class is public for users to be able to make custom editors for this
+    // type (see case 656580)
+    public class DefaultAsset : UnityEngine.Object {
+  private DefaultAsset() {}
+  internal extern string message { get; }
+  internal extern bool isWarning { [NativeName("IsWarning")] get; }
 }
 
-[CustomEditor(typeof(DefaultAsset), isFallback = true)] // fallback so broad-matching user inspectors always win (e.g. case #656580)
-class DefaultAssetInspector : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        var defaultAsset = (DefaultAsset)target;
-        if (defaultAsset.message.Length > 0)
-        {
-            EditorGUILayout.HelpBox(
-                defaultAsset.message,
-                defaultAsset.isWarning ? MessageType.Warning : MessageType.Info);
-        }
+[CustomEditor(typeof(DefaultAsset),
+              isFallback = true)] // fallback so broad-matching user inspectors
+                                  // always win (e.g. case #656580)
+    class DefaultAssetInspector : Editor {
+  public override void OnInspectorGUI() {
+    var defaultAsset = (DefaultAsset) target;
+    if (defaultAsset.message.Length > 0) {
+      EditorGUILayout.HelpBox(defaultAsset.message,
+                              defaultAsset.isWarning ? MessageType.Warning
+                              : MessageType.Info);
     }
+  }
 }
 }

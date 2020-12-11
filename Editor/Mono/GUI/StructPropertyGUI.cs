@@ -4,71 +4,64 @@
 
 using UnityEngine;
 
-namespace UnityEditor
-{
-internal class StructPropertyGUILayout
-{
-    internal static void GenericStruct(SerializedProperty property, params GUILayoutOption[] options)
-    {
-        float height = EditorGUI.kStructHeaderLineHeight + EditorGUI.kSingleLineHeight * GetChildrenCount(property);
-        Rect rect = GUILayoutUtility.GetRect(EditorGUILayout.kLabelFloatMinW, EditorGUILayout.kLabelFloatMaxW,
-                                             height, height, EditorStyles.layerMaskField, options);
+namespace UnityEditor {
+internal class StructPropertyGUILayout {
+  internal static void GenericStruct(SerializedProperty property,
+                                     params GUILayoutOption[] options) {
+    float height = EditorGUI.kStructHeaderLineHeight +
+                   EditorGUI.kSingleLineHeight * GetChildrenCount(property);
+    Rect rect = GUILayoutUtility.GetRect(
+        EditorGUILayout.kLabelFloatMinW, EditorGUILayout.kLabelFloatMaxW,
+        height, height, EditorStyles.layerMaskField, options);
 
-        StructPropertyGUI.GenericStruct(rect, property);
+    StructPropertyGUI.GenericStruct(rect, property);
+  }
+
+  internal static int GetChildrenCount(SerializedProperty property) {
+    int count = 0;
+    SerializedProperty iterator = property.Copy();
+    var end = iterator.GetEndProperty();
+    while (!SerializedProperty.EqualContents(iterator, end)) {
+      count++;
+      iterator.NextVisible(true);
     }
 
-    internal static int GetChildrenCount(SerializedProperty property)
-    {
-        int count = 0;
-        SerializedProperty iterator = property.Copy();
-        var end = iterator.GetEndProperty();
-        while (!SerializedProperty.EqualContents(iterator, end))
-        {
-            count++;
-            iterator.NextVisible(true);
-        }
-
-        return count;
-    }
+    return count;
+  }
 }
 
-internal class StructPropertyGUI
-{
-    static class Styles
-    {
-        public static readonly GUIStyle sectionLabel = new GUIStyle(EditorStyles.label)
-        {
-            alignment = TextAnchor.UpperLeft
-        };
+internal class StructPropertyGUI {
+  static class Styles {
+    public static readonly GUIStyle sectionLabel =
+        new GUIStyle(EditorStyles.label){alignment = TextAnchor.UpperLeft};
+  }
+  internal static void GenericStruct(Rect position,
+                                     SerializedProperty property) {
+    GUI.Label(EditorGUI.IndentedRect(position), property.displayName,
+              Styles.sectionLabel);
+    position.y += EditorGUI.kStructHeaderLineHeight;
+
+    DoChildren(position, property);
+  }
+
+  private static void DoChildren(Rect position, SerializedProperty property) {
+    position.height = EditorGUI.kSingleLineHeight;
+
+    EditorGUI.indentLevel++;
+
+    SerializedProperty iterator = property.Copy();
+    var end = iterator.GetEndProperty();
+    iterator.NextVisible(true);
+    while (!SerializedProperty.EqualContents(iterator, end)) {
+      EditorGUI.PropertyField(position, iterator);
+      position.y += EditorGUI.kSingleLineHeight;
+      if (!iterator.NextVisible(false))
+        break;
     }
-    internal static void GenericStruct(Rect position, SerializedProperty property)
-    {
-        GUI.Label(EditorGUI.IndentedRect(position), property.displayName, Styles.sectionLabel);
-        position.y += EditorGUI.kStructHeaderLineHeight;
 
-        DoChildren(position, property);
-    }
+    EditorGUI.indentLevel--;
 
-    private static void DoChildren(Rect position, SerializedProperty property)
-    {
-        position.height = EditorGUI.kSingleLineHeight;
-
-        EditorGUI.indentLevel++;
-
-        SerializedProperty iterator = property.Copy();
-        var end = iterator.GetEndProperty();
-        iterator.NextVisible(true);
-        while (!SerializedProperty.EqualContents(iterator, end))
-        {
-            EditorGUI.PropertyField(position, iterator);
-            position.y += EditorGUI.kSingleLineHeight;
-            if (!iterator.NextVisible(false))
-                break;
-        }
-
-        EditorGUI.indentLevel--;
-
-        EditorGUILayout.Space();
-    }
+    EditorGUILayout.Space();
+  }
 }
 }

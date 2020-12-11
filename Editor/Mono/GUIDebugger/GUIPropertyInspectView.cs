@@ -6,87 +6,81 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityEditor
-{
-class GUIPropertyInspectView : BaseInspectView
-{
-    Vector2 m_StacktraceScrollPos =  new Vector2();
-    private GUIStyle m_FakeMargingStyleForOverlay = new GUIStyle();
+namespace UnityEditor {
+class GUIPropertyInspectView : BaseInspectView {
+  Vector2 m_StacktraceScrollPos = new Vector2();
+  private GUIStyle m_FakeMargingStyleForOverlay = new GUIStyle();
 
-    List<IMGUIPropertyInstruction> m_PropertyList = new List<IMGUIPropertyInstruction>();
+  List<IMGUIPropertyInstruction> m_PropertyList =
+      new List<IMGUIPropertyInstruction>();
 
-    public GUIPropertyInspectView(GUIViewDebuggerWindow guiViewDebuggerWindow) : base(guiViewDebuggerWindow)
-    {
+  public GUIPropertyInspectView(GUIViewDebuggerWindow guiViewDebuggerWindow)
+      : base(guiViewDebuggerWindow) {}
+
+  public override void UpdateInstructions() {
+    // TODO: find a better approach instead of getting the whole list
+    // everyframe.
+    m_PropertyList.Clear();
+    GUIViewDebuggerHelper.GetPropertyInstructions(m_PropertyList);
+  }
+
+  public override void ShowOverlay() {
+    if (!isInstructionSelected) {
+      debuggerWindow.ClearInstructionHighlighter();
+      return;
     }
 
-    public override void UpdateInstructions()
-    {
-        //TODO: find a better approach instead of getting the whole list everyframe.
-        m_PropertyList.Clear();
-        GUIViewDebuggerHelper.GetPropertyInstructions(m_PropertyList);
-    }
+    var property = m_PropertyList[listViewState.row];
+    debuggerWindow.HighlightInstruction(debuggerWindow.inspected, property.rect,
+                                        m_FakeMargingStyleForOverlay);
+  }
 
-    public override void ShowOverlay()
-    {
-        if (!isInstructionSelected)
-        {
-            debuggerWindow.ClearInstructionHighlighter();
-            return;
-        }
+  protected override int GetInstructionCount() { return m_PropertyList.Count; }
 
-        var property = m_PropertyList[listViewState.row];
-        debuggerWindow.HighlightInstruction(debuggerWindow.inspected, property.rect, m_FakeMargingStyleForOverlay);
-    }
+  protected override void DoDrawInstruction(ListViewElement el, int id) {
+    GUIContent tempContent = GUIContent.Temp(GetInstructionListName(el.row));
 
-    protected override int GetInstructionCount()
-    {
-        return m_PropertyList.Count;
-    }
+    var rect = el.position;
 
-    protected override void DoDrawInstruction(ListViewElement el, int id)
-    {
-        GUIContent tempContent = GUIContent.Temp(GetInstructionListName(el.row));
+    GUIViewDebuggerWindow.Styles.listItemBackground.Draw(
+        rect, false, false, listViewState.row == el.row, false);
+    GUIViewDebuggerWindow.Styles.listItem.Draw(rect, tempContent, id,
+                                               listViewState.row == el.row);
+  }
 
-        var rect = el.position;
+  protected override void DrawInspectedStacktrace(float availableWidth) {
+    var clipInstruction = m_PropertyList[listViewState.row];
+    m_StacktraceScrollPos = EditorGUILayout.BeginScrollView(
+        m_StacktraceScrollPos,
+        GUIViewDebuggerWindow.Styles.stacktraceBackground,
+        GUILayout.ExpandHeight(false));
+    DrawStackFrameList(clipInstruction.beginStacktrace, availableWidth);
+    EditorGUILayout.EndScrollView();
+  }
 
-        GUIViewDebuggerWindow.Styles.listItemBackground.Draw(rect, false, false, listViewState.row == el.row, false);
-        GUIViewDebuggerWindow.Styles.listItem.Draw(rect, tempContent, id, listViewState.row == el.row);
-    }
+  internal override void
+  DoDrawSelectedInstructionDetails(int selectedInstructionIndex) {
+    var property = m_PropertyList[listViewState.row];
 
-    protected override void DrawInspectedStacktrace(float availableWidth)
-    {
-        var clipInstruction = m_PropertyList[listViewState.row];
-        m_StacktraceScrollPos = EditorGUILayout.BeginScrollView(m_StacktraceScrollPos, GUIViewDebuggerWindow.Styles.stacktraceBackground, GUILayout.ExpandHeight(false));
-        DrawStackFrameList(clipInstruction.beginStacktrace, availableWidth);
-        EditorGUILayout.EndScrollView();
-    }
+    using(new EditorGUI.DisabledScope(true)) DrawInspectedRect(property.rect);
 
-    internal override void DoDrawSelectedInstructionDetails(int selectedInstructionIndex)
-    {
-        var property = m_PropertyList[listViewState.row];
+    DoSelectableInstructionDataField("Target Type Name",
+                                     property.targetTypeName);
+    DoSelectableInstructionDataField("Path", property.path);
+  }
 
-        using (new EditorGUI.DisabledScope(true))
-            DrawInspectedRect(property.rect);
+  internal override string GetInstructionListName(int index) {
+    var clipInstruction = m_PropertyList[index];
+    return clipInstruction.path;
+  }
 
-        DoSelectableInstructionDataField("Target Type Name", property.targetTypeName);
-        DoSelectableInstructionDataField("Path", property.path);
-    }
+  internal override void OnDoubleClickInstruction(int index) {
+    throw new NotImplementedException();
+  }
 
-    internal override string GetInstructionListName(int index)
-    {
-        var clipInstruction = m_PropertyList[index];
-        return clipInstruction.path;
-    }
-
-    internal override void OnDoubleClickInstruction(int index)
-    {
-        throw new NotImplementedException();
-    }
-
-    internal override void OnSelectedInstructionChanged(int index)
-    {
-        listViewState.row = index;
-        ShowOverlay();
-    }
+  internal override void OnSelectedInstructionChanged(int index) {
+    listViewState.row = index;
+    ShowOverlay();
+  }
 }
 }

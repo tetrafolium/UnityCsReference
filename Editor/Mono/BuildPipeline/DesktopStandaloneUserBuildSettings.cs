@@ -11,13 +11,8 @@ using UnityEditor.Modules;
 using System.Collections.Generic;
 using System.Text;
 
-internal static class DesktopStandaloneUserBuildSettings
-{
-    internal static string PlatformName
-    {
-        get
-        {
-            return "Standalone";
-        }
-    }
+internal static class DesktopStandaloneUserBuildSettings {
+  internal static string PlatformName {
+    get { return "Standalone"; }
+  }
 }

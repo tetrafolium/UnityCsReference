@@ -10,69 +10,45 @@ using UnityEngine;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace UnityEditor.Collaboration
-{
-[NativeHeader("Editor/Src/Collab/CollabInfo.h")]
-[StructLayout(LayoutKind.Sequential)]
-internal struct CollabInfo
-{
+namespace UnityEditor.Collaboration {
+  [NativeHeader("Editor/Src/Collab/CollabInfo.h")]
+  [StructLayout(LayoutKind.Sequential)]
+  internal struct CollabInfo {
     public bool ready {
-        get {
-            return m_Ready;
-        }
+      get { return m_Ready; }
     }
     public bool update {
-        get {
-            return m_Update;
-        }
+      get { return m_Update; }
     }
     public bool publish {
-        get {
-            return m_Publish;
-        }
+      get { return m_Publish; }
     }
     public bool inProgress {
-        get {
-            return m_InProgress;
-        }
+      get { return m_InProgress; }
     }
     public bool maintenance {
-        get {
-            return m_Maintenance;
-        }
+      get { return m_Maintenance; }
     }
     public bool conflict {
-        get {
-            return m_Conflict;
-        }
+      get { return m_Conflict; }
     }
     public bool refresh {
-        get {
-            return m_Refresh;
-        }
+      get { return m_Refresh; }
     }
     public bool seat {
-        get {
-            return m_HasSeat;
-        }
+      get { return m_HasSeat; }
     }
     public string tip {
-        get {
-            return m_Tip;
-        }
+      get { return m_Tip; }
     }
 
-    public bool Equals(CollabInfo other)
-    {
-        return m_Update == other.m_Update &&
-               m_Publish == other.m_Publish &&
-               m_InProgress == other.m_InProgress &&
-               m_Maintenance == other.m_Maintenance &&
-               m_Conflict == other.m_Conflict &&
-               m_Refresh == other.m_Refresh &&
-               m_HasSeat == other.m_HasSeat &&
-               m_Ready == other.m_Ready &&
-               string.Equals(m_Tip, other.m_Tip);
+    public bool Equals(CollabInfo other) {
+      return m_Update == other.m_Update && m_Publish == other.m_Publish &&
+             m_InProgress == other.m_InProgress &&
+             m_Maintenance == other.m_Maintenance &&
+             m_Conflict == other.m_Conflict && m_Refresh == other.m_Refresh &&
+             m_HasSeat == other.m_HasSeat && m_Ready == other.m_Ready &&
+             string.Equals(m_Tip, other.m_Tip);
     }
 
     bool m_Update;
@@ -84,23 +60,20 @@ internal struct CollabInfo
     bool m_HasSeat;
     bool m_Ready;
     string m_Tip;
-}
+  }
 
-[NativeHeader("Editor/Src/Collab/Collab.h")]
-[NativeHeader("Editor/Src/Collab/Collab.bindings.h")]
-[StructLayout(LayoutKind.Sequential)]
-[StaticAccessor("Collab::Get()", StaticAccessorType.Arrow)]
-partial class Collab
-{
+  [NativeHeader("Editor/Src/Collab/Collab.h")]
+  [NativeHeader("Editor/Src/Collab/Collab.bindings.h")]
+  [StructLayout(LayoutKind.Sequential)]
+  [StaticAccessor("Collab::Get()",
+                  StaticAccessorType.Arrow)] partial class Collab {
     [NativeMethod("Get")]
     static extern IntPtr GetNativeCollab();
 
-    public extern CollabInfo collabInfo {
-        get;
-    }
+    public extern CollabInfo collabInfo { get; }
 
-    public static extern int GetRevisionsData(
-        bool withChanges, int startIndex, int numRevisions);
+    public static extern int GetRevisionsData(bool withChanges, int startIndex,
+                                              int numRevisions);
 
     public static extern int GetSingleRevisionData(bool withChanges, string id);
 
@@ -171,7 +144,8 @@ partial class Collab
     public extern void RevertFile(string path, bool forceOverwrite);
 
     [FreeFunction(HasExplicitThis = true, ThrowsException = true)]
-    public extern void RevertFiles(ChangeItem[] changeItems, bool forceOverwrite);
+    public extern void RevertFiles(ChangeItem[] changeItems,
+                                   bool forceOverwrite);
 
     [FreeFunction(HasExplicitThis = true, ThrowsException = true)]
     public extern void LaunchConflictExternalMerge(string path);
@@ -183,7 +157,8 @@ partial class Collab
     public extern void ResyncSnapshot();
 
     [FreeFunction(HasExplicitThis = true, ThrowsException = true)]
-    public extern void GoBackToRevision(string revisionID, bool updateToRevision);
+    public extern void GoBackToRevision(string revisionID,
+                                        bool updateToRevision);
 
     [FreeFunction(HasExplicitThis = true, ThrowsException = true)]
     public extern void ResyncToRevision(string revisionID);
@@ -220,109 +195,120 @@ partial class Collab
     public extern void FailNextOperation(Collab.Operation operation, int code);
 
     [NativeMethod("GetTestHelper().MarkOperationTimeOut")]
-    public extern void TimeOutNextOperation(Collab.Operation operation, int timeOutSec);
+    public extern void TimeOutNextOperation(Collab.Operation operation,
+                                            int timeOutSec);
 
     [NativeMethod("GetTestHelper().MarkOperationFailureForFile")]
-    public extern void FailNextOperationForFile(string path, Collab.Operation operation, int code);
+    public extern void
+    FailNextOperationForFile(string path, Collab.Operation operation, int code);
 
     [NativeMethod("GetTestHelper().MarkOperationTimeOutForFile")]
-    public extern void TimeOutNextOperationForFile(string path, Collab.Operation operation, int timeOutSec);
+    public extern void TimeOutNextOperationForFile(string path,
+                                                   Collab.Operation operation,
+                                                   int timeOutSec);
 
     [FreeFunction(HasExplicitThis = true, ThrowsException = true)]
-    public extern void TestPostSoftLockAsCollaborator(string projectGuid, string projectPath, string machineGuid,
-            string assetGuid);
+    public extern void
+    TestPostSoftLockAsCollaborator(string projectGuid, string projectPath,
+                                   string machineGuid, string assetGuid);
 
     [FreeFunction(HasExplicitThis = true, ThrowsException = true)]
-    public extern void TestClearSoftLockAsCollaborator(string projectGuid, string projectPath, string machineGuid,
-            string softLockHash);
+    public extern void
+    TestClearSoftLockAsCollaborator(string projectGuid, string projectPath,
+                                    string machineGuid, string softLockHash);
 
     // Private helper methods for bindings
-    [NativeMethod("GetConflictsManager().SetConflictsState")]
-    extern bool SetConflictsResolved(string[] paths, CollabStates state);
+    [NativeMethod("GetConflictsManager().SetConflictsState")] extern bool
+    SetConflictsResolved(string[] paths, CollabStates state);
 
-    [NativeMethod("OnAssetBundleNameChanged")]
-    extern void OnPostprocessAssetbundleNameChanged(string assetPath, string previousAssetBundleName, string newAssetBundleName);
+    [NativeMethod("OnAssetBundleNameChanged")] extern void
+    OnPostprocessAssetbundleNameChanged(string assetPath,
+                                        string previousAssetBundleName,
+                                        string newAssetBundleName);
 
     [NativeMethod("GetError")]
-    internal extern bool GetErrorInternal(int errorFilter, out UnityErrorInfo info);
+    internal extern bool GetErrorInternal(int errorFilter,
+                                          out UnityErrorInfo info);
+
+    [NativeMethod(HasExplicitThis = true, ThrowsException = true)] extern Change
+        [] GetChangesToPublishInternal();
+
+    [NativeMethod(HasExplicitThis = true,
+                  ThrowsException = true)] extern ChangeItem
+        [] GetChangeItemsToPublishInternal_V2();
+
+    [NativeMethod(HasExplicitThis = true, ThrowsException = true,
+                  IsThreadSafe = true)] extern void
+        SetChangesToPublishInternal(ChangeItem[] changes);
+
+    [NativeMethod(
+        HasExplicitThis = true, ThrowsException = true,
+        IsThreadSafe = true)] extern Change[] GetSelectedChangesInternal();
+
+    [NativeMethod(HasExplicitThis = true, ThrowsException = true,
+                  IsThreadSafe = true)] extern ChangeItem
+        [] GetSelectedChangeItemsInternal_V2();
+
+    [NativeMethod(HasExplicitThis = true, ThrowsException = true,
+                  IsThreadSafe = true)] extern void UpdateChangesToPublish();
+
+    [NativeMethod(Name = "GetJobProgress", HasExplicitThis = true,
+                  ThrowsException = true)] extern bool
+    GetJobProgressInternal([ Out ] ProgressInfo info, int jobId);
 
     [NativeMethod(HasExplicitThis = true, ThrowsException = true)]
-    extern Change[] GetChangesToPublishInternal();
-
-    [NativeMethod(HasExplicitThis = true, ThrowsException = true)]
-    extern ChangeItem[] GetChangeItemsToPublishInternal_V2();
-
-    [NativeMethod(HasExplicitThis = true, ThrowsException = true, IsThreadSafe = true)]
-    extern void SetChangesToPublishInternal(ChangeItem[] changes);
-
-    [NativeMethod(HasExplicitThis = true, ThrowsException = true, IsThreadSafe = true)]
-    extern Change[] GetSelectedChangesInternal();
-
-    [NativeMethod(HasExplicitThis = true, ThrowsException = true, IsThreadSafe = true)]
-    extern ChangeItem[] GetSelectedChangeItemsInternal_V2();
-
-    [NativeMethod(HasExplicitThis = true, ThrowsException = true, IsThreadSafe = true)]
-    extern void UpdateChangesToPublish();
-
-    [NativeMethod(Name = "GetJobProgress", HasExplicitThis = true, ThrowsException = true)]
-    extern bool GetJobProgressInternal([Out] ProgressInfo info, int jobId);
-
-    [NativeMethod(HasExplicitThis = true, ThrowsException = true)]
-    public extern void Publish(string comment, bool useSelectedAssets, bool confirmMatchesPrevious);
+    public extern void Publish(string comment, bool useSelectedAssets,
+                               bool confirmMatchesPrevious);
 
     [NativeMethod(HasExplicitThis = true, ThrowsException = true)]
     public extern void PublishAssetsAsync(string comment, ChangeItem[] changes);
 
-    [NativeMethod(HasExplicitThis = true, ThrowsException = true, IsThreadSafe = true)]
+    [NativeMethod(HasExplicitThis = true, ThrowsException = true,
+                  IsThreadSafe = true)]
     public extern void ClearSelectedChangesToPublish();
 
-    [NativeMethod(HasExplicitThis = true, ThrowsException = true, IsThreadSafe = true)]
+    [NativeMethod(HasExplicitThis = true, ThrowsException = true,
+                  IsThreadSafe = true)]
     public extern void SendCollabInfoNotification();
 
     [NativeMethod(HasExplicitThis = true, ThrowsException = true)]
     public extern SoftLock[] GetSoftLocks(string assetGuid);
-}
+  }
 
-// keep in sync with CollabSettingType in C++
-internal enum CollabSettingType
-{
+  // keep in sync with CollabSettingType in C++
+  internal enum CollabSettingType {
     InProgressEnabled = 0,
     InProgressProjectEnabled = 1,
     InProgressGlobalEnabled = 2
-}
+  }
 
-// keep in sync with CollabSettingStatus in C++
-internal enum CollabSettingStatus
-{
-    None = 0,
-    Available = 1
-}
+  // keep in sync with CollabSettingStatus in C++
+  internal enum CollabSettingStatus { None = 0, Available = 1 }
 
-[NativeHeader("Editor/Src/Collab/CollabSettingsManager.h")]
-[StaticAccessor("GetCollabSettingsManager()", StaticAccessorType.Dot)]
-internal class CollabSettingsManager
-{
+  [NativeHeader("Editor/Src/Collab/CollabSettingsManager.h")]
+  [StaticAccessor("GetCollabSettingsManager()", StaticAccessorType.Dot)]
+  internal class CollabSettingsManager {
     [RequiredByNativeCode]
-    static void NotifyStatusListeners(CollabSettingType type, CollabSettingStatus status)
-    {
-        if (statusNotifier[type] != null)
-            statusNotifier[type](type, status);
+    static void NotifyStatusListeners(CollabSettingType type,
+                                      CollabSettingStatus status) {
+      if (statusNotifier[type] != null)
+        statusNotifier[type](type, status);
     }
 
-    public delegate void SettingStatusChanged(CollabSettingType type, CollabSettingStatus status);
-    public static Dictionary<CollabSettingType, SettingStatusChanged> statusNotifier = new Dictionary<CollabSettingType, SettingStatusChanged>();
+    public delegate void SettingStatusChanged(CollabSettingType type,
+                                              CollabSettingStatus status);
+    public static Dictionary<CollabSettingType, SettingStatusChanged>
+        statusNotifier =
+            new Dictionary<CollabSettingType, SettingStatusChanged>();
 
-    static CollabSettingsManager()
-    {
-        foreach (CollabSettingType type in Enum.GetValues(typeof(CollabSettingType)))
-            statusNotifier[type] = null;
+    static CollabSettingsManager() {
+      foreach (CollabSettingType type in Enum.GetValues(
+                   typeof(CollabSettingType)))
+        statusNotifier[type] = null;
     }
 
     public static extern bool IsAvailable(CollabSettingType type);
 
-    public static extern bool inProgressEnabled
-    {
-        get;
-    }
-}
+    public static extern bool inProgressEnabled { get; }
+  }
 }

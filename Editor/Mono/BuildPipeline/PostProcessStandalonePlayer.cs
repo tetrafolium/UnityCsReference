@@ -9,6 +9,4 @@ using UnityEditor;
 using UnityEditor.Modules;
 using UnityEngine;
 
-internal class PostProcessStandalonePlayer
-{
-}
+internal class PostProcessStandalonePlayer {}

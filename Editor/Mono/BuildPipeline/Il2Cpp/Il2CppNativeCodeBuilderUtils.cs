@@ -8,106 +8,117 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 
-namespace UnityEditorInternal
-{
-public static class Il2CppNativeCodeBuilderUtils
-{
-    public static IEnumerable<string> AddBuilderArguments(Il2CppNativeCodeBuilder builder, string outputRelativePath, IEnumerable<string> includeRelativePaths, IEnumerable<string> additionalLibs, Il2CppCompilerConfiguration compilerConfiguration)
-    {
-        var arguments = new List<string>();
+namespace UnityEditorInternal {
+public static class Il2CppNativeCodeBuilderUtils {
+  public static IEnumerable<string>
+  AddBuilderArguments(Il2CppNativeCodeBuilder builder,
+                      string outputRelativePath,
+                      IEnumerable<string> includeRelativePaths,
+                      IEnumerable<string> additionalLibs,
+                      Il2CppCompilerConfiguration compilerConfiguration) {
+    var arguments = new List<string>();
 
-        arguments.Add("--compile-cpp");
-        if (builder.LinkLibIl2CppStatically)
-            arguments.Add("--libil2cpp-static");
-        arguments.Add(FormatArgument("platform", builder.CompilerPlatform));
-        arguments.Add(FormatArgument("architecture", builder.CompilerArchitecture));
+    arguments.Add("--compile-cpp");
+    if (builder.LinkLibIl2CppStatically)
+      arguments.Add("--libil2cpp-static");
+    arguments.Add(FormatArgument("platform", builder.CompilerPlatform));
+    arguments.Add(FormatArgument("architecture", builder.CompilerArchitecture));
 
-        // In IL2CPP, Master config is called "ReleasePlus"
-        string configurationName = compilerConfiguration != Il2CppCompilerConfiguration.Master ? compilerConfiguration.ToString() : "ReleasePlus";
-        arguments.Add(FormatArgument("configuration", configurationName));
+    // In IL2CPP, Master config is called "ReleasePlus"
+    string configurationName =
+        compilerConfiguration !=
+        Il2CppCompilerConfiguration.Master ? compilerConfiguration.ToString()
+        : "ReleasePlus";
+    arguments.Add(FormatArgument("configuration", configurationName));
 
-        arguments.Add(FormatArgument("outputpath", builder.ConvertOutputFileToFullPath(outputRelativePath)));
+    arguments.Add(FormatArgument(
+        "outputpath", builder.ConvertOutputFileToFullPath(outputRelativePath)));
 
-        if (!string.IsNullOrEmpty(builder.CacheDirectory) && !builder.OverriddenCacheDirectory)
-            arguments.Add(FormatArgument("cachedirectory", CacheDirectoryPathFor(builder.CacheDirectory)));
+    if (!string.IsNullOrEmpty(builder.CacheDirectory) &&
+        !builder.OverriddenCacheDirectory)
+      arguments.Add(FormatArgument(
+          "cachedirectory", CacheDirectoryPathFor(builder.CacheDirectory)));
 
-        if (!string.IsNullOrEmpty(builder.CompilerFlags))
-            arguments.Add(FormatArgument("compiler-flags", builder.CompilerFlags));
+    if (!string.IsNullOrEmpty(builder.CompilerFlags))
+      arguments.Add(FormatArgument("compiler-flags", builder.CompilerFlags));
 
-        if (!string.IsNullOrEmpty(builder.LinkerFlags))
-            arguments.Add(FormatArgument("linker-flags", builder.LinkerFlags));
+    if (!string.IsNullOrEmpty(builder.LinkerFlags))
+      arguments.Add(FormatArgument("linker-flags", builder.LinkerFlags));
 
-        if (!string.IsNullOrEmpty(builder.PluginPath))
-            arguments.Add(FormatArgument("plugin", builder.PluginPath));
+    if (!string.IsNullOrEmpty(builder.PluginPath))
+      arguments.Add(FormatArgument("plugin", builder.PluginPath));
 
-        foreach (var includePath in builder.ConvertIncludesToFullPaths(includeRelativePaths))
-            arguments.Add(FormatArgument("additional-include-directories", includePath));
-        foreach (var library in additionalLibs)
-            arguments.Add(FormatArgument("additional-libraries", library));
+    foreach (var includePath in builder.ConvertIncludesToFullPaths(
+                 includeRelativePaths))
+      arguments.Add(
+          FormatArgument("additional-include-directories", includePath));
+    foreach (var library in additionalLibs)
+      arguments.Add(FormatArgument("additional-libraries", library));
 
-        if (!string.IsNullOrEmpty(builder.BaselibLibraryDirectory))
-            arguments.Add(FormatArgument("baselib-directory", builder.BaselibLibraryDirectory));
+    if (!string.IsNullOrEmpty(builder.BaselibLibraryDirectory))
+      arguments.Add(
+          FormatArgument("baselib-directory", builder.BaselibLibraryDirectory));
 
-        arguments.Add("--avoid-dynamic-library-copy");
+    arguments.Add("--avoid-dynamic-library-copy");
 
-        arguments.AddRange(builder.AdditionalIl2CPPArguments);
+    arguments.AddRange(builder.AdditionalIl2CPPArguments);
 
-        return arguments;
+    return arguments;
+  }
+
+  public static void
+  ClearAndPrepareCacheDirectory(Il2CppNativeCodeBuilder builder) {
+    var currentEditorVersion = InternalEditorUtility.GetFullUnityVersion();
+    ClearCacheIfEditorVersionDiffers(builder, currentEditorVersion);
+    PrepareCacheDirectory(builder, currentEditorVersion);
+  }
+
+  public static void
+  ClearCacheIfEditorVersionDiffers(Il2CppNativeCodeBuilder builder,
+                                   string currentEditorVersion) {
+    var cacheDirectoryPath = CacheDirectoryPathFor(builder.CacheDirectory);
+    if (Directory.Exists(cacheDirectoryPath)) {
+      if (!File.Exists(
+              Path.Combine(builder.CacheDirectory,
+                           EditorVersionFilenameFor(currentEditorVersion))))
+        Directory.Delete(cacheDirectoryPath, true);
     }
+  }
 
-    public static void ClearAndPrepareCacheDirectory(Il2CppNativeCodeBuilder builder)
-    {
-        var currentEditorVersion = InternalEditorUtility.GetFullUnityVersion();
-        ClearCacheIfEditorVersionDiffers(builder, currentEditorVersion);
-        PrepareCacheDirectory(builder, currentEditorVersion);
-    }
+  public static void PrepareCacheDirectory(Il2CppNativeCodeBuilder builder,
+                                           string currentEditorVersion) {
+    var cacheDirectoryPath = CacheDirectoryPathFor(builder.CacheDirectory);
+    Directory.CreateDirectory(cacheDirectoryPath);
 
-    public static void ClearCacheIfEditorVersionDiffers(Il2CppNativeCodeBuilder builder, string currentEditorVersion)
-    {
-        var cacheDirectoryPath = CacheDirectoryPathFor(builder.CacheDirectory);
-        if (Directory.Exists(cacheDirectoryPath))
-        {
-            if (!File.Exists(Path.Combine(builder.CacheDirectory, EditorVersionFilenameFor(currentEditorVersion))))
-                Directory.Delete(cacheDirectoryPath, true);
-        }
-    }
+    foreach (var previousEditorVersionFile in Directory.GetFiles(
+                 builder.CacheDirectory, EditorVersionFilenameFor("*")))
+      File.Delete(previousEditorVersionFile);
 
-    public static void PrepareCacheDirectory(Il2CppNativeCodeBuilder builder, string currentEditorVersion)
-    {
-        var cacheDirectoryPath = CacheDirectoryPathFor(builder.CacheDirectory);
-        Directory.CreateDirectory(cacheDirectoryPath);
+    var versionFilePath = Path.Combine(
+        builder.CacheDirectory, EditorVersionFilenameFor(currentEditorVersion));
+    if (!File.Exists(versionFilePath))
+      File.Create(versionFilePath).Dispose();
+  }
 
-        foreach (var previousEditorVersionFile in Directory.GetFiles(builder.CacheDirectory, EditorVersionFilenameFor("*")))
-            File.Delete(previousEditorVersionFile);
+  public static string
+  ObjectFilePathInCacheDirectoryFor(string builderCacheDirectory) {
+    return CacheDirectoryPathFor(builderCacheDirectory);
+  }
 
-        var versionFilePath = Path.Combine(builder.CacheDirectory, EditorVersionFilenameFor(currentEditorVersion));
-        if (!File.Exists(versionFilePath))
-            File.Create(versionFilePath).Dispose();
-    }
+  private static string CacheDirectoryPathFor(string builderCacheDirectory) {
+    return builderCacheDirectory + "/il2cpp_cache";
+  }
 
-    public static string ObjectFilePathInCacheDirectoryFor(string builderCacheDirectory)
-    {
-        return CacheDirectoryPathFor(builderCacheDirectory);
-    }
+  private static string FormatArgument(string name, string value) {
+    return string.Format("--{0}=\"{1}\"", name, EscapeEmbeddedQuotes(value));
+  }
 
-    private static string CacheDirectoryPathFor(string builderCacheDirectory)
-    {
-        return builderCacheDirectory + "/il2cpp_cache";
-    }
+  private static string EditorVersionFilenameFor(string editorVersion) {
+    return string.Format("il2cpp_cache {0}", editorVersion);
+  }
 
-    private static string FormatArgument(string name, string value)
-    {
-        return string.Format("--{0}=\"{1}\"", name, EscapeEmbeddedQuotes(value));
-    }
-
-    private static string EditorVersionFilenameFor(string editorVersion)
-    {
-        return string.Format("il2cpp_cache {0}", editorVersion);
-    }
-
-    private static string EscapeEmbeddedQuotes(string value)
-    {
-        return value.Replace("\"", "\\\"");
-    }
+  private static string EscapeEmbeddedQuotes(string value) {
+    return value.Replace("\"", "\\\"");
+  }
 }
 }

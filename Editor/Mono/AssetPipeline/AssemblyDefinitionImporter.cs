@@ -5,17 +5,13 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace UnityEditorInternal
-{
+namespace UnityEditorInternal {
 [ExcludeFromPreset]
-public sealed partial class AssemblyDefinitionImporter : AssetImporter
-{
-}
+public sealed partial class AssemblyDefinitionImporter : AssetImporter {}
 
-public sealed partial class AssemblyDefinitionAsset : TextAsset
-{
-    private AssemblyDefinitionAsset() {}
+public sealed partial class AssemblyDefinitionAsset : TextAsset {
+  private AssemblyDefinitionAsset() {}
 
-    private AssemblyDefinitionAsset(string text) {}
+  private AssemblyDefinitionAsset(string text) {}
 }
 }

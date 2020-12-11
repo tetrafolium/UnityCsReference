@@ -4,12 +4,11 @@
 
 using UnityEngine.Bindings;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [NativeHeader("Runtime/Scripting/Scripting.h")]
-internal class RuntimeClassMetadataUtils
-{
-    [FreeFunction("Scripting::ScriptingWrapperTypeNameForNativeID")]
-    extern public static string ScriptingWrapperTypeNameForNativeID(int id);
+internal class RuntimeClassMetadataUtils {
+  [FreeFunction(
+      "Scripting::ScriptingWrapperTypeNameForNativeID")] extern public static string
+  ScriptingWrapperTypeNameForNativeID(int id);
 }
 }

@@ -5,20 +5,14 @@
 using UnityEngine;
 using UnityEngine.Bindings;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [NativeHeader("Editor/Src/GI/Enlighten/LightingDataAsset.h")]
 [ExcludeFromPreset]
-public sealed partial class LightingDataAsset : Object
-{
-    private LightingDataAsset() {}
+public sealed partial class LightingDataAsset : Object {
+  private LightingDataAsset() {}
 
-    internal extern bool isValid {
-        [NativeName("IsValid")] get;
-    }
+  internal extern bool isValid { [NativeName("IsValid")] get; }
 
-    internal extern string validityErrorMessage {
-        get;
-    }
+  internal extern string validityErrorMessage { get; }
 }
 }

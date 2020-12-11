@@ -4,19 +4,16 @@
 
 using UnityEditor;
 
-namespace UnityEditorInternal
-{
+namespace UnityEditorInternal {
 // Keep internal and undocumented until we expose more functionality
 //*undocumented*
-public sealed class AssetStore
-{
-    //*undocumented*
-    public static void Open(string assetStoreURL)
-    {
-        if (assetStoreURL != "")
-            AssetStoreWindow.OpenURL(assetStoreURL);
-        else
-            AssetStoreWindow.Init();
-    }
+public sealed class AssetStore {
+  //*undocumented*
+  public static void Open(string assetStoreURL) {
+    if (assetStoreURL != "")
+      AssetStoreWindow.OpenURL(assetStoreURL);
+    else
+      AssetStoreWindow.Init();
+  }
 }
 }

@@ -10,18 +10,16 @@ using UnityEngine;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-
-namespace UnityEditor
-{
+namespace UnityEditor {
 /// <summary>
 /// Used by com.unity.hotreload package
 /// </summary>
 [NativeType(Header = "Runtime/Export/HotReload/HotReload.bindings.h")]
 [NativeConditional("HOT_RELOAD_AVAILABLE")]
-internal static class HotReloadSerializer
-{
-    [NativeThrows]
-    [FreeFunction("HotReload::SerializeAsset")]
-    internal extern static byte[] SerializeAsset(UnityEngine.Object asset, BuildTarget buildTarget);
+internal static class HotReloadSerializer {
+  [NativeThrows]
+  [FreeFunction("HotReload::SerializeAsset")]
+  internal extern static byte[] SerializeAsset(UnityEngine.Object asset,
+                                               BuildTarget buildTarget);
 }
 }

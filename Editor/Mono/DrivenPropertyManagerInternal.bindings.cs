@@ -11,14 +11,15 @@ using UnityEngine.Bindings;
 
 using Object = UnityEngine.Object;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [NativeHeader("Editor/Src/DrivenPropertyManagerInternal.bindings.h")]
-[StaticAccessor("DrivenPropertyManagerInternal", StaticAccessorType.DoubleColon)]
-internal class DrivenPropertyManagerInternal
-{
-    extern public static bool IsDriven(Object target, string propertyPath);
-    extern public static bool IsDriving(Object driver, Object target, string propertyPath);
-    extern public static bool IsDrivingPartial(Object driver, Object target, string propertyPath);
+[StaticAccessor("DrivenPropertyManagerInternal",
+                StaticAccessorType.DoubleColon)]
+internal class DrivenPropertyManagerInternal {
+  extern public static bool IsDriven(Object target, string propertyPath);
+  extern public static bool IsDriving(Object driver, Object target,
+                                      string propertyPath);
+  extern public static bool IsDrivingPartial(Object driver, Object target,
+                                             string propertyPath);
 }
 }

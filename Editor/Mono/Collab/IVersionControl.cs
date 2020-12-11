@@ -2,10 +2,8 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
-namespace UnityEditor.Collaboration
-{
-internal interface IVersionControl
-{
+namespace UnityEditor.Collaboration {
+  internal interface IVersionControl {
     bool SupportsDownloads();
     bool SupportsAsyncChanges();
     bool OnEnableVersionControl();
@@ -13,10 +11,9 @@ internal interface IVersionControl
     ChangeItem[] GetChanges();
     void MergeDownloadedFiles(bool isFullDownload);
     Collab.CollabStates GetAssetState(string assetGuid, string assetPath);
-}
+  }
 
-internal interface IVersionControl_V2 : IVersionControl
-{
+  internal interface IVersionControl_V2 : IVersionControl {
     void RefreshAvailableLocalChangesSynchronous();
-}
+  }
 }

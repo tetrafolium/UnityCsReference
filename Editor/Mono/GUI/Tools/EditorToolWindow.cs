@@ -5,44 +5,39 @@
 using System;
 using UnityEngine;
 
-namespace UnityEditor.EditorTools
-{
-[CustomEditor(typeof(EditorTool), true)]
-class EditorToolCustomEditor : Editor
-{
+namespace UnityEditor.EditorTools {
+  [CustomEditor(typeof(EditorTool), true)]
+  class EditorToolCustomEditor : Editor {
     const string k_GeneratorAssetProperty = "m_GeneratorAsset";
     const string k_ScriptProperty = "m_Script";
 
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
+    public override void OnInspectorGUI() {
+      serializedObject.Update();
 
-        var property = serializedObject.GetIterator();
+      var property = serializedObject.GetIterator();
 
-        bool expanded = true;
+      bool expanded = true;
 
-        while (property.NextVisible(expanded))
-        {
-            if (property.propertyPath == k_GeneratorAssetProperty)
-                continue;
+      while (property.NextVisible(expanded)) {
+        if (property.propertyPath == k_GeneratorAssetProperty)
+          continue;
 
-            using (new EditorGUI.DisabledScope(property.propertyPath == k_ScriptProperty))
-            {
-                EditorGUILayout.PropertyField(property, true);
-            }
-
-            expanded = false;
+        using(new EditorGUI.DisabledScope(property.propertyPath ==
+                                          k_ScriptProperty)) {
+          EditorGUILayout.PropertyField(property, true);
         }
 
-        serializedObject.ApplyModifiedProperties();
-    }
-}
+        expanded = false;
+      }
 
-sealed class EditorToolWindow : EditorWindow
-{
-    static class Styles
-    {
-        public static GUIContent title = EditorGUIUtility.TrTextContent("Editor Tool");
+      serializedObject.ApplyModifiedProperties();
+    }
+  }
+
+  sealed class EditorToolWindow : EditorWindow {
+    static class Styles {
+      public static GUIContent title =
+          EditorGUIUtility.TrTextContent("Editor Tool");
     }
 
     Editor m_Editor;
@@ -50,43 +45,40 @@ sealed class EditorToolWindow : EditorWindow
     EditorToolWindow() {}
 
     [MenuItem("Window/General/Active Tool")]
-    static void ShowEditorToolWindow()
-    {
-        GetWindow<EditorToolWindow>();
+    static void ShowEditorToolWindow() {
+      GetWindow<EditorToolWindow>();
     }
 
-    void OnEnable()
-    {
-        EditorTools.activeToolChanged += ToolChanged;
+    void OnEnable() {
+      EditorTools.activeToolChanged += ToolChanged;
 
-        //active tool is null when opening the editor but activeToolChanged will be called soon after.
-        //This is quick enough that the user shouldn't notice.
-        if (EditorToolContext.activeTool)
-            ToolChanged();
+      // active tool is null when opening the editor but activeToolChanged will
+      // be called soon after. This is quick enough that the user shouldn't
+      // notice.
+      if (EditorToolContext.activeTool)
+        ToolChanged();
     }
 
-    void OnDisable()
-    {
-        EditorTools.activeToolChanged -= ToolChanged;
+    void OnDisable() {
+      EditorTools.activeToolChanged -= ToolChanged;
 
-        if (m_Editor != null)
-            DestroyImmediate(m_Editor);
+      if (m_Editor != null)
+        DestroyImmediate(m_Editor);
     }
 
-    void ToolChanged()
-    {
-        if (m_Editor != null)
-            DestroyImmediate(m_Editor);
-        var activeTool = EditorToolContext.activeTool;
-        m_Editor = Editor.CreateEditor(activeTool);
-        titleContent = new GUIContent(EditorToolUtility.GetToolName(activeTool.GetType()));
-        Repaint();
+    void ToolChanged() {
+      if (m_Editor != null)
+        DestroyImmediate(m_Editor);
+      var activeTool = EditorToolContext.activeTool;
+      m_Editor = Editor.CreateEditor(activeTool);
+      titleContent =
+          new GUIContent(EditorToolUtility.GetToolName(activeTool.GetType()));
+      Repaint();
     }
 
-    void OnGUI()
-    {
-        if (m_Editor != null)
-            m_Editor.OnInspectorGUI();
+    void OnGUI() {
+      if (m_Editor != null)
+        m_Editor.OnInspectorGUI();
     }
-}
+  }
 }

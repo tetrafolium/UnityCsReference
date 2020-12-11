@@ -7,14 +7,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-
-namespace UnityEditor
-{
-static class WaveformPreviewFactory
-{
-    public static WaveformPreview Create(int initialSize, AudioClip clip)
-    {
-        return new StreamedAudioClipPreview(clip, initialSize);
-    }
+namespace UnityEditor {
+static class WaveformPreviewFactory {
+  public static WaveformPreview Create(int initialSize, AudioClip clip) {
+    return new StreamedAudioClipPreview(clip, initialSize);
+  }
 }
 }

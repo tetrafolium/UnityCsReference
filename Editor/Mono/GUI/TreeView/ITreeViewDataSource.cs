@@ -6,28 +6,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // The TreeView requires implementations from the following three interfaces:
-//  ITreeViewDataSource:    Should handle data fetching, build the tree/data structure and hold expanded state
-//  ITreeViewGUI:           Should handle visual representation of TreeView and input handling
-//  ITreeViewDragging       Should handle dragging, temp expansion of items, allow/disallow dropping
+//  ITreeViewDataSource:    Should handle data fetching, build the tree/data
+//  structure and hold expanded state ITreeViewGUI:           Should handle
+//  visual representation of TreeView and input handling ITreeViewDragging
+//  Should handle dragging, temp expansion of items, allow/disallow dropping
 // The TreeView handles:    Navigation, Item selection and initiates dragging
 
-
-namespace UnityEditor.IMGUI.Controls
-{
-// Represents a complete data tree
-internal interface ITreeViewDataSource
-{
+namespace UnityEditor.IMGUI.Controls {
+  // Represents a complete data tree
+  internal interface ITreeViewDataSource {
     void OnInitialize();
 
     // Return root of tree
-    TreeViewItem root {
-        get;
-    }
+    TreeViewItem root { get; }
 
     // For data sources where GetRows() might be an expensive operation
-    int rowCount {
-        get;
-    }
+    int rowCount { get; }
 
     // Reload data
     void ReloadData();
@@ -37,14 +31,15 @@ internal interface ITreeViewDataSource
     // Find Item by id
     TreeViewItem FindItem(int id);
 
-    // Get current row of an item (using the current expanded state in TreeViewState)
-    // Returns -1 if not found
+    // Get current row of an item (using the current expanded state in
+    // TreeViewState) Returns -1 if not found
     int GetRow(int id);
 
     // Check rowCount before requesting
     TreeViewItem GetItem(int row);
 
-    // Get the flattened tree of visible items. If possible use GetItem(int row) instead
+    // Get the flattened tree of visible items. If possible use GetItem(int row)
+    // instead
     IList<TreeViewItem> GetRows();
 
     bool IsRevealed(int id);
@@ -53,8 +48,8 @@ internal interface ITreeViewDataSource
     void RevealItems(int[] ids);
 
     // Expand / collapse interface
-    // The DataSource has the interface for this because it should be able to rebuild
-    // tree when expanding
+    // The DataSource has the interface for this because it should be able to
+    // rebuild tree when expanding
     void SetExpandedWithChildren(TreeViewItem item, bool expand);
     void SetExpanded(TreeViewItem item, bool expand);
     bool IsExpanded(TreeViewItem item);
@@ -68,7 +63,8 @@ internal interface ITreeViewDataSource
     // Selection
     bool CanBeMultiSelected(TreeViewItem item);
     bool CanBeParent(TreeViewItem item);
-    List<int> GetNewSelection(TreeViewItem clickedItem, TreeViewSelectState selectState);
+    List<int> GetNewSelection(TreeViewItem clickedItem,
+                              TreeViewSelectState selectState);
 
     // Renaming
     bool IsRenamingItemAllowed(TreeViewItem item);
@@ -78,5 +74,5 @@ internal interface ITreeViewDataSource
 
     // Search
     void OnSearchChanged();
-}
+  }
 } // namespace UnityEditor

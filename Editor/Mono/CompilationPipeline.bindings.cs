@@ -4,15 +4,14 @@
 
 using UnityEngine.Bindings;
 
-namespace UnityEditor.Compilation
-{
-[NativeHeader("Editor/Src/ScriptCompilation/ScriptCompilationPipeline.h")]
-public static partial class CompilationPipeline
-{
+namespace UnityEditor.Compilation {
+  [NativeHeader("Editor/Src/ScriptCompilation/ScriptCompilationPipeline.h")]
+  public static partial class CompilationPipeline {
     [FreeFunction]
     internal static extern void ClearEditorCompilationErrors();
     [FreeFunction]
-    internal static extern void LogEditorCompilationError(string message, int instanceID);
+    internal static extern void LogEditorCompilationError(string message,
+                                                          int instanceID);
 
     [FreeFunction]
     internal static extern void DisableScriptDebugInfo();
@@ -22,5 +21,5 @@ public static partial class CompilationPipeline
 
     [FreeFunction]
     internal static extern bool IsScriptDebugInfoEnabled();
-}
+  }
 }

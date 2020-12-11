@@ -4,12 +4,10 @@
 
 using UnityEngine;
 
-namespace UnityEditor
-{
-internal struct ListViewElement
-{
-    public int row;
-    public int column;
-    public Rect position;
+namespace UnityEditor {
+internal struct ListViewElement {
+  public int row;
+  public int column;
+  public Rect position;
 }
 }

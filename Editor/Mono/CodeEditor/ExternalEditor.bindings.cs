@@ -4,12 +4,11 @@
 
 using UnityEngine.Bindings;
 
-namespace Unity.CodeEditor
-{
-[NativeHeader("Editor/Platform/Interface/ExternalEditor.h")]
-internal class ExternalEditor
-{
+namespace Unity.CodeEditor {
+  [NativeHeader("Editor/Platform/Interface/ExternalEditor.h")]
+  internal class ExternalEditor {
     [FreeFunction("PlatformSpecificOpenFileAtLine")]
-    internal static extern bool OSOpenFileWithArgument(string appPath, string arguments);
-}
+    internal static extern bool OSOpenFileWithArgument(string appPath,
+                                                       string arguments);
+  }
 }

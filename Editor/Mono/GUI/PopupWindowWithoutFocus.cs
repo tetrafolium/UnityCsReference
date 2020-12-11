@@ -8,83 +8,73 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace UnityEditor
-{
-class PopupWindowWithoutFocus : PopupWindow
-{
-    static PopupWindowWithoutFocus s_PopupWindowWithoutFocus;
+namespace UnityEditor {
+class PopupWindowWithoutFocus : PopupWindow {
+  static PopupWindowWithoutFocus s_PopupWindowWithoutFocus;
 
-    public new static void Show(Rect activatorRect, PopupWindowContent windowContent)
-    {
-        Show(activatorRect, windowContent, null);
+  public new static void Show(Rect activatorRect,
+                              PopupWindowContent windowContent) {
+    Show(activatorRect, windowContent, null);
+  }
+
+  internal new static void Show(Rect activatorRect,
+                                PopupWindowContent windowContent,
+                                PopupLocation[] locationPriorityOrder) {
+    if (windowContent == null)
+      throw new System.ArgumentNullException(nameof(windowContent));
+
+    if (s_PopupWindowWithoutFocus != null) {
+      s_PopupWindowWithoutFocus.CloseContent();
     }
 
-    internal new static void Show(Rect activatorRect, PopupWindowContent windowContent, PopupLocation[] locationPriorityOrder)
-    {
-        if (windowContent == null)
-            throw new System.ArgumentNullException(nameof(windowContent));
+    if (ShouldShowWindow(activatorRect)) {
+      if (s_PopupWindowWithoutFocus == null)
+        s_PopupWindowWithoutFocus = CreateInstance<PopupWindowWithoutFocus>();
 
-        if (s_PopupWindowWithoutFocus != null)
-        {
-            s_PopupWindowWithoutFocus.CloseContent();
-        }
+      s_PopupWindowWithoutFocus.Init(activatorRect, windowContent,
+                                     locationPriorityOrder, ShowMode.PopupMenu,
+                                     false);
+    } else {
+      windowContent.OnClose();
+    }
+  }
 
-        if (ShouldShowWindow(activatorRect))
-        {
-            if (s_PopupWindowWithoutFocus == null)
-                s_PopupWindowWithoutFocus = CreateInstance<PopupWindowWithoutFocus>();
+  public static bool IsVisible() { return s_PopupWindowWithoutFocus != null; }
 
-            s_PopupWindowWithoutFocus.Init(activatorRect, windowContent, locationPriorityOrder, ShowMode.PopupMenu, false);
-        }
-        else
-        {
-            windowContent.OnClose();
-        }
+  public static void Hide() {
+    if (s_PopupWindowWithoutFocus != null)
+      s_PopupWindowWithoutFocus.Close();
+  }
+
+  protected override void OnEnable() {
+    base.OnEnable();
+    hideFlags = HideFlags.DontSave;
+    s_PopupWindowWithoutFocus = this;
+  }
+
+  protected override void OnDisable() {
+    base.OnDisable();
+    s_PopupWindowWithoutFocus = null;
+  }
+
+  // Invoked from C++
+  static bool OnGlobalMouseOrKeyEvent(EventType type, KeyCode keyCode,
+                                      Vector2 mousePosition) {
+    if (s_PopupWindowWithoutFocus == null)
+      return false;
+
+    if (type == EventType.MouseDown &&
+        !s_PopupWindowWithoutFocus.position.Contains(mousePosition)) {
+      s_PopupWindowWithoutFocus.Close();
+      return false;
     }
 
-    public static bool IsVisible()
-    {
-        return s_PopupWindowWithoutFocus != null;
+    if (type == EventType.KeyDown && keyCode == KeyCode.Escape) {
+      s_PopupWindowWithoutFocus.Close();
+      return true;
     }
 
-    public static void Hide()
-    {
-        if (s_PopupWindowWithoutFocus != null)
-            s_PopupWindowWithoutFocus.Close();
-    }
-
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-        hideFlags = HideFlags.DontSave;
-        s_PopupWindowWithoutFocus = this;
-    }
-
-    protected override void OnDisable()
-    {
-        base.OnDisable();
-        s_PopupWindowWithoutFocus = null;
-    }
-
-    // Invoked from C++
-    static bool OnGlobalMouseOrKeyEvent(EventType type, KeyCode keyCode, Vector2 mousePosition)
-    {
-        if (s_PopupWindowWithoutFocus == null)
-            return false;
-
-        if (type == EventType.MouseDown && !s_PopupWindowWithoutFocus.position.Contains(mousePosition))
-        {
-            s_PopupWindowWithoutFocus.Close();
-            return false;
-        }
-
-        if (type == EventType.KeyDown && keyCode == KeyCode.Escape)
-        {
-            s_PopupWindowWithoutFocus.Close();
-            return true;
-        }
-
-        return false;
-    }
+    return false;
+  }
 }
 }

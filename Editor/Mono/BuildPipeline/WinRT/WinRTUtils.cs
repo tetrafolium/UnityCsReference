@@ -16,10 +16,8 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Mono.Cecil;
 
-internal class WinRTUtils
-{
-    public static string GetProcessorArchitecture(BuildTarget target)
-    {
-        return "x86";
-    }
+internal class WinRTUtils {
+  public static string GetProcessorArchitecture(BuildTarget target) {
+    return "x86";
+  }
 }

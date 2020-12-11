@@ -5,14 +5,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace UnityEditor.Collaboration
-{
-internal delegate void PageChangeAction(int page);
-internal delegate void RevisionAction(string revisionId, bool updateToRevision);
-internal delegate void ShowBuildAction(string revisionId);
+namespace UnityEditor.Collaboration {
+  internal delegate void PageChangeAction(int page);
+  internal delegate void RevisionAction(string revisionId,
+                                        bool updateToRevision);
+  internal delegate void ShowBuildAction(string revisionId);
 
-internal enum HistoryState
-{
+  internal enum HistoryState {
     Error,
     Offline,
     Maintenance,
@@ -21,19 +20,17 @@ internal enum HistoryState
     Disabled,
     Waiting,
     Ready,
-}
+  }
 
-internal enum BuildState
-{
+  internal enum BuildState {
     None,
     Configure,
     Success,
     Failed,
     InProgress,
-}
+  }
 
-internal struct RevisionData
-{
+  internal struct RevisionData {
     public string id;
     public int index;
     public DateTime timeStamp;
@@ -52,47 +49,32 @@ internal struct RevisionData
     public ICollection<ChangeData> changes;
     public int changesTotal;
     public bool changesTruncated;
-}
+  }
 
-internal struct ChangeData
-{
+  internal struct ChangeData {
     public string path;
     public string action;
-}
+  }
 
-internal interface ICollabHistoryWindow
-{
+  internal interface ICollabHistoryWindow {
     void UpdateState(HistoryState state, bool force);
-    void UpdateRevisions(IEnumerable<RevisionData> items, string tip, int totalRevisions, int currentPage);
+    void UpdateRevisions(IEnumerable<RevisionData> items, string tip,
+                         int totalRevisions, int currentPage);
 
     bool revisionActionsEnabled {
-        get;
-        set;
+      get;
+      set;
     }
-    int itemsPerPage {
-        set;
-    }
+    int itemsPerPage { set; }
     string inProgressRevision {
-        get;
-        set;
+      get;
+      set;
     }
-    PageChangeAction OnPageChangeAction {
-        set;
-    }
-    RevisionAction OnGoBackAction {
-        set;
-    }
-    RevisionAction OnUpdateAction {
-        set;
-    }
-    RevisionAction OnRestoreAction {
-        set;
-    }
-    ShowBuildAction OnShowBuildAction {
-        set;
-    }
-    Action OnShowServicesAction {
-        set;
-    }
-}
+    PageChangeAction OnPageChangeAction { set; }
+    RevisionAction OnGoBackAction { set; }
+    RevisionAction OnUpdateAction { set; }
+    RevisionAction OnRestoreAction { set; }
+    ShowBuildAction OnShowBuildAction { set; }
+    Action OnShowServicesAction { set; }
+  }
 }

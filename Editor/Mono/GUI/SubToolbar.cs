@@ -4,17 +4,13 @@
 
 using UnityEngine;
 
-namespace UnityEditor
-{
-class SubToolbar
-{
-    public float Width {
-        get;
-        set;
-    }
+namespace UnityEditor {
+class SubToolbar {
+  public float Width {
+    get;
+    set;
+  }
 
-    public virtual void OnGUI(Rect rect)
-    {
-    }
+  public virtual void OnGUI(Rect rect) {}
 }
 } // namespace

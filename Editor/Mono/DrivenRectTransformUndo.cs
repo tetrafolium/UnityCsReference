@@ -4,22 +4,17 @@
 
 using UnityEngine;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [InitializeOnLoad]
-internal class DrivenRectTransformUndo
-{
-    // Static constructor
-    static DrivenRectTransformUndo()
-    {
-        Undo.willFlushUndoRecord += ForceUpdateCanvases;
-        // After undo or redo performed, the 'driven values' & 'driven properties mask' need to be updated.
-        Undo.undoRedoPerformed += ForceUpdateCanvases;
-    }
+internal class DrivenRectTransformUndo {
+  // Static constructor
+  static DrivenRectTransformUndo() {
+    Undo.willFlushUndoRecord += ForceUpdateCanvases;
+    // After undo or redo performed, the 'driven values' & 'driven properties
+    // mask' need to be updated.
+    Undo.undoRedoPerformed += ForceUpdateCanvases;
+  }
 
-    static void ForceUpdateCanvases()
-    {
-        Canvas.ForceUpdateCanvases();
-    }
+  static void ForceUpdateCanvases() { Canvas.ForceUpdateCanvases(); }
 }
 }
