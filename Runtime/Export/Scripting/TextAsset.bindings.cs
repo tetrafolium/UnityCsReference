@@ -6,12 +6,14 @@ using UnityEngine.Bindings;
 
 namespace UnityEngine
 {
-    [NativeHeader("Runtime/Scripting/TextAsset.h")]
-    public partial class TextAsset : Object
-    {
-        // The raw bytes of the text asset. (RO)
-        public extern byte[] bytes { get; }
-
-        extern static void Internal_CreateInstance([Writable] TextAsset self, string text);
+[NativeHeader("Runtime/Scripting/TextAsset.h")]
+public partial class TextAsset : Object
+{
+    // The raw bytes of the text asset. (RO)
+    public extern byte[] bytes {
+        get;
     }
+
+    extern static void Internal_CreateInstance([Writable] TextAsset self, string text);
+}
 }

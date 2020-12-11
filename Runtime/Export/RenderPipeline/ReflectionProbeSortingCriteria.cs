@@ -4,11 +4,11 @@
 
 namespace UnityEngine.Rendering
 {
-    public enum ReflectionProbeSortingCriteria
-    {
-        None,
-        Importance,
-        Size,
-        ImportanceThenSize
-    }
+public enum ReflectionProbeSortingCriteria
+{
+    None,
+    Importance,
+    Size,
+    ImportanceThenSize
+}
 }

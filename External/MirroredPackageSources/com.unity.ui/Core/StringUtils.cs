@@ -4,139 +4,139 @@ using System.Text;
 
 namespace UnityEngine.UIElements
 {
-    internal static class StringUtils
+internal static class StringUtils
+{
+    public unsafe static int LevenshteinDistance(string s, string t)
     {
-        public unsafe static int LevenshteinDistance(string s, string t)
+        int n = s.Length;
+        int m = t.Length;
+
+        if (n == 0)
+            return m;
+
+        if (m == 0)
+            return n;
+
+        int xSize = n + 1;
+        int ySize = m + 1;
+        int* d = stackalloc int[xSize * ySize];
+
+        for (int x = 0; x <= n; x++)
+            d[ySize * x] = x;
+        for (int y = 0; y <= m; y++)
+            d[y] = y;
+
+        for (int y = 1; y <= m; y++)
         {
-            int n = s.Length;
-            int m = t.Length;
-
-            if (n == 0)
-                return m;
-
-            if (m == 0)
-                return n;
-
-            int xSize = n + 1;
-            int ySize = m + 1;
-            int* d = stackalloc int[xSize * ySize];
-
-            for (int x = 0; x <= n; x++)
-                d[ySize * x] = x;
-            for (int y = 0; y <= m; y++)
-                d[y] = y;
-
-            for (int y = 1; y <= m; y++)
+            for (int x = 1; x <= n; x++)
             {
-                for (int x = 1; x <= n; x++)
-                {
-                    if (s[x - 1] == t[y - 1])
-                        d[ySize * x + y] = d[ySize * (x - 1) + y - 1];  // no operation
-                    else
-                        d[ySize * x + y] = Math.Min(Math.Min(
-                            d[ySize * (x - 1) + y] + 1,             // a deletion
-                            d[ySize * x + y - 1] + 1),             // an insertion
-                            d[ySize * (x - 1) + y - 1] + 1 // a substitution
-                        );
-                }
+                if (s[x - 1] == t[y - 1])
+                    d[ySize * x + y] = d[ySize * (x - 1) + y - 1];  // no operation
+                else
+                    d[ySize * x + y] = Math.Min(Math.Min(
+                                                    d[ySize * (x - 1) + y] + 1,             // a deletion
+                                                    d[ySize * x + y - 1] + 1),             // an insertion
+                                                d[ySize * (x - 1) + y - 1] + 1 // a substitution
+                                               );
             }
-            return d[ySize * n + m];
         }
+        return d[ySize * n + m];
+    }
+}
+
+internal static class StringUtilsExtensions
+{
+    private static readonly char NoDelimiter = '\0'; //invalid character
+
+    public static string ToPascalCase(this string text)
+    {
+        return ConvertCase(text, NoDelimiter, char.ToUpperInvariant, char.ToUpperInvariant);
     }
 
-    internal static class StringUtilsExtensions
+    public static string ToCamelCase(this string text)
     {
-        private static readonly char NoDelimiter = '\0'; //invalid character
+        return ConvertCase(text, NoDelimiter, char.ToLowerInvariant, char.ToUpperInvariant);
+    }
 
-        public static string ToPascalCase(this string text)
+    public static string ToKebabCase(this string text)
+    {
+        return ConvertCase(text, '-', char.ToLowerInvariant, char.ToLowerInvariant);
+    }
+
+    public static string ToTrainCase(this string text)
+    {
+        return ConvertCase(text, '-', char.ToUpperInvariant, char.ToUpperInvariant);
+    }
+
+    public static string ToSnakeCase(this string text)
+    {
+        return ConvertCase(text, '_', char.ToLowerInvariant, char.ToLowerInvariant);
+    }
+
+    private static readonly char[] WordDelimiters = { ' ', '-', '_' };
+
+    private static string ConvertCase(string text,
+                                      char outputWordDelimiter,
+                                      Func<char, char> startOfStringCaseHandler,
+                                      Func<char, char> middleStringCaseHandler)
+    {
+        if (text == null)
         {
-            return ConvertCase(text, NoDelimiter, char.ToUpperInvariant, char.ToUpperInvariant);
+            throw new ArgumentNullException(nameof(text));
         }
 
-        public static string ToCamelCase(this string text)
-        {
-            return ConvertCase(text, NoDelimiter, char.ToLowerInvariant, char.ToUpperInvariant);
-        }
+        var builder = new StringBuilder();
 
-        public static string ToKebabCase(this string text)
-        {
-            return ConvertCase(text, '-', char.ToLowerInvariant, char.ToLowerInvariant);
-        }
+        bool startOfString = true;
+        bool startOfWord = true;
+        bool outputDelimiter = true;
 
-        public static string ToTrainCase(this string text)
+        for (int i = 0; i < text.Length; i++)
         {
-            return ConvertCase(text, '-', char.ToUpperInvariant, char.ToUpperInvariant);
-        }
-
-        public static string ToSnakeCase(this string text)
-        {
-            return ConvertCase(text, '_', char.ToLowerInvariant, char.ToLowerInvariant);
-        }
-
-        private static readonly char[] WordDelimiters = { ' ', '-', '_' };
-
-        private static string ConvertCase(string text,
-            char outputWordDelimiter,
-            Func<char, char> startOfStringCaseHandler,
-            Func<char, char> middleStringCaseHandler)
-        {
-            if (text == null)
+            char c = text[i];
+            if (WordDelimiters.Contains(c))
             {
-                throw new ArgumentNullException(nameof(text));
-            }
-
-            var builder = new StringBuilder();
-
-            bool startOfString = true;
-            bool startOfWord = true;
-            bool outputDelimiter = true;
-
-            for (int i = 0; i < text.Length; i++)
-            {
-                char c = text[i];
-                if (WordDelimiters.Contains(c))
+                if (c == outputWordDelimiter)
                 {
-                    if (c == outputWordDelimiter)
-                    {
-                        builder.Append(outputWordDelimiter);
-                        //we disable the delimiter insertion
-                        outputDelimiter = false;
-                    }
-                    startOfWord = true;
+                    builder.Append(outputWordDelimiter);
+                    //we disable the delimiter insertion
+                    outputDelimiter = false;
                 }
-                else if (!char.IsLetterOrDigit(c))
+                startOfWord = true;
+            }
+            else if (!char.IsLetterOrDigit(c))
+            {
+                startOfString = true;
+                startOfWord = true;
+            }
+            else
+            {
+                if (startOfWord || char.IsUpper(c))
                 {
-                    startOfString = true;
-                    startOfWord = true;
+                    if (startOfString)
+                    {
+                        builder.Append(startOfStringCaseHandler(c));
+                    }
+                    else
+                    {
+                        if (outputDelimiter && outputWordDelimiter != NoDelimiter)
+                        {
+                            builder.Append(outputWordDelimiter);
+                        }
+                        builder.Append(middleStringCaseHandler(c));
+                        outputDelimiter = true;
+                    }
+                    startOfString = false;
+                    startOfWord = false;
                 }
                 else
                 {
-                    if (startOfWord || char.IsUpper(c))
-                    {
-                        if (startOfString)
-                        {
-                            builder.Append(startOfStringCaseHandler(c));
-                        }
-                        else
-                        {
-                            if (outputDelimiter && outputWordDelimiter != NoDelimiter)
-                            {
-                                builder.Append(outputWordDelimiter);
-                            }
-                            builder.Append(middleStringCaseHandler(c));
-                            outputDelimiter = true;
-                        }
-                        startOfString = false;
-                        startOfWord = false;
-                    }
-                    else
-                    {
-                        builder.Append(c);
-                    }
+                    builder.Append(c);
                 }
             }
-
-            return builder.ToString();
         }
+
+        return builder.ToString();
     }
+}
 }

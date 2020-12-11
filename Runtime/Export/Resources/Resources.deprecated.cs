@@ -7,17 +7,21 @@ using UnityEngineInternal;
 
 namespace UnityEngine
 {
-    partial class Resources
-    {
-        // Returns a resource at an asset path (Editor Only).
-        [TypeInferenceRule(TypeInferenceRules.TypeReferencedBySecondArgument)]
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        [Obsolete("Use AssetDatabase.LoadAssetAtPath instead (UnityUpgradable) -> * [UnityEditor] UnityEditor.AssetDatabase.LoadAssetAtPath(*)", true)]
-        public static Object LoadAssetAtPath(string assetPath, Type type) { return null; }
-
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        [Obsolete("Use AssetDatabase.LoadAssetAtPath<T>() instead (UnityUpgradable) -> * [UnityEditor] UnityEditor.AssetDatabase.LoadAssetAtPath<T>(*)", true)]
-        public static T LoadAssetAtPath<T>(string assetPath) where T : Object { return null; }
+partial class Resources
+{
+    // Returns a resource at an asset path (Editor Only).
+    [TypeInferenceRule(TypeInferenceRules.TypeReferencedBySecondArgument)]
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    [Obsolete("Use AssetDatabase.LoadAssetAtPath instead (UnityUpgradable) -> * [UnityEditor] UnityEditor.AssetDatabase.LoadAssetAtPath(*)", true)]
+    public static Object LoadAssetAtPath(string assetPath, Type type) {
+        return null;
     }
+
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    [Obsolete("Use AssetDatabase.LoadAssetAtPath<T>() instead (UnityUpgradable) -> * [UnityEditor] UnityEditor.AssetDatabase.LoadAssetAtPath<T>(*)", true)]
+    public static T LoadAssetAtPath<T>(string assetPath) where T : Object {
+        return null;
+    }
+}
 }
 

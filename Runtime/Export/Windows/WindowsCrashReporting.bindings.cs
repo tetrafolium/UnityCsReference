@@ -6,13 +6,13 @@ using UnityEngine.Bindings;
 
 namespace UnityEngine.Windows
 {
-    public static class CrashReporting
+public static class CrashReporting
+{
+    public extern static string crashReportFolder
     {
-        public extern static string crashReportFolder
-        {
-            [ThreadSafe]
-            [NativeHeader("PlatformDependent/WinPlayer/Bindings/CrashReportingBindings.h")]
-            get;
-        }
+        [ThreadSafe]
+        [NativeHeader("PlatformDependent/WinPlayer/Bindings/CrashReportingBindings.h")]
+        get;
     }
+}
 }

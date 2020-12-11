@@ -8,115 +8,117 @@ using UnityEngine.UIElements;
 
 namespace UnityEditor.UIElements.Debugger
 {
-    class UxmlExporter
+class UxmlExporter
+{
+    private const string UIElementsNamespace = "UnityEngine.UIElements";
+
+    [Flags]
+    public enum ExportOptions
     {
-        private const string UIElementsNamespace = "UnityEngine.UIElements";
+        None = 0,
+        NewLineOnAttributes = 1,
+        StyleFields = 2,
+        AutoNameElements = 4,
+    }
 
-        [Flags]
-        public enum ExportOptions
+    public static string Dump(VisualElement selectedElement, string templateId, ExportOptions options)
+    {
+        Dictionary<XNamespace, string> nsToPrefix = new Dictionary<XNamespace, string>()
         {
-            None = 0,
-            NewLineOnAttributes = 1,
-            StyleFields = 2,
-            AutoNameElements = 4,
+            {
+                UIElementsNamespace, "ui"
+            }
+        };
+
+        HashSet<string> usings = new HashSet<string>();
+
+        var doc = new XDocument();
+        XElement template = new XElement("UXML");
+        doc.Add(template);
+
+        Recurse(template, nsToPrefix, usings, selectedElement, options);
+
+        foreach (var it in nsToPrefix)
+        {
+            template.Add(new XAttribute(XNamespace.Xmlns + it.Value, it.Key));
         }
 
-        public static string Dump(VisualElement selectedElement, string templateId, ExportOptions options)
+        foreach (var it in usings.OrderByDescending(x => x))
         {
-            Dictionary<XNamespace, string> nsToPrefix = new Dictionary<XNamespace, string>()
-            {
-                { UIElementsNamespace, "ui" }
-            };
-
-            HashSet<string> usings = new HashSet<string>();
-
-            var doc = new XDocument();
-            XElement template = new XElement("UXML");
-            doc.Add(template);
-
-            Recurse(template, nsToPrefix, usings, selectedElement, options);
-
-            foreach (var it in nsToPrefix)
-            {
-                template.Add(new XAttribute(XNamespace.Xmlns + it.Value, it.Key));
-            }
-
-            foreach (var it in usings.OrderByDescending(x => x))
-            {
-                template.AddFirst(new XElement("Using", new XAttribute("alias", it), new XAttribute("path", it)));
-            }
-
-            XmlWriterSettings settings = new XmlWriterSettings
-            {
-                Indent = true,
-                IndentChars = "  ",
-                NewLineChars = "\n",
-                OmitXmlDeclaration = true,
-                NewLineOnAttributes = (options & ExportOptions.NewLineOnAttributes) == ExportOptions.NewLineOnAttributes,
-                NewLineHandling = NewLineHandling.Replace
-            };
-
-            StringBuilder sb = new StringBuilder();
-            using (XmlWriter writer = XmlWriter.Create(sb, settings))
-                doc.Save(writer);
-
-            return sb.ToString();
+            template.AddFirst(new XElement("Using", new XAttribute("alias", it), new XAttribute("path", it)));
         }
 
-        private static void Recurse(XElement parent, Dictionary<XNamespace, string> nsToPrefix, HashSet<string> usings, VisualElement ve, ExportOptions options)
+        XmlWriterSettings settings = new XmlWriterSettings
         {
-            //todo: handle namespace
-            XElement elt;
+            Indent = true,
+            IndentChars = "  ",
+            NewLineChars = "\n",
+            OmitXmlDeclaration = true,
+            NewLineOnAttributes = (options & ExportOptions.NewLineOnAttributes) == ExportOptions.NewLineOnAttributes,
+            NewLineHandling = NewLineHandling.Replace
+        };
 
-            string ns = ve.GetType().Namespace ?? "";
-            string typeName = ve.typeName;
-            Dictionary<string, string> attrs = new Dictionary<string, string>();
+        StringBuilder sb = new StringBuilder();
+        using (XmlWriter writer = XmlWriter.Create(sb, settings))
+            doc.Save(writer);
 
-            string nsp;
-            if (ve is TemplateContainer)
-            {
-                var templateId = ((TemplateContainer)ve).templateId;
-                elt = new XElement(templateId);
-                usings.Add(templateId);
-            }
-            else if (nsToPrefix.TryGetValue(ns, out nsp))
-            {
-                elt = new XElement((XNamespace)ns + typeName);
-            }
-            else
-                elt = new XElement(typeName);
+        return sb.ToString();
+    }
 
-            parent.Add(elt);
+    private static void Recurse(XElement parent, Dictionary<XNamespace, string> nsToPrefix, HashSet<string> usings, VisualElement ve, ExportOptions options)
+    {
+        //todo: handle namespace
+        XElement elt;
 
-            foreach (var attr in attrs)
-                elt.SetAttributeValue(attr.Key, attr.Value);
+        string ns = ve.GetType().Namespace ?? "";
+        string typeName = ve.typeName;
+        Dictionary<string, string> attrs = new Dictionary<string, string>();
 
-            var elementText = ve is ITextElement ? (ve as ITextElement).text : "";
+        string nsp;
+        if (ve is TemplateContainer)
+        {
+            var templateId = ((TemplateContainer)ve).templateId;
+            elt = new XElement(templateId);
+            usings.Add(templateId);
+        }
+        else if (nsToPrefix.TryGetValue(ns, out nsp))
+        {
+            elt = new XElement((XNamespace)ns + typeName);
+        }
+        else
+            elt = new XElement(typeName);
 
-            if (!String.IsNullOrEmpty(ve.name) && ve.name[0] != '_')
-                elt.SetAttributeValue("name", ve.name);
-            else if ((options & ExportOptions.AutoNameElements) == ExportOptions.AutoNameElements)
-            {
-                var genName = ve.GetType().Name + elementText.Replace(" ", "");
-                elt.SetAttributeValue("name", genName);
-            }
+        parent.Add(elt);
 
-            if (!String.IsNullOrEmpty(elementText))
-                elt.SetAttributeValue("text", elementText);
+        foreach (var attr in attrs)
+            elt.SetAttributeValue(attr.Key, attr.Value);
 
-            var classes = ve.GetClasses();
-            if (classes.Any())
-                elt.SetAttributeValue("class", string.Join(" ", classes.ToArray()));
+        var elementText = ve is ITextElement ? (ve as ITextElement).text : "";
 
-            if (ve is TemplateContainer)
-            {
-                return;
-            }
+        if (!String.IsNullOrEmpty(ve.name) && ve.name[0] != '_')
+            elt.SetAttributeValue("name", ve.name);
+        else if ((options & ExportOptions.AutoNameElements) == ExportOptions.AutoNameElements)
+        {
+            var genName = ve.GetType().Name + elementText.Replace(" ", "");
+            elt.SetAttributeValue("name", genName);
+        }
 
-            foreach (var childElement in ve.Children())
-            {
-                Recurse(elt, nsToPrefix, usings, childElement, options);
-            }
+        if (!String.IsNullOrEmpty(elementText))
+            elt.SetAttributeValue("text", elementText);
+
+        var classes = ve.GetClasses();
+        if (classes.Any())
+            elt.SetAttributeValue("class", string.Join(" ", classes.ToArray()));
+
+        if (ve is TemplateContainer)
+        {
+            return;
+        }
+
+        foreach (var childElement in ve.Children())
+        {
+            Recurse(elt, nsToPrefix, usings, childElement, options);
         }
     }
+}
 }

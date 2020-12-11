@@ -7,72 +7,72 @@ using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCode
 
 namespace UnityEngine.SceneManagement
 {
-    [NativeHeader("Runtime/Export/SceneManager/SceneManager.bindings.h")]
-    [RequiredByNativeCode]
-    public partial class SceneManager
+[NativeHeader("Runtime/Export/SceneManager/SceneManager.bindings.h")]
+[RequiredByNativeCode]
+public partial class SceneManager
+{
+    public extern static int sceneCount
     {
-        public extern static int sceneCount
-        {
-            [NativeHeader("Runtime/SceneManager/SceneManager.h")]
-            [StaticAccessor("GetSceneManager()", StaticAccessorType.Dot)]
-            [NativeMethod("GetSceneCount")]
-            get;
-        }
-
-        public extern static int sceneCountInBuildSettings
-        {
-            [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
-            [NativeMethod("GetNumScenesInBuildSettings")]
-            get;
-        }
-
-        [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
-        extern public static Scene GetActiveScene();
-
-        [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
-        [NativeThrows]
-        extern public static bool SetActiveScene(Scene scene);
-
-        [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
-        extern public static Scene GetSceneByPath(string scenePath);
-
-        [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
-        extern public static Scene GetSceneByName(string name);
-
-        [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
-        [NativeThrows]
-        extern public static Scene GetSceneByBuildIndex(int buildIndex);
-
-        [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
-        [NativeThrows]
-        extern public static Scene GetSceneAt(int index);
-
-        [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
-        [NativeThrows]
-        extern public static Scene CreateScene([NotNull] string sceneName, CreateSceneParameters parameters);
-
-        [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
-        [NativeThrows]
-        extern private static bool UnloadSceneInternal(Scene scene, UnloadSceneOptions options);
-
-        [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
-        [NativeThrows]
-        extern private static AsyncOperation UnloadSceneAsyncInternal(Scene scene, UnloadSceneOptions options);
-
-        [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
-        [NativeThrows]
-        extern private static AsyncOperation LoadSceneAsyncNameIndexInternal(string sceneName, int sceneBuildIndex, LoadSceneParameters parameters, bool mustCompleteNextFrame);
-
-        [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
-        [NativeThrows]
-        extern private static AsyncOperation UnloadSceneNameIndexInternal(string sceneName, int sceneBuildIndex, bool immediately, UnloadSceneOptions options, out bool outSuccess);
-
-        [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
-        [NativeThrows]
-        extern public static void MergeScenes(Scene sourceScene, Scene destinationScene);
-
-        [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
-        [NativeThrows]
-        extern public static void MoveGameObjectToScene([NotNull] GameObject go, Scene scene);
+        [NativeHeader("Runtime/SceneManager/SceneManager.h")]
+        [StaticAccessor("GetSceneManager()", StaticAccessorType.Dot)]
+        [NativeMethod("GetSceneCount")]
+        get;
     }
+
+    public extern static int sceneCountInBuildSettings
+    {
+        [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
+        [NativeMethod("GetNumScenesInBuildSettings")]
+        get;
+    }
+
+    [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
+    extern public static Scene GetActiveScene();
+
+    [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
+    [NativeThrows]
+    extern public static bool SetActiveScene(Scene scene);
+
+    [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
+    extern public static Scene GetSceneByPath(string scenePath);
+
+    [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
+    extern public static Scene GetSceneByName(string name);
+
+    [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
+    [NativeThrows]
+    extern public static Scene GetSceneByBuildIndex(int buildIndex);
+
+    [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
+    [NativeThrows]
+    extern public static Scene GetSceneAt(int index);
+
+    [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
+    [NativeThrows]
+    extern public static Scene CreateScene([NotNull] string sceneName, CreateSceneParameters parameters);
+
+    [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
+    [NativeThrows]
+    extern private static bool UnloadSceneInternal(Scene scene, UnloadSceneOptions options);
+
+    [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
+    [NativeThrows]
+    extern private static AsyncOperation UnloadSceneAsyncInternal(Scene scene, UnloadSceneOptions options);
+
+    [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
+    [NativeThrows]
+    extern private static AsyncOperation LoadSceneAsyncNameIndexInternal(string sceneName, int sceneBuildIndex, LoadSceneParameters parameters, bool mustCompleteNextFrame);
+
+    [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
+    [NativeThrows]
+    extern private static AsyncOperation UnloadSceneNameIndexInternal(string sceneName, int sceneBuildIndex, bool immediately, UnloadSceneOptions options, out bool outSuccess);
+
+    [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
+    [NativeThrows]
+    extern public static void MergeScenes(Scene sourceScene, Scene destinationScene);
+
+    [StaticAccessor("SceneManagerBindings", StaticAccessorType.DoubleColon)]
+    [NativeThrows]
+    extern public static void MoveGameObjectToScene([NotNull] GameObject go, Scene scene);
+}
 }

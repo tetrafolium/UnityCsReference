@@ -6,9 +6,9 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine
 {
-    // Waits until next fixed frame rate update function. SA: MonoBehaviour::pref::FixedUpdate.
-    [RequiredByNativeCode]
-    public sealed class WaitForFixedUpdate : YieldInstruction
-    {
-    }
+// Waits until next fixed frame rate update function. SA: MonoBehaviour::pref::FixedUpdate.
+[RequiredByNativeCode]
+public sealed class WaitForFixedUpdate : YieldInstruction
+{
+}
 }

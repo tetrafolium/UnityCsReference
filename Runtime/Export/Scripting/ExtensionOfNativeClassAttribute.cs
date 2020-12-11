@@ -8,9 +8,9 @@ using System.Reflection;
 
 namespace UnityEngine
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, Inherited = true)]
-    [RequiredByNativeCode]
-    sealed class ExtensionOfNativeClassAttribute : Attribute
-    {
-    }
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, Inherited = true)]
+[RequiredByNativeCode]
+sealed class ExtensionOfNativeClassAttribute : Attribute
+{
+}
 }

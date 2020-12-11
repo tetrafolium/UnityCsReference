@@ -3,17 +3,19 @@ using UnityEngine.UIElements.StyleSheets;
 
 namespace UnityEngine.UIElements
 {
+/// <summary>
+/// Event sent after the custom style properties of a <see cref="VisualElement"/> have been resolved.
+/// </summary>
+public class CustomStyleResolvedEvent : EventBase<CustomStyleResolvedEvent>
+{
     /// <summary>
-    /// Event sent after the custom style properties of a <see cref="VisualElement"/> have been resolved.
+    /// Returns the custom style properties accessor for the targeted <see cref="VisualElement"/>.
     /// </summary>
-    public class CustomStyleResolvedEvent : EventBase<CustomStyleResolvedEvent>
+    public ICustomStyle customStyle
     {
-        /// <summary>
-        /// Returns the custom style properties accessor for the targeted <see cref="VisualElement"/>.
-        /// </summary>
-        public ICustomStyle customStyle
-        {
-            get { return (target as VisualElement)?.customStyle; }
+        get {
+            return (target as VisualElement)?.customStyle;
         }
     }
+}
 }

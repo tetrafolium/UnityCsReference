@@ -7,12 +7,18 @@ using UnityEngine.Bindings;
 
 namespace UnityEngine
 {
-    [NativeHeader("Runtime/Graphics/LightProbeGroup.h")]
-    public sealed partial class LightProbeGroup : Behaviour
-    {
-        [NativeName("Positions")]
-        public extern Vector3[] probePositions { get; set; }
-        [NativeName("Dering")]
-        public extern bool dering { get; set; }
+[NativeHeader("Runtime/Graphics/LightProbeGroup.h")]
+public sealed partial class LightProbeGroup : Behaviour
+{
+    [NativeName("Positions")]
+    public extern Vector3[] probePositions {
+        get;
+        set;
     }
+    [NativeName("Dering")]
+    public extern bool dering {
+        get;
+        set;
+    }
+}
 }

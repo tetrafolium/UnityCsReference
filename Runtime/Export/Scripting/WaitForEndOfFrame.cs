@@ -6,9 +6,9 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine
 {
-    // Waits until the end of the frame after all cameras and GUI is rendered, just before displaying the frame on screen.
-    [RequiredByNativeCode]
-    public sealed class WaitForEndOfFrame : YieldInstruction
-    {
-    }
+// Waits until the end of the frame after all cameras and GUI is rendered, just before displaying the frame on screen.
+[RequiredByNativeCode]
+public sealed class WaitForEndOfFrame : YieldInstruction
+{
+}
 }

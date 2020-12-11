@@ -6,10 +6,10 @@ using System;
 
 namespace UnityEngine.Rendering
 {
-    [Flags]
-    enum VisibleLightFlags
-    {
-        IntersectsNearPlane = 1 << 0,
-        IntersectsFarPlane = 1 << 1,
-    }
+[Flags]
+enum VisibleLightFlags
+{
+    IntersectsNearPlane = 1 << 0,
+    IntersectsFarPlane = 1 << 1,
+}
 }

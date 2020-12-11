@@ -11,32 +11,32 @@ using UnityEngine.Bindings;
 
 namespace Unity.Burst.LowLevel
 {
-    internal static partial class BurstCompilerService
+internal static partial class BurstCompilerService
+{
+    public delegate bool ExtractCompilerFlags(Type jobType, out string flags);
+
+    public enum BurstLogType
     {
-        public delegate bool ExtractCompilerFlags(Type jobType, out string flags);
-
-        public enum BurstLogType
-        {
-            Info,
-            Warning,
-            Error,
-        }
-
-        public static void Initialize(string folderRuntime, ExtractCompilerFlags extractCompilerFlags)
-        {
-            if (folderRuntime == null) throw new ArgumentNullException(nameof(folderRuntime));
-            if (extractCompilerFlags == null) throw new ArgumentNullException(nameof(extractCompilerFlags));
-
-            if (!Directory.Exists(folderRuntime))
-            {
-                Debug.LogError($"Unable to initialize the burst JIT compiler. The folder `{folderRuntime}` does not exist");
-                return;
-            }
-
-            var message = InitializeInternal(folderRuntime, extractCompilerFlags);
-
-            if (!String.IsNullOrEmpty(message))
-                Debug.LogError($"Unexpected error while trying to initialize the burst JIT compiler: {message}");
-        }
+        Info,
+        Warning,
+        Error,
     }
+
+    public static void Initialize(string folderRuntime, ExtractCompilerFlags extractCompilerFlags)
+    {
+        if (folderRuntime == null) throw new ArgumentNullException(nameof(folderRuntime));
+        if (extractCompilerFlags == null) throw new ArgumentNullException(nameof(extractCompilerFlags));
+
+        if (!Directory.Exists(folderRuntime))
+        {
+            Debug.LogError($"Unable to initialize the burst JIT compiler. The folder `{folderRuntime}` does not exist");
+            return;
+        }
+
+        var message = InitializeInternal(folderRuntime, extractCompilerFlags);
+
+        if (!String.IsNullOrEmpty(message))
+            Debug.LogError($"Unexpected error while trying to initialize the burst JIT compiler: {message}");
+    }
+}
 }

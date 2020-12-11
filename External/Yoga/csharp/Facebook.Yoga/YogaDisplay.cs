@@ -9,9 +9,9 @@
 
 namespace UnityEngine.Yoga
 {
-    internal enum YogaDisplay
-    {
-        Flex,
-        None,
-    }
+internal enum YogaDisplay
+{
+    Flex,
+    None,
+}
 }

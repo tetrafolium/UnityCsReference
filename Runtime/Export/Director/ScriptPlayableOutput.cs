@@ -10,48 +10,50 @@ using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCode
 
 namespace UnityEngine.Playables
 {
-    [RequiredByNativeCode]
-    public partial struct ScriptPlayableOutput : IPlayableOutput
+[RequiredByNativeCode]
+public partial struct ScriptPlayableOutput : IPlayableOutput
+{
+    private PlayableOutputHandle m_Handle;
+
+    public static ScriptPlayableOutput Create(PlayableGraph graph, string name)
     {
-        private PlayableOutputHandle m_Handle;
+        PlayableOutputHandle handle;
+        if (!graph.CreateScriptOutputInternal(name, out handle))
+            return ScriptPlayableOutput.Null;
+        return new ScriptPlayableOutput(handle);
+    }
 
-        public static ScriptPlayableOutput Create(PlayableGraph graph, string name)
+    internal ScriptPlayableOutput(PlayableOutputHandle handle)
+    {
+        if (handle.IsValid())
         {
-            PlayableOutputHandle handle;
-            if (!graph.CreateScriptOutputInternal(name, out handle))
-                return ScriptPlayableOutput.Null;
-            return new ScriptPlayableOutput(handle);
+            if (!handle.IsPlayableOutputOfType<ScriptPlayableOutput>())
+                throw new InvalidCastException("Can't set handle: the playable is not a ScriptPlayableOutput.");
         }
 
-        internal ScriptPlayableOutput(PlayableOutputHandle handle)
-        {
-            if (handle.IsValid())
-            {
-                if (!handle.IsPlayableOutputOfType<ScriptPlayableOutput>())
-                    throw new InvalidCastException("Can't set handle: the playable is not a ScriptPlayableOutput.");
-            }
+        m_Handle = handle;
+    }
 
-            m_Handle = handle;
-        }
-
-        public static ScriptPlayableOutput Null
-        {
-            get { return new ScriptPlayableOutput(PlayableOutputHandle.Null); }
-        }
-
-        public PlayableOutputHandle GetHandle()
-        {
-            return m_Handle;
-        }
-
-        public static implicit operator PlayableOutput(ScriptPlayableOutput output)
-        {
-            return new PlayableOutput(output.GetHandle());
-        }
-
-        public static explicit operator ScriptPlayableOutput(PlayableOutput output)
-        {
-            return new ScriptPlayableOutput(output.GetHandle());
+    public static ScriptPlayableOutput Null
+    {
+        get {
+            return new ScriptPlayableOutput(PlayableOutputHandle.Null);
         }
     }
+
+    public PlayableOutputHandle GetHandle()
+    {
+        return m_Handle;
+    }
+
+    public static implicit operator PlayableOutput(ScriptPlayableOutput output)
+    {
+        return new PlayableOutput(output.GetHandle());
+    }
+
+    public static explicit operator ScriptPlayableOutput(PlayableOutput output)
+    {
+        return new ScriptPlayableOutput(output.GetHandle());
+    }
+}
 }

@@ -6,8 +6,8 @@ using UnityEngine.Bindings;
 
 namespace UnityEngine.Android
 {
-    public class AndroidDevice
-    {
-        static public void SetSustainedPerformanceMode(bool enabled) {}
-    }
+public class AndroidDevice
+{
+    static public void SetSustainedPerformanceMode(bool enabled) {}
+}
 }

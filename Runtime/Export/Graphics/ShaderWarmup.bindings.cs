@@ -10,17 +10,17 @@ using UnityEngine.Experimental.Rendering;
 
 namespace UnityEngine.Experimental.Rendering
 {
-    public struct ShaderWarmupSetup
-    {
-        public VertexAttributeDescriptor[] vdecl;
-    }
+public struct ShaderWarmupSetup
+{
+    public VertexAttributeDescriptor[] vdecl;
+}
 
-    [NativeHeader("Runtime/Graphics/ShaderScriptBindings.h")]
-    public static class ShaderWarmup
-    {
-        [FreeFunction(Name = "ShaderWarmupScripting::WarmupShader")]
-        static public extern void WarmupShader(Shader shader, ShaderWarmupSetup setup);
-        [FreeFunction(Name = "ShaderWarmupScripting::WarmupShaderFromCollection")]
-        static public extern void WarmupShaderFromCollection(ShaderVariantCollection collection, Shader shader, ShaderWarmupSetup setup);
-    }
+[NativeHeader("Runtime/Graphics/ShaderScriptBindings.h")]
+public static class ShaderWarmup
+{
+    [FreeFunction(Name = "ShaderWarmupScripting::WarmupShader")]
+    static public extern void WarmupShader(Shader shader, ShaderWarmupSetup setup);
+    [FreeFunction(Name = "ShaderWarmupScripting::WarmupShaderFromCollection")]
+    static public extern void WarmupShaderFromCollection(ShaderVariantCollection collection, Shader shader, ShaderWarmupSetup setup);
+}
 }

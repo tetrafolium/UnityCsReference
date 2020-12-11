@@ -1,35 +1,41 @@
 namespace UnityEngine.UIElements
 {
-    internal class TextEditorEventHandler
+internal class TextEditorEventHandler
+{
+    protected TextEditorEngine editorEngine {
+        get;
+        private set;
+    }
+
+    protected ITextInputField textInputField {
+        get;
+        private set;
+    }
+
+    protected TextEditorEventHandler(TextEditorEngine editorEngine, ITextInputField textInputField)
     {
-        protected TextEditorEngine editorEngine { get; private set; }
+        this.editorEngine = editorEngine;
+        this.textInputField = textInputField;
+        this.textInputField.SyncTextEngine();
+    }
 
-        protected ITextInputField textInputField { get; private set; }
+    public virtual void ExecuteDefaultActionAtTarget(EventBase evt) {}
 
-        protected TextEditorEventHandler(TextEditorEngine editorEngine, ITextInputField textInputField)
+    public virtual void ExecuteDefaultAction(EventBase evt)
+    {
+        if (evt.eventTypeId == FocusEvent.TypeId())
         {
-            this.editorEngine = editorEngine;
-            this.textInputField = textInputField;
-            this.textInputField.SyncTextEngine();
+            editorEngine.OnFocus();
+
+            // Make sure to select all text, OnFocus() does not call SelectAll for multiline text field.
+            // However, in IMGUI it will be call later by the OnMouseUp event.
+            editorEngine.SelectAll();
         }
-
-        public virtual void ExecuteDefaultActionAtTarget(EventBase evt) {}
-
-        public virtual void ExecuteDefaultAction(EventBase evt)
+        else if (evt.eventTypeId == BlurEvent.TypeId())
         {
-            if (evt.eventTypeId == FocusEvent.TypeId())
-            {
-                editorEngine.OnFocus();
-
-                // Make sure to select all text, OnFocus() does not call SelectAll for multiline text field.
-                // However, in IMGUI it will be call later by the OnMouseUp event.
-                editorEngine.SelectAll();
-            }
-            else if (evt.eventTypeId == BlurEvent.TypeId())
-            {
-                editorEngine.OnLostFocus();
-                editorEngine.SelectNone();
-            }
+            editorEngine.OnLostFocus();
+            editorEngine.SelectNone();
         }
     }
+}
 }

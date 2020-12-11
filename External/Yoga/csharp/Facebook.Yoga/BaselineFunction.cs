@@ -9,5 +9,5 @@
 
 namespace UnityEngine.Yoga
 {
-    internal delegate float BaselineFunction(YogaNode node, float width, float height);
+internal delegate float BaselineFunction(YogaNode node, float width, float height);
 }

@@ -11,10 +11,10 @@ using System.Runtime.InteropServices;
 
 namespace UnityEngine.Yoga
 {
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct YogaSize
-    {
-        public float width;
-        public float height;
-    }
+[StructLayout(LayoutKind.Sequential)]
+internal struct YogaSize
+{
+    public float width;
+    public float height;
+}
 }

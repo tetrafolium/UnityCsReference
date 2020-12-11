@@ -4,38 +4,41 @@
 
 namespace UnityEngine
 {
-    public class WaitForSecondsRealtime : CustomYieldInstruction
+public class WaitForSecondsRealtime : CustomYieldInstruction
+{
+    public float waitTime {
+        get;
+        set;
+    }
+    float m_WaitUntilTime = -1;
+
+    public override bool keepWaiting
     {
-        public float waitTime { get; set; }
-        float m_WaitUntilTime = -1;
-
-        public override bool keepWaiting
+        get
         {
-            get
+            if (m_WaitUntilTime < 0)
             {
-                if (m_WaitUntilTime < 0)
-                {
-                    m_WaitUntilTime = Time.realtimeSinceStartup + waitTime;
-                }
-
-                bool wait =  Time.realtimeSinceStartup < m_WaitUntilTime;
-                if (!wait)
-                {
-                    // Reset so it can be reused.
-                    Reset();
-                }
-                return wait;
+                m_WaitUntilTime = Time.realtimeSinceStartup + waitTime;
             }
-        }
 
-        public WaitForSecondsRealtime(float time)
-        {
-            waitTime = time;
-        }
-
-        public override void Reset()
-        {
-            m_WaitUntilTime = -1;
+            bool wait =  Time.realtimeSinceStartup < m_WaitUntilTime;
+            if (!wait)
+            {
+                // Reset so it can be reused.
+                Reset();
+            }
+            return wait;
         }
     }
+
+    public WaitForSecondsRealtime(float time)
+    {
+        waitTime = time;
+    }
+
+    public override void Reset()
+    {
+        m_WaitUntilTime = -1;
+    }
+}
 }

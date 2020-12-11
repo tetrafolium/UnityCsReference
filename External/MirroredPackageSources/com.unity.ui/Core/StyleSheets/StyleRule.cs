@@ -3,28 +3,28 @@ using UnityEngine.Bindings;
 
 namespace UnityEngine.UIElements
 {
-    [Serializable]
-    internal class StyleRule
+[Serializable]
+internal class StyleRule
+{
+    [SerializeField]
+    StyleProperty[] m_Properties;
+
+    [SerializeField]
+    internal int line;
+
+    public StyleProperty[] properties
     {
-        [SerializeField]
-        StyleProperty[] m_Properties;
-
-        [SerializeField]
-        internal int line;
-
-        public StyleProperty[] properties
+        get
         {
-            get
-            {
-                return m_Properties;
-            }
-            internal set
-            {
-                m_Properties = value;
-            }
+            return m_Properties;
         }
-
-        [NonSerialized]
-        internal int customPropertiesCount;
+        internal set
+        {
+            m_Properties = value;
+        }
     }
+
+    [NonSerialized]
+    internal int customPropertiesCount;
+}
 }

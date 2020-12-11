@@ -7,45 +7,51 @@ using System;
 
 namespace UnityEngine.Rendering
 {
-    [RequiredByNativeCode]
-    public class OnDemandRendering
+[RequiredByNativeCode]
+public class OnDemandRendering
+{
+    // Default to 1. Render every frame.
+    private static int m_RenderFrameInterval = 1;
+
+    public static bool willCurrentFrameRender
     {
-        // Default to 1. Render every frame.
-        private static int m_RenderFrameInterval = 1;
-
-        public static bool willCurrentFrameRender
+        get
         {
-            get
+            return Time.frameCount % renderFrameInterval == 0;
+        }
+    }
+
+    public static int renderFrameInterval
+    {
+        get {
+            return m_RenderFrameInterval;
+        }
+
+        set {
+            m_RenderFrameInterval = Math.Max(1, value);
+        }
+    }
+
+    [RequiredByNativeCode]
+    internal static void GetRenderFrameInterval(out int frameInterval) {
+        frameInterval = renderFrameInterval;
+    }
+
+    public static int effectiveRenderFrameRate
+    {
+        get
+        {
+            if (QualitySettings.vSyncCount > 0)
             {
-                return Time.frameCount % renderFrameInterval == 0;
+                return Screen.currentResolution.refreshRate / QualitySettings.vSyncCount / renderFrameInterval;
             }
-        }
-
-        public static int renderFrameInterval
-        {
-            get { return m_RenderFrameInterval; }
-
-            set { m_RenderFrameInterval = Math.Max(1, value); }
-        }
-
-        [RequiredByNativeCode]
-        internal static void GetRenderFrameInterval(out int frameInterval) { frameInterval = renderFrameInterval; }
-
-        public static int effectiveRenderFrameRate
-        {
-            get
+            else
             {
-                if (QualitySettings.vSyncCount > 0)
-                {
-                    return Screen.currentResolution.refreshRate / QualitySettings.vSyncCount / renderFrameInterval;
-                }
-                else
-                {
-                    if (Application.targetFrameRate <= 0)
-                        return Application.targetFrameRate;
-                    return Application.targetFrameRate / renderFrameInterval;
-                }
+                if (Application.targetFrameRate <= 0)
+                    return Application.targetFrameRate;
+                return Application.targetFrameRate / renderFrameInterval;
             }
         }
     }
+}
 }

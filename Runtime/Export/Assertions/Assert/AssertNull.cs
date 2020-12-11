@@ -8,58 +8,58 @@ using UnityEngine;
 
 namespace UnityEngine.Assertions
 {
-    public static partial class Assert
+public static partial class Assert
+{
+    [Conditional(UNITY_ASSERTIONS)]
+    public static void IsNull<T>(T value) where T : class
     {
-        [Conditional(UNITY_ASSERTIONS)]
-        public static void IsNull<T>(T value) where T : class
-        {
-            IsNull(value, null);
-        }
+        IsNull(value, null);
+    }
 
-        [Conditional(UNITY_ASSERTIONS)]
-        public static void IsNull<T>(T value, string message) where T : class
+    [Conditional(UNITY_ASSERTIONS)]
+    public static void IsNull<T>(T value, string message) where T : class
+    {
+        if (typeof(UnityEngine.Object).IsAssignableFrom(typeof(T)))
         {
-            if (typeof(UnityEngine.Object).IsAssignableFrom(typeof(T)))
-            {
-                IsNull(value as UnityEngine.Object, message);
-            }
-            else if (value != null)
-            {
-                Fail(AssertionMessageUtil.NullFailureMessage(value, true), message);
-            }
+            IsNull(value as UnityEngine.Object, message);
         }
-
-        [Conditional(UNITY_ASSERTIONS)]
-        public static void IsNull(UnityEngine.Object value, string message)
+        else if (value != null)
         {
-            if (value != null)
-                Fail(AssertionMessageUtil.NullFailureMessage(value, true), message);
-        }
-
-        [Conditional(UNITY_ASSERTIONS)]
-        public static void IsNotNull<T>(T value) where T : class
-        {
-            IsNotNull(value, null);
-        }
-
-        [Conditional(UNITY_ASSERTIONS)]
-        public static void IsNotNull<T>(T value, string message) where T : class
-        {
-            if (typeof(UnityEngine.Object).IsAssignableFrom(typeof(T)))
-            {
-                IsNotNull(value as UnityEngine.Object, message);
-            }
-            else if (value == null)
-            {
-                Fail(AssertionMessageUtil.NullFailureMessage(value, false), message);
-            }
-        }
-
-        [Conditional(UNITY_ASSERTIONS)]
-        public static void IsNotNull(UnityEngine.Object value, string message)
-        {
-            if (value == null)
-                Fail(AssertionMessageUtil.NullFailureMessage(value, false), message);
+            Fail(AssertionMessageUtil.NullFailureMessage(value, true), message);
         }
     }
+
+    [Conditional(UNITY_ASSERTIONS)]
+    public static void IsNull(UnityEngine.Object value, string message)
+    {
+        if (value != null)
+            Fail(AssertionMessageUtil.NullFailureMessage(value, true), message);
+    }
+
+    [Conditional(UNITY_ASSERTIONS)]
+    public static void IsNotNull<T>(T value) where T : class
+    {
+        IsNotNull(value, null);
+    }
+
+    [Conditional(UNITY_ASSERTIONS)]
+    public static void IsNotNull<T>(T value, string message) where T : class
+    {
+        if (typeof(UnityEngine.Object).IsAssignableFrom(typeof(T)))
+        {
+            IsNotNull(value as UnityEngine.Object, message);
+        }
+        else if (value == null)
+        {
+            Fail(AssertionMessageUtil.NullFailureMessage(value, false), message);
+        }
+    }
+
+    [Conditional(UNITY_ASSERTIONS)]
+    public static void IsNotNull(UnityEngine.Object value, string message)
+    {
+        if (value == null)
+            Fail(AssertionMessageUtil.NullFailureMessage(value, false), message);
+    }
+}
 }

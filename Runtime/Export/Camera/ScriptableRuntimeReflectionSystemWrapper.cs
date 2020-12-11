@@ -6,16 +6,19 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine.Experimental.Rendering
 {
-    [RequiredByNativeCode]
-    class ScriptableRuntimeReflectionSystemWrapper
-    {
-        internal IScriptableRuntimeReflectionSystem implementation { get; set; }
-
-        [RequiredByNativeCode]
-        void Internal_ScriptableRuntimeReflectionSystemWrapper_TickRealtimeProbes(out bool result)
-        {
-            result = implementation != null
-                && implementation.TickRealtimeProbes();
-        }
+[RequiredByNativeCode]
+class ScriptableRuntimeReflectionSystemWrapper
+{
+    internal IScriptableRuntimeReflectionSystem implementation {
+        get;
+        set;
     }
+
+    [RequiredByNativeCode]
+    void Internal_ScriptableRuntimeReflectionSystemWrapper_TickRealtimeProbes(out bool result)
+    {
+        result = implementation != null
+                 && implementation.TickRealtimeProbes();
+    }
+}
 }

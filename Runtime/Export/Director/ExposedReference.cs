@@ -8,28 +8,28 @@ using UnityEngine;
 
 namespace UnityEngine
 {
-    [System.Serializable]
-    [UsedByNativeCode(Name = "ExposedReference")]
-    [StructLayout(LayoutKind.Sequential)]
-    public struct ExposedReference<T> where T : UnityEngine.Object
+[System.Serializable]
+[UsedByNativeCode(Name = "ExposedReference")]
+[StructLayout(LayoutKind.Sequential)]
+public struct ExposedReference<T> where T : UnityEngine.Object
+{
+    [SerializeField]
+    public PropertyName exposedName;
+
+    [SerializeField]
+    public UnityEngine.Object defaultValue;
+
+    public T Resolve(IExposedPropertyTable resolver)
     {
-        [SerializeField]
-        public PropertyName exposedName;
-
-        [SerializeField]
-        public UnityEngine.Object defaultValue;
-
-        public T Resolve(IExposedPropertyTable resolver)
+        if (resolver != null)
         {
-            if (resolver != null)
-            {
-                bool isValid;
-                Object result = resolver.GetReferenceValue(exposedName, out isValid);
-                if (isValid)
-                    return result as T;
-            }
-
-            return defaultValue as T;
+            bool isValid;
+            Object result = resolver.GetReferenceValue(exposedName, out isValid);
+            if (isValid)
+                return result as T;
         }
+
+        return defaultValue as T;
     }
+}
 }

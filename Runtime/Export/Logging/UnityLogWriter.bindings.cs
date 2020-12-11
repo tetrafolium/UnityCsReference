@@ -11,41 +11,43 @@ using UnityEngine.Bindings;
 
 namespace UnityEngine
 {
-    [NativeHeader("Runtime/Export/Logging/UnityLogWriter.bindings.h")]
-    internal class UnityLogWriter : System.IO.TextWriter
+[NativeHeader("Runtime/Export/Logging/UnityLogWriter.bindings.h")]
+internal class UnityLogWriter : System.IO.TextWriter
+{
+    [ThreadAndSerializationSafe]
+    public static void WriteStringToUnityLog(string s)
     {
-        [ThreadAndSerializationSafe]
-        public static void WriteStringToUnityLog(string s)
-        {
-            if (s == null) return;
-            WriteStringToUnityLogImpl(s);
-        }
+        if (s == null) return;
+        WriteStringToUnityLogImpl(s);
+    }
 
-        [FreeFunction(IsThreadSafe = true)]
-        private static extern void WriteStringToUnityLogImpl(string s);
+    [FreeFunction(IsThreadSafe = true)]
+    private static extern void WriteStringToUnityLogImpl(string s);
 
-        public static void Init()
-        {
-            System.Console.SetOut(new UnityLogWriter());
-        }
+    public static void Init()
+    {
+        System.Console.SetOut(new UnityLogWriter());
+    }
 
-        public override System.Text.Encoding Encoding
-        {
-            get { return System.Text.Encoding.UTF8; }
-        }
-        public override void Write(char value)
-        {
-            WriteStringToUnityLog(value.ToString());
-        }
-
-        public override void Write(string s)
-        {
-            WriteStringToUnityLog(s);
-        }
-
-        public override void Write(char[] buffer, int index, int count)
-        {
-            WriteStringToUnityLogImpl(new string(buffer, index, count));
+    public override System.Text.Encoding Encoding
+    {
+        get {
+            return System.Text.Encoding.UTF8;
         }
     }
+    public override void Write(char value)
+    {
+        WriteStringToUnityLog(value.ToString());
+    }
+
+    public override void Write(string s)
+    {
+        WriteStringToUnityLog(s);
+    }
+
+    public override void Write(char[] buffer, int index, int count)
+    {
+        WriteStringToUnityLogImpl(new string(buffer, index, count));
+    }
+}
 }

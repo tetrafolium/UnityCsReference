@@ -9,10 +9,10 @@
 
 namespace UnityEngine.Yoga
 {
-    internal enum YogaOverflow
-    {
-        Visible,
-        Hidden,
-        Scroll,
-    }
+internal enum YogaOverflow
+{
+    Visible,
+    Hidden,
+    Scroll,
+}
 }

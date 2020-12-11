@@ -6,8 +6,8 @@ using System;
 
 namespace UnityEngine
 {
-    [System.AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
-    public class SelectionBaseAttribute : Attribute
-    {
-    }
+[System.AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
+public class SelectionBaseAttribute : Attribute
+{
+}
 }

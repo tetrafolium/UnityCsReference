@@ -3,32 +3,32 @@ using UnityEngine.Bindings;
 
 namespace UnityEngine.UIElements
 {
-    [Serializable]
-    internal struct StyleValueHandle
+[Serializable]
+internal struct StyleValueHandle
+{
+    [SerializeField]
+    StyleValueType m_ValueType;
+
+    public StyleValueType valueType
     {
-        [SerializeField]
-        StyleValueType m_ValueType;
-
-        public StyleValueType valueType
+        get
         {
-            get
-            {
-                return m_ValueType;
-            }
-            internal set
-            {
-                m_ValueType = value;
-            }
+            return m_ValueType;
         }
-
-        // Which index to read from in the value array for the corresponding type
-        [SerializeField]
-        internal int valueIndex;
-
-        internal StyleValueHandle(int valueIndex, StyleValueType valueType)
+        internal set
         {
-            this.valueIndex = valueIndex;
-            m_ValueType = valueType;
+            m_ValueType = value;
         }
     }
+
+    // Which index to read from in the value array for the corresponding type
+    [SerializeField]
+    internal int valueIndex;
+
+    internal StyleValueHandle(int valueIndex, StyleValueType valueType)
+    {
+        this.valueIndex = valueIndex;
+        m_ValueType = valueType;
+    }
+}
 }

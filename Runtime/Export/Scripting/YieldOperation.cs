@@ -7,10 +7,10 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine
 {
-    // Base class for all /yield/ instructions.
-    [StructLayout(LayoutKind.Sequential)]
-    [UsedByNativeCode]
-    public class YieldInstruction
-    {
-    }
+// Base class for all /yield/ instructions.
+[StructLayout(LayoutKind.Sequential)]
+[UsedByNativeCode]
+public class YieldInstruction
+{
+}
 }

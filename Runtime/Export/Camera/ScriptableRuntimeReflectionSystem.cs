@@ -6,19 +6,19 @@ using System;
 
 namespace UnityEngine.Experimental.Rendering
 {
-    public abstract class ScriptableRuntimeReflectionSystem : IScriptableRuntimeReflectionSystem
+public abstract class ScriptableRuntimeReflectionSystem : IScriptableRuntimeReflectionSystem
+{
+    public virtual bool TickRealtimeProbes()
     {
-        public virtual bool TickRealtimeProbes()
-        {
-            return false;
-        }
-
-        protected virtual void Dispose(bool disposing) {}
-
-        void IDisposable.Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+        return false;
     }
+
+    protected virtual void Dispose(bool disposing) {}
+
+    void IDisposable.Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+}
 }

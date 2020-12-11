@@ -9,42 +9,42 @@ using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCode
 
 namespace UnityEngine
 {
-    [StructLayout(LayoutKind.Sequential)]
-    [RequiredByNativeCode]
-    [NativeHeader("Runtime/Export/Scripting/AsyncOperation.bindings.h")]
-    [NativeHeader("Runtime/Misc/AsyncOperation.h")]
-    public partial class AsyncOperation : YieldInstruction
+[StructLayout(LayoutKind.Sequential)]
+[RequiredByNativeCode]
+[NativeHeader("Runtime/Export/Scripting/AsyncOperation.bindings.h")]
+[NativeHeader("Runtime/Misc/AsyncOperation.h")]
+public partial class AsyncOperation : YieldInstruction
+{
+    [NativeMethod(IsThreadSafe = true)]
+    [StaticAccessor("AsyncOperationBindings", StaticAccessorType.DoubleColon)]
+    private static extern void InternalDestroy(IntPtr ptr);
+
+    public extern bool isDone
     {
-        [NativeMethod(IsThreadSafe = true)]
-        [StaticAccessor("AsyncOperationBindings", StaticAccessorType.DoubleColon)]
-        private static extern void InternalDestroy(IntPtr ptr);
-
-        public extern bool isDone
-        {
-            [NativeMethod("IsDone")]
-            get;
-        }
-
-        public extern float progress
-        {
-            [NativeMethod("GetProgress")]
-            get;
-        }
-
-        public extern int priority
-        {
-            [NativeMethod("GetPriority")]
-            get;
-            [NativeMethod("SetPriority")]
-            set;
-        }
-
-        public extern bool allowSceneActivation
-        {
-            [NativeMethod("GetAllowSceneActivation")]
-            get;
-            [NativeMethod("SetAllowSceneActivation")]
-            set;
-        }
+        [NativeMethod("IsDone")]
+        get;
     }
+
+    public extern float progress
+    {
+        [NativeMethod("GetProgress")]
+        get;
+    }
+
+    public extern int priority
+    {
+        [NativeMethod("GetPriority")]
+        get;
+        [NativeMethod("SetPriority")]
+        set;
+    }
+
+    public extern bool allowSceneActivation
+    {
+        [NativeMethod("GetAllowSceneActivation")]
+        get;
+        [NativeMethod("SetAllowSceneActivation")]
+        set;
+    }
+}
 }

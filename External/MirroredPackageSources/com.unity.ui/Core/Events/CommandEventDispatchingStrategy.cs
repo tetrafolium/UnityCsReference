@@ -1,53 +1,53 @@
 namespace UnityEngine.UIElements
 {
-    class CommandEventDispatchingStrategy : IEventDispatchingStrategy
+class CommandEventDispatchingStrategy : IEventDispatchingStrategy
+{
+    public bool CanDispatchEvent(EventBase evt)
     {
-        public bool CanDispatchEvent(EventBase evt)
-        {
-            return evt is ICommandEvent;
-        }
+        return evt is ICommandEvent;
+    }
 
-        public void DispatchEvent(EventBase evt, IPanel panel)
+    public void DispatchEvent(EventBase evt, IPanel panel)
+    {
+        if (panel != null)
         {
-            if (panel != null)
+            var leafFocusElement = panel.focusController.GetLeafFocusedElement();
+
+            if (leafFocusElement != null)
             {
-                var leafFocusElement = panel.focusController.GetLeafFocusedElement();
-
-                if (leafFocusElement != null)
+                if (leafFocusElement.isIMGUIContainer)
                 {
-                    if (leafFocusElement.isIMGUIContainer)
+                    IMGUIContainer imguiContainer = (IMGUIContainer)leafFocusElement;
+                    if (!evt.Skip(imguiContainer) && imguiContainer.SendEventToIMGUI(evt))
                     {
-                        IMGUIContainer imguiContainer = (IMGUIContainer)leafFocusElement;
-                        if (!evt.Skip(imguiContainer) && imguiContainer.SendEventToIMGUI(evt))
-                        {
-                            evt.StopPropagation();
-                            evt.PreventDefault();
-                        }
-
-                        if (!evt.isPropagationStopped && evt.propagateToIMGUI)
-                        {
-                            evt.skipElements.Add(imguiContainer);
-                            EventDispatchUtilities.PropagateToIMGUIContainer(panel.visualTree, evt);
-                        }
+                        evt.StopPropagation();
+                        evt.PreventDefault();
                     }
-                    else
+
+                    if (!evt.isPropagationStopped && evt.propagateToIMGUI)
                     {
-                        evt.target = panel.focusController.GetLeafFocusedElement();
-                        EventDispatchUtilities.PropagateEvent(evt);
-                        if (!evt.isPropagationStopped && evt.propagateToIMGUI)
-                        {
-                            EventDispatchUtilities.PropagateToIMGUIContainer(panel.visualTree, evt);
-                        }
+                        evt.skipElements.Add(imguiContainer);
+                        EventDispatchUtilities.PropagateToIMGUIContainer(panel.visualTree, evt);
                     }
                 }
                 else
                 {
-                    EventDispatchUtilities.PropagateToIMGUIContainer(panel.visualTree, evt);
+                    evt.target = panel.focusController.GetLeafFocusedElement();
+                    EventDispatchUtilities.PropagateEvent(evt);
+                    if (!evt.isPropagationStopped && evt.propagateToIMGUI)
+                    {
+                        EventDispatchUtilities.PropagateToIMGUIContainer(panel.visualTree, evt);
+                    }
                 }
             }
-
-            evt.propagateToIMGUI = false;
-            evt.stopDispatch = true;
+            else
+            {
+                EventDispatchUtilities.PropagateToIMGUIContainer(panel.visualTree, evt);
+            }
         }
+
+        evt.propagateToIMGUI = false;
+        evt.stopDispatch = true;
     }
+}
 }

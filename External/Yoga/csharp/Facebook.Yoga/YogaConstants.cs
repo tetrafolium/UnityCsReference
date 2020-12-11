@@ -9,18 +9,18 @@
 
 namespace UnityEngine.Yoga
 {
-    internal static class YogaConstants
+internal static class YogaConstants
+{
+    public const float Undefined = float.NaN;
+
+    public static bool IsUndefined(float value)
     {
-        public const float Undefined = float.NaN;
-
-        public static bool IsUndefined(float value)
-        {
-            return float.IsNaN(value);
-        }
-
-        public static bool IsUndefined(YogaValue value)
-        {
-            return value.Unit == YogaUnit.Undefined;
-        }
+        return float.IsNaN(value);
     }
+
+    public static bool IsUndefined(YogaValue value)
+    {
+        return value.Unit == YogaUnit.Undefined;
+    }
+}
 }

@@ -6,8 +6,8 @@ using System;
 
 namespace Unity.IL2CPP.CompilerServices
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, Inherited = false, AllowMultiple = false)]
-    class Il2CppEagerStaticClassConstructionAttribute : Attribute
-    {
-    }
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, Inherited = false, AllowMultiple = false)]
+class Il2CppEagerStaticClassConstructionAttribute : Attribute
+{
+}
 }

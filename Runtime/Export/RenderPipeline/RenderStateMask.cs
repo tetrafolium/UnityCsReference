@@ -8,15 +8,15 @@ using UnityEngine.Rendering;
 
 namespace UnityEngine.Rendering
 {
-    // Must match RenderStateMask on C++ side
-    [Flags]
-    public enum RenderStateMask
-    {
-        Nothing = 0,
-        Blend = 1 << 0,
-        Raster = 1 << 1,
-        Depth = 1 << 2,
-        Stencil = 1 << 3,
-        Everything = Blend | Raster | Depth | Stencil
-    }
+// Must match RenderStateMask on C++ side
+[Flags]
+public enum RenderStateMask
+{
+    Nothing = 0,
+    Blend = 1 << 0,
+    Raster = 1 << 1,
+    Depth = 1 << 2,
+    Stencil = 1 << 3,
+    Everything = Blend | Raster | Depth | Stencil
+}
 }

@@ -7,16 +7,16 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine
 {
-    // These classes are only used by native code, and only here to prevent them from being stripped.
-    internal class LowerResBlitTexture : Object
-    {
-        [RequiredByNativeCode]
-        internal void LowerResBlitTextureDontStripMe() {}
-    }
+// These classes are only used by native code, and only here to prevent them from being stripped.
+internal class LowerResBlitTexture : Object
+{
+    [RequiredByNativeCode]
+    internal void LowerResBlitTextureDontStripMe() {}
+}
 
-    internal class PreloadData : Object
-    {
-        [RequiredByNativeCode]
-        internal void PreloadDataDontStripMe() {}
-    }
+internal class PreloadData : Object
+{
+    [RequiredByNativeCode]
+    internal void PreloadDataDontStripMe() {}
+}
 }

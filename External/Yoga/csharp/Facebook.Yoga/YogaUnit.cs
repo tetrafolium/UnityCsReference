@@ -9,11 +9,11 @@
 
 namespace UnityEngine.Yoga
 {
-    internal enum YogaUnit
-    {
-        Undefined,
-        Point,
-        Percent,
-        Auto,
-    }
+internal enum YogaUnit
+{
+    Undefined,
+    Point,
+    Percent,
+    Auto,
+}
 }

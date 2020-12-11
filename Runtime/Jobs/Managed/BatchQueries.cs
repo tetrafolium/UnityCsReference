@@ -13,28 +13,28 @@ using Unity.Jobs;
 
 namespace Unity.Jobs.LowLevel.Unsafe
 {
-    public struct BatchQueryJob<CommandT, ResultT> where CommandT : struct
-        where ResultT : struct
+public struct BatchQueryJob<CommandT, ResultT> where CommandT : struct
+    where ResultT : struct
+{
+    public BatchQueryJob(NativeArray<CommandT> commands, NativeArray<ResultT> results)
     {
-        public BatchQueryJob(NativeArray<CommandT> commands, NativeArray<ResultT> results)
-        {
-            this.commands = commands;
-            this.results = results;
-        }
-
-        [ReadOnly]
-        internal NativeArray<CommandT> commands;
-        internal NativeArray<ResultT> results;
+        this.commands = commands;
+        this.results = results;
     }
-    public struct BatchQueryJobStruct<T> where T : struct
+
+    [ReadOnly]
+    internal NativeArray<CommandT> commands;
+    internal NativeArray<ResultT> results;
+}
+public struct BatchQueryJobStruct<T> where T : struct
+{
+    static internal IntPtr                    jobReflectionData;
+
+    public static IntPtr Initialize()
     {
-        static internal IntPtr                    jobReflectionData;
-
-        public static IntPtr Initialize()
-        {
-            if (jobReflectionData == IntPtr.Zero)
-                jobReflectionData = JobsUtility.CreateJobReflectionData(typeof(T), JobType.ParallelFor, null);
-            return jobReflectionData;
-        }
+        if (jobReflectionData == IntPtr.Zero)
+            jobReflectionData = JobsUtility.CreateJobReflectionData(typeof(T), JobType.ParallelFor, null);
+        return jobReflectionData;
     }
+}
 }

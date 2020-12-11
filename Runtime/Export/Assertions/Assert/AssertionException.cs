@@ -7,25 +7,25 @@ using UnityEngine;
 
 namespace UnityEngine.Assertions
 {
-    public class AssertionException : Exception
+public class AssertionException : Exception
+{
+    string m_UserMessage;
+
+    public AssertionException(string message, string userMessage)
+        : base(message)
     {
-        string m_UserMessage;
+        m_UserMessage = userMessage;
+    }
 
-        public AssertionException(string message, string userMessage)
-            : base(message)
+    public override string Message
+    {
+        get
         {
-            m_UserMessage = userMessage;
-        }
-
-        public override string Message
-        {
-            get
-            {
-                var message = base.Message;
-                if (m_UserMessage != null)
-                    message += '\n' + m_UserMessage;
-                return message;
-            }
+            var message = base.Message;
+            if (m_UserMessage != null)
+                message += '\n' + m_UserMessage;
+            return message;
         }
     }
+}
 }

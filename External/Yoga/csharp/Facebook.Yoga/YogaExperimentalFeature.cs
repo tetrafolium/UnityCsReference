@@ -9,8 +9,8 @@
 
 namespace UnityEngine.Yoga
 {
-    internal enum YogaExperimentalFeature
-    {
-        WebFlexBasis,
-    }
+internal enum YogaExperimentalFeature
+{
+    WebFlexBasis,
+}
 }

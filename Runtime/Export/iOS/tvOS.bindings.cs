@@ -7,50 +7,50 @@ using UnityEngine.Scripting.APIUpdating;
 
 namespace UnityEngine.tvOS
 {
-    [NativeHeader("PlatformDependent/iPhonePlayer/IOSScriptBindings.h")]
-    public sealed partial class Remote
+[NativeHeader("PlatformDependent/iPhonePlayer/IOSScriptBindings.h")]
+public sealed partial class Remote
+{
+    extern public static bool allowExitToHome
     {
-        extern public static bool allowExitToHome
-        {
-            [NativeConditional("PLATFORM_TVOS")]
-            [FreeFunction("UnityGetAppleTVRemoteAllowExitToMenu")]
-            get;
+        [NativeConditional("PLATFORM_TVOS")]
+        [FreeFunction("UnityGetAppleTVRemoteAllowExitToMenu")]
+        get;
 
-            [NativeConditional("PLATFORM_TVOS")]
-            [FreeFunction("UnitySetAppleTVRemoteAllowExitToMenu")]
-            set;
-        }
-
-        extern public static bool allowRemoteRotation
-        {
-            [NativeConditional("PLATFORM_TVOS")]
-            [FreeFunction("UnityGetAppleTVRemoteAllowRotation")]
-            get;
-
-            [NativeConditional("PLATFORM_TVOS")]
-            [FreeFunction("UnitySetAppleTVRemoteAllowRotation")]
-            set;
-        }
-
-        extern public static bool reportAbsoluteDpadValues
-        {
-            [NativeConditional("PLATFORM_TVOS")]
-            [FreeFunction("UnityGetAppleTVRemoteReportAbsoluteDpadValues")]
-            get;
-
-            [NativeConditional("PLATFORM_TVOS")]
-            [FreeFunction("UnitySetAppleTVRemoteReportAbsoluteDpadValues")]
-            set;
-        }
-
-        extern public static bool touchesEnabled
-        {
-            [FreeFunction("TVOSScripting::GetRemoteTouchesEnabled")]
-            get;
-
-            [NativeConditional("PLATFORM_TVOS")]
-            [FreeFunction("UnitySetAppleTVRemoteTouchesEnabled")]
-            set;
-        }
+        [NativeConditional("PLATFORM_TVOS")]
+        [FreeFunction("UnitySetAppleTVRemoteAllowExitToMenu")]
+        set;
     }
+
+    extern public static bool allowRemoteRotation
+    {
+        [NativeConditional("PLATFORM_TVOS")]
+        [FreeFunction("UnityGetAppleTVRemoteAllowRotation")]
+        get;
+
+        [NativeConditional("PLATFORM_TVOS")]
+        [FreeFunction("UnitySetAppleTVRemoteAllowRotation")]
+        set;
+    }
+
+    extern public static bool reportAbsoluteDpadValues
+    {
+        [NativeConditional("PLATFORM_TVOS")]
+        [FreeFunction("UnityGetAppleTVRemoteReportAbsoluteDpadValues")]
+        get;
+
+        [NativeConditional("PLATFORM_TVOS")]
+        [FreeFunction("UnitySetAppleTVRemoteReportAbsoluteDpadValues")]
+        set;
+    }
+
+    extern public static bool touchesEnabled
+    {
+        [FreeFunction("TVOSScripting::GetRemoteTouchesEnabled")]
+        get;
+
+        [NativeConditional("PLATFORM_TVOS")]
+        [FreeFunction("UnitySetAppleTVRemoteTouchesEnabled")]
+        set;
+    }
+}
 }

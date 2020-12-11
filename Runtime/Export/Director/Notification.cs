@@ -4,13 +4,15 @@
 
 namespace UnityEngine.Playables
 {
-    public class Notification : INotification
+public class Notification : INotification
+{
+    public Notification(string name)
     {
-        public Notification(string name)
-        {
-            id = new PropertyName(name);
-        }
-
-        public PropertyName id { get; }
+        id = new PropertyName(name);
     }
+
+    public PropertyName id {
+        get;
+    }
+}
 }

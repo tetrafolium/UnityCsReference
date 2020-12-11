@@ -6,24 +6,24 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine
 {
-    internal class EnumInfo
+internal class EnumInfo
+{
+    public string[] names;
+    public int[] values;
+    public string[] annotations;
+    public bool isFlags;
+
+    [UsedByNativeCode]
+    internal static EnumInfo CreateEnumInfoFromNativeEnum(string[] names, int[] values, string[] annotations, bool isFlags)
     {
-        public string[] names;
-        public int[] values;
-        public string[] annotations;
-        public bool isFlags;
+        EnumInfo result = new EnumInfo();
 
-        [UsedByNativeCode]
-        internal static EnumInfo CreateEnumInfoFromNativeEnum(string[] names, int[] values, string[] annotations, bool isFlags)
-        {
-            EnumInfo result = new EnumInfo();
+        result.names = names;
+        result.values = values;
+        result.annotations = annotations;
+        result.isFlags = isFlags;
 
-            result.names = names;
-            result.values = values;
-            result.annotations = annotations;
-            result.isFlags = isFlags;
-
-            return result;
-        }
+        return result;
     }
+}
 }

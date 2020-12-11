@@ -7,10 +7,10 @@ using UnityEngine.Bindings;
 
 namespace UnityEngine
 {
-    [NativeHeader("Runtime/Export/Scripting/ScriptingRuntime.h")]
-    [VisibleToOtherModules]
-    internal partial class ScriptingRuntime
-    {
-        public static extern string[] GetAllUserAssemblies();
-    }
+[NativeHeader("Runtime/Export/Scripting/ScriptingRuntime.h")]
+[VisibleToOtherModules]
+internal partial class ScriptingRuntime
+{
+    public static extern string[] GetAllUserAssemblies();
+}
 }

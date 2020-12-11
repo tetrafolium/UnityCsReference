@@ -12,13 +12,13 @@ using UnityEngineInternal;
 
 namespace UnityEngine
 {
-    // A class used as a stand-in when a script, used by a ObjectStoredSerializableManagedRef, is missing.
-    [StructLayout(LayoutKind.Sequential)]
-    [RequiredByNativeCode]
-    [NativeClass(null)]
-    [ExcludeFromObjectFactory]
-    class FailedToLoadScriptObject : Object
-    {
-        private FailedToLoadScriptObject() {}
-    }
+// A class used as a stand-in when a script, used by a ObjectStoredSerializableManagedRef, is missing.
+[StructLayout(LayoutKind.Sequential)]
+[RequiredByNativeCode]
+[NativeClass(null)]
+[ExcludeFromObjectFactory]
+class FailedToLoadScriptObject : Object
+{
+    private FailedToLoadScriptObject() {}
+}
 }
