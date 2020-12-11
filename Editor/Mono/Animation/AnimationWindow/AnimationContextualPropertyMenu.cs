@@ -11,171 +11,171 @@ using Object = UnityEngine.Object;
 
 namespace UnityEditorInternal
 {
-    internal class AnimationPropertyContextualMenu
+internal class AnimationPropertyContextualMenu
+{
+    public static AnimationPropertyContextualMenu Instance = new AnimationPropertyContextualMenu();
+
+    IAnimationContextualResponder m_Responder;
+
+    private static GUIContent addKeyContent = EditorGUIUtility.TrTextContent("Add Key");
+    private static GUIContent updateKeyContent = EditorGUIUtility.TrTextContent("Update Key");
+    private static GUIContent removeKeyContent = EditorGUIUtility.TrTextContent("Remove Key");
+    private static GUIContent removeCurveContent = EditorGUIUtility.TrTextContent("Remove All Keys");
+    private static GUIContent goToPreviousKeyContent = EditorGUIUtility.TrTextContent("Go to Previous Key");
+    private static GUIContent goToNextKeyContent = EditorGUIUtility.TrTextContent("Go to Next Key");
+    private static GUIContent addCandidatesContent = EditorGUIUtility.TrTextContent("Key All Modified");
+    private static GUIContent addAnimatedContent = EditorGUIUtility.TrTextContent("Key All Animated");
+
+    public AnimationPropertyContextualMenu()
     {
-        public static AnimationPropertyContextualMenu Instance = new AnimationPropertyContextualMenu();
+        EditorApplication.contextualPropertyMenu += OnPropertyContextMenu;
+        MaterialEditor.contextualPropertyMenu += OnPropertyContextMenu;
+    }
 
-        IAnimationContextualResponder m_Responder;
+    public void SetResponder(IAnimationContextualResponder responder)
+    {
+        m_Responder = responder;
+    }
 
-        private static GUIContent addKeyContent = EditorGUIUtility.TrTextContent("Add Key");
-        private static GUIContent updateKeyContent = EditorGUIUtility.TrTextContent("Update Key");
-        private static GUIContent removeKeyContent = EditorGUIUtility.TrTextContent("Remove Key");
-        private static GUIContent removeCurveContent = EditorGUIUtility.TrTextContent("Remove All Keys");
-        private static GUIContent goToPreviousKeyContent = EditorGUIUtility.TrTextContent("Go to Previous Key");
-        private static GUIContent goToNextKeyContent = EditorGUIUtility.TrTextContent("Go to Next Key");
-        private static GUIContent addCandidatesContent = EditorGUIUtility.TrTextContent("Key All Modified");
-        private static GUIContent addAnimatedContent = EditorGUIUtility.TrTextContent("Key All Animated");
+    public bool IsResponder(IAnimationContextualResponder responder)
+    {
+        return responder == m_Responder;
+    }
 
-        public AnimationPropertyContextualMenu()
+    void OnPropertyContextMenu(GenericMenu menu, SerializedProperty property)
+    {
+        if (m_Responder == null)
+            return;
+
+        PropertyModification[] modifications = AnimationWindowUtility.SerializedPropertyToPropertyModifications(property);
+
+        bool isPropertyAnimatable = m_Responder.IsAnimatable(modifications);
+        if (isPropertyAnimatable)
         {
-            EditorApplication.contextualPropertyMenu += OnPropertyContextMenu;
-            MaterialEditor.contextualPropertyMenu += OnPropertyContextMenu;
-        }
-
-        public void SetResponder(IAnimationContextualResponder responder)
-        {
-            m_Responder = responder;
-        }
-
-        public bool IsResponder(IAnimationContextualResponder responder)
-        {
-            return responder == m_Responder;
-        }
-
-        void OnPropertyContextMenu(GenericMenu menu, SerializedProperty property)
-        {
-            if (m_Responder == null)
-                return;
-
-            PropertyModification[] modifications = AnimationWindowUtility.SerializedPropertyToPropertyModifications(property);
-
-            bool isPropertyAnimatable = m_Responder.IsAnimatable(modifications);
-            if (isPropertyAnimatable)
-            {
-                var targetObject = property.serializedObject.targetObject;
-                if (m_Responder.IsEditable(targetObject))
-                    OnPropertyContextMenu(menu, modifications);
-                else
-                    OnDisabledPropertyContextMenu(menu);
-            }
-        }
-
-        void OnPropertyContextMenu(GenericMenu menu, MaterialProperty property, Renderer[] renderers)
-        {
-            if (m_Responder == null)
-                return;
-
-            if (property.targets == null || property.targets.Length == 0)
-                return;
-
-            if (renderers == null || renderers.Length == 0)
-                return;
-
-            var modifications = new List<PropertyModification>();
-            foreach (Renderer renderer in renderers)
-            {
-                modifications.AddRange(MaterialAnimationUtility.MaterialPropertyToPropertyModifications(property, renderer));
-            }
-
-            if (m_Responder.IsEditable(renderers[0]))
-                OnPropertyContextMenu(menu, modifications.ToArray());
+            var targetObject = property.serializedObject.targetObject;
+            if (m_Responder.IsEditable(targetObject))
+                OnPropertyContextMenu(menu, modifications);
             else
                 OnDisabledPropertyContextMenu(menu);
         }
+    }
 
-        void OnPropertyContextMenu(GenericMenu menu, PropertyModification[] modifications)
+    void OnPropertyContextMenu(GenericMenu menu, MaterialProperty property, Renderer[] renderers)
+    {
+        if (m_Responder == null)
+            return;
+
+        if (property.targets == null || property.targets.Length == 0)
+            return;
+
+        if (renderers == null || renderers.Length == 0)
+            return;
+
+        var modifications = new List<PropertyModification>();
+        foreach (Renderer renderer in renderers)
         {
-            bool hasKey = m_Responder.KeyExists(modifications);
-            bool hasCandidate = m_Responder.CandidateExists(modifications);
-            bool hasCurve = (hasKey || m_Responder.CurveExists(modifications));
-
-            bool hasAnyCandidate = m_Responder.HasAnyCandidates();
-            bool hasAnyCurve = m_Responder.HasAnyCurves();
-
-            menu.AddItem(((hasKey && hasCandidate) ? updateKeyContent : addKeyContent), false, () =>
-            {
-                m_Responder.AddKey(modifications);
-            });
-
-            if (hasKey)
-            {
-                menu.AddItem(removeKeyContent, false, () =>
-                {
-                    m_Responder.RemoveKey(modifications);
-                });
-            }
-            else
-            {
-                menu.AddDisabledItem(removeKeyContent);
-            }
-
-            if (hasCurve)
-            {
-                menu.AddItem(removeCurveContent, false, () =>
-                {
-                    m_Responder.RemoveCurve(modifications);
-                });
-            }
-            else
-            {
-                menu.AddDisabledItem(removeCurveContent);
-            }
-
-            menu.AddSeparator(string.Empty);
-            if (hasAnyCandidate)
-            {
-                menu.AddItem(addCandidatesContent, false, () =>
-                {
-                    m_Responder.AddCandidateKeys();
-                });
-            }
-            else
-            {
-                menu.AddDisabledItem(addCandidatesContent);
-            }
-
-            if (hasAnyCurve)
-            {
-                menu.AddItem(addAnimatedContent, false, () =>
-                {
-                    m_Responder.AddAnimatedKeys();
-                });
-            }
-            else
-            {
-                menu.AddDisabledItem(addAnimatedContent);
-            }
-
-            menu.AddSeparator(string.Empty);
-            if (hasCurve)
-            {
-                menu.AddItem(goToPreviousKeyContent, false, () =>
-                {
-                    m_Responder.GoToPreviousKeyframe(modifications);
-                });
-                menu.AddItem(goToNextKeyContent, false, () =>
-                {
-                    m_Responder.GoToNextKeyframe(modifications);
-                });
-            }
-            else
-            {
-                menu.AddDisabledItem(goToPreviousKeyContent);
-                menu.AddDisabledItem(goToNextKeyContent);
-            }
+            modifications.AddRange(MaterialAnimationUtility.MaterialPropertyToPropertyModifications(property, renderer));
         }
 
-        void OnDisabledPropertyContextMenu(GenericMenu menu)
+        if (m_Responder.IsEditable(renderers[0]))
+            OnPropertyContextMenu(menu, modifications.ToArray());
+        else
+            OnDisabledPropertyContextMenu(menu);
+    }
+
+    void OnPropertyContextMenu(GenericMenu menu, PropertyModification[] modifications)
+    {
+        bool hasKey = m_Responder.KeyExists(modifications);
+        bool hasCandidate = m_Responder.CandidateExists(modifications);
+        bool hasCurve = (hasKey || m_Responder.CurveExists(modifications));
+
+        bool hasAnyCandidate = m_Responder.HasAnyCandidates();
+        bool hasAnyCurve = m_Responder.HasAnyCurves();
+
+        menu.AddItem(((hasKey && hasCandidate) ? updateKeyContent : addKeyContent), false, () =>
         {
-            menu.AddDisabledItem(addKeyContent);
+            m_Responder.AddKey(modifications);
+        });
+
+        if (hasKey)
+        {
+            menu.AddItem(removeKeyContent, false, () =>
+            {
+                m_Responder.RemoveKey(modifications);
+            });
+        }
+        else
+        {
             menu.AddDisabledItem(removeKeyContent);
+        }
+
+        if (hasCurve)
+        {
+            menu.AddItem(removeCurveContent, false, () =>
+            {
+                m_Responder.RemoveCurve(modifications);
+            });
+        }
+        else
+        {
             menu.AddDisabledItem(removeCurveContent);
-            menu.AddSeparator(string.Empty);
+        }
+
+        menu.AddSeparator(string.Empty);
+        if (hasAnyCandidate)
+        {
+            menu.AddItem(addCandidatesContent, false, () =>
+            {
+                m_Responder.AddCandidateKeys();
+            });
+        }
+        else
+        {
             menu.AddDisabledItem(addCandidatesContent);
+        }
+
+        if (hasAnyCurve)
+        {
+            menu.AddItem(addAnimatedContent, false, () =>
+            {
+                m_Responder.AddAnimatedKeys();
+            });
+        }
+        else
+        {
             menu.AddDisabledItem(addAnimatedContent);
-            menu.AddSeparator(string.Empty);
+        }
+
+        menu.AddSeparator(string.Empty);
+        if (hasCurve)
+        {
+            menu.AddItem(goToPreviousKeyContent, false, () =>
+            {
+                m_Responder.GoToPreviousKeyframe(modifications);
+            });
+            menu.AddItem(goToNextKeyContent, false, () =>
+            {
+                m_Responder.GoToNextKeyframe(modifications);
+            });
+        }
+        else
+        {
             menu.AddDisabledItem(goToPreviousKeyContent);
             menu.AddDisabledItem(goToNextKeyContent);
         }
     }
+
+    void OnDisabledPropertyContextMenu(GenericMenu menu)
+    {
+        menu.AddDisabledItem(addKeyContent);
+        menu.AddDisabledItem(removeKeyContent);
+        menu.AddDisabledItem(removeCurveContent);
+        menu.AddSeparator(string.Empty);
+        menu.AddDisabledItem(addCandidatesContent);
+        menu.AddDisabledItem(addAnimatedContent);
+        menu.AddSeparator(string.Empty);
+        menu.AddDisabledItem(goToPreviousKeyContent);
+        menu.AddDisabledItem(goToNextKeyContent);
+    }
+}
 }

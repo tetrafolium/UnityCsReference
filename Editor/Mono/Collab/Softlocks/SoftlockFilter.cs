@@ -10,30 +10,30 @@ using UnityEditor;
 
 namespace UnityEditor.Collaboration
 {
-    internal class SoftLockFilters : AbstractFilters
+internal class SoftLockFilters : AbstractFilters
+{
+    public override void InitializeFilters()
     {
-        public override void InitializeFilters()
+        filters = new List<string[]>()
         {
-            filters = new List<string[]>()
-            {
-                new string[] { "All In Progress" , "s:inprogress"},
-            };
-        }
+            new string[] { "All In Progress", "s:inprogress"},
+        };
+    }
 
-        public SoftLockFilters()
-        {
-            InitializeFilters();
-        }
+    public SoftLockFilters()
+    {
+        InitializeFilters();
+    }
 
-        public void OnSettingStatusChanged(CollabSettingType type, CollabSettingStatus status)
+    public void OnSettingStatusChanged(CollabSettingType type, CollabSettingStatus status)
+    {
+        if (type == CollabSettingType.InProgressEnabled && (status == CollabSettingStatus.Available))
         {
-            if (type == CollabSettingType.InProgressEnabled && (status == CollabSettingStatus.Available))
-            {
-                if (Collab.instance.IsCollabEnabledForCurrentProject() && CollabSettingsManager.inProgressEnabled)
-                    ShowInFavoriteSearchFilters();
-                else
-                    HideFromFavoriteSearchFilters();
-            }
+            if (Collab.instance.IsCollabEnabledForCurrentProject() && CollabSettingsManager.inProgressEnabled)
+                ShowInFavoriteSearchFilters();
+            else
+                HideFromFavoriteSearchFilters();
         }
     }
+}
 }

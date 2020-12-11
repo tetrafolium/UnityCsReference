@@ -6,11 +6,11 @@ using UnityEngine.Bindings;
 
 namespace UnityEditor
 {
-    [NativeHeader("Editor/Src/ContainerWindow.bindings.h")]
-    public partial class EditorWindow
-    {
-        [FreeFunction("ContainerWindowBindings::MakeModal")]
-        internal static extern void Internal_MakeModal(ContainerWindow win);
+[NativeHeader("Editor/Src/ContainerWindow.bindings.h")]
+public partial class EditorWindow
+{
+    [FreeFunction("ContainerWindowBindings::MakeModal")]
+    internal static extern void Internal_MakeModal(ContainerWindow win);
 
-    }
+}
 }

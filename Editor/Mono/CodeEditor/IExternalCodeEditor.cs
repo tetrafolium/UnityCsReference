@@ -4,14 +4,16 @@
 
 namespace Unity.CodeEditor
 {
-    public interface IExternalCodeEditor
-    {
-        CodeEditor.Installation[] Installations { get; }
-        bool TryGetInstallationForPath(string editorPath, out CodeEditor.Installation installation);
-        void OnGUI();
-        void SyncIfNeeded(string[] addedFiles, string[] deletedFiles, string[] movedFiles, string[] movedFromFiles, string[] importedFiles);
-        void SyncAll();
-        void Initialize(string editorInstallationPath);
-        bool OpenProject(string filePath = "", int line = -1, int column = -1);
+public interface IExternalCodeEditor
+{
+    CodeEditor.Installation[] Installations {
+        get;
     }
+    bool TryGetInstallationForPath(string editorPath, out CodeEditor.Installation installation);
+    void OnGUI();
+    void SyncIfNeeded(string[] addedFiles, string[] deletedFiles, string[] movedFiles, string[] movedFromFiles, string[] importedFiles);
+    void SyncAll();
+    void Initialize(string editorInstallationPath);
+    bool OpenProject(string filePath = "", int line = -1, int column = -1);
+}
 }

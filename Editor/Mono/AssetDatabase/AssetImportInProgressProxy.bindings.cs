@@ -7,35 +7,35 @@ using UnityEngine;
 
 namespace UnityEditor
 {
-    [NativeType(Header = "Modules/AssetDatabase/Editor/Public/AssetImportInProgressProxy.h")]
-    class AssetImportInProgressProxy : UnityEngine.Object
+[NativeType(Header = "Modules/AssetDatabase/Editor/Public/AssetImportInProgressProxy.h")]
+class AssetImportInProgressProxy : UnityEngine.Object
+{
+    public extern GUID asset
     {
-        public extern GUID asset
-        {
-            [NativeMethod("GetAsset")]
-            get;
-            [NativeMethod("SetAsset")]
-            set;
-        }
-
-        [NativeMethod]
-        public extern static bool IsProxyAsset(int instanceID);
+        [NativeMethod("GetAsset")]
+        get;
+        [NativeMethod("SetAsset")]
+        set;
     }
 
-    [CustomEditor(typeof(AssetImportInProgressProxy))]
-    class AssetImportInProgressProxyEditor : Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            var proxy = (AssetImportInProgressProxy)target;
+    [NativeMethod]
+    public extern static bool IsProxyAsset(int instanceID);
+}
 
-            if (GUILayout.Button("Import"))
-            {
-                var mainAsset = AssetDatabase.LoadMainAssetAtGUID(proxy.asset);
-                Selection.activeObject = mainAsset;
-                //@TODO: Properly call this from C++ when asset import completes...
-                //EditorApplication.projectWindowChanged();
-            }
+[CustomEditor(typeof(AssetImportInProgressProxy))]
+class AssetImportInProgressProxyEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        var proxy = (AssetImportInProgressProxy)target;
+
+        if (GUILayout.Button("Import"))
+        {
+            var mainAsset = AssetDatabase.LoadMainAssetAtGUID(proxy.asset);
+            Selection.activeObject = mainAsset;
+            //@TODO: Properly call this from C++ when asset import completes...
+            //EditorApplication.projectWindowChanged();
         }
     }
+}
 }

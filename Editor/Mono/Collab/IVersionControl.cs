@@ -4,19 +4,19 @@
 
 namespace UnityEditor.Collaboration
 {
-    internal interface IVersionControl
-    {
-        bool SupportsDownloads();
-        bool SupportsAsyncChanges();
-        bool OnEnableVersionControl();
-        void OnDisableVersionControl();
-        ChangeItem[] GetChanges();
-        void MergeDownloadedFiles(bool isFullDownload);
-        Collab.CollabStates GetAssetState(string assetGuid, string assetPath);
-    }
+internal interface IVersionControl
+{
+    bool SupportsDownloads();
+    bool SupportsAsyncChanges();
+    bool OnEnableVersionControl();
+    void OnDisableVersionControl();
+    ChangeItem[] GetChanges();
+    void MergeDownloadedFiles(bool isFullDownload);
+    Collab.CollabStates GetAssetState(string assetGuid, string assetPath);
+}
 
-    internal interface IVersionControl_V2 : IVersionControl
-    {
-        void RefreshAvailableLocalChangesSynchronous();
-    }
+internal interface IVersionControl_V2 : IVersionControl
+{
+    void RefreshAvailableLocalChangesSynchronous();
+}
 }

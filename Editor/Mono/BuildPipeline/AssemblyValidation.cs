@@ -24,7 +24,9 @@ internal class AssemblyValidationRule : Attribute
 
     public RuntimePlatform Platform
     {
-        get { return _platform; }
+        get {
+            return _platform;
+        }
     }
 }
 
@@ -148,9 +150,9 @@ internal class AssemblyValidation
     {
         return
             ValidationRuleAttributesFor(type).
-                Where(attr => attr.Platform == platform).
-                Select(attr => attr.Priority).
-                FirstOrDefault();
+            Where(attr => attr.Platform == platform).
+            Select(attr => attr.Priority).
+            FirstOrDefault();
     }
 
     private static IEnumerable<AssemblyValidationRule> ValidationRuleAttributesFor(Type type)

@@ -7,50 +7,50 @@ using UnityEditor;
 
 namespace UnityEditorInternal
 {
-    class UnityLinkerArgumentValueProvider
+class UnityLinkerArgumentValueProvider
+{
+    private readonly UnityLinkerRunInformation m_RunInformation;
+
+    public UnityLinkerArgumentValueProvider(UnityLinkerRunInformation runInformation)
     {
-        private readonly UnityLinkerRunInformation m_RunInformation;
+        this.m_RunInformation = runInformation;
+    }
 
-        public UnityLinkerArgumentValueProvider(UnityLinkerRunInformation runInformation)
+    public string Runtime
+    {
+        get
         {
-            this.m_RunInformation = runInformation;
-        }
-
-        public string Runtime
-        {
-            get
+            var backend = PlayerSettings.GetScriptingBackend(m_RunInformation.buildTargetGroup);
+            switch (backend)
             {
-                var backend = PlayerSettings.GetScriptingBackend(m_RunInformation.buildTargetGroup);
-                switch (backend)
-                {
-                    case ScriptingImplementation.IL2CPP:
-                        return "il2cpp";
-                    case ScriptingImplementation.Mono2x:
-                        return "mono";
-                    default:
-                        throw new NotImplementedException($"Don't know the backend value to pass to UnityLinker for {backend}");
-                }
-            }
-        }
-
-        public string Profile => IL2CPPUtils.ApiCompatibilityLevelToDotNetProfileArgument(PlayerSettings.GetApiCompatibilityLevel(m_RunInformation.buildTargetGroup));
-
-        public string RuleSet
-        {
-            get
-            {
-                switch (m_RunInformation.managedStrippingLevel)
-                {
-                    case ManagedStrippingLevel.Low:
-                        return "Conservative";
-                    case ManagedStrippingLevel.Medium:
-                        return "Aggressive";
-                    case ManagedStrippingLevel.High:
-                        return "Experimental";
-                }
-
-                throw new ArgumentException($"Unhandled {nameof(ManagedStrippingLevel)} value of {m_RunInformation.managedStrippingLevel}");
+            case ScriptingImplementation.IL2CPP:
+                return "il2cpp";
+            case ScriptingImplementation.Mono2x:
+                return "mono";
+            default:
+                throw new NotImplementedException($"Don't know the backend value to pass to UnityLinker for {backend}");
             }
         }
     }
+
+    public string Profile => IL2CPPUtils.ApiCompatibilityLevelToDotNetProfileArgument(PlayerSettings.GetApiCompatibilityLevel(m_RunInformation.buildTargetGroup));
+
+    public string RuleSet
+    {
+        get
+        {
+            switch (m_RunInformation.managedStrippingLevel)
+            {
+            case ManagedStrippingLevel.Low:
+                return "Conservative";
+            case ManagedStrippingLevel.Medium:
+                return "Aggressive";
+            case ManagedStrippingLevel.High:
+                return "Experimental";
+            }
+
+            throw new ArgumentException($"Unhandled {nameof(ManagedStrippingLevel)} value of {m_RunInformation.managedStrippingLevel}");
+        }
+    }
+}
 }

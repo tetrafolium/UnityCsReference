@@ -6,20 +6,20 @@ using UnityEngine;
 
 namespace UnityEditor
 {
-    [InitializeOnLoad]
-    internal class DrivenRectTransformUndo
+[InitializeOnLoad]
+internal class DrivenRectTransformUndo
+{
+    // Static constructor
+    static DrivenRectTransformUndo()
     {
-        // Static constructor
-        static DrivenRectTransformUndo()
-        {
-            Undo.willFlushUndoRecord += ForceUpdateCanvases;
-            // After undo or redo performed, the 'driven values' & 'driven properties mask' need to be updated.
-            Undo.undoRedoPerformed += ForceUpdateCanvases;
-        }
-
-        static void ForceUpdateCanvases()
-        {
-            Canvas.ForceUpdateCanvases();
-        }
+        Undo.willFlushUndoRecord += ForceUpdateCanvases;
+        // After undo or redo performed, the 'driven values' & 'driven properties mask' need to be updated.
+        Undo.undoRedoPerformed += ForceUpdateCanvases;
     }
+
+    static void ForceUpdateCanvases()
+    {
+        Canvas.ForceUpdateCanvases();
+    }
+}
 }

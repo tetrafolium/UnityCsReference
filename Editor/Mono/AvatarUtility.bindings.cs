@@ -10,10 +10,10 @@ using UnityEngine.Scripting;
 
 namespace UnityEditor
 {
-    [NativeHeader("Modules/Animation/Animator.h")]
-    [NativeHeader("Editor/Src/Animation/AvatarUtility.h")]
-    internal class AvatarUtility
-    {
-        extern static internal void SetHumanPose(Animator animator, float[] dof);
-    }
+[NativeHeader("Modules/Animation/Animator.h")]
+[NativeHeader("Editor/Src/Animation/AvatarUtility.h")]
+internal class AvatarUtility
+{
+    extern static internal void SetHumanPose(Animator animator, float[] dof);
+}
 }

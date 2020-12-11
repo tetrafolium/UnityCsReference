@@ -4,11 +4,19 @@
 
 namespace UnityEditor
 {
-    internal interface IGameViewSizeMenuUser
-    {
-        void SizeSelectionCallback(int indexClicked, object objectSelected);
-        bool lowResolutionForAspectRatios { get; set; }
-        bool forceLowResolutionAspectRatios { get; }
-        bool vSyncEnabled { get; set; }
+internal interface IGameViewSizeMenuUser
+{
+    void SizeSelectionCallback(int indexClicked, object objectSelected);
+    bool lowResolutionForAspectRatios {
+        get;
+        set;
     }
+    bool forceLowResolutionAspectRatios {
+        get;
+    }
+    bool vSyncEnabled {
+        get;
+        set;
+    }
+}
 }

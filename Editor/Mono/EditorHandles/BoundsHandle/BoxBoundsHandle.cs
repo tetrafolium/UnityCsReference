@@ -7,18 +7,25 @@ using UnityEngine;
 
 namespace UnityEditor.IMGUI.Controls
 {
-    public class BoxBoundsHandle : PrimitiveBoundsHandle
-    {
-        [Obsolete("Use parameterless constructor instead.")]
-        public BoxBoundsHandle(int controlIDHint) : base(controlIDHint) {}
+public class BoxBoundsHandle : PrimitiveBoundsHandle
+{
+    [Obsolete("Use parameterless constructor instead.")]
+    public BoxBoundsHandle(int controlIDHint) : base(controlIDHint) {}
 
-        public BoxBoundsHandle() : base() {}
+    public BoxBoundsHandle() : base() {}
 
-        public UnityEngine.Vector3 size { get { return GetSize(); } set { SetSize(value); } }
-
-        protected override void DrawWireframe()
-        {
-            Handles.DrawWireCube(center, size);
+    public UnityEngine.Vector3 size {
+        get {
+            return GetSize();
+        }
+        set {
+            SetSize(value);
         }
     }
+
+    protected override void DrawWireframe()
+    {
+        Handles.DrawWireCube(center, size);
+    }
+}
 }

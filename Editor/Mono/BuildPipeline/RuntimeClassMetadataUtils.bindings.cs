@@ -6,10 +6,10 @@ using UnityEngine.Bindings;
 
 namespace UnityEditor
 {
-    [NativeHeader("Runtime/Scripting/Scripting.h")]
-    internal class RuntimeClassMetadataUtils
-    {
-        [FreeFunction("Scripting::ScriptingWrapperTypeNameForNativeID")]
-        extern public static string ScriptingWrapperTypeNameForNativeID(int id);
-    }
+[NativeHeader("Runtime/Scripting/Scripting.h")]
+internal class RuntimeClassMetadataUtils
+{
+    [FreeFunction("Scripting::ScriptingWrapperTypeNameForNativeID")]
+    extern public static string ScriptingWrapperTypeNameForNativeID(int id);
+}
 }

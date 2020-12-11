@@ -6,12 +6,15 @@ using UnityEngine;
 
 namespace UnityEditor
 {
-    class SubToolbar
-    {
-        public float Width { get; set; }
-
-        public virtual void OnGUI(Rect rect)
-        {
-        }
+class SubToolbar
+{
+    public float Width {
+        get;
+        set;
     }
+
+    public virtual void OnGUI(Rect rect)
+    {
+    }
+}
 } // namespace

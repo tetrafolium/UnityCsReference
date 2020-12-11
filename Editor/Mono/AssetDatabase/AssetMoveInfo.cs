@@ -6,44 +6,48 @@ using System;
 
 namespace UnityEditor.Experimental
 {
-    public struct AssetMoveInfo : IEquatable<AssetMoveInfo>
+public struct AssetMoveInfo : IEquatable<AssetMoveInfo>
+{
+    public AssetMoveInfo(string sourceAssetPath, string destinationAssetPath)
     {
-        public AssetMoveInfo(string sourceAssetPath, string destinationAssetPath)
-        {
-            this.sourceAssetPath = sourceAssetPath;
-            this.destinationAssetPath = destinationAssetPath;
-        }
+        this.sourceAssetPath = sourceAssetPath;
+        this.destinationAssetPath = destinationAssetPath;
+    }
 
-        public string sourceAssetPath { get; }
-        public string destinationAssetPath { get; }
+    public string sourceAssetPath {
+        get;
+    }
+    public string destinationAssetPath {
+        get;
+    }
 
-        public bool Equals(AssetMoveInfo other)
-        {
-            return string.Equals(sourceAssetPath, other.sourceAssetPath) && string.Equals(destinationAssetPath, other.destinationAssetPath);
-        }
+    public bool Equals(AssetMoveInfo other)
+    {
+        return string.Equals(sourceAssetPath, other.sourceAssetPath) && string.Equals(destinationAssetPath, other.destinationAssetPath);
+    }
 
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            return obj is AssetMoveInfo && Equals((AssetMoveInfo)obj);
-        }
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        return obj is AssetMoveInfo && Equals((AssetMoveInfo)obj);
+    }
 
-        public override int GetHashCode()
+    public override int GetHashCode()
+    {
+        unchecked
         {
-            unchecked
-            {
-                return ((sourceAssetPath != null ? sourceAssetPath.GetHashCode() : 0) * 397) ^ (destinationAssetPath != null ? destinationAssetPath.GetHashCode() : 0);
-            }
-        }
-
-        public static bool operator==(AssetMoveInfo left, AssetMoveInfo right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator!=(AssetMoveInfo left, AssetMoveInfo right)
-        {
-            return !left.Equals(right);
+            return ((sourceAssetPath != null ? sourceAssetPath.GetHashCode() : 0) * 397) ^ (destinationAssetPath != null ? destinationAssetPath.GetHashCode() : 0);
         }
     }
+
+    public static bool operator==(AssetMoveInfo left, AssetMoveInfo right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator!=(AssetMoveInfo left, AssetMoveInfo right)
+    {
+        return !left.Equals(right);
+    }
+}
 }

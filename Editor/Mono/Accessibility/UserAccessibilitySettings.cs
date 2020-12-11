@@ -6,41 +6,43 @@ using System;
 
 namespace UnityEditor.Accessibility
 {
-    internal enum ColorBlindCondition
+internal enum ColorBlindCondition
+{
+    Default,
+    Deuteranopia,
+    Protanopia,
+    Tritanopia,
+}
+
+// NOTE: The preferences in this class are currently only exposed via a context menu in the ProfilerWindow
+// these toggles need to instead be moved to e.g., the Preferences menu before they are used elsewhere
+internal static class UserAccessiblitySettings
+{
+    static UserAccessiblitySettings()
     {
-        Default,
-        Deuteranopia,
-        Protanopia,
-        Tritanopia,
+        s_ColorBlindCondition = (ColorBlindCondition)EditorPrefs.GetInt(k_ColorBlindConditionPrefKey, (int)ColorBlindCondition.Default);
     }
 
-    // NOTE: The preferences in this class are currently only exposed via a context menu in the ProfilerWindow
-    // these toggles need to instead be moved to e.g., the Preferences menu before they are used elsewhere
-    internal static class UserAccessiblitySettings
+    private const string k_ColorBlindConditionPrefKey = "AccessibilityColorBlindCondition";
+
+    public static ColorBlindCondition colorBlindCondition
     {
-        static UserAccessiblitySettings()
-        {
-            s_ColorBlindCondition = (ColorBlindCondition)EditorPrefs.GetInt(k_ColorBlindConditionPrefKey, (int)ColorBlindCondition.Default);
+        get {
+            return s_ColorBlindCondition;
         }
-
-        private const string k_ColorBlindConditionPrefKey = "AccessibilityColorBlindCondition";
-
-        public static ColorBlindCondition colorBlindCondition
+        set
         {
-            get { return s_ColorBlindCondition; }
-            set
+            if (s_ColorBlindCondition != value)
             {
-                if (s_ColorBlindCondition != value)
-                {
-                    s_ColorBlindCondition = value;
-                    EditorPrefs.SetInt(k_ColorBlindConditionPrefKey, (int)value);
-                    if (colorBlindConditionChanged != null)
-                        colorBlindConditionChanged();
-                }
+                s_ColorBlindCondition = value;
+                EditorPrefs.SetInt(k_ColorBlindConditionPrefKey, (int)value);
+                if (colorBlindConditionChanged != null)
+                    colorBlindConditionChanged();
             }
         }
-        private static ColorBlindCondition s_ColorBlindCondition;
-
-        public static Action colorBlindConditionChanged;
     }
+    private static ColorBlindCondition s_ColorBlindCondition;
+
+    public static Action colorBlindConditionChanged;
+}
 }

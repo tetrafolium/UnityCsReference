@@ -8,71 +8,76 @@ using UnityEngine.Bindings;
 
 namespace UnityEditor
 {
-    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    [Obsolete("DDSImporter is obsolete. Use IHVImageFormatImporter instead (UnityUpgradable) -> IHVImageFormatImporter", true)]
-    [NativeClass(null)]
-    public sealed class DDSImporter : AssetImporter
+[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+[Obsolete("DDSImporter is obsolete. Use IHVImageFormatImporter instead (UnityUpgradable) -> IHVImageFormatImporter", true)]
+[NativeClass(null)]
+public sealed class DDSImporter : AssetImporter
+{
+    public bool isReadable {
+        get {
+            return false;
+        }
+        set {}
+    }
+}
+
+[NativeHeader("Editor/Src/AssetPipeline/TextureImporting/IHVImageFormatImporter.h")]
+public sealed class IHVImageFormatImporter : AssetImporter
+{
+    public extern bool isReadable
     {
-        public bool isReadable { get {return false; } set {} }
+        get;
+        set;
     }
 
-    [NativeHeader("Editor/Src/AssetPipeline/TextureImporting/IHVImageFormatImporter.h")]
-    public sealed class IHVImageFormatImporter : AssetImporter
+    public extern FilterMode filterMode
     {
-        public extern bool isReadable
-        {
-            get;
-            set;
-        }
-
-        public extern FilterMode filterMode
-        {
-            get;
-            set;
-        }
-
-        // note: wrapMode getter returns U wrapping axis
-        public extern TextureWrapMode wrapMode
-        {
-            [NativeName("GetWrapU")]
-            get;
-            [NativeName("SetWrapUVW")]
-            set;
-        }
-
-        [NativeName("WrapU")]
-        public extern TextureWrapMode wrapModeU
-        {
-            get;
-            set;
-        }
-
-        [NativeName("WrapV")]
-        public extern TextureWrapMode wrapModeV
-        {
-            get;
-            set;
-        }
-
-        [NativeName("WrapW")]
-        public extern TextureWrapMode wrapModeW
-        {
-            get;
-            set;
-        }
-
-        [NativeConditional("ENABLE_TEXTURE_STREAMING")]
-        public extern bool streamingMipmaps
-        {
-            get;
-            set;
-        }
-
-        [NativeConditional("ENABLE_TEXTURE_STREAMING")]
-        public extern int streamingMipmapsPriority
-        {
-            get;
-            set;
-        }
+        get;
+        set;
     }
+
+    // note: wrapMode getter returns U wrapping axis
+    public extern TextureWrapMode wrapMode
+    {
+        [NativeName("GetWrapU")]
+        get;
+        [NativeName("SetWrapUVW")]
+        set;
+    }
+
+    [NativeName("WrapU")]
+    public extern TextureWrapMode wrapModeU
+    {
+        get;
+        set;
+    }
+
+    [NativeName("WrapV")]
+    public extern TextureWrapMode wrapModeV
+    {
+        get;
+        set;
+    }
+
+    [NativeName("WrapW")]
+    public extern TextureWrapMode wrapModeW
+    {
+        get;
+        set;
+    }
+
+    [NativeConditional("ENABLE_TEXTURE_STREAMING")]
+    public extern bool streamingMipmaps
+    {
+        get;
+        set;
+    }
+
+    [NativeConditional("ENABLE_TEXTURE_STREAMING")]
+    public extern int streamingMipmapsPriority
+    {
+        get;
+        set;
+    }
+}
 }

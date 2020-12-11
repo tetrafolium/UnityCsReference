@@ -4,18 +4,18 @@
 
 namespace UnityEditor.UnityLinker
 {
-    /// <summary>
-    /// Data exposed during IRunUnityLinker callbacks
-    /// </summary>
-    public sealed class UnityLinkerBuildPipelineData
-    {
-        public readonly BuildTarget target;
-        public readonly string inputDirectory;
+/// <summary>
+/// Data exposed during IRunUnityLinker callbacks
+/// </summary>
+public sealed class UnityLinkerBuildPipelineData
+{
+    public readonly BuildTarget target;
+    public readonly string inputDirectory;
 
-        public UnityLinkerBuildPipelineData(BuildTarget target, string inputDirectory)
-        {
-            this.target = target;
-            this.inputDirectory = inputDirectory;
-        }
+    public UnityLinkerBuildPipelineData(BuildTarget target, string inputDirectory)
+    {
+        this.target = target;
+        this.inputDirectory = inputDirectory;
     }
+}
 }

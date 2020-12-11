@@ -9,129 +9,129 @@ using System.Linq;
 
 namespace UnityEditorInternal
 {
-    internal static class FileMirroring
+internal static class FileMirroring
+{
+    public static void MirrorFile(string from, string to)
     {
-        public static void MirrorFile(string from, string to)
+        MirrorFile(from, to, CanSkipCopy);
+    }
+
+    public static void MirrorFile(string from, string to, Func<string, string, bool> comparer)
+    {
+        if (comparer(from, to))
+            return;
+
+        if (!File.Exists(from))
         {
-            MirrorFile(from, to, CanSkipCopy);
+            DeleteFileOrDirectory(to);
+            return;
         }
 
-        public static void MirrorFile(string from, string to, Func<string, string, bool> comparer)
+        var parentDir = Path.GetDirectoryName(to);
+        if (!Directory.Exists(parentDir))
+            Directory.CreateDirectory(parentDir);
+
+        File.Copy(from, to, true);
+    }
+
+    public static void MirrorFolder(string from, string to)
+    {
+        MirrorFolder(from, to, CanSkipCopy);
+    }
+
+    public static void MirrorFolder(string from, string to, Func<string, string, bool> comparer)
+    {
+        from = Path.GetFullPath(from);
+        to = Path.GetFullPath(to);
+
+        if (!Directory.Exists(from))
         {
-            if (comparer(from, to))
-                return;
-
-            if (!File.Exists(from))
-            {
-                DeleteFileOrDirectory(to);
-                return;
-            }
-
-            var parentDir = Path.GetDirectoryName(to);
-            if (!Directory.Exists(parentDir))
-                Directory.CreateDirectory(parentDir);
-
-            File.Copy(from, to, true);
+            if (Directory.Exists(to))
+                Directory.Delete(to, true);
+            return;
         }
+        if (!Directory.Exists(to))
+            Directory.CreateDirectory(to);
 
-        public static void MirrorFolder(string from, string to)
+        var toFileEntries = Directory.GetFileSystemEntries(to).Select(s => StripPrefix(s, to));
+        var fromFileEntries = Directory.GetFileSystemEntries(from).Select(s => StripPrefix(s, from));
+
+        var shouldDeletes = toFileEntries.Except(fromFileEntries);
+        foreach (var shouldDelete in shouldDeletes)
+            DeleteFileOrDirectory(Path.Combine(to, shouldDelete));
+
+        foreach (var file in fromFileEntries)
         {
-            MirrorFolder(from, to, CanSkipCopy);
-        }
+            var absFrom = Path.Combine(from, file);
+            var absTo = Path.Combine(to, file);
 
-        public static void MirrorFolder(string from, string to, Func<string, string, bool> comparer)
-        {
-            from = Path.GetFullPath(from);
-            to = Path.GetFullPath(to);
+            var fromType = FileEntryTypeFor(absFrom);
+            var toType = FileEntryTypeFor(absTo);
 
-            if (!Directory.Exists(from))
+            if (fromType == FileEntryType.File && toType == FileEntryType.Directory)
+                DeleteFileOrDirectory(absTo);
+
+            if (fromType == FileEntryType.Directory)
             {
-                if (Directory.Exists(to))
-                    Directory.Delete(to, true);
-                return;
-            }
-            if (!Directory.Exists(to))
-                Directory.CreateDirectory(to);
-
-            var toFileEntries = Directory.GetFileSystemEntries(to).Select(s => StripPrefix(s, to));
-            var fromFileEntries = Directory.GetFileSystemEntries(from).Select(s => StripPrefix(s, from));
-
-            var shouldDeletes = toFileEntries.Except(fromFileEntries);
-            foreach (var shouldDelete in shouldDeletes)
-                DeleteFileOrDirectory(Path.Combine(to, shouldDelete));
-
-            foreach (var file in fromFileEntries)
-            {
-                var absFrom = Path.Combine(from, file);
-                var absTo = Path.Combine(to, file);
-
-                var fromType = FileEntryTypeFor(absFrom);
-                var toType = FileEntryTypeFor(absTo);
-
-                if (fromType == FileEntryType.File && toType == FileEntryType.Directory)
+                if (toType == FileEntryType.File)
                     DeleteFileOrDirectory(absTo);
 
-                if (fromType == FileEntryType.Directory)
-                {
-                    if (toType == FileEntryType.File)
-                        DeleteFileOrDirectory(absTo);
+                if (toType != FileEntryType.Directory)
+                    Directory.CreateDirectory(absTo);
 
-                    if (toType != FileEntryType.Directory)
-                        Directory.CreateDirectory(absTo);
-
-                    MirrorFolder(absFrom, absTo);
-                }
-
-                if (fromType == FileEntryType.File)
-                    MirrorFile(absFrom, absTo, comparer);
+                MirrorFolder(absFrom, absTo);
             }
-        }
 
-        static void DeleteFileOrDirectory(string path)
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-                return;
-            }
-            if (Directory.Exists(path))
-                Directory.Delete(path, true);
+            if (fromType == FileEntryType.File)
+                MirrorFile(absFrom, absTo, comparer);
         }
+    }
 
-        static string StripPrefix(string s, string prefix)
+    static void DeleteFileOrDirectory(string path)
+    {
+        if (File.Exists(path))
         {
-            return s.Substring(prefix.Length + 1);
+            File.Delete(path);
+            return;
         }
+        if (Directory.Exists(path))
+            Directory.Delete(path, true);
+    }
 
-        enum FileEntryType
-        {
-            File,
-            Directory,
-            NotExisting
-        }
+    static string StripPrefix(string s, string prefix)
+    {
+        return s.Substring(prefix.Length + 1);
+    }
 
-        static FileEntryType FileEntryTypeFor(string fileEntry)
-        {
-            if (File.Exists(fileEntry))
-                return FileEntryType.File;
-            if (Directory.Exists(fileEntry))
-                return FileEntryType.Directory;
-            return FileEntryType.NotExisting;
-        }
+    enum FileEntryType
+    {
+        File,
+        Directory,
+        NotExisting
+    }
 
-        public static bool CanSkipCopy(string from, string to)
-        {
-            bool noFrom = !File.Exists(from);
-            bool noTo = !File.Exists(to);
-            // Early out: true if neither files exist, false if only one exists
-            if (noFrom || noTo)
-                return noFrom && noTo;
-            return AreFilesIdentical(from, to);
-        }
+    static FileEntryType FileEntryTypeFor(string fileEntry)
+    {
+        if (File.Exists(fileEntry))
+            return FileEntryType.File;
+        if (Directory.Exists(fileEntry))
+            return FileEntryType.Directory;
+        return FileEntryType.NotExisting;
+    }
 
-        static bool AreFilesIdentical(string filePath1, string filePath2)
-        {
-            using (var file = File.OpenRead(filePath1))
+    public static bool CanSkipCopy(string from, string to)
+    {
+        bool noFrom = !File.Exists(from);
+        bool noTo = !File.Exists(to);
+        // Early out: true if neither files exist, false if only one exists
+        if (noFrom || noTo)
+            return noFrom && noTo;
+        return AreFilesIdentical(from, to);
+    }
+
+    static bool AreFilesIdentical(string filePath1, string filePath2)
+    {
+        using (var file = File.OpenRead(filePath1))
             using (var file2 = File.OpenRead(filePath2))
             {
                 if (file.Length != file2.Length)
@@ -152,7 +152,7 @@ namespace UnityEditorInternal
                 }
             }
 
-            return true;
-        }
+        return true;
     }
+}
 }

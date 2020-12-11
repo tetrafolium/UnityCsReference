@@ -7,56 +7,56 @@ using UnityEditor.Experimental;
 
 namespace UnityEditor
 {
-    internal class CacheServerToggle
+internal class CacheServerToggle
+{
+    private readonly GUIContent m_CacheServerNotEnabledContent;
+    private readonly GUIContent m_CacheServerDisconnectedContent;
+    private readonly GUIContent m_CacheServerConnectedContent;
+    private readonly PopupLocation[] m_PopupLocation;
+
+    static CacheServerToggle()
     {
-        private readonly GUIContent m_CacheServerNotEnabledContent;
-        private readonly GUIContent m_CacheServerDisconnectedContent;
-        private readonly GUIContent m_CacheServerConnectedContent;
-        private readonly PopupLocation[] m_PopupLocation;
+        AssetDatabaseExperimental.cacheServerConnectionChanged += OnCacherServerConnectionChanged;
+    }
 
-        static CacheServerToggle()
+    public CacheServerToggle()
+    {
+        m_CacheServerNotEnabledContent = EditorGUIUtility.TrIconContent("CacheServerDisabled", "Cache Server disabled");
+        m_CacheServerDisconnectedContent = EditorGUIUtility.TrIconContent("CacheServerDisconnected", "Cache Server disconnected");
+        m_CacheServerConnectedContent = EditorGUIUtility.TrIconContent("CacheServerConnected", "Cache Server connected");
+        m_PopupLocation = new[] { PopupLocation.AboveAlignRight };
+    }
+
+    public void OnGUI()
+    {
+        var content = GetStatusContent();
+        var style = AppStatusBar.Styles.statusIcon;
+        var rect = GUILayoutUtility.GetRect(content, style);
+        if (GUI.Button(rect, content, style))
         {
-            AssetDatabaseExperimental.cacheServerConnectionChanged += OnCacherServerConnectionChanged;
-        }
-
-        public CacheServerToggle()
-        {
-            m_CacheServerNotEnabledContent = EditorGUIUtility.TrIconContent("CacheServerDisabled", "Cache Server disabled");
-            m_CacheServerDisconnectedContent = EditorGUIUtility.TrIconContent("CacheServerDisconnected", "Cache Server disconnected");
-            m_CacheServerConnectedContent = EditorGUIUtility.TrIconContent("CacheServerConnected", "Cache Server connected");
-            m_PopupLocation = new[] { PopupLocation.AboveAlignRight };
-        }
-
-        public void OnGUI()
-        {
-            var content = GetStatusContent();
-            var style = AppStatusBar.Styles.statusIcon;
-            var rect = GUILayoutUtility.GetRect(content, style);
-            if (GUI.Button(rect, content, style))
-            {
-                PopupWindow.Show(rect, new CacheServerWindow(), m_PopupLocation);
-                GUIUtility.ExitGUI();
-            }
-        }
-
-        private GUIContent GetStatusContent()
-        {
-            if (!AssetDatabaseExperimental.IsCacheServerEnabled())
-            {
-                return m_CacheServerNotEnabledContent;
-            }
-
-            if (!AssetDatabaseExperimental.IsConnectedToCacheServer())
-            {
-                return m_CacheServerDisconnectedContent;
-            }
-
-            return m_CacheServerConnectedContent;
-        }
-
-        private static void OnCacherServerConnectionChanged(AssetDatabaseExperimental.CacheServerConnectionChangedParameters param)
-        {
-            AppStatusBar.StatusChanged();
+            PopupWindow.Show(rect, new CacheServerWindow(), m_PopupLocation);
+            GUIUtility.ExitGUI();
         }
     }
+
+    private GUIContent GetStatusContent()
+    {
+        if (!AssetDatabaseExperimental.IsCacheServerEnabled())
+        {
+            return m_CacheServerNotEnabledContent;
+        }
+
+        if (!AssetDatabaseExperimental.IsConnectedToCacheServer())
+        {
+            return m_CacheServerDisconnectedContent;
+        }
+
+        return m_CacheServerConnectedContent;
+    }
+
+    private static void OnCacherServerConnectionChanged(AssetDatabaseExperimental.CacheServerConnectionChangedParameters param)
+    {
+        AppStatusBar.StatusChanged();
+    }
+}
 }

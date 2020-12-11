@@ -9,18 +9,20 @@ using UnityEngine.Scripting;
 
 namespace UnityEditor
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    internal sealed partial class EditorHeaderItemAttribute : CallbackOrderAttribute
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+internal sealed partial class EditorHeaderItemAttribute : CallbackOrderAttribute
+{
+    public EditorHeaderItemAttribute(Type targetType, int priority = 1)
     {
-        public EditorHeaderItemAttribute(Type targetType, int priority = 1)
-        {
-            TargetType = targetType;
-            m_CallbackOrder = priority;
-        }
-
-        public Type TargetType;
-
-        [RequiredSignature]
-        static bool SignatureBool(Rect rectangle, UnityEngine.Object[] targetObjets) { throw new InvalidOperationException(); }
+        TargetType = targetType;
+        m_CallbackOrder = priority;
     }
+
+    public Type TargetType;
+
+    [RequiredSignature]
+    static bool SignatureBool(Rect rectangle, UnityEngine.Object[] targetObjets) {
+        throw new InvalidOperationException();
+    }
+}
 }

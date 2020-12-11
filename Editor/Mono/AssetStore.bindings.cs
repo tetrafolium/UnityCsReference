@@ -6,17 +6,17 @@ using UnityEditor;
 
 namespace UnityEditorInternal
 {
-    // Keep internal and undocumented until we expose more functionality
+// Keep internal and undocumented until we expose more functionality
+//*undocumented*
+public sealed class AssetStore
+{
     //*undocumented*
-    public sealed class AssetStore
+    public static void Open(string assetStoreURL)
     {
-        //*undocumented*
-        public static void Open(string assetStoreURL)
-        {
-            if (assetStoreURL != "")
-                AssetStoreWindow.OpenURL(assetStoreURL);
-            else
-                AssetStoreWindow.Init();
-        }
+        if (assetStoreURL != "")
+            AssetStoreWindow.OpenURL(assetStoreURL);
+        else
+            AssetStoreWindow.Init();
     }
+}
 }

@@ -7,10 +7,10 @@ using UnityEngine.Bindings;
 
 namespace UnityEditorInternal
 {
-    [NativeHeader("Editor/Mono/AssetStore.bindings.h")]
-    [StaticAccessor("AssetStoreScriptBindings", StaticAccessorType.DoubleColon)]
-    public sealed partial class AssetStoreToolUtils
-    {
-        extern public static bool BuildAssetStoreAssetBundle(Object targetObject, string targetPath);
-    }
+[NativeHeader("Editor/Mono/AssetStore.bindings.h")]
+[StaticAccessor("AssetStoreScriptBindings", StaticAccessorType.DoubleColon)]
+public sealed partial class AssetStoreToolUtils
+{
+    extern public static bool BuildAssetStoreAssetBundle(Object targetObject, string targetPath);
+}
 }

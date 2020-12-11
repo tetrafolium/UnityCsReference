@@ -9,36 +9,51 @@ using UnityEngine.Bindings;
 
 namespace UnityEditor
 {
-    [NativeHeader("Editor/Src/LightProbeVisualization.h")]
-    internal static partial class LightProbeVisualization
+[NativeHeader("Editor/Src/LightProbeVisualization.h")]
+internal static partial class LightProbeVisualization
+{
+    internal enum LightProbeVisualizationMode
     {
-        internal enum LightProbeVisualizationMode
-        {
-            OnlyProbesUsedBySelection = 0,
-            AllProbesNoCells = 1,
-            AllProbesWithCells = 2,
-            None = 3,
-        }
-
-        [StaticAccessor("GetLightProbeVisualizationSettings()")]
-        public extern static LightProbeVisualizationMode lightProbeVisualizationMode { get; set; }
-
-        [StaticAccessor("GetLightProbeVisualizationSettings()")]
-        public extern static bool showInterpolationWeights { get; set; }
-
-        [StaticAccessor("GetLightProbeVisualizationSettings()")]
-        public extern static bool showOcclusions { get; set; }
-
-        [StaticAccessor("GetLightProbeVisualizationSettings()")]
-        public extern static bool highlightInvalidCells { get; set; }
-
-        [StaticAccessor("GetLightProbeVisualizationSettings()")]
-        public extern static bool dynamicUpdateLightProbes { get; set; }
-
-        [StaticAccessor("GetLightProbeVisualizationSettings()")]
-        internal static extern void DrawPointCloud([NotNull] Vector3[] unselectedPositions, [NotNull] Vector3[] selectedPositions, Color baseColor, Color selectedColor, float scale, Transform cloudTransform);
-
-        [StaticAccessor("GetLightProbeVisualizationSettings()")]
-        internal static extern void DrawTetrahedra(bool shouldRecalculateTetrahedra, Vector3 cameraPosition);
+        OnlyProbesUsedBySelection = 0,
+        AllProbesNoCells = 1,
+        AllProbesWithCells = 2,
+        None = 3,
     }
+
+    [StaticAccessor("GetLightProbeVisualizationSettings()")]
+    public extern static LightProbeVisualizationMode lightProbeVisualizationMode {
+        get;
+        set;
+    }
+
+    [StaticAccessor("GetLightProbeVisualizationSettings()")]
+    public extern static bool showInterpolationWeights {
+        get;
+        set;
+    }
+
+    [StaticAccessor("GetLightProbeVisualizationSettings()")]
+    public extern static bool showOcclusions {
+        get;
+        set;
+    }
+
+    [StaticAccessor("GetLightProbeVisualizationSettings()")]
+    public extern static bool highlightInvalidCells {
+        get;
+        set;
+    }
+
+    [StaticAccessor("GetLightProbeVisualizationSettings()")]
+    public extern static bool dynamicUpdateLightProbes {
+        get;
+        set;
+    }
+
+    [StaticAccessor("GetLightProbeVisualizationSettings()")]
+    internal static extern void DrawPointCloud([NotNull] Vector3[] unselectedPositions, [NotNull] Vector3[] selectedPositions, Color baseColor, Color selectedColor, float scale, Transform cloudTransform);
+
+    [StaticAccessor("GetLightProbeVisualizationSettings()")]
+    internal static extern void DrawTetrahedra(bool shouldRecalculateTetrahedra, Vector3 cameraPosition);
+}
 }

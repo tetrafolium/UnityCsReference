@@ -7,86 +7,86 @@ using UnityEngine;
 
 namespace UnityEditor.EditorTools
 {
-    [CustomEditor(typeof(EditorTool), true)]
-    class EditorToolCustomEditor : Editor
+[CustomEditor(typeof(EditorTool), true)]
+class EditorToolCustomEditor : Editor
+{
+    const string k_GeneratorAssetProperty = "m_GeneratorAsset";
+    const string k_ScriptProperty = "m_Script";
+
+    public override void OnInspectorGUI()
     {
-        const string k_GeneratorAssetProperty = "m_GeneratorAsset";
-        const string k_ScriptProperty = "m_Script";
+        serializedObject.Update();
 
-        public override void OnInspectorGUI()
+        var property = serializedObject.GetIterator();
+
+        bool expanded = true;
+
+        while (property.NextVisible(expanded))
         {
-            serializedObject.Update();
+            if (property.propertyPath == k_GeneratorAssetProperty)
+                continue;
 
-            var property = serializedObject.GetIterator();
-
-            bool expanded = true;
-
-            while (property.NextVisible(expanded))
+            using (new EditorGUI.DisabledScope(property.propertyPath == k_ScriptProperty))
             {
-                if (property.propertyPath == k_GeneratorAssetProperty)
-                    continue;
-
-                using (new EditorGUI.DisabledScope(property.propertyPath == k_ScriptProperty))
-                {
-                    EditorGUILayout.PropertyField(property, true);
-                }
-
-                expanded = false;
+                EditorGUILayout.PropertyField(property, true);
             }
 
-            serializedObject.ApplyModifiedProperties();
+            expanded = false;
         }
-    }
 
-    sealed class EditorToolWindow : EditorWindow
+        serializedObject.ApplyModifiedProperties();
+    }
+}
+
+sealed class EditorToolWindow : EditorWindow
+{
+    static class Styles
     {
-        static class Styles
-        {
-            public static GUIContent title = EditorGUIUtility.TrTextContent("Editor Tool");
-        }
-
-        Editor m_Editor;
-
-        EditorToolWindow() {}
-
-        [MenuItem("Window/General/Active Tool")]
-        static void ShowEditorToolWindow()
-        {
-            GetWindow<EditorToolWindow>();
-        }
-
-        void OnEnable()
-        {
-            EditorTools.activeToolChanged += ToolChanged;
-
-            //active tool is null when opening the editor but activeToolChanged will be called soon after.
-            //This is quick enough that the user shouldn't notice.
-            if (EditorToolContext.activeTool)
-                ToolChanged();
-        }
-
-        void OnDisable()
-        {
-            EditorTools.activeToolChanged -= ToolChanged;
-
-            if (m_Editor != null)
-                DestroyImmediate(m_Editor);
-        }
-
-        void ToolChanged()
-        {
-            if (m_Editor != null)
-                DestroyImmediate(m_Editor);
-            var activeTool = EditorToolContext.activeTool;
-            m_Editor = Editor.CreateEditor(activeTool);
-            titleContent = new GUIContent(EditorToolUtility.GetToolName(activeTool.GetType()));
-            Repaint();
-        }
-
-        void OnGUI()
-        {
-            if (m_Editor != null)
-                m_Editor.OnInspectorGUI();
-        }
+        public static GUIContent title = EditorGUIUtility.TrTextContent("Editor Tool");
     }
+
+    Editor m_Editor;
+
+    EditorToolWindow() {}
+
+    [MenuItem("Window/General/Active Tool")]
+    static void ShowEditorToolWindow()
+    {
+        GetWindow<EditorToolWindow>();
+    }
+
+    void OnEnable()
+    {
+        EditorTools.activeToolChanged += ToolChanged;
+
+        //active tool is null when opening the editor but activeToolChanged will be called soon after.
+        //This is quick enough that the user shouldn't notice.
+        if (EditorToolContext.activeTool)
+            ToolChanged();
+    }
+
+    void OnDisable()
+    {
+        EditorTools.activeToolChanged -= ToolChanged;
+
+        if (m_Editor != null)
+            DestroyImmediate(m_Editor);
+    }
+
+    void ToolChanged()
+    {
+        if (m_Editor != null)
+            DestroyImmediate(m_Editor);
+        var activeTool = EditorToolContext.activeTool;
+        m_Editor = Editor.CreateEditor(activeTool);
+        titleContent = new GUIContent(EditorToolUtility.GetToolName(activeTool.GetType()));
+        Repaint();
+    }
+
+    void OnGUI()
+    {
+        if (m_Editor != null)
+            m_Editor.OnInspectorGUI();
+    }
+}
 }

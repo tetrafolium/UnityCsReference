@@ -6,16 +6,16 @@ using System;
 
 namespace UnityEditor
 {
-    [Flags]
-    public enum AssetMoveResult
-    {
-        // Tells the internal implementation that the asset was not moved physically on disk by the script
-        DidNotMove = 0,
+[Flags]
+public enum AssetMoveResult
+{
+    // Tells the internal implementation that the asset was not moved physically on disk by the script
+    DidNotMove = 0,
 
-        // Tells the internal implementation that the script could not move the assets, and Unity should not attempt to move the asset
-        FailedMove = 1,
+    // Tells the internal implementation that the script could not move the assets, and Unity should not attempt to move the asset
+    FailedMove = 1,
 
-        // Tells the internal implementation that the script moved the asset physically on disk. The internal implementation will
-        DidMove = 2
-    }
+    // Tells the internal implementation that the script moved the asset physically on disk. The internal implementation will
+    DidMove = 2
+}
 }

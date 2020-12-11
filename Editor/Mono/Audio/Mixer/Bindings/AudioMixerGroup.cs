@@ -11,62 +11,62 @@ using System;
 
 namespace UnityEditor.Audio
 {
-    [ExcludeFromPreset]
-    internal partial class AudioMixerGroupController
+[ExcludeFromPreset]
+internal partial class AudioMixerGroupController
+{
+    public void InsertEffect(AudioMixerEffectController effect, int index)
     {
-        public void InsertEffect(AudioMixerEffectController effect, int index)
-        {
-            var modifiedEffectsList = new List<AudioMixerEffectController>(effects);
-            modifiedEffectsList.Add(null);
-            for (int i = modifiedEffectsList.Count - 1; i > index; i--)
-                modifiedEffectsList[i] = modifiedEffectsList[i - 1];
-            modifiedEffectsList[index] = effect;
-            effects = modifiedEffectsList.ToArray();
-        }
+        var modifiedEffectsList = new List<AudioMixerEffectController>(effects);
+        modifiedEffectsList.Add(null);
+        for (int i = modifiedEffectsList.Count - 1; i > index; i--)
+            modifiedEffectsList[i] = modifiedEffectsList[i - 1];
+        modifiedEffectsList[index] = effect;
+        effects = modifiedEffectsList.ToArray();
+    }
 
-        public bool HasAttenuation()
-        {
-            foreach (var e in effects)
-                if (e.IsAttenuation())
-                    return true;
-            return false;
-        }
+    public bool HasAttenuation()
+    {
+        foreach (var e in effects)
+            if (e.IsAttenuation())
+                return true;
+        return false;
+    }
 
-        public void DumpHierarchy(string title, int level)
-        {
-            if (title != "")
-                Console.WriteLine(title);
+    public void DumpHierarchy(string title, int level)
+    {
+        if (title != "")
+            Console.WriteLine(title);
 
-            string prefix = "";
-            int l = level;
-            while (l-- > 0)
-                prefix += "  ";
-            Console.WriteLine(prefix + "name=" + name);
-
+        string prefix = "";
+        int l = level;
+        while (l-- > 0)
             prefix += "  ";
-            foreach (var f in effects)
-                Console.WriteLine(prefix + "effect=" + f);
+        Console.WriteLine(prefix + "name=" + name);
 
-            foreach (var g in children)
-                g.DumpHierarchy("", level + 1);
-        }
+        prefix += "  ";
+        foreach (var f in effects)
+            Console.WriteLine(prefix + "effect=" + f);
 
-        public string GetDisplayString()
-        {
-            return name; // AudioMixerController.FixNameForPopupMenu(name);
-        }
-
-        public override string ToString()
-        {
-            return name;
-        }
+        foreach (var g in children)
+            g.DumpHierarchy("", level + 1);
     }
 
-    internal class MixerGroupControllerCompareByName : IComparer<AudioMixerGroupController>
+    public string GetDisplayString()
     {
-        public int Compare(AudioMixerGroupController x, AudioMixerGroupController y)
-        {
-            return StringComparer.InvariantCultureIgnoreCase.Compare(x.GetDisplayString(), y.GetDisplayString());
-        }
+        return name; // AudioMixerController.FixNameForPopupMenu(name);
     }
+
+    public override string ToString()
+    {
+        return name;
+    }
+}
+
+internal class MixerGroupControllerCompareByName : IComparer<AudioMixerGroupController>
+{
+    public int Compare(AudioMixerGroupController x, AudioMixerGroupController y)
+    {
+        return StringComparer.InvariantCultureIgnoreCase.Compare(x.GetDisplayString(), y.GetDisplayString());
+    }
+}
 }

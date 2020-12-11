@@ -11,9 +11,19 @@ internal class SerializedStringTable
     [SerializeField] private string[] keys;
     [SerializeField] private int[] values;
     private Hashtable table;
-    public Hashtable hashtable { get { SanityCheck(); return table; } }
+    public Hashtable hashtable {
+        get {
+            SanityCheck();
+            return table;
+        }
+    }
 
-    public int Length { get { SanityCheck(); return keys.Length; } }
+    public int Length {
+        get {
+            SanityCheck();
+            return keys.Length;
+        }
+    }
 
     private void SanityCheck()
     {

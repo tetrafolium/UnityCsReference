@@ -11,7 +11,11 @@ using System.Threading;
 
 internal abstract class NativeCompiler : INativeCompiler
 {
-    protected virtual string objectFileExtension { get { return "o"; } }
+    protected virtual string objectFileExtension {
+        get {
+            return "o";
+        }
+    }
 
     public abstract void CompileDynamicLibrary(string outFile, IEnumerable<string> sources, IEnumerable<string> includePaths, IEnumerable<string> libraries, IEnumerable<string> libraryPaths);
 
@@ -100,7 +104,7 @@ internal abstract class NativeCompiler : INativeCompiler
     protected internal static IEnumerable<string> AllSourceFilesIn(string directory)
     {
         return Directory.GetFiles(directory, "*.cpp", SearchOption.AllDirectories)
-            .Concat(Directory.GetFiles(directory, "*.c", SearchOption.AllDirectories));
+               .Concat(Directory.GetFiles(directory, "*.c", SearchOption.AllDirectories));
     }
 
     protected internal static bool IsSourceFile(string source)

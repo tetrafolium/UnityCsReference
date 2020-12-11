@@ -10,11 +10,11 @@ using UnityEngine;
 
 namespace UnityEditor
 {
-    static class WaveformPreviewFactory
+static class WaveformPreviewFactory
+{
+    public static WaveformPreview Create(int initialSize, AudioClip clip)
     {
-        public static WaveformPreview Create(int initialSize, AudioClip clip)
-        {
-            return new StreamedAudioClipPreview(clip, initialSize);
-        }
+        return new StreamedAudioClipPreview(clip, initialSize);
     }
+}
 }

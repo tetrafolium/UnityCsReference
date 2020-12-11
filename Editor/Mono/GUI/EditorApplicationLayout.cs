@@ -21,77 +21,77 @@ using UnityEditorInternal;
 
 namespace UnityEditor
 {
-    internal class EditorApplicationLayout
+internal class EditorApplicationLayout
+{
+    static private PlayModeView m_PlayModeView = null;
+    static private bool m_MaximizePending = false;
+
+
+    static internal bool IsInitializingPlaymodeLayout()
     {
-        static private PlayModeView m_PlayModeView = null;
-        static private bool m_MaximizePending = false;
-
-
-        static internal bool IsInitializingPlaymodeLayout()
-        {
-            return m_PlayModeView != null;
-        }
-
-        static internal void SetPlaymodeLayout()
-        {
-            InitPlaymodeLayout();
-            FinalizePlaymodeLayout();
-        }
-
-        static internal void SetStopmodeLayout()
-        {
-            WindowLayout.ShowAppropriateViewOnEnterExitPlaymode(false);
-            Toolbar.RepaintToolbar();
-        }
-
-        static internal void SetPausemodeLayout()
-        {
-            // We use the stopmode layout when pausing (maximized windows are unmaximized)
-            SetStopmodeLayout();
-        }
-
-        static internal void InitPlaymodeLayout()
-        {
-            m_PlayModeView = WindowLayout.ShowAppropriateViewOnEnterExitPlaymode(true) as PlayModeView;
-            if (m_PlayModeView == null)
-                return;
-
-            DockArea da = m_PlayModeView.m_Parent as DockArea;
-            if (da != null)
-            {
-                if (m_PlayModeView.maximizeOnPlay)
-                    m_MaximizePending = WindowLayout.MaximizePrepare(da.actualView);
-
-                var gv = da.actualView as GameView;
-                if (gv != null)
-                    m_PlayModeView.m_Parent.EnableVSync(gv.vSyncEnabled);
-            }
-
-            // Mark this PlayModeView window as the start view so the backend
-            // can set size and mouseoffset properly for this view
-            m_PlayModeView.m_Parent.SetAsStartView();
-            m_PlayModeView.m_Parent.SetAsLastPlayModeView();
-
-            Toolbar.RepaintToolbar();
-        }
-
-        static internal void FinalizePlaymodeLayout()
-        {
-            if (m_PlayModeView != null)
-            {
-                if (m_MaximizePending)
-                    WindowLayout.MaximizePresent(m_PlayModeView);
-
-                m_PlayModeView.m_Parent.ClearStartView();
-            }
-
-            Clear();
-        }
-
-        static private void Clear()
-        {
-            m_MaximizePending = false;
-            m_PlayModeView = null;
-        }
+        return m_PlayModeView != null;
     }
+
+    static internal void SetPlaymodeLayout()
+    {
+        InitPlaymodeLayout();
+        FinalizePlaymodeLayout();
+    }
+
+    static internal void SetStopmodeLayout()
+    {
+        WindowLayout.ShowAppropriateViewOnEnterExitPlaymode(false);
+        Toolbar.RepaintToolbar();
+    }
+
+    static internal void SetPausemodeLayout()
+    {
+        // We use the stopmode layout when pausing (maximized windows are unmaximized)
+        SetStopmodeLayout();
+    }
+
+    static internal void InitPlaymodeLayout()
+    {
+        m_PlayModeView = WindowLayout.ShowAppropriateViewOnEnterExitPlaymode(true) as PlayModeView;
+        if (m_PlayModeView == null)
+            return;
+
+        DockArea da = m_PlayModeView.m_Parent as DockArea;
+        if (da != null)
+        {
+            if (m_PlayModeView.maximizeOnPlay)
+                m_MaximizePending = WindowLayout.MaximizePrepare(da.actualView);
+
+            var gv = da.actualView as GameView;
+            if (gv != null)
+                m_PlayModeView.m_Parent.EnableVSync(gv.vSyncEnabled);
+        }
+
+        // Mark this PlayModeView window as the start view so the backend
+        // can set size and mouseoffset properly for this view
+        m_PlayModeView.m_Parent.SetAsStartView();
+        m_PlayModeView.m_Parent.SetAsLastPlayModeView();
+
+        Toolbar.RepaintToolbar();
+    }
+
+    static internal void FinalizePlaymodeLayout()
+    {
+        if (m_PlayModeView != null)
+        {
+            if (m_MaximizePending)
+                WindowLayout.MaximizePresent(m_PlayModeView);
+
+            m_PlayModeView.m_Parent.ClearStartView();
+        }
+
+        Clear();
+    }
+
+    static private void Clear()
+    {
+        m_MaximizePending = false;
+        m_PlayModeView = null;
+    }
+}
 } // namespace

@@ -7,72 +7,92 @@ using System.Collections.Generic;
 
 namespace UnityEditor.Collaboration
 {
-    internal delegate void PageChangeAction(int page);
-    internal delegate void RevisionAction(string revisionId, bool updateToRevision);
-    internal delegate void ShowBuildAction(string revisionId);
+internal delegate void PageChangeAction(int page);
+internal delegate void RevisionAction(string revisionId, bool updateToRevision);
+internal delegate void ShowBuildAction(string revisionId);
 
-    internal enum HistoryState
-    {
-        Error,
-        Offline,
-        Maintenance,
-        LoggedOut,
-        NoSeat,
-        Disabled,
-        Waiting,
-        Ready,
+internal enum HistoryState
+{
+    Error,
+    Offline,
+    Maintenance,
+    LoggedOut,
+    NoSeat,
+    Disabled,
+    Waiting,
+    Ready,
+}
+
+internal enum BuildState
+{
+    None,
+    Configure,
+    Success,
+    Failed,
+    InProgress,
+}
+
+internal struct RevisionData
+{
+    public string id;
+    public int index;
+    public DateTime timeStamp;
+    public string authorName;
+    public string comment;
+
+    // Whether this revision is on the client
+    public bool obtained;
+    public bool current;
+    public bool inProgress;
+    public bool enabled;
+
+    public BuildState buildState;
+    public int buildFailures;
+
+    public ICollection<ChangeData> changes;
+    public int changesTotal;
+    public bool changesTruncated;
+}
+
+internal struct ChangeData
+{
+    public string path;
+    public string action;
+}
+
+internal interface ICollabHistoryWindow
+{
+    void UpdateState(HistoryState state, bool force);
+    void UpdateRevisions(IEnumerable<RevisionData> items, string tip, int totalRevisions, int currentPage);
+
+    bool revisionActionsEnabled {
+        get;
+        set;
     }
-
-    internal enum BuildState
-    {
-        None,
-        Configure,
-        Success,
-        Failed,
-        InProgress,
+    int itemsPerPage {
+        set;
     }
-
-    internal struct RevisionData
-    {
-        public string id;
-        public int index;
-        public DateTime timeStamp;
-        public string authorName;
-        public string comment;
-
-        // Whether this revision is on the client
-        public bool obtained;
-        public bool current;
-        public bool inProgress;
-        public bool enabled;
-
-        public BuildState buildState;
-        public int buildFailures;
-
-        public ICollection<ChangeData> changes;
-        public int changesTotal;
-        public bool changesTruncated;
+    string inProgressRevision {
+        get;
+        set;
     }
-
-    internal struct ChangeData
-    {
-        public string path;
-        public string action;
+    PageChangeAction OnPageChangeAction {
+        set;
     }
-
-    internal interface ICollabHistoryWindow
-    {
-        void UpdateState(HistoryState state, bool force);
-        void UpdateRevisions(IEnumerable<RevisionData> items, string tip, int totalRevisions, int currentPage);
-
-        bool revisionActionsEnabled { get; set; }
-        int itemsPerPage { set; }
-        string inProgressRevision { get; set; }
-        PageChangeAction OnPageChangeAction { set; }
-        RevisionAction OnGoBackAction { set; }
-        RevisionAction OnUpdateAction { set; }
-        RevisionAction OnRestoreAction { set; }
-        ShowBuildAction OnShowBuildAction { set; }
-        Action OnShowServicesAction { set; }
+    RevisionAction OnGoBackAction {
+        set;
     }
+    RevisionAction OnUpdateAction {
+        set;
+    }
+    RevisionAction OnRestoreAction {
+        set;
+    }
+    ShowBuildAction OnShowBuildAction {
+        set;
+    }
+    Action OnShowServicesAction {
+        set;
+    }
+}
 }

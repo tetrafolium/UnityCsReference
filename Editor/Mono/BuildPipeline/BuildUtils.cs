@@ -21,145 +21,145 @@ using System.Xml.XPath;
 
 namespace UnityEditorInternal
 {
-    internal class NativeProgram : Program
+internal class NativeProgram : Program
+{
+    public NativeProgram(string executable, string arguments)
     {
-        public NativeProgram(string executable, string arguments)
+        var startInfo = new ProcessStartInfo
         {
-            var startInfo = new ProcessStartInfo
+            Arguments = arguments,
+            CreateNoWindow = true,
+            FileName = executable,
+            RedirectStandardError = true,
+            RedirectStandardOutput = true,
+            WorkingDirectory = Application.dataPath + "/..",
+            UseShellExecute = false
+        };
+
+        _process.StartInfo = startInfo;
+    }
+}
+
+internal class Runner
+{
+    internal static void RunManagedProgram(string exe, string args)
+    {
+        RunManagedProgram(exe, args, Application.dataPath + "/..", null, null);
+    }
+
+    internal static void RunManagedProgram(string exe, string args, string workingDirectory, CompilerOutputParserBase parser, Action<ProcessStartInfo> setupStartInfo)
+    {
+        Program p;
+
+        // Run on .NET if running on windows
+        // It's twice as fast as Mono for IL2CPP.exe
+        if (Application.platform == RuntimePlatform.WindowsEditor)
+        {
+            var startInfo = new ProcessStartInfo()
             {
-                Arguments = arguments,
+                Arguments = args,
                 CreateNoWindow = true,
-                FileName = executable,
-                RedirectStandardError = true,
-                RedirectStandardOutput = true,
-                WorkingDirectory = Application.dataPath + "/..",
-                UseShellExecute = false
+                FileName = exe
             };
 
-            _process.StartInfo = startInfo;
+            if (setupStartInfo != null)
+                setupStartInfo(startInfo);
+
+            p = new Program(startInfo);
         }
+        else
+        {
+            p = new ManagedProgram(MonoInstallationFinder.GetMonoInstallation("MonoBleedingEdge"), null, exe, args, false, setupStartInfo);
+        }
+
+        RunProgram(p, exe, args, workingDirectory, parser);
     }
 
-    internal class Runner
+    internal static void RunNetCoreProgram(string exe, string args, string workingDirectory, CompilerOutputParserBase parser, Action<ProcessStartInfo> setupStartInfo)
     {
-        internal static void RunManagedProgram(string exe, string args)
+        Program p;
+
+        if (Path.GetExtension(exe).Equals(".dll", StringComparison.OrdinalIgnoreCase))
         {
-            RunManagedProgram(exe, args, Application.dataPath + "/..", null, null);
+            p = new NetCoreProgram(exe, args, setupStartInfo);
+        }
+        else
+        {
+            var startInfo = new ProcessStartInfo()
+            {
+                Arguments = args,
+                CreateNoWindow = true,
+                FileName = exe
+            };
+
+            if (setupStartInfo != null)
+                setupStartInfo(startInfo);
+
+            p = new Program(startInfo);
         }
 
-        internal static void RunManagedProgram(string exe, string args, string workingDirectory, CompilerOutputParserBase parser, Action<ProcessStartInfo> setupStartInfo)
+        RunProgram(p, exe, args, workingDirectory, parser);
+    }
+
+    // Used when debugging il2cpp.exe from Windows, please don't remove it
+    public static void RunNativeProgram(string exe, string args)
+    {
+        using (var p = new NativeProgram(exe, args))
         {
-            Program p;
-
-            // Run on .NET if running on windows
-            // It's twice as fast as Mono for IL2CPP.exe
-            if (Application.platform == RuntimePlatform.WindowsEditor)
+            p.Start();
+            p.WaitForExit();
+            if (p.ExitCode != 0)
             {
-                var startInfo = new ProcessStartInfo()
+                Debug.LogError("Failed running " + exe + " " + args + "\n\n" + p.GetAllOutput());
+
+                throw new Exception(string.Format("{0} did not run properly!", exe));
+            }
+        }
+    }
+
+    private static void RunProgram(Program p, string exe, string args, string workingDirectory, CompilerOutputParserBase parser)
+    {
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+
+        using (p)
+        {
+            p.GetProcessStartInfo().WorkingDirectory = workingDirectory;
+            p.Start();
+            p.WaitForExit();
+
+            stopwatch.Stop();
+            Console.WriteLine("{0} exited after {1} ms.", exe, stopwatch.ElapsedMilliseconds);
+
+            IEnumerable<CompilerMessage> messages = null;
+            if (parser != null)
+            {
+                var errorOutput = p.GetErrorOutput();
+                var standardOutput = p.GetStandardOutput();
+                messages = parser.Parse(errorOutput, standardOutput, true, "n/a (il2cpp)");
+            }
+
+            if (p.ExitCode != 0)
+            {
+                if (messages != null)
                 {
-                    Arguments = args,
-                    CreateNoWindow = true,
-                    FileName = exe
-                };
+                    foreach (var message in messages)
+                        Debug.LogPlayerBuildError(message.message, message.file, message.line, message.column);
+                }
 
-                if (setupStartInfo != null)
-                    setupStartInfo(startInfo);
+                Debug.LogError("Failed running " + exe + " " + args + "\n\n" + p.GetAllOutput());
 
-                p = new Program(startInfo);
+                throw new Exception(string.Format("{0} did not run properly!", exe));
             }
             else
             {
-                p = new ManagedProgram(MonoInstallationFinder.GetMonoInstallation("MonoBleedingEdge"), null, exe, args, false, setupStartInfo);
-            }
-
-            RunProgram(p, exe, args, workingDirectory, parser);
-        }
-
-        internal static void RunNetCoreProgram(string exe, string args, string workingDirectory, CompilerOutputParserBase parser, Action<ProcessStartInfo> setupStartInfo)
-        {
-            Program p;
-
-            if (Path.GetExtension(exe).Equals(".dll", StringComparison.OrdinalIgnoreCase))
-            {
-                p = new NetCoreProgram(exe, args, setupStartInfo);
-            }
-            else
-            {
-                var startInfo = new ProcessStartInfo()
+                if (messages != null)
                 {
-                    Arguments = args,
-                    CreateNoWindow = true,
-                    FileName = exe
-                };
-
-                if (setupStartInfo != null)
-                    setupStartInfo(startInfo);
-
-                p = new Program(startInfo);
-            }
-
-            RunProgram(p, exe, args, workingDirectory, parser);
-        }
-
-        // Used when debugging il2cpp.exe from Windows, please don't remove it
-        public static void RunNativeProgram(string exe, string args)
-        {
-            using (var p = new NativeProgram(exe, args))
-            {
-                p.Start();
-                p.WaitForExit();
-                if (p.ExitCode != 0)
-                {
-                    Debug.LogError("Failed running " + exe + " " + args + "\n\n" + p.GetAllOutput());
-
-                    throw new Exception(string.Format("{0} did not run properly!", exe));
-                }
-            }
-        }
-
-        private static void RunProgram(Program p, string exe, string args, string workingDirectory, CompilerOutputParserBase parser)
-        {
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            using (p)
-            {
-                p.GetProcessStartInfo().WorkingDirectory = workingDirectory;
-                p.Start();
-                p.WaitForExit();
-
-                stopwatch.Stop();
-                Console.WriteLine("{0} exited after {1} ms.", exe, stopwatch.ElapsedMilliseconds);
-
-                IEnumerable<CompilerMessage> messages = null;
-                if (parser != null)
-                {
-                    var errorOutput = p.GetErrorOutput();
-                    var standardOutput = p.GetStandardOutput();
-                    messages = parser.Parse(errorOutput, standardOutput, true, "n/a (il2cpp)");
-                }
-
-                if (p.ExitCode != 0)
-                {
-                    if (messages != null)
-                    {
-                        foreach (var message in messages)
-                            Debug.LogPlayerBuildError(message.message, message.file, message.line, message.column);
-                    }
-
-                    Debug.LogError("Failed running " + exe + " " + args + "\n\n" + p.GetAllOutput());
-
-                    throw new Exception(string.Format("{0} did not run properly!", exe));
-                }
-                else
-                {
-                    if (messages != null)
-                    {
-                        foreach (var message in messages)
-                            Console.WriteLine(message.message + " - " + message.file + " - " + message.line + " - " + message.column);
-                    }
+                    foreach (var message in messages)
+                        Console.WriteLine(message.message + " - " + message.file + " - " + message.line + " - " + message.column);
                 }
             }
         }
     }
+}
 }

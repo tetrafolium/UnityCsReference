@@ -8,43 +8,46 @@ using UnityEditor.IMGUI.Controls;
 
 namespace UnityEditor.TreeViewExamples
 {
-    class TestDataSource : TreeViewDataSource
+class TestDataSource : TreeViewDataSource
+{
+    private BackendData m_Backend;
+    public int itemCounter {
+        get;
+        private set;
+    }
+
+    public TestDataSource(TreeViewController treeView, BackendData data) : base(treeView)
     {
-        private BackendData m_Backend;
-        public int itemCounter { get; private set; }
+        m_Backend = data;
+        FetchData();
+    }
 
-        public TestDataSource(TreeViewController treeView, BackendData data) : base(treeView)
-        {
-            m_Backend = data;
-            FetchData();
-        }
+    public override void FetchData()
+    {
+        itemCounter = 1;
+        m_RootItem = new FooTreeViewItem(m_Backend.root.id, 0, null, m_Backend.root.name, m_Backend.root);
+        AddChildrenRecursive(m_Backend.root, m_RootItem);
+        m_NeedRefreshRows = true;
+    }
 
-        public override void FetchData()
+    void AddChildrenRecursive(BackendData.Foo source, TreeViewItem dest)
+    {
+        if (source.hasChildren)
         {
-            itemCounter = 1;
-            m_RootItem = new FooTreeViewItem(m_Backend.root.id, 0, null, m_Backend.root.name, m_Backend.root);
-            AddChildrenRecursive(m_Backend.root, m_RootItem);
-            m_NeedRefreshRows = true;
-        }
-
-        void AddChildrenRecursive(BackendData.Foo source, TreeViewItem dest)
-        {
-            if (source.hasChildren)
+            dest.children = new List<TreeViewItem>(source.children.Count);
+            for (int i = 0; i < source.children.Count; ++i)
             {
-                dest.children = new List<TreeViewItem>(source.children.Count);
-                for (int i = 0; i < source.children.Count; ++i)
-                {
-                    BackendData.Foo s = source.children[i];
-                    dest.children.Add(new FooTreeViewItem(s.id, dest.depth + 1, dest, s.name, s));
-                    itemCounter++;
-                    AddChildrenRecursive(s, dest.children[i]);
-                }
+                BackendData.Foo s = source.children[i];
+                dest.children.Add(new FooTreeViewItem(s.id, dest.depth + 1, dest, s.name, s));
+                itemCounter++;
+                AddChildrenRecursive(s, dest.children[i]);
             }
         }
-
-        public override bool CanBeParent(TreeViewItem item)
-        {
-            return true;
-        }
     }
+
+    public override bool CanBeParent(TreeViewItem item)
+    {
+        return true;
+    }
+}
 } // UnityEditor

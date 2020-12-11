@@ -4,8 +4,16 @@
 
 interface ICompilerSettings
 {
-    string[] LibPaths { get; }
-    string CompilerPath { get; }
-    string LinkerPath { get; }
-    string MachineSpecification { get; }
+    string[] LibPaths {
+        get;
+    }
+    string CompilerPath {
+        get;
+    }
+    string LinkerPath {
+        get;
+    }
+    string MachineSpecification {
+        get;
+    }
 }

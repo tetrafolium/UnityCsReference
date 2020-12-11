@@ -363,11 +363,11 @@ internal abstract class DesktopStandalonePostProcessor : DefaultBuildPostprocess
     private static void CreateApplicationData(BuildPostProcessArgs args)
     {
         File.WriteAllText(Path.Combine(args.stagingAreaData, "app.info"),
-            string.Join("\n", new[]
-            {
-                args.companyName,
-                args.productName
-            }));
+                          string.Join("\n", new[]
+        {
+            args.companyName,
+            args.productName
+        }));
         args.report.RecordFileAdded(Path.Combine(args.stagingAreaData, "app.info"), CommonRoles.appInfo);
     }
 
@@ -396,7 +396,7 @@ internal abstract class DesktopStandalonePostProcessor : DefaultBuildPostprocess
     }
 
     protected string GetVariationFolder(BuildPostProcessArgs args) =>
-        Paths.Combine(args.playerPackage, "Variations", GetVariationName(args));
+    Paths.Combine(args.playerPackage, "Variations", GetVariationName(args));
 
     protected abstract void CopyVariationFolderIntoStagingArea(BuildPostProcessArgs args, HashSet<string> filesToNotOverwrite);
 
@@ -404,13 +404,13 @@ internal abstract class DesktopStandalonePostProcessor : DefaultBuildPostprocess
     {
         // Mark the default resources file
         args.report.RecordFileAdded(Path.Combine(args.stagingArea, "Data/Resources/unity default resources"),
-            CommonRoles.builtInResources);
+                                    CommonRoles.builtInResources);
 
         // Mark up each mono runtime
         args.report.RecordFilesAddedRecursive(Path.Combine(monoFolderRoot, k_MonoDirectoryName + "/EmbedRuntime"),
-            CommonRoles.monoRuntime);
+                                              CommonRoles.monoRuntime);
         args.report.RecordFilesAddedRecursive(Path.Combine(monoFolderRoot, k_MonoDirectoryName + "/etc"),
-            CommonRoles.monoConfig);
+                                              CommonRoles.monoConfig);
     }
 
     private void CopyStagingAreaIntoBuildsFolder(BuildPostProcessArgs args)
@@ -490,7 +490,9 @@ internal abstract class DesktopStandalonePostProcessor : DefaultBuildPostprocess
 
     protected static bool UseIl2Cpp => PlayerSettings.GetScriptingBackend(BuildTargetGroup.Standalone) == ScriptingImplementation.IL2CPP;
 
-    protected virtual bool GetCreateSolution(BuildPostProcessArgs args) { return false; }
+    protected virtual bool GetCreateSolution(BuildPostProcessArgs args) {
+        return false;
+    }
 
     protected virtual string GetDestinationFolder(BuildPostProcessArgs args)
     {

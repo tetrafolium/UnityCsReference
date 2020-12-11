@@ -4,11 +4,11 @@
 
 namespace UnityEditor.Experimental
 {
-    public static class BuildPipelineExperimental
+public static class BuildPipelineExperimental
+{
+    public static string GetSessionIdForBuildTarget(BuildTarget target)
     {
-        public static string GetSessionIdForBuildTarget(BuildTarget target)
-        {
-            return BuildPipeline.GetSessionIdForBuildTarget(target);
-        }
+        return BuildPipeline.GetSessionIdForBuildTarget(target);
     }
+}
 }

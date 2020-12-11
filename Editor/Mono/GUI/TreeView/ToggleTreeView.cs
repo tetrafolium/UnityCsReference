@@ -11,7 +11,10 @@ using UnityEngine;
 
 internal abstract class ToggleTreeViewItem : TreeViewItem
 {
-    public abstract bool nodeState { get; set; }
+    public abstract bool nodeState {
+        get;
+        set;
+    }
 }
 
 internal class ToggleTreeView<T> : TreeView where T : ToggleTreeViewItem, new()
@@ -129,7 +132,7 @@ internal class ToggleTreeView<T> : TreeView where T : ToggleTreeViewItem, new()
     {
         base.OnGUI(GUILayoutUtility.GetRect(0, totalHeight));
         if (HasFocus() && Event.current.type == EventType.KeyDown
-            && (Event.current.keyCode == KeyCode.Space || Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter))
+                && (Event.current.keyCode == KeyCode.Space || Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter))
         {
             Event.current.Use();
             var nodes = GetSelection();
@@ -177,21 +180,21 @@ internal class ToggleTreeView<T> : TreeView where T : ToggleTreeViewItem, new()
     protected virtual void BottomGUI()
     {
         using (new EditorGUILayout.HorizontalScope())
-        using (new EditorGUI.DisabledScope(!hasNodes))
-        {
-            if (GUILayout.Button(Styles.toggleAll, EditorStyles.miniButton))
-                ToggleAll();
+            using (new EditorGUI.DisabledScope(!hasNodes))
+            {
+                if (GUILayout.Button(Styles.toggleAll, EditorStyles.miniButton))
+                    ToggleAll();
 
-            var enabledGUI = GUI.enabled;
-            GUI.enabled = hasNodes;
-            if (GUILayout.Button(Styles.collapseAll, EditorStyles.miniButton))
-                CollapseAll();
+                var enabledGUI = GUI.enabled;
+                GUI.enabled = hasNodes;
+                if (GUILayout.Button(Styles.collapseAll, EditorStyles.miniButton))
+                    CollapseAll();
 
-            if (GUILayout.Button(Styles.expandAll, EditorStyles.miniButton))
-                ExpandAll();
+                if (GUILayout.Button(Styles.expandAll, EditorStyles.miniButton))
+                    ExpandAll();
 
-            GUI.enabled = enabledGUI;
-        }
+                GUI.enabled = enabledGUI;
+            }
     }
 
     protected virtual void ToggleAll()
@@ -203,7 +206,9 @@ internal class ToggleTreeView<T> : TreeView where T : ToggleTreeViewItem, new()
 
     protected override TreeViewItem BuildRoot()
     {
-        return m_RebuildRoot == null ? new T() { depth = -1, id = 0, displayName = "", children = new List<TreeViewItem>() } : m_RebuildRoot();
+        return m_RebuildRoot == null ? new T() {
+            depth = -1, id = 0, displayName = "", children = new List<TreeViewItem>()
+        } : m_RebuildRoot();
     }
 
     protected override void RowGUI(RowGUIArgs args)
@@ -225,12 +230,12 @@ internal class ToggleTreeView<T> : TreeView where T : ToggleTreeViewItem, new()
         CenterRectUsingSingleLineHeight(ref cellRect);
         switch (column)
         {
-            case Column.Enabled:
-                EnabledGUI(cellRect, node, ref args);
-                break;
-            case Column.Name:
-                NameGUI(cellRect, node, ref args);
-                break;
+        case Column.Enabled:
+            EnabledGUI(cellRect, node, ref args);
+            break;
+        case Column.Name:
+            NameGUI(cellRect, node, ref args);
+            break;
         }
     }
 

@@ -71,20 +71,20 @@ internal abstract class DesktopStandaloneBuildWindowExtension : DefaultBuildWind
     {
         switch (target)
         {
-            case BuildTarget.StandaloneWindows:
-            case BuildTarget.StandaloneWindows64:
-                return new Dictionary<GUIContent, BuildTarget>()
-                {
-                    { EditorGUIUtility.TrTextContent("x86"), BuildTarget.StandaloneWindows },
-                    { EditorGUIUtility.TrTextContent("x86_64"), BuildTarget.StandaloneWindows64 },
-                };
-            case BuildTarget.StandaloneLinux64:
-                return new Dictionary<GUIContent, BuildTarget>()
-                {
-                    { EditorGUIUtility.TrTextContent("x86_64"), BuildTarget.StandaloneLinux64 },
-                };
-            default:
-                return null;
+        case BuildTarget.StandaloneWindows:
+        case BuildTarget.StandaloneWindows64:
+            return new Dictionary<GUIContent, BuildTarget>()
+            {
+                { EditorGUIUtility.TrTextContent("x86"), BuildTarget.StandaloneWindows },
+                { EditorGUIUtility.TrTextContent("x86_64"), BuildTarget.StandaloneWindows64 },
+            };
+        case BuildTarget.StandaloneLinux64:
+            return new Dictionary<GUIContent, BuildTarget>()
+            {
+                { EditorGUIUtility.TrTextContent("x86_64"), BuildTarget.StandaloneLinux64 },
+            };
+        default:
+            return null;
         }
     }
 
@@ -92,25 +92,25 @@ internal abstract class DesktopStandaloneBuildWindowExtension : DefaultBuildWind
     {
         switch (target)
         {
-            case BuildTarget.StandaloneWindows:
-            case BuildTarget.StandaloneWindows64:
-                return BuildTarget.StandaloneWindows;
-                // Deprecated
+        case BuildTarget.StandaloneWindows:
+        case BuildTarget.StandaloneWindows64:
+            return BuildTarget.StandaloneWindows;
+            // Deprecated
 #pragma warning disable 612, 618
-            case BuildTarget.StandaloneLinux:
-            case BuildTarget.StandaloneLinuxUniversal:
+        case BuildTarget.StandaloneLinux:
+        case BuildTarget.StandaloneLinuxUniversal:
 #pragma warning restore 612, 618
-            case BuildTarget.StandaloneLinux64:
-                return BuildTarget.StandaloneLinux64;
-            case BuildTarget.StandaloneOSX:
-                // Deprecated
+        case BuildTarget.StandaloneLinux64:
+            return BuildTarget.StandaloneLinux64;
+        case BuildTarget.StandaloneOSX:
+            // Deprecated
 #pragma warning disable 612, 618
-            case BuildTarget.StandaloneOSXIntel:
-            case BuildTarget.StandaloneOSXIntel64:
+        case BuildTarget.StandaloneOSXIntel:
+        case BuildTarget.StandaloneOSXIntel64:
 #pragma warning restore 612, 618
-                return BuildTarget.StandaloneOSX;
-            default:
-                return target;
+            return BuildTarget.StandaloneOSX;
+        default:
+            return target;
         }
     }
 
@@ -118,25 +118,25 @@ internal abstract class DesktopStandaloneBuildWindowExtension : DefaultBuildWind
     {
         switch (target)
         {
-            case BuildTarget.StandaloneWindows:
-            case BuildTarget.StandaloneWindows64:
-                return BuildTarget.StandaloneWindows64;
-                // Deprecated
+        case BuildTarget.StandaloneWindows:
+        case BuildTarget.StandaloneWindows64:
+            return BuildTarget.StandaloneWindows64;
+            // Deprecated
 #pragma warning disable 612, 618
-            case BuildTarget.StandaloneLinux:
-            case BuildTarget.StandaloneLinuxUniversal:
+        case BuildTarget.StandaloneLinux:
+        case BuildTarget.StandaloneLinuxUniversal:
 #pragma warning restore 612, 618
-            case BuildTarget.StandaloneLinux64:
-                return BuildTarget.StandaloneLinux64;
-            case BuildTarget.StandaloneOSX:
-                // Deprecated
+        case BuildTarget.StandaloneLinux64:
+            return BuildTarget.StandaloneLinux64;
+        case BuildTarget.StandaloneOSX:
+            // Deprecated
 #pragma warning disable 612, 618
-            case BuildTarget.StandaloneOSXIntel:
-            case BuildTarget.StandaloneOSXIntel64:
+        case BuildTarget.StandaloneOSXIntel:
+        case BuildTarget.StandaloneOSXIntel64:
 #pragma warning restore 612, 618
-                return BuildTarget.StandaloneOSX;
-            default:
-                return target;
+            return BuildTarget.StandaloneOSX;
+        default:
+            return target;
         }
     }
 

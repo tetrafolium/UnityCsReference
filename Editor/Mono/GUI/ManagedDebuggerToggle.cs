@@ -8,47 +8,47 @@ using UnityEditor.Scripting;
 
 namespace UnityEditor
 {
-    internal class ManagedDebuggerToggle
+internal class ManagedDebuggerToggle
+{
+    private readonly GUIContent m_DebuggerAttachedContent;
+    private readonly GUIContent m_DebuggerDisabledContent;
+    private readonly GUIContent m_DebuggerEnabledContent;
+    private readonly PopupLocation[] m_PopupLocation;
+
+    public ManagedDebuggerToggle()
     {
-        private readonly GUIContent m_DebuggerAttachedContent;
-        private readonly GUIContent m_DebuggerDisabledContent;
-        private readonly GUIContent m_DebuggerEnabledContent;
-        private readonly PopupLocation[] m_PopupLocation;
+        m_DebuggerAttachedContent = EditorGUIUtility.TrIconContent("DebuggerAttached", "Debugger Attached");
+        m_DebuggerDisabledContent = EditorGUIUtility.TrIconContent("DebuggerDisabled", "Debugger Disabled");
+        m_DebuggerEnabledContent = EditorGUIUtility.TrIconContent("DebuggerEnabled", "Debugger Enabled");
+        m_PopupLocation = new[] { PopupLocation.AboveAlignRight };
+    }
 
-        public ManagedDebuggerToggle()
+    public void OnGUI()
+    {
+        using (new EditorGUI.DisabledScope(!ManagedDebugger.isEnabled))
         {
-            m_DebuggerAttachedContent = EditorGUIUtility.TrIconContent("DebuggerAttached", "Debugger Attached");
-            m_DebuggerDisabledContent = EditorGUIUtility.TrIconContent("DebuggerDisabled", "Debugger Disabled");
-            m_DebuggerEnabledContent = EditorGUIUtility.TrIconContent("DebuggerEnabled", "Debugger Enabled");
-            m_PopupLocation = new[] { PopupLocation.AboveAlignRight };
-        }
+            var codeOptimization = CompilationPipeline.codeOptimization;
+            var debuggerAttached = ManagedDebugger.isAttached;
+            var content = GetDebuggerContent(debuggerAttached, codeOptimization);
 
-        public void OnGUI()
-        {
-            using (new EditorGUI.DisabledScope(!ManagedDebugger.isEnabled))
+            var style = AppStatusBar.Styles.statusIcon;
+            var rect = GUILayoutUtility.GetRect(content, style);
+            if (GUI.Button(rect, content, style))
             {
-                var codeOptimization = CompilationPipeline.codeOptimization;
-                var debuggerAttached = ManagedDebugger.isAttached;
-                var content = GetDebuggerContent(debuggerAttached, codeOptimization);
-
-                var style = AppStatusBar.Styles.statusIcon;
-                var rect = GUILayoutUtility.GetRect(content, style);
-                if (GUI.Button(rect, content, style))
-                {
-                    PopupWindow.Show(rect, new ManagedDebuggerWindow(codeOptimization), m_PopupLocation);
-                    GUIUtility.ExitGUI();
-                }
+                PopupWindow.Show(rect, new ManagedDebuggerWindow(codeOptimization), m_PopupLocation);
+                GUIUtility.ExitGUI();
             }
-        }
-
-        private GUIContent GetDebuggerContent(bool debuggerAttached, CodeOptimization optimization)
-        {
-            if (CodeOptimization.Debug == optimization)
-            {
-                return debuggerAttached ? m_DebuggerAttachedContent : m_DebuggerEnabledContent;
-            }
-
-            return m_DebuggerDisabledContent;
         }
     }
+
+    private GUIContent GetDebuggerContent(bool debuggerAttached, CodeOptimization optimization)
+    {
+        if (CodeOptimization.Debug == optimization)
+        {
+            return debuggerAttached ? m_DebuggerAttachedContent : m_DebuggerEnabledContent;
+        }
+
+        return m_DebuggerDisabledContent;
+    }
+}
 }

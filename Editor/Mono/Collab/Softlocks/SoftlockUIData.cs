@@ -12,196 +12,196 @@ using UnityEditor.Web;
 
 namespace UnityEditor.Collaboration
 {
-    // Composes Softlock data into structures used by the UI.
-    internal static class SoftLockUIData
+// Composes Softlock data into structures used by the UI.
+internal static class SoftLockUIData
+{
+    private static Dictionary<string, Texture> s_ImageCache = new Dictionary<string, Texture>();
+    private static Dictionary<SectionEnum, string> s_ImageNameCache = new Dictionary<SectionEnum, string>();
+    private const string kIconMipSuffix = " Icon";
+
+    public enum SectionEnum
     {
-        private static Dictionary<string, Texture> s_ImageCache = new Dictionary<string, Texture>();
-        private static Dictionary<SectionEnum, string> s_ImageNameCache = new Dictionary<SectionEnum, string>();
-        private const string kIconMipSuffix = " Icon";
+        None,
+        Inspector,
+        Scene,
+        ProjectBrowser
+    }
 
-        public enum SectionEnum
+    #region General
+
+    // Provides the names of all additional users editing the asset
+    // with the given 'assetGuid'.
+    // Defaults to an empty list.
+    public static List<string> GetLocksNamesOnAsset(string assetGuid)
+    {
+        List<SoftLock> softLocks = null;
+        List<string> names = new List<string>();
+
+        if (SoftLockData.TryGetLocksOnAssetGUID(assetGuid, out softLocks))
         {
-            None,
-            Inspector,
-            Scene,
-            ProjectBrowser
-        }
-
-        #region General
-
-        // Provides the names of all additional users editing the asset
-        // with the given 'assetGuid'.
-        // Defaults to an empty list.
-        public static List<string> GetLocksNamesOnAsset(string assetGuid)
-        {
-            List<SoftLock> softLocks = null;
-            List<string> names = new List<string>();
-
-            if (SoftLockData.TryGetLocksOnAssetGUID(assetGuid, out softLocks))
+            foreach (SoftLock softLock in softLocks)
             {
-                foreach (SoftLock softLock in softLocks)
-                {
-                    names.Add(softLock.displayName);
-                }
+                names.Add(softLock.displayName);
             }
-            return names;
         }
+        return names;
+    }
 
-        #endregion
-        #region Scene
+    #endregion
+    #region Scene
 
-        // Provides the names of all additional users editing the scene.
-        // Defaults to an empty list.
-        public static List<string> GetLocksNamesOnScene(Scene scene)
+    // Provides the names of all additional users editing the scene.
+    // Defaults to an empty list.
+    public static List<string> GetLocksNamesOnScene(Scene scene)
+    {
+        List<string> names = GetLockNamesOnScenePath(scene.path);
+        return names;
+    }
+
+    public static List<string> GetLockNamesOnScenePath(string scenePath)
+    {
+        string assetGuid = AssetDatabase.AssetPathToGUID(scenePath);
+        List<string> names = GetLocksNamesOnAsset(assetGuid);
+        return names;
+    }
+
+    public static string GetSceneNameFromPath(string scenePath)
+    {
+        string name = "";
+        if (null != scenePath)
         {
-            List<string> names = GetLockNamesOnScenePath(scene.path);
-            return names;
+            name = scenePath;
         }
+        return name;
+    }
 
-        public static List<string> GetLockNamesOnScenePath(string scenePath)
+    // Provides the names of all additional users editing each scene.
+    // Defaults to an empty list, and may contain empty sub-lists.
+    public static List<List<string>> GetLockNamesOnScenes(List<Scene> scenes)
+    {
+        List<List<string>> namesByScene = new List<List<string>>();
+
+        if (scenes == null)
         {
-            string assetGuid = AssetDatabase.AssetPathToGUID(scenePath);
-            List<string> names = GetLocksNamesOnAsset(assetGuid);
-            return names;
-        }
-
-        public static string GetSceneNameFromPath(string scenePath)
-        {
-            string name = "";
-            if (null != scenePath)
-            {
-                name = scenePath;
-            }
-            return name;
-        }
-
-        // Provides the names of all additional users editing each scene.
-        // Defaults to an empty list, and may contain empty sub-lists.
-        public static List<List<string>> GetLockNamesOnScenes(List<Scene> scenes)
-        {
-            List<List<string>> namesByScene = new List<List<string>>();
-
-            if (scenes == null)
-            {
-                return namesByScene;
-            }
-
-            foreach (Scene scene in scenes)
-            {
-                List<string> names = GetLocksNamesOnScene(scene);
-                namesByScene.Add(names);
-            }
             return namesByScene;
         }
 
-        // For each iteration, returns the pair (scene name : list of other users' names).
-        public static IEnumerable<KeyValuePair<string, List<string>>> GetLockNamesOnOpenScenes()
+        foreach (Scene scene in scenes)
         {
-            if (Collab.instance.IsCollabEnabledForCurrentProject())
+            List<string> names = GetLocksNamesOnScene(scene);
+            namesByScene.Add(names);
+        }
+        return namesByScene;
+    }
+
+    // For each iteration, returns the pair (scene name : list of other users' names).
+    public static IEnumerable<KeyValuePair<string, List<string>>> GetLockNamesOnOpenScenes()
+    {
+        if (Collab.instance.IsCollabEnabledForCurrentProject())
+        {
+            for (int sceneIndex = 0; sceneIndex < EditorSceneManager.sceneCount; sceneIndex++)
             {
-                for (int sceneIndex = 0; sceneIndex < EditorSceneManager.sceneCount; sceneIndex++)
+                Scene scene = SceneManager.GetSceneAt(sceneIndex);
+                List<string> names = GetLocksNamesOnScene(scene);
+                string sceneName = scene.name;
+                if (String.IsNullOrEmpty(sceneName))
                 {
-                    Scene scene = SceneManager.GetSceneAt(sceneIndex);
-                    List<string> names = GetLocksNamesOnScene(scene);
-                    string sceneName = scene.name;
-                    if (String.IsNullOrEmpty(sceneName))
-                    {
-                        // Default for unnamed scenes.
-                        sceneName = "Untitled";
-                    }
-                    KeyValuePair<string, List<string>> sceneData = new KeyValuePair<string, List<string>>(sceneName, names);
-                    yield return sceneData;
+                    // Default for unnamed scenes.
+                    sceneName = "Untitled";
                 }
+                KeyValuePair<string, List<string>> sceneData = new KeyValuePair<string, List<string>>(sceneName, names);
+                yield return sceneData;
             }
         }
+    }
 
-        public static int CountOfLocksOnOpenScenes()
+    public static int CountOfLocksOnOpenScenes()
+    {
+        int count = 0;
+
+        foreach (KeyValuePair<string, List<string>> sceneData in GetLockNamesOnOpenScenes())
         {
-            int count = 0;
+            count += sceneData.Value.Count;
+        }
+        return count;
+    }
 
-            foreach (KeyValuePair<string, List<string>> sceneData in GetLockNamesOnOpenScenes())
+    #endregion
+    #region Game Object
+
+    // The usernames of additional people editing the given 'objectWithGUID'.
+    // Defaults to an empty list.
+    public static List<string> GetLockNamesOnObject(UnityEngine.Object objectWithGUID)
+    {
+        string assetGUID = null;
+        AssetAccess.TryGetAssetGUIDFromObject(objectWithGUID, out assetGUID);
+        List<string> names = GetLocksNamesOnAsset(assetGUID);
+        return names;
+    }
+
+    #endregion
+    #region Icons
+
+    // The icon for the particular section in the editor.
+    // Defaults to null.
+    public static Texture GetIconForSection(SectionEnum section)
+    {
+        string iconName = IconNameForSection(section);
+        Texture texture = GetIconForName(iconName);
+        return texture;
+    }
+
+    private static string IconNameForSection(SectionEnum section)
+    {
+        string iconName;
+        if (!s_ImageNameCache.TryGetValue(section, out iconName))
+        {
+            switch (section)
             {
-                count += sceneData.Value.Count;
-            }
-            return count;
-        }
+            case SectionEnum.Inspector:
+            case SectionEnum.Scene:
+                iconName = "SoftlockInline.png";
+                break;
 
-        #endregion
-        #region Game Object
+            case SectionEnum.ProjectBrowser:
+                iconName = String.Format("SoftlockProjectBrowser{0}", kIconMipSuffix);
+                break;
 
-        // The usernames of additional people editing the given 'objectWithGUID'.
-        // Defaults to an empty list.
-        public static List<string> GetLockNamesOnObject(UnityEngine.Object objectWithGUID)
-        {
-            string assetGUID = null;
-            AssetAccess.TryGetAssetGUIDFromObject(objectWithGUID, out assetGUID);
-            List<string> names = GetLocksNamesOnAsset(assetGUID);
-            return names;
-        }
-
-        #endregion
-        #region Icons
-
-        // The icon for the particular section in the editor.
-        // Defaults to null.
-        public static Texture GetIconForSection(SectionEnum section)
-        {
-            string iconName = IconNameForSection(section);
-            Texture texture = GetIconForName(iconName);
-            return texture;
-        }
-
-        private static string IconNameForSection(SectionEnum section)
-        {
-            string iconName;
-            if (!s_ImageNameCache.TryGetValue(section, out iconName))
-            {
-                switch (section)
-                {
-                    case SectionEnum.Inspector:
-                    case SectionEnum.Scene:
-                        iconName = "SoftlockInline.png";
-                        break;
-
-                    case SectionEnum.ProjectBrowser:
-                        iconName = String.Format("SoftlockProjectBrowser{0}", kIconMipSuffix);
-                        break;
-
-                    default:
-                        return null;
-                }
-                s_ImageNameCache.Add(section, iconName);
-            }
-            return iconName;
-        }
-
-        private static Texture GetIconForName(string fileName)
-        {
-            if (String.IsNullOrEmpty(fileName))
-            {
+            default:
                 return null;
             }
+            s_ImageNameCache.Add(section, iconName);
+        }
+        return iconName;
+    }
 
-            Texture texture;
-            // Note: a previous texture may have been destroyed
-            // by the system on the c++ side.
-            if (!s_ImageCache.TryGetValue(fileName, out texture) || texture == null)
-            {
-                if (fileName.EndsWith(kIconMipSuffix))
-                {
-                    texture = EditorGUIUtility.FindTexture(fileName) as Texture;
-                }
-                else
-                {
-                    texture = EditorGUIUtility.LoadIconRequired(fileName) as Texture;
-                }
-                s_ImageCache.Remove(fileName);
-                s_ImageCache.Add(fileName, texture);
-            }
-            return texture;
+    private static Texture GetIconForName(string fileName)
+    {
+        if (String.IsNullOrEmpty(fileName))
+        {
+            return null;
         }
 
-        #endregion
+        Texture texture;
+        // Note: a previous texture may have been destroyed
+        // by the system on the c++ side.
+        if (!s_ImageCache.TryGetValue(fileName, out texture) || texture == null)
+        {
+            if (fileName.EndsWith(kIconMipSuffix))
+            {
+                texture = EditorGUIUtility.FindTexture(fileName) as Texture;
+            }
+            else
+            {
+                texture = EditorGUIUtility.LoadIconRequired(fileName) as Texture;
+            }
+            s_ImageCache.Remove(fileName);
+            s_ImageCache.Add(fileName, texture);
+        }
+        return texture;
     }
+
+    #endregion
+}
 }
 

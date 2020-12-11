@@ -11,24 +11,24 @@ using System.Collections;
 
 namespace UnityEditor
 {
-    public sealed partial class EditorGUILayout
+public sealed partial class EditorGUILayout
+{
+    internal static bool IconButton(int id, GUIContent content, GUIStyle style, params GUILayoutOption[] options)
     {
-        internal static bool IconButton(int id, GUIContent content, GUIStyle style, params GUILayoutOption[] options)
-        {
-            s_LastRect = GUILayoutUtility.GetRect(content, style, options);
-            return EditorGUI.IconButton(id, s_LastRect, content, style);
-        }
-
-        internal static void GameViewSizePopup(GameViewSizeGroupType groupType, int selectedIndex, IGameViewSizeMenuUser gameView, GUIStyle style, params GUILayoutOption[] options)
-        {
-            s_LastRect =  GetControlRect(false, EditorGUI.kSingleLineHeight, style, options);
-            EditorGUI.GameViewSizePopup(s_LastRect, groupType, selectedIndex, gameView, style);
-        }
-
-        internal static void SortingLayerField(GUIContent label, SerializedProperty layerID, GUIStyle style, GUIStyle labelStyle)
-        {
-            s_LastRect = EditorGUILayout.GetControlRect(false, EditorGUI.kSingleLineHeight, style);
-            EditorGUI.SortingLayerField(s_LastRect, label, layerID, style, labelStyle);
-        }
+        s_LastRect = GUILayoutUtility.GetRect(content, style, options);
+        return EditorGUI.IconButton(id, s_LastRect, content, style);
     }
+
+    internal static void GameViewSizePopup(GameViewSizeGroupType groupType, int selectedIndex, IGameViewSizeMenuUser gameView, GUIStyle style, params GUILayoutOption[] options)
+    {
+        s_LastRect =  GetControlRect(false, EditorGUI.kSingleLineHeight, style, options);
+        EditorGUI.GameViewSizePopup(s_LastRect, groupType, selectedIndex, gameView, style);
+    }
+
+    internal static void SortingLayerField(GUIContent label, SerializedProperty layerID, GUIStyle style, GUIStyle labelStyle)
+    {
+        s_LastRect = EditorGUILayout.GetControlRect(false, EditorGUI.kSingleLineHeight, style);
+        EditorGUI.SortingLayerField(s_LastRect, label, layerID, style, labelStyle);
+    }
+}
 }
