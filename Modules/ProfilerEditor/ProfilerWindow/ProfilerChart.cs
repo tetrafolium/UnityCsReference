@@ -64,7 +64,7 @@ public override void Close() {
 }
 
 /// <summary>
-/// Callback parameter will be either true if a state change occured
+/// Callback parameter will be either true if a state change occurred
 /// </summary>
 /// <param name="onSeriesToggle"></param>
 public void SetOnSeriesToggleCallback(Action<bool> onSeriesToggle) {

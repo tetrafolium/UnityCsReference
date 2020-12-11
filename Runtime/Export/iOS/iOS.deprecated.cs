@@ -445,7 +445,7 @@ public static iPhoneOrientation orientation {
 	get { return default(iPhoneOrientation); }
 }
 
-// Folowing members are not strictly required to update references from
+// Following members are not strictly required to update references from
 // iPhoneInput -> Input, but any method that takes an argument like
 // iPhoneInput.touchCount will fail resolution if the member (touchCount) is
 // not present in the "old" version of the type and the update may fail.

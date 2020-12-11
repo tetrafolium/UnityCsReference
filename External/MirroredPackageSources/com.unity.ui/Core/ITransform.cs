@@ -5,7 +5,7 @@ namespace UnityEngine.UIElements {
 /// <remarks>
 ///
 ///             Reading properties of this object gives information about the
-///             tranform of its VisualElement. It is possible to write the
+///             transform of its VisualElement. It is possible to write the
 ///             position, scale and rotation of the transform.
 ///
 /// </remarks>

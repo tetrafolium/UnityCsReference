@@ -191,7 +191,7 @@ void HandleOnCompilationTaskFinished() {
 // Returns true when compilation is finished due to one of these reasons
 // * Was stopped (CompilationTask.Stopped will be true)
 // * Compilation had errors (CompilationTask.CompileErrors will be true)
-// * Compilation succesfully completed without errors.
+// * Compilation successfully completed without errors.
 public bool Poll() {
 	HandleOnCompilationTaskStarted();
 

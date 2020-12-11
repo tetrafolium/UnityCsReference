@@ -9,7 +9,7 @@ using System.IO;
 using UnityEngine;
 namespace UnityEditor {
 /// <summary>
-/// Class intented to verify if build will compile / work on specified target
+/// Class intended to verify if build will compile / work on specified target
 /// platform Currently only managed references are verified
 /// </summary>
 internal class BuildVerifier {

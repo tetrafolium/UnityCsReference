@@ -178,7 +178,7 @@ public static extern string applicationPath {
 	[FreeFunction("GetApplicationPath", IsThreadSafe = true)] get;
 }
 
-// Retuns true if resources are being built
+// Returns true if resources are being built
 internal static extern bool isBuildingAnyResources {
 	[FreeFunction("IsBuildingAnyResources")] get;
 }

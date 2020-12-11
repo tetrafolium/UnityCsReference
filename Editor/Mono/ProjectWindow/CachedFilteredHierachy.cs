@@ -38,7 +38,7 @@ public Texture2D icon {
 					// InternalEditorUtility.FindIconForFile first in revision
 					// f25945218bb6 / 29b23dbe4b5c introduced several regressions.
 					//  - Doesn't support custom user-assigned icons for monoscripts.
-					//  - Doesn't support open/closed folder icon destinction.
+					//  - Doesn't support open/closed folder icon destination.
 					//  - The change only affected Two-Column mode in Project View and
 					//  not One-Column mode, adding inconsistency.
 					//  - Doesn't support showing different icons for different prefab

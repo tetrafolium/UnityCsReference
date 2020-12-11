@@ -44,7 +44,7 @@ TreeViewState m_AudioGroupTreeState;
 AudioMixerGroupTreeView m_GroupTree;
 [SerializeField] TreeViewStateWithAssetUtility
         m_MixersTreeState; // Use SerializeField so it is stored in the layout
-                           // file (persistant)
+                           // file (persistent)
 AudioMixersTreeView m_MixersTree;
 ReorderableListWithRenameAndScrollView.State m_ViewsState;
 AudioMixerGroupViewList m_GroupViews;

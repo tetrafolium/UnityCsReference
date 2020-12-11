@@ -154,7 +154,7 @@ string currentSortingName {
 	set {
 		m_CurrentSortingName = value;
 
-		// Ensure backwards compability (if current sort is not found, default to
+		// Ensure backwards compatibility (if current sort is not found, default to
 		// transform sort)
 		if (!m_SortingObjects.ContainsKey(m_CurrentSortingName)) {
 			m_CurrentSortingName = GetNameForType(typeof(TransformSorting));

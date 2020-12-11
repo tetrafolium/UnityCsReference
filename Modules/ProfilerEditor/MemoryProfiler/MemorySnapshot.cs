@@ -43,7 +43,7 @@ Convert(UnityEditor.MemoryProfiler.PackedMemorySnapshot snapshot,
 		return false;
 	}
 
-	// snapshot version will always be the current one for convertion
+	// snapshot version will always be the current one for conversion
 	// operations
 	writer.WriteEntry(EntryType.Metadata_Version, kCurrentVersion);
 

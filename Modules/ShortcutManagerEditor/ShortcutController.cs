@@ -329,7 +329,7 @@ void MigrateUserSpecifiedPrefKeys() {
 		if (entry == null)
 			continue;
 
-		// Ignore former PrefKey if it is overriden in existing migrated profile
+		// Ignore former PrefKey if it is overridden in existing migrated profile
 		if (entry.overridden)
 			continue;
 

@@ -681,7 +681,7 @@ CopyAttenuationToAllSnapshots(AudioMixerGroupController group,
 public void ReparentSelection(AudioMixerGroupController newParent,
                               int insertionIndex,
                               List<AudioMixerGroupController> selection) {
-	// We are moving items so we adjust the insertion index to accomodate that
+	// We are moving items so we adjust the insertion index to accommodate that
 	// any items above the insertion index is removed before inserting
 	if (insertionIndex >= 0)
 		insertionIndex -= newParent.children.ToList()

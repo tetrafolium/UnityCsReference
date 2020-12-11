@@ -258,7 +258,7 @@ bool drawLabels {
 	}
 }
 
-// Returns an error string. If no errors occured then null is returned
+// Returns an error string. If no errors occurred then null is returned
 string CreateNewLibraryCallback(string libraryName,
                                 PresetFileLocation fileLocation) {
 	string defaultPath =

@@ -27,7 +27,7 @@ internal static void Internal_ActiveBuildTargetChanged() {
 
 #pragma warning restore 0618
 
-// Force full optimisations for script complilation in Development builds
+// Force full optimisations for script complication in Development builds
 // (OBSOLETE, replaced by "IL2CPP optimization level" Player Setting)
 [Obsolete(
 	 "forceOptimizeScriptCompilation is obsolete - will always return false. Control script optimization using the 'IL2CPP optimization level' configuration in Player Settings / Other.")]

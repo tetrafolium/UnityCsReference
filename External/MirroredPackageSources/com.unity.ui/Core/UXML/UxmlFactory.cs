@@ -189,7 +189,7 @@ string substituteForTypeQualifiedName {
 bool AcceptsAttributeBag(IUxmlAttributes bag, CreationContext cc);
 
 /// <summary>
-/// Instanciate and initialize an object of type <c>T0</c>.
+/// Instantiate and initialize an object of type <c>T0</c>.
 /// </summary>
 /// <param name="bag">A bag of name-value pairs, one for each attribute of
 /// the UXML element. This can be used to initialize the properties of the

@@ -593,7 +593,7 @@ GenerateMenu(List<AnimationWindowHierarchyNode> interactedNodes,
 	  : nullMenuFunction2, RotationCurveInterpolation.Mode.NonBaked);
 	}
 
-	// Menu items that are only applicaple when in animation mode:
+	// Menu items that are only applicable when in animation mode:
 	if (state.previewing) {
 		menu.AddSeparator("");
 

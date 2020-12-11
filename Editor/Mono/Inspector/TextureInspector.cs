@@ -11,7 +11,7 @@ using VirtualTexturing = UnityEngine.Rendering.VirtualTexturing;
 
 namespace UnityEditor {
 internal class PreviewHelpers {
-// This assumes NPOT RenderTextures since Unity 4.3 has this as a requirment
+// This assumes NPOT RenderTextures since Unity 4.3 has this as a requirement
 // already.
 internal static void AdjustWidthAndHeightForStaticPreview(int textureWidth,
                                                           int textureHeight,

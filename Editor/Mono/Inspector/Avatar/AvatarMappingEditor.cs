@@ -301,7 +301,7 @@ public override void OnInspectorGUI() {
 	HandleUndoPerformed();
 	UpdateSelectedBone();
 
-	// case 837655.  GUI.keyboardControl is overriden when changing scene
+	// case 837655.  GUI.keyboardControl is overridden when changing scene
 	// selection. Late update here to bypass this issue.
 	if (s_KeyboardControl != 0) {
 		GUIUtility.keyboardControl = s_KeyboardControl;
@@ -612,7 +612,7 @@ protected void DisplayFoldout() {
 						bone.Serialize(m_HumanBoneArray);
 
 						// User adding a bone manually, if it not in the modelBones dict,
-						// we must explictly add it
+						// we must explicitly add it
 						if (newBoneTransform != null &&
 						    !bones.ContainsKey(newBoneTransform))
 							bones[newBoneTransform] = true;
@@ -699,7 +699,7 @@ protected BoneState GetBoneState(int i, out string error) {
 		return BoneState.BoneLenghtIsZero;
 	}
 
-	// Does this transfrom is already set
+	// Does this transform is already set
 	// List<BoneWrapper> match = ArrayUtility.FindAll (m_BoneWrappers, delegate
 	// (Transform t) { return t == m_BoneWrappers[i].bone; });
 	IEnumerable<AvatarSetupTool.BoneWrapper> match =

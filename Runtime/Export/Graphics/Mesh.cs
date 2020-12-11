@@ -574,7 +574,7 @@ private void SetUvsImpl<T>(int uvIndex, int dim, List<T> uvs, int start,
                            int length,
                            UnityEngine.Rendering.MeshUpdateFlags flags) {
 	// before this resulted in error *printed* out deep inside c++ code (coming
-	// from assert - useless for end-user) while excpetion would make sense we
+	// from assert - useless for end-user) while exception would make sense we
 	// dont want to add exceptions to exisisting apis
 	if (uvIndex < 0 || uvIndex > 7) {
 		Debug.LogError("The uv index is invalid. Must be in the range 0 to 7.");

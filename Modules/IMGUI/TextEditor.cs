@@ -1328,7 +1328,7 @@ static void MapKey(string key, TextEditOp action) {
 }
 
 static Dictionary<Event, TextEditOp> s_Keyactions;
-/// Set up a platform independant keyboard->Edit action map. This varies
+/// Set up a platform independent keyboard->Edit action map. This varies
 /// depending on whether we are on mac or windows.
 void InitKeyActions() {
 	if (s_Keyactions != null)

@@ -4,7 +4,7 @@ namespace UnityEngine.UIElements {
 /// </summary>
 public class InputEvent : EventBase<InputEvent> {
 /// <summary>
-/// The text before the change occured.
+/// The text before the change occurred.
 /// </summary>
 public string previousData {
 	get;
@@ -38,7 +38,7 @@ void LocalInit() {
 /// obtained using this method need to be released back to the pool. You can
 /// use `Dispose()` to release them.
 /// </summary>
-/// <param name="previousData">The text before the change occured.</param>
+/// <param name="previousData">The text before the change occurred.</param>
 /// <param name="newData">The new text.</param>
 /// <returns>An initialized event.</returns>
 public static InputEvent GetPooled(string previousData, string newData) {

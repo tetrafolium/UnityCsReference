@@ -172,7 +172,7 @@ public TreeGroup AddGroup(TreeGroup parent, System.Type type) {
 	// set parent
 	SetGroupParent(g, parent);
 
-	// validate hierachy // already done in setgroupparent
+	// validate hierarchy // already done in setgroupparent
 	// ValidateReferences();
 
 	return g;
@@ -619,7 +619,7 @@ static public List<float> GetAdaptiveSamples(TreeGroup group, TreeNode node,
 		if (Mathf.Abs(radiusB - radiusC) > thresholdR)
 			removeMidPoint = false;
 
-		// remove point inbetween a and b..
+		// remove point between a and b..
 		if (removeMidPoint) {
 			samplePoints.RemoveAt(i + 1);
 			i--;
@@ -1327,7 +1327,7 @@ private bool UpdateTextures(TextureAtlas atlas,
 	DestroyImmediate(translucencyTexture);
 	DestroyImmediate(shadowTexture);
 
-	// set texutres on optimized materials
+	// set textures on optimized materials
 	optimizedSolidMaterial.SetTexture("_MainTex", textures[0]);
 	optimizedSolidMaterial.SetTexture("_BumpSpecMap", textures[1]);
 	optimizedSolidMaterial.SetTexture("_TranslucencyMap", textures[2]);

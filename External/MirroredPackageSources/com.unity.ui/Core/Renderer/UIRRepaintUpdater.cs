@@ -80,7 +80,7 @@ internal RenderChain DebugGetRenderChain() {
 	return renderChain;
 }
 
-// Overriden in tests
+// Overridden in tests
 protected virtual RenderChain CreateRenderChain() {
 	return new RenderChain(panel);
 }

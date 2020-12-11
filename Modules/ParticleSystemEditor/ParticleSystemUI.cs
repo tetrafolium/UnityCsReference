@@ -311,7 +311,7 @@ public void OnGUI(float width, bool fixedWidth) {
 			                             FocusType.Passive, GUIStyle.none))
 				ShowAddModuleMenu();
 
-			// Module header (last to become top most renderered)
+			// Module header (last to become top most rendered)
 			if (!string.IsNullOrEmpty(selectedEmitterName))
 				headerLabel.text =
 					initialModule ? selectedEmitterName : module.displayName;

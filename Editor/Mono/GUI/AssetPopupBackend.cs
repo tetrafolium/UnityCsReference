@@ -107,7 +107,7 @@ new () {
 		}
 	}
 
-	// If no defalut asset was found, add defualt null value.
+	// If no defalut asset was found, add default null value.
 	if (!foundDefaultAsset) {
 		gm.AddItem(new GUIContent(defaultFieldName), selectedInstanceID == 0,
 		           AssetPopupMenuCallback, new object[] {0, serializedProperty});

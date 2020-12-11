@@ -450,7 +450,7 @@ internal void ResetValuesFromProperties() {
 	m_HasTranslationDoF = m_HasTranslationDoFProperty.boolValue;
 
 	// limit is a special case, because they are added dynamicly by the editor
-	// all the default value are wrong, we must explictly query mecanim to get
+	// all the default value are wrong, we must explicitly query mecanim to get
 	// the default value when m_Modified is set to false.
 	for (int i = 0; i < m_Bones.Length; i++) {
 		if (m_Modified[i] != null) {
@@ -657,7 +657,7 @@ protected override void ResetValues() {
 
 protected void ResetMuscleToDefault() {
 	Avatar avatar = null;
-	// For live update, update instanciate avatar to adjust pose
+	// For live update, update instantiate avatar to adjust pose
 	if (gameObject != null) {
 		Animator animator = gameObject.GetComponent(typeof(Animator)) as Animator;
 		avatar = animator.avatar;
@@ -685,7 +685,7 @@ protected void ResetMuscleToDefault() {
 
 protected void UpdateAvatarParameter(HumanParameter parameterId,
                                      float value) {
-	// For live update, update instanciate avatar to adjust pose
+	// For live update, update instantiate avatar to adjust pose
 	if (gameObject != null) {
 		Animator animator = gameObject.GetComponent(typeof(Animator)) as Animator;
 		Avatar avatar = animator.avatar;
@@ -727,7 +727,7 @@ protected bool UpdateMuscle(int muscleId, float min, float max) {
 	// OnSceneGUI need focused muscle to know which one to draw
 	m_FocusedMuscle = muscleId;
 
-	// For live update, update instanciate avatar to adjust pose
+	// For live update, update instantiate avatar to adjust pose
 	if (gameObject != null) {
 		Animator animator = gameObject.GetComponent(typeof(Animator)) as Animator;
 		Avatar avatar = animator.avatar;

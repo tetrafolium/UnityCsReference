@@ -26,7 +26,7 @@ internal static event OnAssetIconDrawDelegate postAssetIconDrawCallback =
 
 // 'drawRect' prescribed draw area after the asset label.
 // 'guid' asset being drawn.
-// return whether drawing occured (space will be redistributed if false)
+// return whether drawing occurred (space will be redistributed if false)
 internal delegate bool OnAssetLabelDrawDelegate(Rect drawRect, string guid,
                                                 bool isListMode);
 internal static event OnAssetLabelDrawDelegate postAssetLabelDrawCallback =
@@ -173,7 +173,7 @@ protected override void DrawInternal(int beginIndex, int endIndex,
 	bool isFolderBrowsing = m_FilteredHierarchy.searchFilter.GetState() ==
 	                        SearchFilter.State.FolderBrowsing;
 
-	// The seperator bar is drawn before all items
+	// The separator bar is drawn before all items
 	yOffset += GetHeaderHeight();
 
 	// 1. None item

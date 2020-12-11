@@ -78,7 +78,7 @@ protected override void DrawInternal(int itemIdx, int endItem,
 	int endContainerItem = m_Assets.Count;
 	int startItemIdx = itemIdx;
 
-	// The seperator bar is drawn before all items
+	// The separator bar is drawn before all items
 	yOffset += kGroupSeparatorHeight;
 
 	bool isRepaintEvent = Event.current.type == EventType.Repaint;
@@ -277,7 +277,7 @@ public override void UpdateFilter(HierarchyType hierarchyType,
 }
 
 public override void UpdateHeight() {
-	// We always show the seperator bar
+	// We always show the separator bar
 	m_Height = (int) kGroupSeparatorHeight;
 
 	if (!Visible)

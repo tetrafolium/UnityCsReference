@@ -394,7 +394,7 @@ public float TimeField(Rect rect, int id, float time, float frameRate,
 			if (GUIUtility.keyboardControl == id) {
 				GUI.changed = true;
 
-				// Make sure that comma & period are interchangable.
+				// Make sure that comma & period are interchangeable.
 				str = str.Replace(',', '.');
 
 				// format is time:frame

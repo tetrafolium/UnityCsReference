@@ -152,7 +152,7 @@ public void Update() {
 		return;
 	}
 
-	// Update the last camera positon and repaint if the camera has moved
+	// Update the last camera position and repaint if the camera has moved
 	if (SceneView.lastActiveSceneView.camera.transform.position !=
 	    m_LastCameraPos) {
 		m_LastCameraPos = SceneView.lastActiveSceneView.camera.transform.position;
@@ -247,7 +247,7 @@ public override void OnInspectorGUI() {
 	var sliderBarPosition = GUILayoutUtility.GetRect(
 		0, LODGroupGUI.kSliderBarHeight, GUILayout.ExpandWidth(true));
 
-	// Precalculate the lod info (button locations / ranges ect)
+	// Precalculate the lod info (button locations / ranges etc)
 	var lods = LODGroupGUI.CreateLODInfos(
 		m_NumberOfLODs, sliderBarPosition, i => String.Format("LOD {0}", i),
 		i => serializedObject
@@ -653,7 +653,7 @@ private void AddGameObjectRenderers(IEnumerable<Renderer> toAdd, bool add) {
 	m_LODGroup.RecalculateBounds();
 }
 
-// Callabck action for mouse context clicks on the LOD slider(right click ect)
+// Callabck action for mouse context clicks on the LOD slider(right click etc)
 private class LODAction {
 private readonly float m_Percentage;
 private readonly List<LODGroupGUI.LODInfo> m_LODs;

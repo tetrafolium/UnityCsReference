@@ -20,7 +20,7 @@ internal static ReadOnlyCollection<Stage> allStages {
 
 // Called when the user have accepted to switch away from previous stage.
 // This method should load stage contents. Should return 'true' if the stage
-// was opened succesfully otherwise 'false'.
+// was opened successfully otherwise 'false'.
 protected internal abstract bool OnOpenStage();
 
 // Called when the stage is destroyed (when OnDestroy() is called). Should

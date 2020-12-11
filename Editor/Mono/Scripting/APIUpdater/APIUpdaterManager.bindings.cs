@@ -149,7 +149,7 @@ internal static void UpdateAssemblies() {
 /*
  * We store this list at native side so it don't get lost at domain reloads
  * Code should call `GetAssembliesToBeUpdated()` instead of using
- * `assembliesToUpdate` direclty.
+ * `assembliesToUpdate` directly.
  */
 private static void PersistListOfAssembliesToUpdate() {
 	ResetListOfAssembliesToBeUpdateInNativeSide();

@@ -453,7 +453,7 @@ public IAutomatedUIElement nextSibling {
 		if (parent == null)
 			return null;
 
-		// TODO: this is a silly implementaiton. we can probably do better.
+		// TODO: this is a silly implementation. we can probably do better.
 		var siblings = parent.children;
 		for (int i = 0; i < siblings.Count; ++i) {
 			if (siblings[i] == this) {

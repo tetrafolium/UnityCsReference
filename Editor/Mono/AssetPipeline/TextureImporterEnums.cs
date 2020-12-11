@@ -45,7 +45,7 @@ public enum TextureImporterFormat {
 		  "Use crunchedCompression property instead") ] AutomaticCrunched = -5,
 	// Choose an HDR format automatically.
 	[ System.Obsolete("HDR is handled automatically now") ] AutomaticHDR = -6,
-	// Choose a compresssed HDR format automatically.
+	// Choose a compressed HDR format automatically.
 	[ System.Obsolete(
 		  "HDR is handled automatically now") ] AutomaticCompressedHDR = -7,
 

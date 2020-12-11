@@ -112,7 +112,7 @@ public bool isRealtimeLightmap {
 	set { m_IsRealtimeLightmap = value; }
 }
 
-// this seperates between lightsmaps that we opened from a specific index, or
+// this separates between lightsmaps that we opened from a specific index, or
 // the ones that are connected to an object (where the index can change)
 private bool isIndexBased {
 	get { return m_InstanceID == -1; }

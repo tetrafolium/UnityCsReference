@@ -52,7 +52,7 @@ internal static bool ParseSearchString(string searchText,
 		if (endpos == -1)
 			endpos = searchString.Length;
 
-		// Check if we have quotes (may be used for pathnames) inbetween start and
+		// Check if we have quotes (may be used for pathnames) between start and
 		// a /filter-separator/
 		int q1 = searchString.IndexOf('"', pos);
 		int q2 = -1;

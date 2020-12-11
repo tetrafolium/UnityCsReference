@@ -721,7 +721,7 @@ private static void UpdatePrefabOverrideBarStyle(VisualElement blueBar) {
 	// Move the bar to where the control is in the container.
 	var top = element.worldBound.y - container.worldBound.y;
 	if (float.IsNaN(
-		    top)) // If this is run before the container has been layed out.
+		    top)) // If this is run before the container has been laid out.
 		return;
 
 	var elementHeight = element.resolvedStyle.height;
@@ -844,7 +844,7 @@ internal static void UpdateElementStyle(VisualElement element,
 
 				// We need to try and set the bar style right away, even if the
 				// container didn't compute its layout yet. This is for when the
-				// override is done after everything has been layed out.
+				// override is done after everything has been laid out.
 				UpdatePrefabOverrideBarStyle(prefabOverrideBar);
 
 				// We intentionally re-register this event on the container per

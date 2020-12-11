@@ -15,7 +15,7 @@ public enum ScaleMode {
 	// draw to a rectangle with a different aspect ratio than the original, the
 	// image is cropped.
 	ScaleAndCrop = 1,
-	// Scales the texture, maintaining aspect ratio, so it completely fits withing
+	// Scales the texture, maintaining aspect ratio, so it completely fits within
 	// the /position/ rectangle passed to GUI.DrawTexture.
 	ScaleToFit = 2
 }

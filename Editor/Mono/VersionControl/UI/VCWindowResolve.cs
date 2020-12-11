@@ -109,7 +109,7 @@ void OnGUI() {
 	GUILayout.FlexibleSpace();
 
 	// I would use GUIUtility.GetLastRect() here after the box but that seems
-	// to have wierd side effects.
+	// to have weird side effects.
 	Rect r1 =
 		new Rect(6, 40, position.width - 12, position.height - 112); // 82
 	GUILayout.BeginArea(r1);

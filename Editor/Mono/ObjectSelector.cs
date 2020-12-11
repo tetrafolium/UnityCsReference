@@ -574,7 +574,7 @@ void SearchArea() {
 			Cancel();
 
 		// Otherwise the string has been cleared and focus has been lost. We don't
-		// have anything else to recieve focus, so we want to refocus the search
+		// have anything else to receive focus, so we want to refocus the search
 		// field.
 		m_FocusSearchFilter = true;
 	}

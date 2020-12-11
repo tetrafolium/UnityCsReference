@@ -9,7 +9,7 @@ internal class IconSelector : EditorWindow {
 public delegate void MonoScriptIconChangedCallback(MonoScript monoScript);
 class Styles {
 public GUIStyle background = "sv_iconselector_back";
-public GUIStyle seperator = "sv_iconselector_sep";
+public GUIStyle separator = "sv_iconselector_sep";
 public GUIStyle selection = "sv_iconselector_selection";
 public GUIStyle selectionLabel = "sv_iconselector_labelselection";
 public GUIStyle noneButton = "sv_iconselector_button";
@@ -62,7 +62,7 @@ void SaveIconChanges() {
 	if (currentIcon != m_StartIcon) {
 		MonoScript monoScript = m_TargetObject as MonoScript;
 		if (monoScript != null) {
-			// If callback is set then it is the callback owner responsiblity to
+			// If callback is set then it is the callback owner responsibility to
 			// call CopyMonoScriptIconToImporters
 			if (m_MonoScriptIconChangedCallback != null)
 				m_MonoScriptIconChangedCallback(monoScript);

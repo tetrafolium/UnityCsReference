@@ -132,7 +132,7 @@ public void ReparentSelection(Foo parentItem, int insertionIndex,
 	if (parentItem == null)
 		return;
 
-	// We are moving items so we adjust the insertion index to accomodate that
+	// We are moving items so we adjust the insertion index to accommodate that
 	// any items above the insertion index is removed before inserting
 	if (insertionIndex > 0)
 		insertionIndex -= parentItem.children.GetRange(0, insertionIndex)

@@ -133,7 +133,7 @@ MatchRightToLeft(VisualElement element,
                  Action<VisualElement, MatchResultInfo> processResult) {
 	// see
 	// https://speakerdeck.com/constellation/css-jit-just-in-time-compiled-css-selectors-in-webkit
-	// for a detailed explaination of the algorithm
+	// for a detailed explanation of the algorithm
 
 	var current = element;
 	int nextIndex = complexSelector.selectors.Length - 1;

@@ -1001,7 +1001,7 @@ private GUIContent GetTruncatedTabContent(int tabIndex) {
 	if (s_GUIContents.ContainsKey(key))
 		return s_GUIContents[key];
 
-	// Guarantees the acuracy of the text measurement
+	// Guarantees the accuracy of the text measurement
 	if (hasUnsavedChanges)
 		text += "*";
 

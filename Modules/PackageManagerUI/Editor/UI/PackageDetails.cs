@@ -528,7 +528,7 @@ private void RefreshLinks() {
 }
 
 private void AddToLinks(VisualElement item) {
-	// Add a seperator between links to make them less crowded together
+	// Add a separator between links to make them less crowded together
 	if (detailLinksContainer.childCount > 0)
 		detailLinksContainer.Add(new Label("·"){
 					classList = {"interpunct"}

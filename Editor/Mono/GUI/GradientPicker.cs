@@ -70,7 +70,7 @@ public static GradientPicker instance {
 	get {
 		if (!s_GradientPicker)
 			Debug.LogError(
-				"Gradient Picker not initalized, did you call Show first?");
+				"Gradient Picker not initialized, did you call Show first?");
 		return s_GradientPicker;
 	}
 }

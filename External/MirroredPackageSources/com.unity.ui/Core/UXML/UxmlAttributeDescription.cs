@@ -177,7 +177,7 @@ internal bool TryGetValueFromBagAsString(IUxmlAttributes bag,
 /// <summary>
 /// Tries to get the attribute value from the attribute bag.
 /// </summary>
-/// <param name="bag">A bag containg attributes and their values as
+/// <param name="bag">A bag containing attributes and their values as
 /// strings.</param> <param name="cc">The context in which the values are
 /// retrieved.</param> <param name="converterFunc">A function to convert a
 /// string value to type T.</param> <param name="defaultValue">The value to
@@ -207,7 +207,7 @@ protected bool TryGetValueFromBag<T>(IUxmlAttributes bag,
 /// <summary>
 /// Get the attribute value from the attribute bag.
 /// </summary>
-/// <param name="bag">A bag containg attributes and their values as
+/// <param name="bag">A bag containing attributes and their values as
 /// strings.</param> <param name="cc">The context in which the values are
 /// retrieved.</param> <param name="converterFunc">A function to convert a
 /// string value to type T.</param> <param name="defaultValue">The value to

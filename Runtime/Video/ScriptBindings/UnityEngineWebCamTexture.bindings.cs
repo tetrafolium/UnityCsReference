@@ -172,7 +172,7 @@ public extern Color32[] GetPixels32(
 	[ UnityEngine.Internal.DefaultValue("null") ] Color32[] colors);
 
 // Arbitrary focus point (relative x/y values in 0..1 range), null for
-// automatic/continious focusing (default)
+// automatic/continuous focusing (default)
 public Vector2? autoFocusPoint {
 	get {
 		return internalAutoFocusPoint.x < 0

@@ -93,7 +93,7 @@ public void OnRowGUI(int row) {
 }
 
 // Call before of TreeViewGUI's OnRowGUI (Needs to be called for all items
-// (changes rects for rows comming after the animating rows)
+// (changes rects for rows coming after the animating rows)
 public Rect OnBeginRowGUI(int row, Rect rowRect) {
 	if (!isAnimating)
 		return rowRect;

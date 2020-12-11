@@ -549,7 +549,7 @@ TreeViewItem FindItem(int id) {
 	var item = TreeViewUtility.FindItem(id, rootItem);
 	if (item == null)
 		throw new ArgumentException(string.Format(
-						    "Could not find item with id: {0}. FindItem assumes complete tree is built. Most likely the item is not allocated because it is hidden under a collapsed item. Check if GetAncestors are overriden for the tree view.",
+						    "Could not find item with id: {0}. FindItem assumes complete tree is built. Most likely the item is not allocated because it is hidden under a collapsed item. Check if GetAncestors are overridden for the tree view.",
 						    id));
 	return item;
 }

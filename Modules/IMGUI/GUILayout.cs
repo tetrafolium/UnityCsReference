@@ -431,7 +431,7 @@ public static float HorizontalScrollbar(float value, float size,
 	return HorizontalScrollbar(value, size, leftValue, rightValue,
 	                           GUI.skin.horizontalScrollbar, options);
 }
-// Make a horiztonal scrollbar.
+// Make a horizontal scrollbar.
 public static float HorizontalScrollbar(float value, float size,
                                         float leftValue, float rightValue,
                                         GUIStyle style,

@@ -56,7 +56,7 @@ public virtual void SetSearchFilter(ISearchContext context,
 }
 }
 
-// Default project search engine. Nothing is overriden. We keep returning null
+// Default project search engine. Nothing is overridden. We keep returning null
 // because of how the search is implemented in the project browser. The null
 // value is handled there, and the default behavior is used when null is
 // returned.
@@ -92,7 +92,7 @@ public override void BeginSearch(ISearchContext context, string query) {
 }
 }
 
-// Default object selector engine. Nothing is overriden. We keep returning
+// Default object selector engine. Nothing is overridden. We keep returning
 // false because of how the selector is implemented in the object selector.
 // The bool value is handled there, and the default behavior is used when
 // false is returned.

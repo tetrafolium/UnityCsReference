@@ -1239,7 +1239,7 @@ internal override bool AskUserToSaveModifiedStageBeforeSwitchingStage() {
 	return true;
 }
 
-// Returns true if saved succesfully (internal so we can use it in Tests)
+// Returns true if saved successfully (internal so we can use it in Tests)
 internal bool SavePrefab() {
 	if (!isValid)
 		return false;

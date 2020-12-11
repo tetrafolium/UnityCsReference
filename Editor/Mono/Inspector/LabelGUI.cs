@@ -139,7 +139,7 @@ public void OnLabelGUI(Object[] assets) {
 
 	// For the label list as a whole
 	// The previous layouting means we've already lost a pixel to the left and
-	// couple at the top, so it is an attempt at horizontal padding: 3, verical
+	// couple at the top, so it is an attempt at horizontal padding: 3, vertical
 	// padding: 5 (the rounded sides of labels makes this look like the
 	// horizontal and vertical padding is the same)
 	float leftPadding = 1.0f;

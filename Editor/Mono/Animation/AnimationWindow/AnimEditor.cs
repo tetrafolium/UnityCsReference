@@ -1361,7 +1361,7 @@ private void Initialize() {
 
 	m_CurveEditor.state = m_State;
 
-	// The rect here is only for initialization and will be overriden at layout
+	// The rect here is only for initialization and will be overridden at layout
 	m_HorizontalSplitter.realSizes[0] = kHierarchyMinWidth;
 	m_HorizontalSplitter.realSizes[1] = (int) Mathf.Max(
 		m_Position.width - kHierarchyMinWidth, kHierarchyMinWidth);
@@ -1377,7 +1377,7 @@ private void InitializeClipSelection() {
 
 // Called once during initialization of m_State
 private void InitializeHierarchy() {
-	// The rect here is only for initialization and will be overriden at layout
+	// The rect here is only for initialization and will be overridden at layout
 	m_Hierarchy = new AnimationWindowHierarchy(
 		m_State, m_OwnerWindow, new Rect(0, 0, hierarchyWidth, 100));
 }
@@ -1388,7 +1388,7 @@ private void InitializeDopeSheet() {
 	m_DopeSheet.SetTickMarkerRanges();
 	m_DopeSheet.hSlider = true;
 	m_DopeSheet.shownArea = new Rect(1, 1, 1, 1);
-	// The rect here is only for initialization and will be overriden at layout
+	// The rect here is only for initialization and will be overridden at layout
 	m_DopeSheet.rect = new Rect(0, 0, contentWidth, 100);
 	m_DopeSheet.hTicks.SetTickModulosForFrameRate(m_State.frameRate);
 }
@@ -1400,7 +1400,7 @@ private void InitializeEvents() {
 
 // Called once during initialization of m_State
 private void InitializeCurveEditor() {
-	// The rect here is only for initialization and will be overriden at layout
+	// The rect here is only for initialization and will be overridden at layout
 	m_CurveEditor = new CurveEditor(new Rect(0, 0, contentWidth, 100),
 	                                new CurveWrapper[0], false);
 

@@ -32,7 +32,7 @@ internal struct MovedFromAttributeData {
 //----------------------------------------------------------------------------------------------------------------------
 // What is this : Attribute that can be used to indicate that a type has been
 // moved/renamed. Motivation(s):
-//  - When a class is moved from one namespace to an other (potentialy in a
+//  - When a class is moved from one namespace to an other (potentially in a
 //  different assembly), the APIUpdater needs
 //     a way to be informed of this.
 //  - Serialization by reference of plain C# classes needs to be informed of

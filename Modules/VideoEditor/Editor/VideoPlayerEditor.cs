@@ -120,7 +120,7 @@ public readonly string[] selectMovieFileFilter = {
 public readonly string selectMovieFileRecentPath =
 	"VideoPlayerSelectMovieFileRecentPath";
 public readonly string audioControlsNotEditableHelp =
-	"Audio controls not editable when using muliple selection.";
+	"Audio controls not editable when using multiple selection.";
 public readonly string enableDecodingTooltip =
 	"Enable decoding for this track.  Only effective when not playing.  When playing from a URL, track details are shown only while playing back.";
 public static readonly int ObjectFieldControlID =

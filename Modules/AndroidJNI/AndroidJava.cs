@@ -125,7 +125,7 @@ public virtual AndroidJavaObject Invoke(string methodName,
 		args[i] = _AndroidJNIHelper.Unbox(javaArgs[i]);
 		if (!(args[i] is AndroidJavaObject)) {
 			// If we're not passing a AndroidJavaObject/Class to the proxy, we can
-			// safely dispose Otherwise the GC would do it eventally, but it might
+			// safely dispose Otherwise the GC would do it eventually, but it might
 			// be too slow and hit the global ref limit
 			if (javaArgs[i] != null)
 				javaArgs [i]
@@ -1124,7 +1124,7 @@ public static object Unbox(AndroidJavaObject obj) {
 			return obj.Call<System.Char>("charValue");
 		else if ("java.lang.String" == className)
 			return obj.Call<System.String>(
-				"toString"); // um, can obvoiusly be performed in a better fasion
+				"toString"); // um, can obviously be performed in a better fasion
 		else if ("java.lang.Class" == className)
 			return new AndroidJavaClass(obj.GetRawObject());
 		else if (clazz.Call<bool>("isArray"))

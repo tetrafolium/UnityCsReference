@@ -128,7 +128,7 @@ ShowImportSettings(BaseTextureImportPlatformSettings editor) {
 
 		if (!editor.model.isDefault &&
 		    !editor.model.platformTextureSettings.overridden) {
-			// If not overriden, show what the auto format is going to be
+			// If not overridden, show what the auto format is going to be
 			// don't care about alpha in normal maps. If editor.assetTarget is
 			// null then we are dealing with texture preset and we show all
 			// options.

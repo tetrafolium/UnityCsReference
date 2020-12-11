@@ -307,7 +307,7 @@ protected override void ResetValues() {
 	ResetCompatability(ref m_ValidateReferences,
 	                   (imp => imp.ValidateReferences));
 	// If Any Platform is selected, initialize m_Compatible* variables using
-	// compatability function If Any Platform is unselected, initialize
+	// compatibility function If Any Platform is unselected, initialize
 	// m_Compatible* variables using exclude function This gives correct
 	// initialization in case when plugin is imported for the first time, and
 	// only "Any Platform" is selected

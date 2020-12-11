@@ -363,7 +363,7 @@ DrawGridParameters PrepareGridRenderOrthogonalMode(Camera camera,
 	// It's normally already faded out by the managed animated fading values at
 	// this angle, but if it's orbited rapidly, it can end up at this angle
 	// faster than the fading has kicked in. For these cases hiding it abruptly
-	// looks better. The popping isn't noticable because the user is orbiting
+	// looks better. The popping isn't noticeable because the user is orbiting
 	// rapidly to begin with.
 	if (xGrid.fade.target &&
 	    Mathf.Abs(direction.x) >= k_AngleThresholdForOrthographicGrid)

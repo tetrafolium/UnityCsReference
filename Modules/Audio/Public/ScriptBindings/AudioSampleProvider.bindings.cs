@@ -221,7 +221,7 @@ private static extern AudioSampleProvider
 InternalGetScriptingPtr(uint providerId);
 
 // Can be done outside of the main thread so that garbage-collected provider
-// can be destoryed in any thread. The wanted constraint (must lookup from
+// can be destroyed in any thread. The wanted constraint (must lookup from
 // main thread) is enforced by the fact that InternalGetScriptingPtr _must_
 // be called from the main thread.
 [NativeMethod(IsThreadSafe = true)]

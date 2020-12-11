@@ -223,7 +223,7 @@ public virtual void OnGUI(Rect rect, float xScroll) {
 		Rect localRect = new Rect(0, 0, rect.width, rect.height);
 
 		// Background ( We always add the width of the vertical scrollbar to
-		// accomodate if this is being shown below e.g by a tree view)
+		// accommodate if this is being shown below e.g by a tree view)
 		float widthOfAllColumns = state.widthOfAllVisibleColumns;
 		float backgroundWidth =
 			(localRect.width > widthOfAllColumns ? localRect.width

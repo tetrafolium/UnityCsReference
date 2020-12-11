@@ -270,7 +270,7 @@ AddTreeViewItemRecursive(TreeViewItem parentItem, GameObject gameObject,
 	prefabOverrideMap.TryGetValue(gameObject.GetInstanceID(),
 	                              out objectModifications);
 	if (objectModifications != null) {
-		// Added GameObject - note that this earlies out!
+		// Added GameObject - note that this earliest out!
 		AddedGameObject addedGameObjectData =
 			objectModifications.addedGameObjects.Find(x => x.instanceGameObject ==
 			                                          gameObject);

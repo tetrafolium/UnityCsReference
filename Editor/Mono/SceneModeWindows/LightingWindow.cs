@@ -356,7 +356,7 @@ void Buttons(bool showAutoToggle) {
 			EditorGUI.BeginProperty(rect, Styles.continuousBakeLabel,
 			                        m_WorkflowMode);
 
-			// Continous mode checkbox
+			// Continuous mode checkbox
 			EditorGUI.BeginChangeCheck();
 			using (new EditorGUI.DisabledScope(m_LightingSettingsReadOnlyMode)) {
 				iterative = GUILayout.Toggle(iterative, Styles.continuousBakeLabel);

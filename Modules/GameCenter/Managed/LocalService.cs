@@ -201,7 +201,7 @@ public DateTime lastReportedDate {
 	get { return m_LastReportedDate; }
 }
 
-// TODO: How to have a static method for resetting all achivements?
+// TODO: How to have a static method for resetting all achievements?
 // public abstract void ResetAllAchievements();
 }
 
@@ -265,7 +265,7 @@ private string m_FormattedValue;
 private string m_UserID;
 private int m_Rank;
 
-public Score() : this("unkown", -1) {
+public Score() : this("unknown", -1) {
 }
 
 public Score(string leaderboardID, Int64 value)

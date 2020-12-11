@@ -574,7 +574,7 @@ public void Show() {
 
 // Show the EditorWindow.
 public void Show(bool immediateDisplay) {
-	// If somebody called show on us, set up the neccessary structure for us.
+	// If somebody called show on us, set up the necessary structure for us.
 	if (m_Parent == null)
 		CreateNewWindowForEditorWindow(this, true, immediateDisplay);
 }

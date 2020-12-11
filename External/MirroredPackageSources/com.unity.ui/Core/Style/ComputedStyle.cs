@@ -39,7 +39,7 @@ private ComputedStyle(bool isShared) {
 
 public void CopyShared(ComputedStyle sharedStyle) {
 	// Always just copy the reference to custom properties, since they can't
-	// be overriden per instance
+	// be overridden per instance
 	m_CustomProperties = sharedStyle.m_CustomProperties;
 
 	CopyFrom(sharedStyle);

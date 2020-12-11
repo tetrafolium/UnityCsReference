@@ -1121,7 +1121,7 @@ extern public Quaternion targetRotation {
 [System.ComponentModel.EditorBrowsable(
 	 System.ComponentModel.EditorBrowsableState.Never)]
 [Obsolete(
-	 "Use mask and layers to control subset of transfroms in a skeleton.",
+	 "Use mask and layers to control subset of transforms in a skeleton.",
 	 true)]
 public bool IsControlled(Transform transform) {
 	return false;

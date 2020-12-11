@@ -111,7 +111,7 @@ private static bool GetVSForMacVersion(string externalEditor,
 
 private static string GetVSForMacBridgeAssembly(string externalEditor,
                                                 Version vsfmVersion) {
-	// Check first if we're overriden
+	// Check first if we're overridden
 	// Useful when developing UnityVS for Mac
 	var bridge = Environment.GetEnvironmentVariable("VSTUM_BRIDGE");
 	if (!string.IsNullOrEmpty(bridge) && File.Exists(bridge))

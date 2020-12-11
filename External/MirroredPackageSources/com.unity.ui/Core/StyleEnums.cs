@@ -18,7 +18,7 @@ public enum Position {
 }
 
 /// <summary>
-/// Defines what should happend if content overflows an element bounds.
+/// Defines what should happened if content overflows an element bounds.
 /// </summary>
 public enum Overflow {
 	/// <summary>

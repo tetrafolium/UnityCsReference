@@ -16,7 +16,7 @@ public GUIStyle listEvenBg =
 public GUIStyle listOddBg =
 	"ObjectPickerResultsEven"; //"ObjectPickerResultsEven";//
 public GUIStyle background = "grey_border";
-public GUIStyle seperator = "sv_iconselector_sep";
+public GUIStyle separator = "sv_iconselector_sep";
 public GUIStyle iconDropDown = "IN dropdown";
 public GUIStyle listTextStyle;
 public GUIStyle listHeaderStyle;

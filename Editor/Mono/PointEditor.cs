@@ -21,7 +21,7 @@ Vector3 GetPosition(int idx);
 void SetPosition(int idx, Vector3 position);
 /// Get the default color for points
 Color GetDefaultColor();
-/// Get tje selected color for points
+/// Get the selected color for points
 Color GetSelectedColor();
 /// Scale of the spheres to draw
 float GetPointScale();

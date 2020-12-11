@@ -96,7 +96,7 @@ private void AssetBundlePopup(Rect rect, int id, IEnumerable<Object> assets,
                               bool isVariant) {
 	List<string> displayedOptions = new List<string>();
 	displayedOptions.Add("None");
-	displayedOptions.Add(""); // seperator
+	displayedOptions.Add(""); // separator
 
 	// Anyway to optimize this by caching GetAssetBundleNameFromAssets() and
 	// GetAllAssetBundleNames() when they actually change? As we can change the
@@ -110,7 +110,7 @@ private void AssetBundlePopup(Rect rect, int id, IEnumerable<Object> assets,
 	: AssetDatabase.GetAllAssetBundleNamesWithoutVariant();
 	displayedOptions.AddRange(assetBundles);
 
-	displayedOptions.Add(""); // seperator
+	displayedOptions.Add(""); // separator
 	int newAssetBundleIndex = displayedOptions.Count;
 	displayedOptions.Add("New...");
 

@@ -24,7 +24,7 @@ static void SetBestTargetForEvent(EventBase evt, IPanel panel) {
 		evt.propagateToIMGUI = false;
 		evt.target = elementUnderPointer;
 	} else if (evt.target == null && elementUnderPointer == null) {
-		// Event occured outside the window.
+		// Event occurred outside the window.
 		// Send event to visual tree root and
 		// don't modify evt.propagateToIMGUI.
 		evt.target = panel?.visualTree;

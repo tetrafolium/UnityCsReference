@@ -258,7 +258,7 @@ void SceneGUI() {
 				if (changed.changed)
 					m_UseFileScale.boolValue = result;
 			}
-			// Put the unit convertion description on a second line if the Inspector
+			// Put the unit conversion description on a second line if the Inspector
 			// is too small.
 			if (!EditorGUIUtility.wideMode) {
 				EditorGUILayout.EndHorizontal();

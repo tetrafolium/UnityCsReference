@@ -622,7 +622,7 @@ public void ShowAssetStoreHitCountWhileSearchingLocalAssetsChanged() {
 		RequeryAssetStore();
 	} else {
 		if (m_ShowLocalAssetsOnly)
-			ClearAssetStoreGroups(); // do not clear if we are wathcing asset store
+			ClearAssetStoreGroups(); // do not clear if we are watching asset store
 		                                 // results
 	}
 	Repaint();

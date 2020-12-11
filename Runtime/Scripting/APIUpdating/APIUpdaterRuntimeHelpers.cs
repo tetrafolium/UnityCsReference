@@ -14,7 +14,7 @@ namespace UnityEngine._Scripting
 // What is this: Collection of helper functions that deal will handling
 // changes to scripts, like type rename or
 //                  relocation to other assemblies.
-// Motivation  : Since we support renamig types and moving them arround, the
+// Motivation  : Since we support renamig types and moving them around, the
 // serialization layer sometimes needs
 //                  to track how types have moves/changed so that it can
 //                  adjust accordingly.

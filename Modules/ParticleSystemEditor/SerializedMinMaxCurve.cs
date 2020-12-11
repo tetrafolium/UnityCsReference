@@ -251,7 +251,7 @@ public void SetMinMaxState(MinMaxCurveState newState, bool addToCurveEditor) {
 
 void SetCurveRequirements() {
 	// Abs negative values if we change to curve mode (in curve mode the sign is
-	// transfered to the curve)
+	// transferred to the curve)
 	scalar.floatValue = Mathf.Abs(scalar.floatValue);
 
 	// Ensure proper y-axis value (0 does not create a valid range)

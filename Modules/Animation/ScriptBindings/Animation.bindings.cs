@@ -40,7 +40,7 @@ public enum AnimationBlendMode {
 // considered deprecated
 public enum AnimationPlayMode { Stop = 0, Queue = 1, Mix = 2 }
 
-// This enum controlls culling of Animation component.
+// This enum controls culling of Animation component.
 public enum AnimationCullingType {
 	// Animation culling is disabled - object is animated even when offscreen.
 	AlwaysAnimate = 0,

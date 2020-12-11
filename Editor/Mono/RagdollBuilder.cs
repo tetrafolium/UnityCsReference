@@ -137,7 +137,7 @@ void OnWizardUpdate() {
 			"Drag all bones from the hierarchy into their slots.\nMake sure your character is in T-Stand.\n";
 	} else {
 		helpString =
-			"Make sure your character is in T-Stand.\nMake sure the blue axis faces in the same direction the chracter is looking.\nUse flipForward to flip the direction";
+			"Make sure your character is in T-Stand.\nMake sure the blue axis faces in the same direction the character is looking.\nUse flipForward to flip the direction";
 	}
 
 	isValid = errorString.Length == 0;

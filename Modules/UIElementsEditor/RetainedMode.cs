@@ -111,7 +111,7 @@ private static void OneShotUxmlLiveReload() {
 		Debug.LogException(e);
 	}
 
-	// Make sure to unregister ourself to prevent any infinit updates.
+	// Make sure to unregister ourself to prevent any infinite updates.
 	EditorApplication.update -= OneShotUxmlLiveReload;
 }
 

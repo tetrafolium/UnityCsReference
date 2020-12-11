@@ -75,7 +75,7 @@ FindTypeByFullName(AssemblyDefinition assemblyDefinition,
 	var allTypes = AggregateAllTypeDefinitions(
 		assemblyDefinition.MainModule
 		.Types); // recursively checks for nested types and adds them to
-	                 // colleciton, if any
+	                 // collection, if any
 	return allTypes.FirstOrDefault(t => t.FullName == typeFullName);
 }
 

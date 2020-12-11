@@ -284,7 +284,7 @@ public void Import(out VisualTreeAsset asset) {
 	ImportXml(assetPath, out asset);
 }
 
-// This variable is overriden during editor tests
+// This variable is overridden during editor tests
 internal static DefaultLogger logger = new DefaultLogger();
 
 void ImportXml(string xmlPath, out VisualTreeAsset vta) {

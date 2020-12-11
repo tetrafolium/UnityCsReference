@@ -910,7 +910,7 @@ public override void OnInspectorGUI() {
 	GUILayout.Label(string.Format(L10n.Tr("Settings for {0}"),
 	                              validPlatforms[selectedPlatform].title.text));
 
-	// Increase the offset to accomodate large labels, though keep a minimum of
+	// Increase the offset to accommodate large labels, though keep a minimum of
 	// 150.
 	EditorGUIUtility.labelWidth =
 		Mathf.Max(150, EditorGUIUtility.labelWidth + 4);

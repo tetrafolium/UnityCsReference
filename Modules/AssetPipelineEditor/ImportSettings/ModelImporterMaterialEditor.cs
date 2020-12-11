@@ -722,7 +722,7 @@ void MaterialPropertyGUI(MaterialCache materialCache) {
 
 private static readonly int s_PPtrHash = "s_PPtrHash".GetHashCode();
 
-// Taken from EditorGUI in order to work arround the issue of ObjectField
+// Taken from EditorGUI in order to work around the issue of ObjectField
 // using different ControlIDs when a Serialized property is passed as
 // argument.
 private static Object

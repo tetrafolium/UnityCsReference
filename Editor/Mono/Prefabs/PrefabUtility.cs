@@ -1619,7 +1619,7 @@ private static Object
 GetCorrespondingObjectFromOriginalSource_Internal(Object instanceOrAsset) {
 	var sourceObjectInPrefabAsset = instanceOrAsset;
 
-	// First one is mandatory for non-persistant asset,
+	// First one is mandatory for non-persistent asset,
 	// since we want the result to be null if there's asset object at all.
 	if (!EditorUtility.IsPersistent(sourceObjectInPrefabAsset)) {
 		sourceObjectInPrefabAsset =

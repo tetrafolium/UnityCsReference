@@ -393,7 +393,7 @@ void DoBakeButton() {
 
 	case ReflectionProbeMode.Baked:
 		using (new EditorGUI.DisabledScope(!reflectionProbeTarget.enabled)) {
-			// Bake button in non-continous mode
+			// Bake button in non-continuous mode
 			if (EditorGUI.ButtonWithDropdownList(
 				    Styles.bakeButtonText, Styles.bakeButtonsText, OnBakeButton)) {
 				Lightmapping.BakeReflectionProbeSnapshot(reflectionProbeTarget);

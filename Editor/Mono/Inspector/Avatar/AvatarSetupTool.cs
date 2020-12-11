@@ -166,7 +166,7 @@ public void HandleClickSelection(int keyboardID, Rect selectRect,
 		AvatarMappingEditor.s_SelectedBoneIndex = boneIndex;
 		AvatarMappingEditor.s_DirtySelection = true;
 		// case 837655.  Late update GUIUtility.keyboardControl to avoid it
-		// being overriden during scene selection.
+		// being overridden during scene selection.
 		AvatarMappingEditor.s_KeyboardControl = keyboardID;
 		Selection.activeTransform = bone;
 		if (bone != null)
@@ -978,7 +978,7 @@ public static void SampleBindPose(GameObject go) {
 		foreach (Transform bone in bones)
 			bone.parent = parents[bone];
 
-		// put back local postion of bones
+		// put back local position of bones
 		for (int i = 0; i < bones.Count; i++) {
 			bones[i].localPosition = backupLocalPosition[i];
 		}

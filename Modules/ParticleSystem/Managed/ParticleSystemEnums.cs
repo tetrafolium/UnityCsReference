@@ -183,7 +183,7 @@ public enum ParticleSystemEmitterVelocityMode {
 		1 // Use the Rigidbody or Rigidbody2D component for calculating velocity.
 }
 
-// The mode used for velocity inheritence
+// The mode used for velocity inheritance
 public enum ParticleSystemInheritVelocityMode {
 	Initial = 0, // Emitter velocity is inherited over the particle's lifetime
 	             // using the emitter velocity when the particle was born.
@@ -287,7 +287,7 @@ public enum ParticleSystemTrailMode {
 	Ribbon = 1 // Trails are rendered between each particle.
 }
 
-// The mode applied to the U coordiante on Particle Trails
+// The mode applied to the U coordinate on Particle Trails
 public enum ParticleSystemTrailTextureMode {
 	Stretch = 0, // Stretch the texture over the entire trail length.
 	Tile = 1, // Repeat the texture along the trail.

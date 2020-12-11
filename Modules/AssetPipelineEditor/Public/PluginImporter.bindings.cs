@@ -86,7 +86,7 @@ public static PluginImporter[] GetImporters(string platformName) {
 			} else if (tempImporter.GetIsOverridable() &&
 			           !currentImporter.GetIsOverridable()) {
 				// finalPluginPath isn't unique and the finalImporter already in the
-				// list is overriden by the new one, remove the overridable one.
+				// list is overridden by the new one, remove the overridable one.
 				uniqueFinalPathToImporterMap[finalPluginPath] = currentImporter;
 				finalImporters.Remove(tempImporter);
 			} else if (currentImporter.GetIsOverridable()) {

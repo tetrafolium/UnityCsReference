@@ -9,7 +9,7 @@ public interface IChangeEvent {}
 /// </summary>
 public class ChangeEvent<T> : EventBase<ChangeEvent<T> >, IChangeEvent {
 /// <summary>
-/// The value before the change occured.
+/// The value before the change occurred.
 /// </summary>
 public T previousValue {
 	get;

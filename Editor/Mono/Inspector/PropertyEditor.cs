@@ -1705,7 +1705,7 @@ public bool WasEditorVisible(Editor[] editors, int editorIndex,
 		// Init our state with last state
 		// Large headers should always be considered visible
 		// because they need to at least update their Icons when they have a
-		// static preview (Material for exemple)
+		// static preview (Material for example)
 		wasVisible = InternalEditorUtility.GetIsInspectorExpanded(target) ||
 		             EditorHasLargeHeader(editorIndex, editors);
 		tracker.SetVisible(editorIndex, wasVisible ? 1 : 0);

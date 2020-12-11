@@ -58,7 +58,7 @@ public enum AlternatingRowBackground {
 ///         in the list) Action<VisualElement, int> bindItem = (e, i) => (e as
 ///         Label).text = items[i];
 ///
-///         // Provide the list view with an explict height for every row
+///         // Provide the list view with an explicit height for every row
 ///         // so it can calculate how many items to actually display
 ///         const int itemHeight = 16;
 ///

@@ -13,7 +13,7 @@ public enum DeviceGeneration {
 }
 
 // Currently the bindings system does not support identically named class
-// memeber in different namespaces. To avoid conflicts with iOS.Device all
+// member in different namespaces. To avoid conflicts with iOS.Device all
 // properties have an internal extern implementation. These should be removed
 // when the bindings are fixed.
 [NativeHeader("PlatformDependent/iPhonePlayer/IOSScriptBindings.h")]

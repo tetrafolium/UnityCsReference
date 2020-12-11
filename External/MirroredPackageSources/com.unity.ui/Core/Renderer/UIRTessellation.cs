@@ -479,7 +479,7 @@ static Vector2 IntersectEllipseWithLine(float a, float b, Vector2 dir) {
 	// Ellipse equation: y = b - r*sqrt(a²-(x-a)²)
 	// Line equation: y = m*x
 
-	// We get x by substracting both equations and solving for x:
+	// We get x by subtracting both equations and solving for x:
 	float x = b * (r + m - Mathf.Sqrt(2 * m * r)) / (m * m + r * r);
 
 	// We get y by substituting x in the line equation:

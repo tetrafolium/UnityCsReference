@@ -735,9 +735,9 @@ private void UpdateWorldClip() {
 	      : GUIClip.topmostRect;
 
 		if (ShouldClip()) {
-			// Case 1222517: We must substract before intersection. Otherwise, if
+			// Case 1222517: We must subtract before intersection. Otherwise, if
 			// the parent world clip boundary happens to be overlapping the
-			// element, we may be over-substracting. Also clamping must be the
+			// element, we may be over-subtracting. Also clamping must be the
 			// last operation that's performed.
 			Rect wb = SubstractBorderPadding(worldBound);
 
@@ -1115,7 +1115,7 @@ public bool enabledInHierarchy {
 /// Returns true if the <see cref="VisualElement"/> is enabled locally.
 /// </summary>
 /// <remarks>
-/// This flag isn't changed if the VisualElement is disabled implicitely by
+/// This flag isn't changed if the VisualElement is disabled implicitly by
 /// one of its parents. To verify this, use enabledInHierarchy.
 /// </remarks>
 public bool enabledSelf {
@@ -1621,7 +1621,7 @@ public bool ClassListContains(string cls) {
 }
 
 /// <summary>
-/// Searchs up the hierachy of this VisualElement and retrieves stored
+/// Searches up the hierarchy of this VisualElement and retrieves stored
 /// userData, if any is found.
 /// </summary>
 /// <remarks>

@@ -254,7 +254,7 @@ static void SetFilter(HierarchyProperty hierarchy, string filter) {
 	hierarchy.SetSearchFilter(search);
 }
 
-// Pre 4.0 interface (kept for backwards compability)
+// Pre 4.0 interface (kept for backwards compatibility)
 public void SetSearchFilter(string searchString, int mode) {
 	SearchFilter filter = SearchableEditorWindow.CreateFilter(
 		searchString, (SearchableEditorWindow.SearchMode)mode);

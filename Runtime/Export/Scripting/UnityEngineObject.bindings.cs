@@ -125,7 +125,7 @@ static bool IsNativeObjectAlive(UnityEngine.Object o) {
 	if (o.GetCachedPtr() != IntPtr.Zero)
 		return true;
 
-	// Ressurection of assets is complicated.
+	// Resurrection of assets is complicated.
 	// For almost all cases, if you have a c# wrapper for an asset like a
 	// material, if the material gets moved, or deleted, and later placed back,
 	// the persistentmanager will ensure it will come back with the same

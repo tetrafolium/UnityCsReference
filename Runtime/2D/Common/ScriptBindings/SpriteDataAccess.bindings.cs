@@ -190,7 +190,7 @@ extern public static void SetVertexCount([ NotNull ] this Sprite sprite,
                                          int count);
 extern public static int GetVertexCount([ NotNull ] this Sprite sprite);
 
-// This lenght is not tied to vertexCount
+// This length is not tied to vertexCount
 extern private static SpriteChannelInfo
 GetBindPoseInfo([ NotNull ] Sprite sprite);
 unsafe extern private static void SetBindPoseData([ NotNull ] Sprite sprite,

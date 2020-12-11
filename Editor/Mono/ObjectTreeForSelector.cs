@@ -323,7 +323,7 @@ void SearchArea(Rect toolbarRect) {
 		// If we hit esc and the string WAS empty, it's an actual cancel event.
 		if (m_SearchString != string.Empty)
 			// Otherwise the string has been cleared and focus has been lost. We
-			// don't have anything else to recieve focus, so we want to refocus the
+			// don't have anything else to receive focus, so we want to refocus the
 			// search field.
 			m_FocusSearchFilter = true;
 	}

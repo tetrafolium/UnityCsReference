@@ -244,7 +244,7 @@ public enum LogType {
 public enum LogOption {
 	// LogOption used for default behaviour
 	None = 0,
-	// LogOption used for supressing stacktraces from log message
+	// LogOption used for suppressing stacktraces from log message
 	NoStacktrace = 1,
 }
 

@@ -313,7 +313,7 @@ public string[] GetChangedAssemblies() {
 }
 
 public void DirtyAllScripts() {
-	// DirtyAllScripts is called in cases where defines change ect. so we want
+	// DirtyAllScripts is called in cases where defines change etc. so we want
 	// to clear the cached precompiled assemblies, as their compatibility can
 	// have changed. DirtyAllScripts is the same as a full recompilation
 	PrecompiledAssemblyProvider.Dirty();
@@ -2003,7 +2003,7 @@ public AssemblyCompilerMessages[] GetCompileMessages() {
 		};
 	}
 
-	// Sort compiler messages by assemby filename to make the order
+	// Sort compiler messages by assembly filename to make the order
 	// deterministic.
 	Array.Sort(result, (m1, m2) => String.Compare(m1.assemblyFilename,
 	                                              m2.assemblyFilename));

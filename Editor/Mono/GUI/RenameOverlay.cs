@@ -16,7 +16,7 @@ namespace UnityEditor {
 // still not show anything due to 'delay' parameter in BeginRename) Clear() -
 // Clears rename state IMPORTANT: OnEvent () - Should be called early in an
 // OnGUI of an EditorWindow that is using this RenameOverlay (handles closing if
-// clicking outside and closing while receving any input while delayed, and
+// clicking outside and closing while receiving any input while delayed, and
 // caches controlID for text field) OnGUI (GUIStyle textFieldStyle) - Should be
 // called late to ensure rendered on top and early for non-repaint event to
 // handle input before other ui logic

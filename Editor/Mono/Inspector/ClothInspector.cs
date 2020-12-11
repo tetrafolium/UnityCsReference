@@ -65,7 +65,7 @@ class ClothInspector : Editor {
 public enum DrawMode { MaxDistance = 1, CollisionSphereDistance }
 public enum ToolMode { Select, Paint, GradientTool }
 public enum CollToolMode { Select, Paint, Erase }
-enum RectSelectionMode { Replace, Add, Substract }
+enum RectSelectionMode { Replace, Add, Subtract }
 public enum CollisionVisualizationMode { SelfCollision, InterCollision }
 
 bool[] m_ParticleSelection;

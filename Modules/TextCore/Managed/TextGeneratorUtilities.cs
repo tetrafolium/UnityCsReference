@@ -493,7 +493,7 @@ StringToCharArray(string sourceText, ref int[] charBuffer,
 			continue;
 		}
 
-		//// Handle inline replacement of <stlye> and <br> tags.
+		//// Handle inline replacement of <style> and <br> tags.
 		if (sourceText[i] == 60 && generationSettings.richText) {
 			if (IsTagName(ref sourceText, "<BR>", i)) {
 				if (writeIndex == charBuffer.Length)

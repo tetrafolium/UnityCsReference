@@ -597,7 +597,7 @@ private void RebuildGraph(Animator animator) {
 		m_GraphRoot = (Playable) motionX;
 	}
 
-	var output = AnimationPlayableOutput.Create(m_Graph, "ouput", animator);
+	var output = AnimationPlayableOutput.Create(m_Graph, "output", animator);
 	output.SetSourcePlayable(m_GraphRoot);
 	output.SetWeight(0.0f);
 }

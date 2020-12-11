@@ -187,7 +187,7 @@ public void BuildVertices(List<TreeVertex> verts) {
 		normal.y = 0.0f;
 		normal.Normalize();
 
-		// tilt accoring to surface angle
+		// tilt according to surface angle
 		normal.x = surfAngleCos * normal.x;
 		normal.y = surfAngleSin;
 		normal.z = surfAngleCos * normal.z;

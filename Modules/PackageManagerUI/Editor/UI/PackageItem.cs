@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 namespace UnityEditor.PackageManager.UI {
 internal class PackageItem : VisualElement, ISelectableItem {
 // Note that the height here is only the height of the main item (i.e,
-// verison list is not expanded)
+// version list is not expanded)
 internal const float k_MainItemHeight = 38.0f;
 private const string k_SelectedClassName = "selected";
 private const string k_ExpandedClassName = "expanded";

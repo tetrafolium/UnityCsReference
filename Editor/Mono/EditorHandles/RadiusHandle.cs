@@ -30,7 +30,7 @@ internal static float DoRadiusHandle(Quaternion rotation, Vector3 position,
 			}
 		}
 	} else {
-		// Since the geometry is transfromed by Handles.matrix during rendering,
+		// Since the geometry is transformed by Handles.matrix during rendering,
 		// we transform the camera position by the inverse matrix so that the
 		// two-shaded wireframe will have the proper orientation.
 		Matrix4x4 invMatrix = Matrix4x4.Inverse(Handles.matrix);

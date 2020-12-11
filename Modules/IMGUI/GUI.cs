@@ -1689,7 +1689,7 @@ public static void EndScrollView(bool handleScrollWheel) {
 				state.velocity[axis] +=
 					state.velocity[axis] < 0
 		  ? velocityToSubstract
-		  : -velocityToSubstract; // Substract directly to stop it
+		  : -velocityToSubstract; // Subtract directly to stop it
 				          // faster on low velocity
 				state.scrollPosition[axis] += state.velocity[axis] * deltaTime;
 

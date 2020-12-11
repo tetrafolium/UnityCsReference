@@ -1175,7 +1175,7 @@ public void PasteKeys() {
 				newKeyframe.curve.RemoveKeyframe(AnimationKeyTime.Time(
 									 newKeyframe.time, newKeyframe.curve.clip.frameRate));
 
-			// When copy-pasting multiple keyframes (curve), its a continous thing.
+			// When copy-pasting multiple keyframes (curve), its a continuous thing.
 			// This is why we delete the existing keyframes in the pasted range.
 			if (lastTargetCurve == newKeyframe.curve)
 				newKeyframe.curve.RemoveKeysAtRange(lastTime, newKeyframe.time);

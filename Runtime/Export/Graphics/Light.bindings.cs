@@ -37,7 +37,7 @@ extern public UnityEngine.Rendering.LightShadowResolution shadowResolution {
 	              ThrowsException = true)] set;
 }
 
-// Note: do not remove (so that projects with assembly-only scritps using this
+// Note: do not remove (so that projects with assembly-only scripts using this
 // will continue working), just make it do nothing.
 [System.ComponentModel.EditorBrowsable(
 	 System.ComponentModel.EditorBrowsableState.Never)]
@@ -47,7 +47,7 @@ public float shadowSoftness {
 	set {}
 }
 
-// Note: do not remove (so that projects with assembly-only scritps using this
+// Note: do not remove (so that projects with assembly-only scripts using this
 // will continue working), just make it do nothing.
 [System.ComponentModel.EditorBrowsable(
 	 System.ComponentModel.EditorBrowsableState.Never)]

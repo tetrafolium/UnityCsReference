@@ -203,7 +203,7 @@ private void SetDebugInternal() {
 protected override void CreateTracker() {
 	if (m_Tracker != null) {
 		// Ensure that inspector mode
-		// This shouldn't be necessary but there are some non-reproducable bugs
+		// This shouldn't be necessary but there are some non-reproducible bugs
 		// objects showing up as not able to multi-edit because this state goes
 		// out of sync.
 		m_Tracker.inspectorMode = m_InspectorMode;

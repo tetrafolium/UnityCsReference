@@ -19,7 +19,7 @@ internal partial class AssemblyHelper {
 static Dictionary<string, bool> managedToDllType =
 	new Dictionary<string, bool>();
 
-// Check if assmebly internal name doesn't match file name, and show the
+// Check if assembly internal name doesn't match file name, and show the
 // warning.
 static public void CheckForAssemblyFileNameMismatch(string assemblyPath) {
 	string fileName = Path.GetFileNameWithoutExtension(assemblyPath);

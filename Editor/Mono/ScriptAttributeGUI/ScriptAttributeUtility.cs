@@ -220,7 +220,7 @@ GetFieldInfoAndStaticTypeFromProperty(SerializedProperty property,
 		// serialized data,
 		// 2. get the path *in the current managed instance* of the field we are
 		// pointing to,
-		// 3. foward that to 'GetFieldInfoFromPropertyPath' as if it was a regular
+		// 3. forward that to 'GetFieldInfoFromPropertyPath' as if it was a regular
 		// field,
 
 		var objectTypename =

@@ -65,14 +65,14 @@ public static GUIContent[] customQueueNames = {
 	queueNames[2],
 	queueNames[3],
 	EditorGUIUtility.TextContent(
-		""), // This name will be overriden during runtime
+		""), // This name will be overridden during runtime
 };
 public static int[] customQueueValues = {
 	queueValues[0],
 	queueValues[1],
 	queueValues[2],
 	queueValues[3],
-	0, // This value will be overriden during runtime
+	0, // This value will be overridden during runtime
 };
 
 public static readonly GUIContent enableInstancingLabel =
@@ -1419,7 +1419,7 @@ FixupEmissiveFlag(Color col, MaterialGlobalIlluminationFlags flags) {
 	else if (flags !=
 	         MaterialGlobalIlluminationFlags
 	         .EmissiveIsBlack) // clear baked flag on everything else,
-		                   // unless it's explicity disabled
+		                   // unless it's explicitly disabled
 		flags &= MaterialGlobalIlluminationFlags.AnyEmissive;
 	return flags;
 }

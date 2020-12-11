@@ -469,7 +469,7 @@ public void RegisterUpdate(uint start, uint size) {
 		m_UpdateRangesSaturated = true;
 		return; // Reached the max for this frame, ignore any more
 		        // notifications, and just upload the entire affected regions
-		        // including any holes inbetween
+		        // including any holes between
 	}
 
 	var cpuDataSlice = new UIntPtr(
@@ -501,7 +501,7 @@ public void SendUpdates() {
 
 	// Send to the GPU, if the minimum affected byte address is not zero, we
 	// need to adjust the range entries to factor out that offset as the
-	// 'offsetFromWriteStart' member is refering to the buffer lock position
+	// 'offsetFromWriteStart' member is referring to the buffer lock position
 	// not the start of the GPU buffer
 	uint minByte = m_UpdateRangeMin * m_ElemStride;
 	uint maxByte = m_UpdateRangeMax * m_ElemStride;
