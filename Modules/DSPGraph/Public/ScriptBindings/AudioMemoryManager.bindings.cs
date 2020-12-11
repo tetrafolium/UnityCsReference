@@ -5,13 +5,13 @@
 using UnityEngine.Bindings;
 
 namespace Unity.Audio {
-  [NativeType(Header = "Modules/DSPGraph/Public/AudioMemoryManager.bindings.h")]
-  internal struct AudioMemoryManager {
-    [NativeMethod(IsFreeFunction = true, ThrowsException = false)]
-    public static extern unsafe void *
-    Internal_AllocateAudioMemory(int size, int alignment);
+[NativeType(Header = "Modules/DSPGraph/Public/AudioMemoryManager.bindings.h")]
+internal struct AudioMemoryManager {
+	[NativeMethod(IsFreeFunction = true, ThrowsException = false)]
+	public static extern unsafe void *
+	Internal_AllocateAudioMemory(int size, int alignment);
 
-    [NativeMethod(IsFreeFunction = true, ThrowsException = false)]
-    public static extern unsafe void Internal_FreeAudioMemory(void *memory);
-  }
+	[NativeMethod(IsFreeFunction = true, ThrowsException = false)]
+	public static extern unsafe void Internal_FreeAudioMemory(void *memory);
+}
 }

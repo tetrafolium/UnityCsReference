@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Scripting;
 
 namespace UnityEngine.Animations {
-  [RequiredByNativeCode]
-  [AttributeUsage(AttributeTargets.Field | AttributeTargets.Class)]
-  public class NotKeyableAttribute : Attribute {}
+[RequiredByNativeCode]
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Class)]
+public class NotKeyableAttribute : Attribute {}
 }

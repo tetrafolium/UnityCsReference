@@ -10,11 +10,11 @@ namespace UnityEditorInternal {
 [StructLayout(LayoutKind.Sequential)]
 [RequiredByNativeCode]
 public sealed class ObjectMemoryStackInfo {
-  public bool expanded;
-  public bool sorted;
-  public int allocated;
-  public int ownedAllocated;
-  public ObjectMemoryStackInfo[] callerSites;
-  public string name;
+public bool expanded;
+public bool sorted;
+public int allocated;
+public int ownedAllocated;
+public ObjectMemoryStackInfo[] callerSites;
+public string name;
 }
 }

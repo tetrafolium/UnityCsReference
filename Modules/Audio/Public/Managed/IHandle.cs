@@ -6,11 +6,11 @@ using System;
 using System.Runtime.CompilerServices;
 using UnityEngine.Bindings;
 
-[assembly:InternalsVisibleTo("UnityEngine.DSPGraphModule")]
+[assembly: InternalsVisibleTo("UnityEngine.DSPGraphModule")]
 
-    namespace Unity.Audio {
-  [VisibleToOtherModules]
-  internal interface IHandle<HandleType>
-      : IValidatable, IEquatable<HandleType> where HandleType : struct
-  , IHandle<HandleType> {}
+namespace Unity.Audio {
+[VisibleToOtherModules]
+internal interface IHandle<HandleType>
+	: IValidatable, IEquatable<HandleType> where HandleType : struct
+	, IHandle<HandleType> {}
 }

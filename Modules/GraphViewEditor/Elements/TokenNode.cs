@@ -6,43 +6,43 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UnityEditor.Experimental.GraphView {
-  public class TokenNode : Node {
-    private Pill m_Pill;
+public class TokenNode : Node {
+private Pill m_Pill;
 
-    public Texture icon {
-      get { return m_Pill.icon; }
-      set { m_Pill.icon = value; }
-    }
+public Texture icon {
+	get { return m_Pill.icon; }
+	set { m_Pill.icon = value; }
+}
 
-    public Port input {
-      get { return m_Pill.left as Port; }
-    }
+public Port input {
+	get { return m_Pill.left as Port; }
+}
 
-    public Port output {
-      get { return m_Pill.right as Port; }
-    }
+public Port output {
+	get { return m_Pill.right as Port; }
+}
 
-    public TokenNode(Port input, Port output)
-        : base("UXML/GraphView/TokenNode.uxml") {
-      AddStyleSheetPath("StyleSheets/GraphView/TokenNode.uss");
+public TokenNode(Port input, Port output)
+	: base("UXML/GraphView/TokenNode.uxml") {
+	AddStyleSheetPath("StyleSheets/GraphView/TokenNode.uss");
 
-      m_Pill = this.Q<Pill>(name : "pill");
+	m_Pill = this.Q<Pill>(name: "pill");
 
-      if (input != null) {
-        m_Pill.left = input;
-      }
+	if (input != null) {
+		m_Pill.left = input;
+	}
 
-      if (output != null) {
-        m_Pill.right = output;
-      }
+	if (output != null) {
+		m_Pill.right = output;
+	}
 
-      ClearClassList();
-      AddToClassList("token-node");
-    }
+	ClearClassList();
+	AddToClassList("token-node");
+}
 
-    public bool highlighted {
-      get { return m_Pill.highlighted; }
-      set { m_Pill.highlighted = value; }
-    }
-  }
+public bool highlighted {
+	get { return m_Pill.highlighted; }
+	set { m_Pill.highlighted = value; }
+}
+}
 }

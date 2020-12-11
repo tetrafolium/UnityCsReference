@@ -11,8 +11,11 @@ namespace UnityEngine {
 [UsedByNativeCode]
 [ExcludeFromObjectFactory]
 public partial class RuntimeAnimatorController : Object {
-  protected RuntimeAnimatorController() {}
+protected RuntimeAnimatorController() {
+}
 
-  extern public AnimationClip[] animationClips { get; }
+extern public AnimationClip[] animationClips {
+	get;
+}
 }
 }

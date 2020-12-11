@@ -17,8 +17,12 @@ namespace UnityEngine {
 [RequiredByNativeCode]
 [NativeHeader("Modules/AssetBundle/Public/AssetBundleLoadAssetOperation.h")]
 public class AssetBundleRequest : AsyncOperation {
-  public extern Object asset { [NativeMethod("GetLoadedAsset")] get; }
+public extern Object asset {
+	[NativeMethod("GetLoadedAsset")] get;
+}
 
-  public extern Object[] allAssets { [NativeMethod("GetAllLoadedAssets")] get; }
+public extern Object[] allAssets {
+	[NativeMethod("GetAllLoadedAssets")] get;
+}
 }
 }

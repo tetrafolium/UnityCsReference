@@ -3,5 +3,5 @@
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
 namespace UnityEditor.PackageManager {
-  public enum LogLevel { Error, Warn, Info, Verbose, Debug, Silly }
+public enum LogLevel { Error, Warn, Info, Verbose, Debug, Silly }
 }

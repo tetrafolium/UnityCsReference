@@ -13,19 +13,25 @@ namespace UnityEngine {
 [RequiredByNativeCode]
 [NativeHeader("Modules/AssetBundle/Public/AssetBundleRecompressOperation.h")]
 public class AssetBundleRecompressOperation : AsyncOperation {
-  // String describing the result of recompressing the [[AssetBundle]]
-  public extern string humanReadableResult {
-    [NativeMethod("GetResultStr")] get;
-  }
+// String describing the result of recompressing the [[AssetBundle]]
+public extern string humanReadableResult {
+	[NativeMethod("GetResultStr")] get;
+}
 
-  public extern string inputPath { [NativeMethod("GetInputPath")] get; }
+public extern string inputPath {
+	[NativeMethod("GetInputPath")] get;
+}
 
-  public extern string outputPath { [NativeMethod("GetOutputPath")] get; }
+public extern string outputPath {
+	[NativeMethod("GetOutputPath")] get;
+}
 
-  public extern AssetBundleLoadResult result {
-    [NativeMethod("GetResult")] get;
-  }
+public extern AssetBundleLoadResult result {
+	[NativeMethod("GetResult")] get;
+}
 
-  public extern bool success { [NativeMethod("GetSuccess")] get; }
+public extern bool success {
+	[NativeMethod("GetSuccess")] get;
+}
 }
 }

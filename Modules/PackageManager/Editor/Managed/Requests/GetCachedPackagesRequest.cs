@@ -6,20 +6,22 @@ using System;
 using System.Linq;
 
 namespace UnityEditor.PackageManager.Requests {
-  [Serializable]
-  internal sealed partial class GetCachedPackagesRequest
-      : Request<CachedPackageInfo[]> {
-    /// <summary>
-    /// Constructor to support serialization
-    /// </summary>
-    private GetCachedPackagesRequest() : base() {}
+[Serializable]
+internal sealed partial class GetCachedPackagesRequest
+	: Request<CachedPackageInfo[]> {
+/// <summary>
+/// Constructor to support serialization
+/// </summary>
+private GetCachedPackagesRequest() : base() {
+}
 
-    internal GetCachedPackagesRequest(long operationId,
-                                      NativeStatusCode initialStatus)
-        : base(operationId, initialStatus) {}
+internal GetCachedPackagesRequest(long operationId,
+                                  NativeStatusCode initialStatus)
+	: base(operationId, initialStatus) {
+}
 
-    protected override CachedPackageInfo[] GetResult() {
-      return GetOperationData(Id);
-    }
-  }
+protected override CachedPackageInfo[] GetResult() {
+	return GetOperationData(Id);
+}
+}
 }

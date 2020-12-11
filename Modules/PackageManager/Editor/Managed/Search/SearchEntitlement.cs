@@ -3,9 +3,9 @@
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
 namespace UnityEditor.PackageManager {
-  internal enum SearchEntitlement {
-    Any,
-    None,
-    AssetStore,
-  }
+internal enum SearchEntitlement {
+	Any,
+	None,
+	AssetStore,
+}
 }

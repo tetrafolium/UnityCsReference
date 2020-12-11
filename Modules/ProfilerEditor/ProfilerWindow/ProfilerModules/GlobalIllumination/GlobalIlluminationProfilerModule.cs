@@ -9,14 +9,14 @@ using UnityEngine.Profiling;
 using UnityEditor;
 
 namespace UnityEditorInternal.Profiling {
-  [Serializable]
-  internal class GlobalIlluminationProfilerModule : ProfilerModuleBase {
-    public override void DrawToolbar(Rect position) {
-      DrawOtherToolbar(ProfilerArea.GlobalIllumination);
-    }
+[Serializable]
+internal class GlobalIlluminationProfilerModule : ProfilerModuleBase {
+public override void DrawToolbar(Rect position) {
+	DrawOtherToolbar(ProfilerArea.GlobalIllumination);
+}
 
-    public override void DrawView(Rect position) {
-      DrawOverviewText(ProfilerArea.GlobalIllumination, position);
-    }
-  }
+public override void DrawView(Rect position) {
+	DrawOverviewText(ProfilerArea.GlobalIllumination, position);
+}
+}
 }

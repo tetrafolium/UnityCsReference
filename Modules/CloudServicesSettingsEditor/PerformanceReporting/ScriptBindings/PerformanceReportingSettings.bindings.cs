@@ -7,14 +7,14 @@ using UnityEngine.Bindings;
 
 namespace UnityEditor.Analytics {
 
-  [NativeHeader(
-      "Modules/UnityConnect/PerformanceReporting/PerformanceReportingSettings.h")]
-  [StaticAccessor("GetPerformanceReportingSettings()", StaticAccessorType.Dot)]
-  public static partial class PerformanceReportingSettings {
-    public static extern bool enabled {
-      [ThreadSafe] get;
-      [ThreadSafe] set;
-    }
-  }
+[NativeHeader(
+	 "Modules/UnityConnect/PerformanceReporting/PerformanceReportingSettings.h")]
+[StaticAccessor("GetPerformanceReportingSettings()", StaticAccessorType.Dot)]
+public static partial class PerformanceReportingSettings {
+public static extern bool enabled {
+	[ThreadSafe] get;
+	[ThreadSafe] set;
+}
+}
 
 }

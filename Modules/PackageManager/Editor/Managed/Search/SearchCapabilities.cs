@@ -4,16 +4,16 @@
 
 using System;
 using RequiredByNativeCodeAttribute =
-    UnityEngine.Scripting.RequiredByNativeCodeAttribute;
+	      UnityEngine.Scripting.RequiredByNativeCodeAttribute;
 
 namespace UnityEditor.PackageManager {
-  [Serializable]
-  [RequiredByNativeCode]
-  [Flags]
-  internal enum SearchCapabilities {
-    None = 0,
-    Classification = 1 << 0,
-    Ordering = 1 << 1,
-    Pagination = 1 << 2,
-  }
+[Serializable]
+[RequiredByNativeCode]
+[Flags]
+internal enum SearchCapabilities {
+	None = 0,
+	Classification = 1 << 0,
+	Ordering = 1 << 1,
+	Pagination = 1 << 2,
+}
 }

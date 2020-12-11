@@ -5,16 +5,20 @@
 using System;
 
 namespace UnityEditor.PackageManager.Requests {
-  [Serializable]
-  public sealed partial class EmbedRequest : Request<PackageInfo> {
-    /// <summary>
-    /// Constructor to support serialization
-    /// </summary>
-    private EmbedRequest() : base() {}
+[Serializable]
+public sealed partial class EmbedRequest : Request<PackageInfo> {
+/// <summary>
+/// Constructor to support serialization
+/// </summary>
+private EmbedRequest() : base() {
+}
 
-    internal EmbedRequest(long operationId, NativeStatusCode initialStatus)
-        : base(operationId, initialStatus) {}
+internal EmbedRequest(long operationId, NativeStatusCode initialStatus)
+	: base(operationId, initialStatus) {
+}
 
-    protected override PackageInfo GetResult() { return GetOperationData(Id); }
-  }
+protected override PackageInfo GetResult() {
+	return GetOperationData(Id);
+}
+}
 }

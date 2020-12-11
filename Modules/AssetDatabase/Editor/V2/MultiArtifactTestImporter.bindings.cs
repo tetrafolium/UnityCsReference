@@ -6,8 +6,8 @@ using UnityEngine;
 using UnityEngine.Bindings;
 
 namespace UnityEditor.Experimental {
-  // AssetImporter for importing ReferenceArtifactGenerator
-  [NativeHeader("Modules/AssetDatabase/Editor/V2/MultiArtifactTestImporter.h")]
-  [ExcludeFromPreset]
-  internal partial class MultiArtifactTestImporter : AssetImporter {}
+// AssetImporter for importing ReferenceArtifactGenerator
+[NativeHeader("Modules/AssetDatabase/Editor/V2/MultiArtifactTestImporter.h")]
+[ExcludeFromPreset]
+internal partial class MultiArtifactTestImporter : AssetImporter {}
 }

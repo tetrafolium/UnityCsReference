@@ -11,22 +11,25 @@ using UnityEngine;
 namespace UnityEditor {
 [InitializeOnLoad]
 internal class UISystemProfilerRenderService : IDisposable {
-  private bool m_Disposed;
+private bool m_Disposed;
 
-  public UISystemProfilerRenderService() {}
+public UISystemProfilerRenderService() {
+}
 
-  public void Dispose() { m_Disposed = true; }
+public void Dispose() {
+	m_Disposed = true;
+}
 
-  private Texture2D Generate(int frameIndex, int renderDataIndex,
-                             int renderDataCount, bool overdraw) {
-    return m_Disposed ? null
-        : ProfilerProperty.UISystemProfilerRender(frameIndex, renderDataIndex,
-                                                  renderDataCount, overdraw);
-  }
+private Texture2D Generate(int frameIndex, int renderDataIndex,
+                           int renderDataCount, bool overdraw) {
+	return m_Disposed ? null
+	: ProfilerProperty.UISystemProfilerRender(frameIndex, renderDataIndex,
+	                                          renderDataCount, overdraw);
+}
 
-  public Texture2D GetThumbnail(int frameIndex, int renderDataIndex,
-                                int infoRenderDataCount, bool overdraw) {
-    return Generate(frameIndex, renderDataIndex, infoRenderDataCount, overdraw);
-  }
+public Texture2D GetThumbnail(int frameIndex, int renderDataIndex,
+                              int infoRenderDataCount, bool overdraw) {
+	return Generate(frameIndex, renderDataIndex, infoRenderDataCount, overdraw);
+}
 }
 }

@@ -6,28 +6,30 @@ using System;
 using UnityEngine;
 
 namespace UnityEditor.PackageManager.UI {
-  [FilePath("ProjectSettings/PackageManagerSettings.asset",
-            FilePathAttribute.Location.ProjectFolder)]
-  internal class PackageManagerProjectSettings
-      : ScriptableSingleton<PackageManagerProjectSettings> {
-    public event Action<bool> onEnablePreviewPackagesChanged = delegate{};
+[FilePath("ProjectSettings/PackageManagerSettings.asset",
+          FilePathAttribute.Location.ProjectFolder)]
+internal class PackageManagerProjectSettings
+	: ScriptableSingleton<PackageManagerProjectSettings> {
+public event Action<bool> onEnablePreviewPackagesChanged = delegate {};
 
-    [SerializeField]
-    private bool m_EnablePreviewPackages;
+[SerializeField]
+private bool m_EnablePreviewPackages;
 
-    public bool enablePreviewPackages {
-      get { return m_EnablePreviewPackages; }
-      set {
-        if (value != m_EnablePreviewPackages) {
-          m_EnablePreviewPackages = value;
-          onEnablePreviewPackagesChanged?.Invoke(m_EnablePreviewPackages);
-        }
-      }
-    }
+public bool enablePreviewPackages {
+	get { return m_EnablePreviewPackages; }
+	set {
+		if (value != m_EnablePreviewPackages) {
+			m_EnablePreviewPackages = value;
+			onEnablePreviewPackagesChanged?.Invoke(m_EnablePreviewPackages);
+		}
+	}
+}
 
-    [SerializeField]
-    public bool oneTimeWarningShown;
+[SerializeField]
+public bool oneTimeWarningShown;
 
-    public void Save() { Save(true); }
-  }
+public void Save() {
+	Save(true);
+}
+}
 }

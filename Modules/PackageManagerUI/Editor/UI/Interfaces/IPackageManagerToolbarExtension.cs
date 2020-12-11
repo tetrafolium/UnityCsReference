@@ -5,22 +5,22 @@
 using UnityEngine.UIElements;
 
 namespace UnityEditor.PackageManager.UI {
-  /// <summary>
-  /// Interface for Package Manager UI Extension
-  /// </summary>
-  internal interface IPackageManagerToolbarExtension {
-    /// <summary>
-    /// Called by the Package Manager UI when the package selection changed.
-    /// </summary>
-    /// <param name="packageVersion">The newly selected package information (can
-    /// be null)</param> <param name="toolbar">The toolbar VisualElement to add
-    /// new action into.</param>
-    void OnPackageSelectionChange(IPackageVersion packageVersion,
-                                  VisualElement toolbar);
+/// <summary>
+/// Interface for Package Manager UI Extension
+/// </summary>
+internal interface IPackageManagerToolbarExtension {
+/// <summary>
+/// Called by the Package Manager UI when the package selection changed.
+/// </summary>
+/// <param name="packageVersion">The newly selected package information (can
+/// be null)</param> <param name="toolbar">The toolbar VisualElement to add
+/// new action into.</param>
+void OnPackageSelectionChange(IPackageVersion packageVersion,
+                              VisualElement toolbar);
 
-    /// <summary>
-    /// Called by the Package Manager UI when its window is being closed
-    /// </summary>
-    void OnWindowDestroy();
-  }
+/// <summary>
+/// Called by the Package Manager UI when its window is being closed
+/// </summary>
+void OnWindowDestroy();
+}
 }

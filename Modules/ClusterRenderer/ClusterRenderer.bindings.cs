@@ -8,11 +8,15 @@ using UnityEngine.Bindings;
 namespace UnityEngine {
 [NativeHeader("Modules/ClusterRenderer/ClusterNetwork.h")]
 public class ClusterNetwork {
-  public static extern bool isMasterOfCluster { get; }
-  public static extern bool isDisconnected { get; }
-  public static extern int nodeIndex {
-    get;
-    set;
-  }
+public static extern bool isMasterOfCluster {
+	get;
+}
+public static extern bool isDisconnected {
+	get;
+}
+public static extern int nodeIndex {
+	get;
+	set;
+}
 }
 }

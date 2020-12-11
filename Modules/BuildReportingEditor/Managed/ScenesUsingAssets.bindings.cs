@@ -7,13 +7,13 @@ using UnityEngine.Bindings;
 using Object = UnityEngine.Object;
 
 namespace UnityEditor.Build.Reporting {
-  [NativeType(Header =
-                  "Modules/BuildReportingEditor/Public/ScenesUsingAssets.h")]
-  [NativeClass("BuildReporting::ScenesUsingAssets")]
-  public sealed class ScenesUsingAssets : Object {
-    public ScenesUsingAsset[] list {
-      get { return GetList(); }
-    }
-    internal extern ScenesUsingAsset[] GetList();
-  }
+[NativeType(Header =
+		    "Modules/BuildReportingEditor/Public/ScenesUsingAssets.h")]
+[NativeClass("BuildReporting::ScenesUsingAssets")]
+public sealed class ScenesUsingAssets : Object {
+public ScenesUsingAsset[] list {
+	get { return GetList(); }
+}
+internal extern ScenesUsingAsset[] GetList();
+}
 }

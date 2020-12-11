@@ -7,15 +7,17 @@ using System.Linq;
 using UnityEngine;
 
 namespace UnityEditor.PackageManager.Requests {
-  [Serializable]
-  public sealed partial class PackRequest : Request<PackOperationResult> {
-    private PackRequest() {}
+[Serializable]
+public sealed partial class PackRequest : Request<PackOperationResult> {
+private PackRequest() {
+}
 
-    internal PackRequest(long operationId, NativeStatusCode initialStatus)
-        : base(operationId, initialStatus) {}
+internal PackRequest(long operationId, NativeStatusCode initialStatus)
+	: base(operationId, initialStatus) {
+}
 
-    protected override PackOperationResult GetResult() {
-      return GetOperationData(Id);
-    }
-  }
+protected override PackOperationResult GetResult() {
+	return GetOperationData(Id);
+}
+}
 }

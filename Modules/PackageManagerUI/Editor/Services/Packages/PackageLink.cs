@@ -5,9 +5,9 @@
 using System;
 
 namespace UnityEditor.PackageManager.UI {
-  [Serializable]
-  internal class PackageLink {
-    public string name;
-    public string url;
-  }
+[Serializable]
+internal class PackageLink {
+public string name;
+public string url;
+}
 }

@@ -8,132 +8,132 @@ using UnityEngine;
 namespace UnityEditor {
 // Version for AssetImporterInspector derived editors
 internal abstract class AssetImporterTabbedEditor : AssetImporterEditor {
-  protected string[] m_TabNames = null;
-  private int m_ActiveEditorIndex = 0;
+protected string[] m_TabNames = null;
+private int m_ActiveEditorIndex = 0;
 
-  /// <summary>
-  /// The list of child inspectors.
-  /// </summary>
-  private BaseAssetImporterTabUI[] m_Tabs = null;
-  public BaseAssetImporterTabUI activeTab {
-    get;
-    private set;
-  }
-  protected BaseAssetImporterTabUI[] tabs {
-    get { return m_Tabs; }
-    set { m_Tabs = value; }
-  }
+/// <summary>
+/// The list of child inspectors.
+/// </summary>
+private BaseAssetImporterTabUI[] m_Tabs = null;
+public BaseAssetImporterTabUI activeTab {
+	get;
+	private set;
+}
+protected BaseAssetImporterTabUI[] tabs {
+	get { return m_Tabs; }
+	set { m_Tabs = value; }
+}
 
-  public override void OnEnable() {
-    base.OnEnable();
+public override void OnEnable() {
+	base.OnEnable();
 
-    foreach (var tab in m_Tabs) {
-      tab.OnEnable();
-    }
+	foreach (var tab in m_Tabs) {
+		tab.OnEnable();
+	}
 
-    m_ActiveEditorIndex =
-        EditorPrefs.GetInt(this.GetType().Name + "ActiveEditorIndex", 0);
-    if (activeTab == null)
-      activeTab = m_Tabs[m_ActiveEditorIndex];
-  }
+	m_ActiveEditorIndex =
+		EditorPrefs.GetInt(this.GetType().Name + "ActiveEditorIndex", 0);
+	if (activeTab == null)
+		activeTab = m_Tabs[m_ActiveEditorIndex];
+}
 
-  void OnDestroy() {
-    if (m_Tabs != null) {
-      foreach (var tab in m_Tabs) {
-        tab.OnDestroy();
-      }
+void OnDestroy() {
+	if (m_Tabs != null) {
+		foreach (var tab in m_Tabs) {
+			tab.OnDestroy();
+		}
 
-      // destroy all the child tabs
-      m_Tabs = null;
-      activeTab = null;
-    }
-  }
+		// destroy all the child tabs
+		m_Tabs = null;
+		activeTab = null;
+	}
+}
 
-  protected override void ResetValues() {
-    base.ResetValues();
+protected override void ResetValues() {
+	base.ResetValues();
 
-    if (m_Tabs != null) {
-      foreach (var tab in m_Tabs) {
-        tab.ResetValues();
-      }
-    }
-  }
+	if (m_Tabs != null) {
+		foreach (var tab in m_Tabs) {
+			tab.ResetValues();
+		}
+	}
+}
 
-  public override void OnInspectorGUI() {
-    serializedObject.Update();
-    extraDataSerializedObject?.Update();
-    // Always allow user to switch between tabs even when the editor is
-    // disabled, so they can look at all parts of read-only assets
-    using(new EditorGUI.DisabledScope(
-        false)) // this doesn't enable the UI, but it seems correct to push the
-                // stack
-    {
-      GUI.enabled = true;
-      using(new GUILayout.HorizontalScope()) {
-        GUILayout.FlexibleSpace();
-        using(var check = new EditorGUI.ChangeCheckScope()) {
-          m_ActiveEditorIndex =
-              GUILayout.Toolbar(m_ActiveEditorIndex, m_TabNames, "LargeButton",
-                                GUI.ToolbarButtonSize.FitToContents);
-          if (check.changed) {
-            EditorPrefs.SetInt(GetType().Name + "ActiveEditorIndex",
-                               m_ActiveEditorIndex);
-            activeTab = m_Tabs[m_ActiveEditorIndex];
+public override void OnInspectorGUI() {
+	serializedObject.Update();
+	extraDataSerializedObject?.Update();
+	// Always allow user to switch between tabs even when the editor is
+	// disabled, so they can look at all parts of read-only assets
+	using (new EditorGUI.DisabledScope(
+		       false)) // this doesn't enable the UI, but it seems correct to push the
+	                       // stack
+	{
+		GUI.enabled = true;
+		using (new GUILayout.HorizontalScope()) {
+			GUILayout.FlexibleSpace();
+			using (var check = new EditorGUI.ChangeCheckScope()) {
+				m_ActiveEditorIndex =
+					GUILayout.Toolbar(m_ActiveEditorIndex, m_TabNames, "LargeButton",
+					                  GUI.ToolbarButtonSize.FitToContents);
+				if (check.changed) {
+					EditorPrefs.SetInt(GetType().Name + "ActiveEditorIndex",
+					                   m_ActiveEditorIndex);
+					activeTab = m_Tabs[m_ActiveEditorIndex];
 
-            activeTab.OnInspectorGUI();
-          }
-        }
-        GUILayout.FlexibleSpace();
-      }
-    }
+					activeTab.OnInspectorGUI();
+				}
+			}
+			GUILayout.FlexibleSpace();
+		}
+	}
 
-    // the activeTab can get destroyed when opening particular sub-editors (such
-    // as the Avatar configuration editor on the Rig tab)
-    if (activeTab != null) {
-      GUILayout.Space(EditorGUI.kSpacing);
+	// the activeTab can get destroyed when opening particular sub-editors (such
+	// as the Avatar configuration editor on the Rig tab)
+	if (activeTab != null) {
+		GUILayout.Space(EditorGUI.kSpacing);
 
-      activeTab.OnInspectorGUI();
-    }
+		activeTab.OnInspectorGUI();
+	}
 
-    extraDataSerializedObject?.ApplyModifiedProperties();
-    serializedObject.ApplyModifiedProperties();
+	extraDataSerializedObject?.ApplyModifiedProperties();
+	serializedObject.ApplyModifiedProperties();
 
-    // show a single Apply/Revert set of buttons for all the tabs
-    ApplyRevertGUI();
-  }
+	// show a single Apply/Revert set of buttons for all the tabs
+	ApplyRevertGUI();
+}
 
-  public override void OnPreviewSettings() {
-    if (activeTab != null) {
-      activeTab.OnPreviewSettings();
-    }
-  }
+public override void OnPreviewSettings() {
+	if (activeTab != null) {
+		activeTab.OnPreviewSettings();
+	}
+}
 
-  public override void OnInteractivePreviewGUI(Rect r, GUIStyle background) {
-    if (activeTab != null) {
-      activeTab.OnInteractivePreviewGUI(r, background);
-    }
-  }
+public override void OnInteractivePreviewGUI(Rect r, GUIStyle background) {
+	if (activeTab != null) {
+		activeTab.OnInteractivePreviewGUI(r, background);
+	}
+}
 
-  public override bool HasPreviewGUI() {
-    if (activeTab == null)
-      return false;
-    return activeTab.HasPreviewGUI();
-  }
+public override bool HasPreviewGUI() {
+	if (activeTab == null)
+		return false;
+	return activeTab.HasPreviewGUI();
+}
 
-  protected override void Apply() {
-    if (m_Tabs != null) {
-      // tabs can do work before or after the application of changes in the
-      // serialization object
-      foreach (var tab in m_Tabs) {
-        tab.PreApply();
-      }
+protected override void Apply() {
+	if (m_Tabs != null) {
+		// tabs can do work before or after the application of changes in the
+		// serialization object
+		foreach (var tab in m_Tabs) {
+			tab.PreApply();
+		}
 
-      base.Apply();
+		base.Apply();
 
-      foreach (var tab in m_Tabs) {
-        tab.PostApply();
-      }
-    }
-  }
+		foreach (var tab in m_Tabs) {
+			tab.PostApply();
+		}
+	}
+}
 }
 }

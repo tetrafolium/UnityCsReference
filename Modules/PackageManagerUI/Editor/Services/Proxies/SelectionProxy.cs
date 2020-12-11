@@ -5,18 +5,20 @@
 using System;
 
 namespace UnityEditor.PackageManager.UI {
-  internal class SelectionProxy {
-    public virtual event Action onSelectionChanged = delegate{};
+internal class SelectionProxy {
+public virtual event Action onSelectionChanged = delegate {};
 
-    public SelectionProxy() {
-      Selection.selectionChanged += OnSelectionChanged;
-    }
+public SelectionProxy() {
+	Selection.selectionChanged += OnSelectionChanged;
+}
 
-    public virtual UnityEngine.Object activeObject {
-      get { return Selection.activeObject; }
-      set { Selection.activeObject = value; }
-    }
+public virtual UnityEngine.Object activeObject {
+	get { return Selection.activeObject; }
+	set { Selection.activeObject = value; }
+}
 
-    private void OnSelectionChanged() { onSelectionChanged?.Invoke(); }
-  }
+private void OnSelectionChanged() {
+	onSelectionChanged?.Invoke();
+}
+}
 }

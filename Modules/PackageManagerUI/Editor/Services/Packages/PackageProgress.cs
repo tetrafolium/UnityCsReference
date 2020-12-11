@@ -3,13 +3,13 @@
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
 namespace UnityEditor.PackageManager.UI {
-  internal enum PackageProgress {
-    None = 0,
-    Refreshing,
-    Downloading,
-    Pausing,
-    Resuming,
-    Installing,
-    Removing
-  }
+internal enum PackageProgress {
+	None = 0,
+	Refreshing,
+	Downloading,
+	Pausing,
+	Resuming,
+	Installing,
+	Removing
+}
 }

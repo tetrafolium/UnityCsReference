@@ -6,11 +6,11 @@ using System;
 using UnityEngine;
 
 namespace UnityEditor.PackageManager.UI {
-  [ExcludeFromPreset]
-  [Serializable]
-  internal class PackageSelectionObject : ScriptableObject {
-    public string displayName;
-    public string packageUniqueId;
-    public string versionUniqueId;
-  }
+[ExcludeFromPreset]
+[Serializable]
+internal class PackageSelectionObject : ScriptableObject {
+public string displayName;
+public string packageUniqueId;
+public string versionUniqueId;
+}
 }

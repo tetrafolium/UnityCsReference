@@ -6,26 +6,28 @@ using System;
 using UnityEditor.PackageManager.Requests;
 
 namespace UnityEditor.PackageManager.UI {
-  [Serializable]
-  internal class UpmListOperation : UpmBaseOperation<ListRequest> {
-    public override RefreshOptions refreshOptions =>
-        isOfflineMode ? RefreshOptions.UpmListOffline : RefreshOptions.UpmList;
+[Serializable]
+internal class UpmListOperation : UpmBaseOperation<ListRequest> {
+public override RefreshOptions refreshOptions =>
+isOfflineMode ? RefreshOptions.UpmListOffline : RefreshOptions.UpmList;
 
-    public void List() {
-      m_OfflineMode = false;
-      Start();
-    }
+public void List() {
+	m_OfflineMode = false;
+	Start();
+}
 
-    public void ListOffline(long timestamp) {
-      m_OfflineMode = true;
-      m_Timestamp = timestamp;
-      Start();
-    }
+public void ListOffline(long timestamp) {
+	m_OfflineMode = true;
+	m_Timestamp = timestamp;
+	Start();
+}
 
-    protected override ListRequest CreateRequest() {
-      return Client.List(isOfflineMode, true);
-    }
+protected override ListRequest CreateRequest() {
+	return Client.List(isOfflineMode, true);
+}
 
-    public void Cancel() { CancelInternal(); }
-  }
+public void Cancel() {
+	CancelInternal();
+}
+}
 }

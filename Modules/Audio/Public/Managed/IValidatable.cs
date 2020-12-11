@@ -3,8 +3,10 @@
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
 namespace Unity.Audio {
-  [UnityEngine.Bindings.VisibleToOtherModules]
-  internal interface IValidatable {
-    bool Valid { get; }
-  }
+[UnityEngine.Bindings.VisibleToOtherModules]
+internal interface IValidatable {
+bool Valid {
+	get;
+}
+}
 }

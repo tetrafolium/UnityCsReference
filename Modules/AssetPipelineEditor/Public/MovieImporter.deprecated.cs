@@ -6,20 +6,20 @@ using UnityEngine;
 
 namespace UnityEditor {
 [System.ComponentModel.EditorBrowsable(
-    System.ComponentModel.EditorBrowsableState.Never)]
+	 System.ComponentModel.EditorBrowsableState.Never)]
 [System.Obsolete("MovieImporter is removed. Use VideoClipImporter instead.",
                  true)]
 public class MovieImporter {
-  public float quality {
-    get { return 1.0f; }
-    set {}
-  }
-  public bool linearTexture {
-    get { return false; }
-    set {}
-  }
-  public float duration {
-    get { return 1.0f; }
-  }
+public float quality {
+	get { return 1.0f; }
+	set {}
+}
+public bool linearTexture {
+	get { return false; }
+	set {}
+}
+public float duration {
+	get { return 1.0f; }
+}
 }
 }

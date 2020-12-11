@@ -15,29 +15,29 @@ using System.Text.RegularExpressions;
 using Mono.Cecil;
 using UnityEditor.Modules;
 using RequiredByNativeCodeAttribute =
-    UnityEngine.Scripting.RequiredByNativeCodeAttribute;
+	      UnityEngine.Scripting.RequiredByNativeCodeAttribute;
 
 namespace UnityEditor.Build.Reporting {
-  internal static class BuildReportHelper {
-    private static IBuildAnalyzer m_CachedAnalyzer;
-    private static BuildTarget m_CachedAnalyzerTarget;
+internal static class BuildReportHelper {
+private static IBuildAnalyzer m_CachedAnalyzer;
+private static BuildTarget m_CachedAnalyzerTarget;
 
-    private static IBuildAnalyzer GetAnalyzerForTarget(BuildTarget target) {
-      if (m_CachedAnalyzerTarget == target)
-        return m_CachedAnalyzer;
+private static IBuildAnalyzer GetAnalyzerForTarget(BuildTarget target) {
+	if (m_CachedAnalyzerTarget == target)
+		return m_CachedAnalyzer;
 
-      m_CachedAnalyzer = ModuleManager.GetBuildAnalyzer(target);
-      m_CachedAnalyzerTarget = target;
-      return m_CachedAnalyzer;
-    }
+	m_CachedAnalyzer = ModuleManager.GetBuildAnalyzer(target);
+	m_CachedAnalyzerTarget = target;
+	return m_CachedAnalyzer;
+}
 
-    [RequiredByNativeCode]
-    public static void OnAddedExecutable(BuildReport report, int fileIndex) {
-      var analyzer = GetAnalyzerForTarget(report.summary.platform);
-      if (analyzer == null)
-        return;
+[RequiredByNativeCode]
+public static void OnAddedExecutable(BuildReport report, int fileIndex) {
+	var analyzer = GetAnalyzerForTarget(report.summary.platform);
+	if (analyzer == null)
+		return;
 
-      analyzer.OnAddedExecutable(report, fileIndex);
-    }
-  }
+	analyzer.OnAddedExecutable(report, fileIndex);
+}
+}
 }

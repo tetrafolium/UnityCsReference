@@ -5,8 +5,8 @@
 using System.Runtime.CompilerServices;
 
 // Make internal visible to UIElements module.
-[assembly : InternalsVisibleTo("UnityEngine.UIElementsModule")]
-[assembly : InternalsVisibleTo("Unity.UIElements")]
-[assembly : InternalsVisibleTo("Unity.UIElements.Editor")]
-[assembly : InternalsVisibleTo("Unity.UIElements.EditorTests")]
-[assembly:InternalsVisibleTo("Unity.UIElements.Tests")]
+[assembly: InternalsVisibleTo("UnityEngine.UIElementsModule")]
+[assembly: InternalsVisibleTo("Unity.UIElements")]
+[assembly: InternalsVisibleTo("Unity.UIElements.Editor")]
+[assembly: InternalsVisibleTo("Unity.UIElements.EditorTests")]
+[assembly: InternalsVisibleTo("Unity.UIElements.Tests")]

@@ -9,31 +9,31 @@ namespace UnityEngine {
 // You don't use these directly, but construct them with the layouting functions
 // in the [[GUILayout]] class.
 public sealed class GUILayoutOption {
-  internal enum Type {
-    fixedWidth,
-    fixedHeight,
-    minWidth,
-    maxWidth,
-    minHeight,
-    maxHeight,
-    stretchWidth,
-    stretchHeight,
-    // These are just for the spacing variables
-    alignStart,
-    alignMiddle,
-    alignEnd,
-    alignJustify,
-    equalSize,
-    spacing
-  }
-  // *undocumented*
-  internal Type type;
-  // *undocumented*
-  internal object value;
-  // *undocumented*
-  internal GUILayoutOption(Type type, object value) {
-    this.type = type;
-    this.value = value;
-  }
+internal enum Type {
+	fixedWidth,
+	fixedHeight,
+	minWidth,
+	maxWidth,
+	minHeight,
+	maxHeight,
+	stretchWidth,
+	stretchHeight,
+	// These are just for the spacing variables
+	alignStart,
+	alignMiddle,
+	alignEnd,
+	alignJustify,
+	equalSize,
+	spacing
+}
+// *undocumented*
+internal Type type;
+// *undocumented*
+internal object value;
+// *undocumented*
+internal GUILayoutOption(Type type, object value) {
+	this.type = type;
+	this.value = value;
+}
 }
 }

@@ -9,14 +9,14 @@ using UnityEngine.Profiling;
 using UnityEditor;
 
 namespace UnityEditorInternal.Profiling {
-  [Serializable]
-  internal class PhysicsProfilerModule : ProfilerModuleBase {
-    public override void DrawToolbar(Rect position) {
-      DrawOtherToolbar(ProfilerArea.Physics);
-    }
+[Serializable]
+internal class PhysicsProfilerModule : ProfilerModuleBase {
+public override void DrawToolbar(Rect position) {
+	DrawOtherToolbar(ProfilerArea.Physics);
+}
 
-    public override void DrawView(Rect position) {
-      DrawOverviewText(ProfilerArea.Physics, position);
-    }
-  }
+public override void DrawView(Rect position) {
+	DrawOverviewText(ProfilerArea.Physics, position);
+}
+}
 }

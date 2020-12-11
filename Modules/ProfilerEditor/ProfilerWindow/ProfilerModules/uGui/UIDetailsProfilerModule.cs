@@ -8,6 +8,6 @@ using UnityEngine;
 using UnityEditor;
 
 namespace UnityEditorInternal.Profiling {
-  [Serializable]
-  internal class UIDetailsProfilerModule : UIProfilerModule {}
+[Serializable]
+internal class UIDetailsProfilerModule : UIProfilerModule {}
 }

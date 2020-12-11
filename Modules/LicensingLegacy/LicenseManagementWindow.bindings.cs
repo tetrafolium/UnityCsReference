@@ -9,11 +9,11 @@ namespace UnityEditor {
 [StaticAccessor("LicensingLegacy::LicenseInfo::Get()",
                 StaticAccessorType.Arrow)]
 internal partial class LicenseManagementWindow {
-  [NativeName("QueryLicenseUpdateChecked")]
-  public static extern void CheckForUpdates();
-  [NativeName("NewActivation")]
-  public static extern void ActivateNewLicense();
-  public static extern void ManualActivation();
-  public static extern void ReturnLicense();
+[NativeName("QueryLicenseUpdateChecked")]
+public static extern void CheckForUpdates();
+[NativeName("NewActivation")]
+public static extern void ActivateNewLicense();
+public static extern void ManualActivation();
+public static extern void ReturnLicense();
 }
 }

@@ -11,53 +11,55 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine {
 [NativeHeader(
-    "Modules/Animation/ScriptBindings/AnimatorControllerParameter.bindings.h")]
+	 "Modules/Animation/ScriptBindings/AnimatorControllerParameter.bindings.h")]
 [NativeHeader("Modules/Animation/AnimatorControllerParameter.h")]
 [NativeAsStruct]
 [StructLayout(LayoutKind.Sequential)]
 [UsedByNativeCode]
 [NativeType(CodegenOptions.Custom, "MonoAnimatorControllerParameter")]
 public class AnimatorControllerParameter {
-  public string name {
-    get { return m_Name; }
-    set { m_Name = value; }
-  }
+public string name {
+	get { return m_Name; }
+	set { m_Name = value; }
+}
 
-  public int nameHash {
-    get { return Animator.StringToHash(m_Name); }
-  }
+public int nameHash {
+	get { return Animator.StringToHash(m_Name); }
+}
 
-  public AnimatorControllerParameterType type {
-    get { return m_Type; }
-    set { m_Type = value; }
-  }
-  public float defaultFloat {
-    get { return m_DefaultFloat; }
-    set { m_DefaultFloat = value; }
-  }
-  public int defaultInt {
-    get { return m_DefaultInt; }
-    set { m_DefaultInt = value; }
-  }
-  public bool defaultBool {
-    get { return m_DefaultBool; }
-    set { m_DefaultBool = value; }
-  }
+public AnimatorControllerParameterType type {
+	get { return m_Type; }
+	set { m_Type = value; }
+}
+public float defaultFloat {
+	get { return m_DefaultFloat; }
+	set { m_DefaultFloat = value; }
+}
+public int defaultInt {
+	get { return m_DefaultInt; }
+	set { m_DefaultInt = value; }
+}
+public bool defaultBool {
+	get { return m_DefaultBool; }
+	set { m_DefaultBool = value; }
+}
 
-  internal string m_Name = "";
-  internal AnimatorControllerParameterType m_Type;
-  internal float m_DefaultFloat;
-  internal int m_DefaultInt;
-  internal bool m_DefaultBool;
+internal string m_Name = "";
+internal AnimatorControllerParameterType m_Type;
+internal float m_DefaultFloat;
+internal int m_DefaultInt;
+internal bool m_DefaultBool;
 
-  public override bool Equals(object o) {
-    AnimatorControllerParameter other = o as AnimatorControllerParameter;
-    return other != null && m_Name == other.m_Name && m_Type == other.m_Type &&
-           m_DefaultFloat == other.m_DefaultFloat &&
-           m_DefaultInt == other.m_DefaultInt &&
-           m_DefaultBool == other.m_DefaultBool;
-  }
+public override bool Equals(object o) {
+	AnimatorControllerParameter other = o as AnimatorControllerParameter;
+	return other != null && m_Name == other.m_Name && m_Type == other.m_Type &&
+	       m_DefaultFloat == other.m_DefaultFloat &&
+	       m_DefaultInt == other.m_DefaultInt &&
+	       m_DefaultBool == other.m_DefaultBool;
+}
 
-  public override int GetHashCode() { return name.GetHashCode(); }
+public override int GetHashCode() {
+	return name.GetHashCode();
+}
 }
 }

@@ -3,13 +3,13 @@
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
 namespace UnityEditor.PackageManager {
-  internal enum NativeErrorCode {
-    Unknown,
-    NotFound,
-    Forbidden,
-    InvalidParameter,
-    Conflict,
-    Cancelled,
-    Success
-  }
+internal enum NativeErrorCode {
+	Unknown,
+	NotFound,
+	Forbidden,
+	InvalidParameter,
+	Conflict,
+	Cancelled,
+	Success
+}
 }

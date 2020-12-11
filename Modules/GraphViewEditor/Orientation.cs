@@ -3,5 +3,5 @@
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
 namespace UnityEditor.Experimental.GraphView {
-  public enum Orientation { Horizontal, Vertical }
+public enum Orientation { Horizontal, Vertical }
 }

@@ -6,31 +6,31 @@ using UnityEngine;
 using UnityEngine.Bindings;
 
 namespace UnityEditor.Experimental.AssetImporters {
-  [NativeHeader(
-      "Modules/AssetPipelineEditor/ImportSettings/AssetImporterEditorUtility.h")]
-  public abstract partial class AssetImporterEditor {
-    [FreeFunction]
-    private static extern Object CreateOrReloadInspectorCopy(int instanceID);
-    [FreeFunction]
-    private static extern void SaveUserData(int instanceID, Object userData);
-    [FreeFunction]
-    private static extern bool ReleaseInspectorCopy(int instanceID);
-    [FreeFunction]
-    private static extern void FixCacheCount(int instanceID, int count);
-    [FreeFunction]
-    private static extern int GetInspectorCopyCount(int instanceID);
-    [FreeFunction("IsMetaDataSerializationEqual")]
-    private static extern bool IsSerializedDataEqual([ NotNull ] Object source);
-    [FreeFunction]
-    private static extern void RevertObject([ NotNull ] Object source);
-    [FreeFunction]
-    private static extern void UpdateSavedData([ NotNull ] Object source);
-    [FreeFunction]
-    private static extern void
-    FixSavedAssetbundleSettings(int instanceID,
-                                PropertyModification[] assetBundleProperties);
-    [FreeFunction]
-    private static extern void
-    CheckForInspectorCopyBackingData([ NotNull ] Object source);
-  }
+[NativeHeader(
+	 "Modules/AssetPipelineEditor/ImportSettings/AssetImporterEditorUtility.h")]
+public abstract partial class AssetImporterEditor {
+[FreeFunction]
+private static extern Object CreateOrReloadInspectorCopy(int instanceID);
+[FreeFunction]
+private static extern void SaveUserData(int instanceID, Object userData);
+[FreeFunction]
+private static extern bool ReleaseInspectorCopy(int instanceID);
+[FreeFunction]
+private static extern void FixCacheCount(int instanceID, int count);
+[FreeFunction]
+private static extern int GetInspectorCopyCount(int instanceID);
+[FreeFunction("IsMetaDataSerializationEqual")]
+private static extern bool IsSerializedDataEqual([ NotNull ] Object source);
+[FreeFunction]
+private static extern void RevertObject([ NotNull ] Object source);
+[FreeFunction]
+private static extern void UpdateSavedData([ NotNull ] Object source);
+[FreeFunction]
+private static extern void
+FixSavedAssetbundleSettings(int instanceID,
+                            PropertyModification[] assetBundleProperties);
+[FreeFunction]
+private static extern void
+CheckForInspectorCopyBackingData([ NotNull ] Object source);
+}
 }

@@ -5,11 +5,13 @@
 using System.Collections.Generic;
 
 namespace UnityEditor.Experimental.GraphView {
-  public interface ISelection {
-    List<ISelectable> selection { get; }
+public interface ISelection {
+List<ISelectable> selection {
+	get;
+}
 
-    void AddToSelection(ISelectable selectable);
-    void RemoveFromSelection(ISelectable selectable);
-    void ClearSelection();
-  }
+void AddToSelection(ISelectable selectable);
+void RemoveFromSelection(ISelectable selectable);
+void ClearSelection();
+}
 }

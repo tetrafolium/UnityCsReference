@@ -10,8 +10,10 @@ namespace UnityEditorInternal {
 public sealed class PackageManifestImporter : AssetImporter {}
 
 public sealed class PackageManifest : TextAsset {
-  private PackageManifest() {}
+private PackageManifest() {
+}
 
-  private PackageManifest(string text) {}
+private PackageManifest(string text) {
+}
 }
 }

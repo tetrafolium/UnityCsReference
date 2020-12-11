@@ -6,11 +6,11 @@ using System;
 using UnityEngine.Bindings;
 
 namespace Unity.Audio {
-  [NativeType(Header = "Modules/DSPGraph/Public/ExecuteContext.bindings.h")]
-  internal unsafe struct ExecuteContextInternal {
-    [NativeMethod(IsThreadSafe = true, IsFreeFunction = true)]
-    public static extern unsafe void
-    Internal_PostEvent(void *dspNodePtr, long eventTypeHashCode, void *eventPtr,
-                       int eventSize);
-  }
+[NativeType(Header = "Modules/DSPGraph/Public/ExecuteContext.bindings.h")]
+internal unsafe struct ExecuteContextInternal {
+	[NativeMethod(IsThreadSafe = true, IsFreeFunction = true)]
+	public static extern unsafe void
+	Internal_PostEvent(void *dspNodePtr, long eventTypeHashCode, void *eventPtr,
+	                   int eventSize);
+}
 }
