@@ -7,16 +7,28 @@ using UnityEngine.Bindings;
 
 namespace UnityEditor.Build.Reporting
 {
-    [NativeType(Header = "Modules/BuildReportingEditor/Public/PackedAssets.h")]
-    public struct PackedAssetInfo
-    {
-        [NativeName("fileID")]
-        public long id { get; }
-        public Type type { get; }
-        public ulong packedSize { get; }
-        public ulong offset { get; }
-        public GUID sourceAssetGUID { get; }
-        [NativeName("buildTimeAssetPath")]
-        public string sourceAssetPath { get; }
+[NativeType(Header = "Modules/BuildReportingEditor/Public/PackedAssets.h")]
+public struct PackedAssetInfo
+{
+    [NativeName("fileID")]
+    public long id {
+        get;
     }
+    public Type type {
+        get;
+    }
+    public ulong packedSize {
+        get;
+    }
+    public ulong offset {
+        get;
+    }
+    public GUID sourceAssetGUID {
+        get;
+    }
+    [NativeName("buildTimeAssetPath")]
+    public string sourceAssetPath {
+        get;
+    }
+}
 }

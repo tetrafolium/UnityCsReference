@@ -4,17 +4,17 @@
 
 namespace UnityEditor.PackageManager.UI
 {
-    internal enum PackageState
-    {
-        None = 0,
-        Installed,
-        InstalledAsDependency,
-        DownloadAvailable,
-        InstallAvailable,
-        ImportAvailable,
-        InDevelopment,
-        UpdateAvailable,
-        InProgress,
-        Error
-    }
+internal enum PackageState
+{
+    None = 0,
+    Installed,
+    InstalledAsDependency,
+    DownloadAvailable,
+    InstallAvailable,
+    ImportAvailable,
+    InDevelopment,
+    UpdateAvailable,
+    InProgress,
+    Error
+}
 }

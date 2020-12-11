@@ -7,142 +7,148 @@ using UnityEngine.UIElements;
 
 namespace UnityEditor.Experimental.GraphView
 {
-    public class Dragger : MouseManipulator
+public class Dragger : MouseManipulator
+{
+    private Vector2 m_Start;
+    protected bool m_Active;
+
+    public Vector2 panSpeed {
+        get;
+        set;
+    }
+
+    public bool clampToParentEdges {
+        get;
+        set;
+    }
+
+    public Dragger()
     {
-        private Vector2 m_Start;
-        protected bool m_Active;
+        activators.Add(new ManipulatorActivationFilter {button = MouseButton.LeftMouse});
+        panSpeed = new Vector2(1, 1);
+        clampToParentEdges = false;
+        m_Active = false;
+    }
 
-        public Vector2 panSpeed { get; set; }
+    protected Rect CalculatePosition(float x, float y, float width, float height)
+    {
+        var rect = new Rect(x, y, width, height);
 
-        public bool clampToParentEdges { get; set; }
-
-        public Dragger()
+        if (clampToParentEdges)
         {
-            activators.Add(new ManipulatorActivationFilter {button = MouseButton.LeftMouse});
-            panSpeed = new Vector2(1, 1);
-            clampToParentEdges = false;
-            m_Active = false;
+            Rect shadowRect = target.hierarchy.parent.rect;
+            if (rect.x < shadowRect.xMin)
+                rect.x = shadowRect.xMin;
+            else if (rect.xMax > shadowRect.xMax)
+                rect.x = shadowRect.xMax - rect.width;
+
+            if (rect.y < shadowRect.yMin)
+                rect.y = shadowRect.yMin;
+            else if (rect.yMax > shadowRect.yMax)
+                rect.y = shadowRect.yMax - rect.height;
+
+            // Reset size, we never intended to change them in the first place
+            rect.width = width;
+            rect.height = height;
         }
 
-        protected Rect CalculatePosition(float x, float y, float width, float height)
+        return rect;
+    }
+
+    protected override void RegisterCallbacksOnTarget()
+    {
+        target.RegisterCallback<MouseDownEvent>(OnMouseDown);
+        target.RegisterCallback<MouseMoveEvent>(OnMouseMove);
+        target.RegisterCallback<MouseUpEvent>(OnMouseUp);
+    }
+
+    protected override void UnregisterCallbacksFromTarget()
+    {
+        target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
+        target.UnregisterCallback<MouseMoveEvent>(OnMouseMove);
+        target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
+    }
+
+    protected void OnMouseDown(MouseDownEvent e)
+    {
+        if (m_Active)
         {
-            var rect = new Rect(x, y, width, height);
+            e.StopImmediatePropagation();
+            return;
+        }
 
-            if (clampToParentEdges)
+        GraphElement ce = e.target as GraphElement;
+        if (ce != null && !ce.IsMovable())
+        {
+            return;
+        }
+
+        if (CanStartManipulation(e))
+        {
+            m_Start = e.localMousePosition;
+
+            m_Active = true;
+            target.CaptureMouse();
+            e.StopPropagation();
+        }
+    }
+
+    protected void OnMouseMove(MouseMoveEvent e)
+    {
+        GraphElement ce = e.target as GraphElement;
+        if (ce != null && !ce.IsMovable())
+        {
+            return;
+        }
+
+        if (m_Active)
+        {
+            Vector2 diff = e.localMousePosition - m_Start;
+
+            if (ce != null)
             {
-                Rect shadowRect = target.hierarchy.parent.rect;
-                if (rect.x < shadowRect.xMin)
-                    rect.x = shadowRect.xMin;
-                else if (rect.xMax > shadowRect.xMax)
-                    rect.x = shadowRect.xMax - rect.width;
-
-                if (rect.y < shadowRect.yMin)
-                    rect.y = shadowRect.yMin;
-                else if (rect.yMax > shadowRect.yMax)
-                    rect.y = shadowRect.yMax - rect.height;
-
-                // Reset size, we never intended to change them in the first place
-                rect.width = width;
-                rect.height = height;
+                var targetScale = ce.transform.scale;
+                diff.x *= targetScale.x;
+                diff.y *= targetScale.y;
             }
 
-            return rect;
-        }
+            Rect rect = CalculatePosition(target.layout.x + diff.x, target.layout.y + diff.y, target.layout.width, target.layout.height);
 
-        protected override void RegisterCallbacksOnTarget()
-        {
-            target.RegisterCallback<MouseDownEvent>(OnMouseDown);
-            target.RegisterCallback<MouseMoveEvent>(OnMouseMove);
-            target.RegisterCallback<MouseUpEvent>(OnMouseUp);
-        }
-
-        protected override void UnregisterCallbacksFromTarget()
-        {
-            target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
-            target.UnregisterCallback<MouseMoveEvent>(OnMouseMove);
-            target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
-        }
-
-        protected void OnMouseDown(MouseDownEvent e)
-        {
-            if (m_Active)
+            if (target.isLayoutManual)
             {
-                e.StopImmediatePropagation();
-                return;
+                target.layout = rect;
+            }
+            else if (target.resolvedStyle.position == Position.Absolute)
+            {
+                target.style.left = rect.x;
+                target.style.top = rect.y;
             }
 
-            GraphElement ce = e.target as GraphElement;
-            if (ce != null && !ce.IsMovable())
-            {
-                return;
-            }
+            e.StopPropagation();
+        }
+    }
 
-            if (CanStartManipulation(e))
-            {
-                m_Start = e.localMousePosition;
+    protected void OnMouseUp(MouseUpEvent e)
+    {
+        GraphElement ce = e.target as GraphElement;
+        if (ce != null && !ce.IsMovable())
+        {
+            return;
+        }
 
-                m_Active = true;
-                target.CaptureMouse();
+        if (m_Active)
+        {
+            if (CanStopManipulation(e))
+            {
+                var graphElement = target as GraphElement;
+                if (graphElement != null)
+                    graphElement.UpdatePresenterPosition();
+
+                m_Active = false;
+                target.ReleaseMouse();
                 e.StopPropagation();
-            }
-        }
-
-        protected void OnMouseMove(MouseMoveEvent e)
-        {
-            GraphElement ce = e.target as GraphElement;
-            if (ce != null && !ce.IsMovable())
-            {
-                return;
-            }
-
-            if (m_Active)
-            {
-                Vector2 diff = e.localMousePosition - m_Start;
-
-                if (ce != null)
-                {
-                    var targetScale = ce.transform.scale;
-                    diff.x *= targetScale.x;
-                    diff.y *= targetScale.y;
-                }
-
-                Rect rect = CalculatePosition(target.layout.x + diff.x, target.layout.y + diff.y, target.layout.width, target.layout.height);
-
-                if (target.isLayoutManual)
-                {
-                    target.layout = rect;
-                }
-                else if (target.resolvedStyle.position == Position.Absolute)
-                {
-                    target.style.left = rect.x;
-                    target.style.top = rect.y;
-                }
-
-                e.StopPropagation();
-            }
-        }
-
-        protected void OnMouseUp(MouseUpEvent e)
-        {
-            GraphElement ce = e.target as GraphElement;
-            if (ce != null && !ce.IsMovable())
-            {
-                return;
-            }
-
-            if (m_Active)
-            {
-                if (CanStopManipulation(e))
-                {
-                    var graphElement = target as GraphElement;
-                    if (graphElement != null)
-                        graphElement.UpdatePresenterPosition();
-
-                    m_Active = false;
-                    target.ReleaseMouse();
-                    e.StopPropagation();
-                }
             }
         }
     }
+}
 }

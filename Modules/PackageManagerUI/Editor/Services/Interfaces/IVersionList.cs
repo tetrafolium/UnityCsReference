@@ -6,23 +6,37 @@ using System.Collections.Generic;
 
 namespace UnityEditor.PackageManager.UI
 {
-    internal interface IVersionList : IEnumerable<IPackageVersion>
-    {
-        IEnumerable<IPackageVersion> key { get; }
-
-        IPackageVersion installed { get; }
-
-        IPackageVersion latest { get; }
-
-        IPackageVersion latestPatch { get; }
-
-        IPackageVersion importAvailable { get; }
-
-        // the recommended version to install or update to
-        IPackageVersion recommended { get; }
-
-        // the primary version is most important version that we want to show to the user
-        // it will be the default that will be displayed if no versions are selected
-        IPackageVersion primary { get; }
+internal interface IVersionList : IEnumerable<IPackageVersion>
+{
+    IEnumerable<IPackageVersion> key {
+        get;
     }
+
+    IPackageVersion installed {
+        get;
+    }
+
+    IPackageVersion latest {
+        get;
+    }
+
+    IPackageVersion latestPatch {
+        get;
+    }
+
+    IPackageVersion importAvailable {
+        get;
+    }
+
+    // the recommended version to install or update to
+    IPackageVersion recommended {
+        get;
+    }
+
+    // the primary version is most important version that we want to show to the user
+    // it will be the default that will be displayed if no versions are selected
+    IPackageVersion primary {
+        get;
+    }
+}
 }

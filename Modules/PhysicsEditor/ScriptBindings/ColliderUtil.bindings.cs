@@ -7,16 +7,16 @@ using UnityEngine;
 
 namespace UnityEditor
 {
-    internal class ColliderUtil
+internal class ColliderUtil
+{
+    static Vector3 GetCapsuleExtents(CapsuleCollider cc)
     {
-        static Vector3 GetCapsuleExtents(CapsuleCollider cc)
-        {
-            return cc.GetGlobalExtents();
-        }
-
-        static Matrix4x4 CalculateCapsuleTransform(CapsuleCollider cc)
-        {
-            return cc.CalculateTransform();
-        }
+        return cc.GetGlobalExtents();
     }
+
+    static Matrix4x4 CalculateCapsuleTransform(CapsuleCollider cc)
+    {
+        return cc.CalculateTransform();
+    }
+}
 }

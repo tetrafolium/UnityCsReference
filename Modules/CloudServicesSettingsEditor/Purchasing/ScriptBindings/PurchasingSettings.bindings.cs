@@ -8,21 +8,23 @@ using UnityEngine.Bindings;
 namespace UnityEditor.Purchasing
 {
 
-    [NativeHeader("Modules/UnityConnect/UnityPurchasing/UnityPurchasingSettings.h")]
-    [StaticAccessor("GetUnityPurchasingSettings()", StaticAccessorType.Dot)]
-    public static partial class PurchasingSettings
+[NativeHeader("Modules/UnityConnect/UnityPurchasing/UnityPurchasingSettings.h")]
+[StaticAccessor("GetUnityPurchasingSettings()", StaticAccessorType.Dot)]
+public static partial class PurchasingSettings
+{
+    public static extern bool enabled
     {
-        public static extern bool enabled
-        {
-            [ThreadSafe] get;
-            [ThreadSafe] set;
-        }
-
-        internal static extern bool enabledForPlatform { get; }
-
-        internal static extern void ApplyEnableSettings(BuildTarget target);
-
-        internal static extern void SetEnabledServiceWindow(bool enabled);
+        [ThreadSafe] get;
+        [ThreadSafe] set;
     }
+
+    internal static extern bool enabledForPlatform {
+        get;
+    }
+
+    internal static extern void ApplyEnableSettings(BuildTarget target);
+
+    internal static extern void SetEnabledServiceWindow(bool enabled);
+}
 
 }

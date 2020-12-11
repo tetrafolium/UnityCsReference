@@ -4,14 +4,14 @@
 
 namespace UnityEditor.PackageManager
 {
-    public enum PackageSource
-    {
-        Unknown,
-        Registry,
-        BuiltIn,
-        Embedded,
-        Local,
-        Git,
-        LocalTarball,
-    }
+public enum PackageSource
+{
+    Unknown,
+    Registry,
+    BuiltIn,
+    Embedded,
+    Local,
+    Git,
+    LocalTarball,
+}
 }

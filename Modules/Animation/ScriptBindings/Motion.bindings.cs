@@ -8,40 +8,52 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine
 {
-    [NativeHeader("Modules/Animation/Motion.h")]
-    public partial class Motion : Object
-    {
-        protected Motion() {}
+[NativeHeader("Modules/Animation/Motion.h")]
+public partial class Motion : Object
+{
+    protected Motion() {}
 
-        extern public float averageDuration { get; }
-        extern public float averageAngularSpeed { get; }
-        extern public Vector3 averageSpeed { get; }
-        extern public float apparentSpeed { get; }
-
-        extern public bool isLooping
-        {
-            [NativeMethod("IsLooping")]
-            get;
-        }
-
-        extern public bool legacy
-        {
-            [NativeMethod("IsLegacy")]
-            get;
-        }
-
-        extern public bool isHumanMotion
-        {
-            [NativeMethod("IsHumanMotion")]
-            get;
-        }
-
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        [Obsolete("ValidateIfRetargetable is not supported anymore, please use isHumanMotion instead.", true)]
-        public bool ValidateIfRetargetable(bool val) { return false; }
-
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        [Obsolete("isAnimatorMotion is not supported anymore, please use !legacy instead.", true)]
-        public bool isAnimatorMotion { get; }
+    extern public float averageDuration {
+        get;
     }
+    extern public float averageAngularSpeed {
+        get;
+    }
+    extern public Vector3 averageSpeed {
+        get;
+    }
+    extern public float apparentSpeed {
+        get;
+    }
+
+    extern public bool isLooping
+    {
+        [NativeMethod("IsLooping")]
+        get;
+    }
+
+    extern public bool legacy
+    {
+        [NativeMethod("IsLegacy")]
+        get;
+    }
+
+    extern public bool isHumanMotion
+    {
+        [NativeMethod("IsHumanMotion")]
+        get;
+    }
+
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    [Obsolete("ValidateIfRetargetable is not supported anymore, please use isHumanMotion instead.", true)]
+    public bool ValidateIfRetargetable(bool val) {
+        return false;
+    }
+
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    [Obsolete("isAnimatorMotion is not supported anymore, please use !legacy instead.", true)]
+    public bool isAnimatorMotion {
+        get;
+    }
+}
 }

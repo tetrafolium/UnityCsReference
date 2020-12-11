@@ -6,18 +6,18 @@ using System;
 
 namespace UnityEditor.PackageManager.UI
 {
-    internal enum DownloadState
-    {
-        None,
-        Connecting,
-        DownloadRequested,
-        Downloading,
-        Pausing,
-        Paused,
-        ResumeRequested,
-        Completed,
-        Decrypting,
-        Aborted,
-        Error
-    }
+internal enum DownloadState
+{
+    None,
+    Connecting,
+    DownloadRequested,
+    Downloading,
+    Pausing,
+    Paused,
+    ResumeRequested,
+    Completed,
+    Decrypting,
+    Aborted,
+    Error
+}
 }

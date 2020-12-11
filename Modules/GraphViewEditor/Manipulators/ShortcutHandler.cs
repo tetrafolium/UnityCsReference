@@ -8,51 +8,51 @@ using UnityEngine.UIElements;
 
 namespace UnityEditor.Experimental.GraphView
 {
-    public enum EventPropagation
+public enum EventPropagation
+{
+    Stop,
+    Continue
+}
+
+public delegate EventPropagation ShortcutDelegate();
+
+public class ShortcutHandler : Manipulator
+{
+    readonly Dictionary<Event, ShortcutDelegate> m_Dictionary;
+
+    public ShortcutHandler(Dictionary<Event, ShortcutDelegate> dictionary)
     {
-        Stop,
-        Continue
+        m_Dictionary = dictionary;
     }
 
-    public delegate EventPropagation ShortcutDelegate();
-
-    public class ShortcutHandler : Manipulator
+    protected override void RegisterCallbacksOnTarget()
     {
-        readonly Dictionary<Event, ShortcutDelegate> m_Dictionary;
+        target.RegisterCallback<KeyDownEvent>(OnKeyDown);
+    }
 
-        public ShortcutHandler(Dictionary<Event, ShortcutDelegate> dictionary)
+    protected override void UnregisterCallbacksFromTarget()
+    {
+        target.UnregisterCallback<KeyDownEvent>(OnKeyDown);
+    }
+
+    void OnKeyDown(KeyDownEvent evt)
+    {
+        IPanel panel = (evt.target as VisualElement)?.panel;
+        if (panel.GetCapturingElement(PointerId.mousePointerId) != null)
+            return;
+
+        if (m_Dictionary.ContainsKey(evt.imguiEvent))
         {
-            m_Dictionary = dictionary;
-        }
-
-        protected override void RegisterCallbacksOnTarget()
-        {
-            target.RegisterCallback<KeyDownEvent>(OnKeyDown);
-        }
-
-        protected override void UnregisterCallbacksFromTarget()
-        {
-            target.UnregisterCallback<KeyDownEvent>(OnKeyDown);
-        }
-
-        void OnKeyDown(KeyDownEvent evt)
-        {
-            IPanel panel = (evt.target as VisualElement)?.panel;
-            if (panel.GetCapturingElement(PointerId.mousePointerId) != null)
-                return;
-
-            if (m_Dictionary.ContainsKey(evt.imguiEvent))
+            var result = m_Dictionary[evt.imguiEvent]();
+            if (result == EventPropagation.Stop)
             {
-                var result = m_Dictionary[evt.imguiEvent]();
-                if (result == EventPropagation.Stop)
+                evt.StopPropagation();
+                if (evt.imguiEvent != null)
                 {
-                    evt.StopPropagation();
-                    if (evt.imguiEvent != null)
-                    {
-                        evt.imguiEvent.Use();
-                    }
+                    evt.imguiEvent.Use();
                 }
             }
         }
     }
+}
 }

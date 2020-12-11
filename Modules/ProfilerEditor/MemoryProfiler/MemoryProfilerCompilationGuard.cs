@@ -7,16 +7,16 @@ using ExperimentalMemoryProfiler = UnityEngine.Profiling.Memory.Experimental.Mem
 
 namespace UnityEditor.Profiling.Memory.Experimental
 {
-    /// <summary>
-    /// Memory profiler compilation guard to prevent starting of captures during the compilation process.
-    /// </summary>
-    internal static class MemoryProfilerCompilationGuard
+/// <summary>
+/// Memory profiler compilation guard to prevent starting of captures during the compilation process.
+/// </summary>
+internal static class MemoryProfilerCompilationGuard
+{
+    [InitializeOnLoadMethod]
+    public static void InjectCompileGuard()
     {
-        [InitializeOnLoadMethod]
-        public static void InjectCompileGuard()
-        {
-            CompilationPipeline.compilationStarted +=  ExperimentalMemoryProfiler.StartedCompilationCallback;
-            CompilationPipeline.compilationFinished += ExperimentalMemoryProfiler.FinishedCompilationCallback;
-        }
+        CompilationPipeline.compilationStarted +=  ExperimentalMemoryProfiler.StartedCompilationCallback;
+        CompilationPipeline.compilationFinished += ExperimentalMemoryProfiler.FinishedCompilationCallback;
     }
+}
 }

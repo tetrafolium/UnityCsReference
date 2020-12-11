@@ -4,12 +4,12 @@
 
 namespace UnityEditor.PackageManager
 {
-    public enum PackageStatus
-    {
-        Unknown,
-        Unavailable,
-        InProgress,
-        Error,
-        Available
-    }
+public enum PackageStatus
+{
+    Unknown,
+    Unavailable,
+    InProgress,
+    Error,
+    Available
+}
 }

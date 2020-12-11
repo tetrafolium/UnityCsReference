@@ -8,32 +8,36 @@ using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCode
 
 namespace UnityEditor.PackageManager
 {
-    [StructLayout(LayoutKind.Sequential)]
-    [RequiredByNativeCode]
-    [NativeAsStruct]
-    class OperationStatus
-    {
-        [NativeName("packageList")]
-        private PackageInfo[] m_PackageList;
-        [NativeName("error")]
-        private Error m_Error;
+[StructLayout(LayoutKind.Sequential)]
+[RequiredByNativeCode]
+[NativeAsStruct]
+class OperationStatus
+{
+    [NativeName("packageList")]
+    private PackageInfo[] m_PackageList;
+    [NativeName("error")]
+    private Error m_Error;
 
-        private OperationStatus() {}
+    private OperationStatus() {}
 
-        public PackageInfo[] packageList { get { return m_PackageList; } }
-
-        public Error error
-        {
-            get
-            {
-                if (m_Error != null && m_Error.errorCode == ErrorCode.Unknown && m_Error.message == "")
-                {
-                    // Since the native error field is an Error instance (rather than a Error pointer), it is always instanciated
-                    //  by the binding layer, even when there is no error. Therefore we check whether it's an "empty" error.
-                    return null;
-                }
-                return m_Error;
-            }
+    public PackageInfo[] packageList {
+        get {
+            return m_PackageList;
         }
     }
+
+    public Error error
+    {
+        get
+        {
+            if (m_Error != null && m_Error.errorCode == ErrorCode.Unknown && m_Error.message == "")
+            {
+                // Since the native error field is an Error instance (rather than a Error pointer), it is always instanciated
+                //  by the binding layer, even when there is no error. Therefore we check whether it's an "empty" error.
+                return null;
+            }
+            return m_Error;
+        }
+    }
+}
 }

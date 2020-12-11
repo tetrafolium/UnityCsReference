@@ -4,9 +4,13 @@
 
 namespace UnityEngine
 {
-    public partial class Grid
-    {
-        public Vector3 GetCellCenterLocal(Vector3Int position) { return CellToLocalInterpolated(position + GetLayoutCellCenter()); }
-        public Vector3 GetCellCenterWorld(Vector3Int position) { return LocalToWorld(CellToLocalInterpolated(position + GetLayoutCellCenter())); }
+public partial class Grid
+{
+    public Vector3 GetCellCenterLocal(Vector3Int position) {
+        return CellToLocalInterpolated(position + GetLayoutCellCenter());
     }
+    public Vector3 GetCellCenterWorld(Vector3Int position) {
+        return LocalToWorld(CellToLocalInterpolated(position + GetLayoutCellCenter()));
+    }
+}
 }

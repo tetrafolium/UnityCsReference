@@ -7,34 +7,36 @@ using UnityEngine.Bindings;
 
 namespace UnityEditor
 {
-    [NativeHeader("Modules/JSONSerializeEditor/EditorJsonUtility.bindings.h")]
-    public static class EditorJsonUtility
-    {
-        [FreeFunction("ToEditorJsonInternal")]
-        private static extern string ToJsonInternal([NotNull] object obj, bool prettyPrint);
+[NativeHeader("Modules/JSONSerializeEditor/EditorJsonUtility.bindings.h")]
+public static class EditorJsonUtility
+{
+    [FreeFunction("ToEditorJsonInternal")]
+    private static extern string ToJsonInternal([NotNull] object obj, bool prettyPrint);
 
-        public static string ToJson(object obj) { return ToJson(obj, false); }
-
-        public static string ToJson(object obj, bool prettyPrint)
-        {
-            if (obj == null)
-                return "";
-
-            return ToJsonInternal(obj, prettyPrint);
-        }
-
-        [FreeFunction("FromEditorJsonOverwriteInternal", ThrowsException = true)]
-        private static extern void FromJsonOverwriteInternal([NotNull] string json, [NotNull] object objectToOverwrite);
-
-        public static void FromJsonOverwrite(string json, object objectToOverwrite)
-        {
-            if (string.IsNullOrEmpty(json))
-                return;
-
-            if (objectToOverwrite == null || (objectToOverwrite is UnityEngine.Object && !((UnityEngine.Object)objectToOverwrite)))
-                throw new ArgumentNullException("objectToOverwrite");
-
-            FromJsonOverwriteInternal(json, objectToOverwrite);
-        }
+    public static string ToJson(object obj) {
+        return ToJson(obj, false);
     }
+
+    public static string ToJson(object obj, bool prettyPrint)
+    {
+        if (obj == null)
+            return "";
+
+        return ToJsonInternal(obj, prettyPrint);
+    }
+
+    [FreeFunction("FromEditorJsonOverwriteInternal", ThrowsException = true)]
+    private static extern void FromJsonOverwriteInternal([NotNull] string json, [NotNull] object objectToOverwrite);
+
+    public static void FromJsonOverwrite(string json, object objectToOverwrite)
+    {
+        if (string.IsNullOrEmpty(json))
+            return;
+
+        if (objectToOverwrite == null || (objectToOverwrite is UnityEngine.Object && !((UnityEngine.Object)objectToOverwrite)))
+            throw new ArgumentNullException("objectToOverwrite");
+
+        FromJsonOverwriteInternal(json, objectToOverwrite);
+    }
+}
 }

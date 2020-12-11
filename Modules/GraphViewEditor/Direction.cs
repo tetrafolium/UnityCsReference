@@ -4,9 +4,9 @@
 
 namespace UnityEditor.Experimental.GraphView
 {
-    public enum Direction
-    {
-        Input = 0,
-        Output = 1
-    }
+public enum Direction
+{
+    Input = 0,
+    Output = 1
+}
 }

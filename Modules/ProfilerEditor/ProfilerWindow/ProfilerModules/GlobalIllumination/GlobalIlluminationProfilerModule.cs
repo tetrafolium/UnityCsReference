@@ -10,17 +10,17 @@ using UnityEditor;
 
 namespace UnityEditorInternal.Profiling
 {
-    [Serializable]
-    internal class GlobalIlluminationProfilerModule : ProfilerModuleBase
+[Serializable]
+internal class GlobalIlluminationProfilerModule : ProfilerModuleBase
+{
+    public override void DrawToolbar(Rect position)
     {
-        public override void DrawToolbar(Rect position)
-        {
-            DrawOtherToolbar(ProfilerArea.GlobalIllumination);
-        }
-
-        public override void DrawView(Rect position)
-        {
-            DrawOverviewText(ProfilerArea.GlobalIllumination, position);
-        }
+        DrawOtherToolbar(ProfilerArea.GlobalIllumination);
     }
+
+    public override void DrawView(Rect position)
+    {
+        DrawOverviewText(ProfilerArea.GlobalIllumination, position);
+    }
+}
 }

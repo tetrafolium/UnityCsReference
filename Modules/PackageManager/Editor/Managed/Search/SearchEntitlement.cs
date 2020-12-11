@@ -4,10 +4,10 @@
 
 namespace UnityEditor.PackageManager
 {
-    internal enum SearchEntitlement
-    {
-        Any,
-        None,
-        AssetStore,
-    }
+internal enum SearchEntitlement
+{
+    Any,
+    None,
+    AssetStore,
+}
 }

@@ -10,18 +10,22 @@ using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCode
 
 namespace UnityEditor.PackageManager
 {
-    [Serializable]
-    [StructLayout(LayoutKind.Sequential)]
-    [RequiredByNativeCode]
-    [NativeAsStruct]
-    public sealed class PackOperationResult
-    {
-        [SerializeField]
-        [NativeName("tarballPath")]
-        private string m_TarballPath = "";
+[Serializable]
+[StructLayout(LayoutKind.Sequential)]
+[RequiredByNativeCode]
+[NativeAsStruct]
+public sealed class PackOperationResult
+{
+    [SerializeField]
+    [NativeName("tarballPath")]
+    private string m_TarballPath = "";
 
-        internal PackOperationResult() {}
+    internal PackOperationResult() {}
 
-        public string tarballPath { get { return m_TarballPath;  } }
+    public string tarballPath {
+        get {
+            return m_TarballPath;
+        }
     }
+}
 }

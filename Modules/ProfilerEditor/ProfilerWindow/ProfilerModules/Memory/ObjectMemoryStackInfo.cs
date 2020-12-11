@@ -7,16 +7,16 @@ using System.Runtime.InteropServices;
 
 namespace UnityEditorInternal
 {
-    [System.Serializable]
-    [StructLayout(LayoutKind.Sequential)]
-    [RequiredByNativeCode]
-    public sealed class ObjectMemoryStackInfo
-    {
-        public bool expanded;
-        public bool sorted;
-        public int allocated;
-        public int ownedAllocated;
-        public ObjectMemoryStackInfo[] callerSites;
-        public string name;
-    }
+[System.Serializable]
+[StructLayout(LayoutKind.Sequential)]
+[RequiredByNativeCode]
+public sealed class ObjectMemoryStackInfo
+{
+    public bool expanded;
+    public bool sorted;
+    public int allocated;
+    public int ownedAllocated;
+    public ObjectMemoryStackInfo[] callerSites;
+    public string name;
+}
 }

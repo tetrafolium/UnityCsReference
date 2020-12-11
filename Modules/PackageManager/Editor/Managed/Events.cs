@@ -7,21 +7,21 @@ using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCode
 
 namespace UnityEditor.PackageManager
 {
-    public static class Events
+public static class Events
+{
+    public static event Action<PackageRegistrationEventArgs> registeringPackages;
+    public static event Action<PackageRegistrationEventArgs> registeredPackages;
+
+    [RequiredByNativeCode]
+    internal static void InvokeRegisteringPackages(PackageRegistrationEventArgs eventArgs)
     {
-        public static event Action<PackageRegistrationEventArgs> registeringPackages;
-        public static event Action<PackageRegistrationEventArgs> registeredPackages;
-
-        [RequiredByNativeCode]
-        internal static void InvokeRegisteringPackages(PackageRegistrationEventArgs eventArgs)
-        {
-            registeringPackages?.Invoke(eventArgs);
-        }
-
-        [RequiredByNativeCode]
-        internal static void InvokeRegisteredPackages(PackageRegistrationEventArgs eventArgs)
-        {
-            registeredPackages?.Invoke(eventArgs);
-        }
+        registeringPackages?.Invoke(eventArgs);
     }
+
+    [RequiredByNativeCode]
+    internal static void InvokeRegisteredPackages(PackageRegistrationEventArgs eventArgs)
+    {
+        registeredPackages?.Invoke(eventArgs);
+    }
+}
 }

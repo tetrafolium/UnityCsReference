@@ -249,8 +249,8 @@ internal class ParticleSystemCurveEditor
     static bool SameColor(Color c1, Color c2)
     {
         return Mathf.Abs(c1.r - c2.r) < 0.01f &&
-            Mathf.Abs(c1.g - c2.g) < 0.01f &&
-            Mathf.Abs(c1.b - c2.b) < 0.01f;
+               Mathf.Abs(c1.g - c2.g) < 0.01f &&
+               Mathf.Abs(c1.b - c2.b) < 0.01f;
     }
 
     // Private
@@ -753,7 +753,7 @@ internal class ParticleSystemCurveEditor
     }
 
     CurveWrapper CreateCurveWrapper(SerializedProperty curve, int id, int regionId, Color color, bool signedRange,
-        CurveWrapper.GetAxisScalarsCallback getAxisScalarsCallback, CurveWrapper.SetAxisScalarsCallback setAxisScalarsCallback)
+                                    CurveWrapper.GetAxisScalarsCallback getAxisScalarsCallback, CurveWrapper.SetAxisScalarsCallback setAxisScalarsCallback)
     {
         CurveWrapper cw = new CurveWrapper();
         cw.id = id;

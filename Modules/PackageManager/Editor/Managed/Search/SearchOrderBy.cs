@@ -4,10 +4,10 @@
 
 namespace UnityEditor.PackageManager
 {
-    internal enum SearchOrderBy
-    {
-        Relevance,
-        Name,
-        DisplayName,
-    }
+internal enum SearchOrderBy
+{
+    Relevance,
+    Name,
+    DisplayName,
+}
 }

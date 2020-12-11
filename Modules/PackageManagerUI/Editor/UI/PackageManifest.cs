@@ -7,15 +7,15 @@ using UnityEditor;
 
 namespace UnityEditorInternal
 {
-    [ExcludeFromPreset]
-    public sealed class PackageManifestImporter : AssetImporter
-    {
-    }
+[ExcludeFromPreset]
+public sealed class PackageManifestImporter : AssetImporter
+{
+}
 
-    public sealed class PackageManifest : TextAsset
-    {
-        private PackageManifest() {}
+public sealed class PackageManifest : TextAsset
+{
+    private PackageManifest() {}
 
-        private PackageManifest(string text) {}
-    }
+    private PackageManifest(string text) {}
+}
 }

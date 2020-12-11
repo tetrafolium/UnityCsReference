@@ -12,50 +12,50 @@ using UnityEngine.UIElements;
 
 namespace UnityEditor.Experimental.GraphView
 {
-    [Flags]
-    public enum ResizerDirection
+[Flags]
+public enum ResizerDirection
+{
+    Top = 1 << 0,
+    Bottom = 1 << 1,
+    Left = 1 << 2,
+    Right = 1 << 3,
+}
+
+public class ResizableElement : VisualElement
+{
+    public new class UxmlFactory : UxmlFactory<ResizableElement> {}
+
+    public ResizableElement() : this("UXML/GraphView/Resizable.uxml")
     {
-        Top = 1 << 0,
-        Bottom = 1 << 1,
-        Left = 1 << 2,
-        Right = 1 << 3,
+        pickingMode = PickingMode.Ignore;
+        AddToClassList("resizableElement");
     }
 
-    public class ResizableElement : VisualElement
+    public ResizableElement(string uiFile)
     {
-        public new class UxmlFactory : UxmlFactory<ResizableElement> {}
+        var tpl = Resources.Load<VisualTreeAsset>(uiFile);
+        if (tpl == null)
+            tpl = EditorGUIUtility.Load(uiFile) as VisualTreeAsset;
 
-        public ResizableElement() : this("UXML/GraphView/Resizable.uxml")
+        var sheet = EditorGUIUtility.Load("StyleSheets/GraphView/Resizable.uss") as StyleSheet;
+        styleSheets.Add(sheet);
+
+        tpl.CloneTree(this);
+
+        foreach (ResizerDirection value in System.Enum.GetValues(typeof(ResizerDirection)))
         {
-            pickingMode = PickingMode.Ignore;
-            AddToClassList("resizableElement");
+            VisualElement resizer = this.Q(value.ToString().ToLower() + "-resize");
+            if (resizer != null)
+                resizer.AddManipulator(new ElementResizer(this, value));
         }
 
-        public ResizableElement(string uiFile)
-        {
-            var tpl = Resources.Load<VisualTreeAsset>(uiFile);
-            if (tpl == null)
-                tpl = EditorGUIUtility.Load(uiFile) as VisualTreeAsset;
-
-            var sheet = EditorGUIUtility.Load("StyleSheets/GraphView/Resizable.uss") as StyleSheet;
-            styleSheets.Add(sheet);
-
-            tpl.CloneTree(this);
-
-            foreach (ResizerDirection value in System.Enum.GetValues(typeof(ResizerDirection)))
+        foreach (ResizerDirection vertical in new[] { ResizerDirection.Top, ResizerDirection.Bottom })
+            foreach (ResizerDirection horizontal in new[] { ResizerDirection.Left, ResizerDirection.Right })
             {
-                VisualElement resizer = this.Q(value.ToString().ToLower() + "-resize");
+                VisualElement resizer = this.Q(vertical.ToString().ToLower() + "-" + horizontal.ToString().ToLower() + "-resize");
                 if (resizer != null)
-                    resizer.AddManipulator(new ElementResizer(this, value));
+                    resizer.AddManipulator(new ElementResizer(this, vertical | horizontal));
             }
-
-            foreach (ResizerDirection vertical in new[] { ResizerDirection.Top, ResizerDirection.Bottom })
-                foreach (ResizerDirection horizontal in new[] { ResizerDirection.Left, ResizerDirection.Right })
-                {
-                    VisualElement resizer = this.Q(vertical.ToString().ToLower() + "-" + horizontal.ToString().ToLower() + "-resize");
-                    if (resizer != null)
-                        resizer.AddManipulator(new ElementResizer(this, vertical | horizontal));
-                }
-        }
     }
+}
 }

@@ -4,9 +4,11 @@
 
 namespace Unity.Audio
 {
-    [UnityEngine.Bindings.VisibleToOtherModules]
-    internal interface IValidatable
-    {
-        bool Valid { get; }
+[UnityEngine.Bindings.VisibleToOtherModules]
+internal interface IValidatable
+{
+    bool Valid {
+        get;
     }
+}
 }

@@ -9,206 +9,224 @@ using UnityEngine.UIElements;
 
 namespace UnityEditor.Experimental.GraphView
 {
-    // TODO: Should stay internal when GraphView becomes public
-    internal class DragAndDropDelay
+// TODO: Should stay internal when GraphView becomes public
+internal class DragAndDropDelay
+{
+    const float k_StartDragTreshold = 4.0f;
+
+    Vector2 mouseDownPosition {
+        get;
+        set;
+    }
+
+    public void Init(Vector2 mousePosition)
     {
-        const float k_StartDragTreshold = 4.0f;
+        mouseDownPosition = mousePosition;
+    }
 
-        Vector2 mouseDownPosition { get; set; }
+    public bool CanStartDrag(Vector2 mousePosition)
+    {
+        return Vector2.Distance(mouseDownPosition, mousePosition) > k_StartDragTreshold;
+    }
+}
 
-        public void Init(Vector2 mousePosition)
+// Manipulates movable objects, can also initiate a Drag and Drop operation
+// FIXME: update this code once we have support for drag and drop events in UIElements.
+public class SelectionDropper : Manipulator
+{
+    readonly DragAndDropDelay m_DragAndDropDelay;
+
+    bool m_Active;
+
+    public Vector2 panSpeed {
+        get;
+        set;
+    }
+
+    public MouseButton activateButton {
+        get;
+        set;
+    }
+
+    public bool clampToParentEdges {
+        get;
+        set;
+    }
+
+    // selectedElement is used to store a unique selection candidate for cases where user clicks on an item not to
+    // drag it but just to reset the selection -- we only know this after the manipulation has ended
+    GraphElement selectedElement {
+        get;
+        set;
+    }
+    ISelection selectionContainer {
+        get;
+        set;
+    }
+
+    public SelectionDropper()
+    {
+        m_Active = false;
+
+        m_DragAndDropDelay = new DragAndDropDelay();
+
+        activateButton = MouseButton.LeftMouse;
+        panSpeed = new Vector2(1, 1);
+    }
+
+    protected override void RegisterCallbacksOnTarget()
+    {
+        target.RegisterCallback<MouseDownEvent>(OnMouseDown);
+        target.RegisterCallback<MouseMoveEvent>(OnMouseMove);
+        target.RegisterCallback<MouseUpEvent>(OnMouseUp);
+        target.RegisterCallback<MouseCaptureOutEvent>(OnMouseCaptureOutEvent);
+    }
+
+    protected override void UnregisterCallbacksFromTarget()
+    {
+        target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
+        target.UnregisterCallback<MouseMoveEvent>(OnMouseMove);
+        target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
+        target.UnregisterCallback<MouseCaptureOutEvent>(OnMouseCaptureOutEvent);
+    }
+
+    bool m_AddedByMouseDown;
+    bool m_Dragging;
+
+    void Reset()
+    {
+        m_Active = false;
+        m_AddedByMouseDown = false;
+        m_Dragging = false;
+    }
+
+    void OnMouseCaptureOutEvent(MouseCaptureOutEvent e)
+    {
+        if (m_Active)
         {
-            mouseDownPosition = mousePosition;
-        }
-
-        public bool CanStartDrag(Vector2 mousePosition)
-        {
-            return Vector2.Distance(mouseDownPosition, mousePosition) > k_StartDragTreshold;
+            Reset();
         }
     }
 
-    // Manipulates movable objects, can also initiate a Drag and Drop operation
-    // FIXME: update this code once we have support for drag and drop events in UIElements.
-    public class SelectionDropper : Manipulator
+    protected void OnMouseDown(MouseDownEvent e)
     {
-        readonly DragAndDropDelay m_DragAndDropDelay;
-
-        bool m_Active;
-
-        public Vector2 panSpeed { get; set; }
-
-        public MouseButton activateButton { get; set; }
-
-        public bool clampToParentEdges { get; set; }
-
-        // selectedElement is used to store a unique selection candidate for cases where user clicks on an item not to
-        // drag it but just to reset the selection -- we only know this after the manipulation has ended
-        GraphElement selectedElement { get; set; }
-        ISelection selectionContainer { get; set; }
-
-        public SelectionDropper()
+        if (m_Active)
         {
-            m_Active = false;
-
-            m_DragAndDropDelay = new DragAndDropDelay();
-
-            activateButton = MouseButton.LeftMouse;
-            panSpeed = new Vector2(1, 1);
+            e.StopImmediatePropagation();
+            return;
         }
 
-        protected override void RegisterCallbacksOnTarget()
+        m_Active = false;
+        m_Dragging = false;
+        m_AddedByMouseDown = false;
+
+        if (target == null)
+            return;
+
+        selectionContainer = target.GetFirstAncestorOfType<ISelection>();
+
+        if (selectionContainer == null)
         {
-            target.RegisterCallback<MouseDownEvent>(OnMouseDown);
-            target.RegisterCallback<MouseMoveEvent>(OnMouseMove);
-            target.RegisterCallback<MouseUpEvent>(OnMouseUp);
-            target.RegisterCallback<MouseCaptureOutEvent>(OnMouseCaptureOutEvent);
+            // Keep for potential later use in OnMouseUp (where e.target might be different then)
+            selectionContainer = target.GetFirstOfType<ISelection>();
+            selectedElement = e.target as GraphElement;
+            return;
         }
 
-        protected override void UnregisterCallbacksFromTarget()
+        selectedElement = target.GetFirstOfType<GraphElement>();
+
+        if (selectedElement == null)
+            return;
+
+        // Since we didn't drag after all, update selection with current element only
+        if (!selectionContainer.selection.Contains(selectedElement))
         {
-            target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
-            target.UnregisterCallback<MouseMoveEvent>(OnMouseMove);
-            target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
-            target.UnregisterCallback<MouseCaptureOutEvent>(OnMouseCaptureOutEvent);
+            if (!e.actionKey)
+                selectionContainer.ClearSelection();
+            selectionContainer.AddToSelection(selectedElement);
+            m_AddedByMouseDown = true;
         }
 
-        bool m_AddedByMouseDown;
-        bool m_Dragging;
-
-        void Reset()
+        if (e.button == (int)activateButton)
         {
-            m_Active = false;
-            m_AddedByMouseDown = false;
-            m_Dragging = false;
+            // avoid starting a manipulation on a non movable object
+
+            if (!selectedElement.IsDroppable())
+                return;
+
+            // Reset drag and drop
+            m_DragAndDropDelay.Init(e.localMousePosition);
+
+            m_Active = true;
+            target.CaptureMouse();
+            e.StopPropagation();
         }
+    }
 
-        void OnMouseCaptureOutEvent(MouseCaptureOutEvent e)
+    protected void OnMouseMove(MouseMoveEvent e)
+    {
+        if (m_Active && !m_Dragging && selectionContainer != null)
         {
-            if (m_Active)
+            // Keep a copy of the selection
+            var selection = selectionContainer.selection.ToList();
+
+            if (selection.Count > 0)
             {
-                Reset();
+                var ce = selection[0] as GraphElement;
+                bool canStartDrag = ce != null && ce.IsDroppable();
+
+                if (canStartDrag && m_DragAndDropDelay.CanStartDrag(e.localMousePosition))
+                {
+                    DragAndDrop.PrepareStartDrag();
+                    DragAndDrop.objectReferences = new UnityEngine.Object[] {};   // this IS required for dragging to work
+                    DragAndDrop.SetGenericData("DragSelection", selection);
+                    m_Dragging = true;
+
+                    DragAndDrop.StartDrag("");
+                    DragAndDrop.visualMode = e.actionKey ? DragAndDropVisualMode.Copy : DragAndDropVisualMode.Move;
+                    target.ReleaseMouse();
+                }
+
+                e.StopPropagation();
             }
         }
+    }
 
-        protected void OnMouseDown(MouseDownEvent e)
+    protected void OnMouseUp(MouseUpEvent e)
+    {
+        if (!m_Active || selectionContainer == null)
         {
-            if (m_Active)
+            if (selectedElement != null && selectionContainer != null && !m_Dragging)
             {
-                e.StopImmediatePropagation();
-                return;
+                if (selectedElement.IsSelected((VisualElement)selectionContainer) && !e.actionKey && e.button == (int)activateButton)
+                {
+                    // Reset to single selection
+                    selectionContainer.ClearSelection();
+                    selectedElement.Select((VisualElement)selectionContainer, e.actionKey);
+                }
             }
 
-            m_Active = false;
-            m_Dragging = false;
-            m_AddedByMouseDown = false;
+            Reset();
+            return;
+        }
 
-            if (target == null)
-                return;
-
-            selectionContainer = target.GetFirstAncestorOfType<ISelection>();
-
-            if (selectionContainer == null)
-            {
-                // Keep for potential later use in OnMouseUp (where e.target might be different then)
-                selectionContainer = target.GetFirstOfType<ISelection>();
-                selectedElement = e.target as GraphElement;
-                return;
-            }
-
-            selectedElement = target.GetFirstOfType<GraphElement>();
-
-            if (selectedElement == null)
-                return;
-
+        if (e.button == (int)activateButton)
+        {
             // Since we didn't drag after all, update selection with current element only
-            if (!selectionContainer.selection.Contains(selectedElement))
+            if (!e.actionKey)
             {
-                if (!e.actionKey)
-                    selectionContainer.ClearSelection();
+                selectionContainer.ClearSelection();
                 selectionContainer.AddToSelection(selectedElement);
-                m_AddedByMouseDown = true;
             }
-
-            if (e.button == (int)activateButton)
+            else if (m_AddedByMouseDown && !m_Dragging && selectionContainer.selection.Contains(selectedElement))
             {
-                // avoid starting a manipulation on a non movable object
-
-                if (!selectedElement.IsDroppable())
-                    return;
-
-                // Reset drag and drop
-                m_DragAndDropDelay.Init(e.localMousePosition);
-
-                m_Active = true;
-                target.CaptureMouse();
-                e.StopPropagation();
-            }
-        }
-
-        protected void OnMouseMove(MouseMoveEvent e)
-        {
-            if (m_Active && !m_Dragging && selectionContainer != null)
-            {
-                // Keep a copy of the selection
-                var selection = selectionContainer.selection.ToList();
-
-                if (selection.Count > 0)
-                {
-                    var ce = selection[0] as GraphElement;
-                    bool canStartDrag = ce != null && ce.IsDroppable();
-
-                    if (canStartDrag && m_DragAndDropDelay.CanStartDrag(e.localMousePosition))
-                    {
-                        DragAndDrop.PrepareStartDrag();
-                        DragAndDrop.objectReferences = new UnityEngine.Object[] {};   // this IS required for dragging to work
-                        DragAndDrop.SetGenericData("DragSelection", selection);
-                        m_Dragging = true;
-
-                        DragAndDrop.StartDrag("");
-                        DragAndDrop.visualMode = e.actionKey ? DragAndDropVisualMode.Copy : DragAndDropVisualMode.Move;
-                        target.ReleaseMouse();
-                    }
-
-                    e.StopPropagation();
-                }
-            }
-        }
-
-        protected void OnMouseUp(MouseUpEvent e)
-        {
-            if (!m_Active || selectionContainer == null)
-            {
-                if (selectedElement != null && selectionContainer != null && !m_Dragging)
-                {
-                    if (selectedElement.IsSelected((VisualElement)selectionContainer) && !e.actionKey && e.button == (int)activateButton)
-                    {
-                        // Reset to single selection
-                        selectionContainer.ClearSelection();
-                        selectedElement.Select((VisualElement)selectionContainer, e.actionKey);
-                    }
-                }
-
-                Reset();
-                return;
+                selectionContainer.RemoveFromSelection(selectedElement);
             }
 
-            if (e.button == (int)activateButton)
-            {
-                // Since we didn't drag after all, update selection with current element only
-                if (!e.actionKey)
-                {
-                    selectionContainer.ClearSelection();
-                    selectionContainer.AddToSelection(selectedElement);
-                }
-                else if (m_AddedByMouseDown && !m_Dragging && selectionContainer.selection.Contains(selectedElement))
-                {
-                    selectionContainer.RemoveFromSelection(selectedElement);
-                }
-
-                target.ReleaseMouse();
-                e.StopPropagation();
-                Reset();
-            }
+            target.ReleaseMouse();
+            e.StopPropagation();
+            Reset();
         }
     }
+}
 }

@@ -10,30 +10,38 @@ using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCode
 
 namespace UnityEditor.PackageManager
 {
-    [Serializable]
-    [StructLayout(LayoutKind.Sequential)]
-    [RequiredByNativeCode]
-    [NativeAsStruct]
-    public class Error
+[Serializable]
+[StructLayout(LayoutKind.Sequential)]
+[RequiredByNativeCode]
+[NativeAsStruct]
+public class Error
+{
+    [SerializeField]
+    [NativeName("errorCode")]
+    private NativeErrorCode m_ErrorCode;
+
+    [SerializeField]
+    [NativeName("message")]
+    private string m_Message;
+
+    private Error() {}
+
+    internal Error(NativeErrorCode errorCode, string message)
     {
-        [SerializeField]
-        [NativeName("errorCode")]
-        private NativeErrorCode m_ErrorCode;
-
-        [SerializeField]
-        [NativeName("message")]
-        private string m_Message;
-
-        private Error() {}
-
-        internal Error(NativeErrorCode errorCode, string message)
-        {
-            m_ErrorCode = errorCode;
-            m_Message = message;
-        }
-
-        public ErrorCode errorCode { get { return m_ErrorCode.ConvertToManaged(); } }
-
-        public string message { get { return m_Message; } }
+        m_ErrorCode = errorCode;
+        m_Message = message;
     }
+
+    public ErrorCode errorCode {
+        get {
+            return m_ErrorCode.ConvertToManaged();
+        }
+    }
+
+    public string message {
+        get {
+            return m_Message;
+        }
+    }
+}
 }

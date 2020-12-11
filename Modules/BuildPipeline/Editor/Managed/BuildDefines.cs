@@ -9,22 +9,22 @@ using System.Collections.Generic;
 
 namespace UnityEditor.Build
 {
-    internal delegate void GetScriptCompilationDefinesDelegate(BuildTarget target, HashSet<string> defines);
+internal delegate void GetScriptCompilationDefinesDelegate(BuildTarget target, HashSet<string> defines);
+
+[RequiredByNativeCode]
+internal class BuildDefines
+{
+    public static event GetScriptCompilationDefinesDelegate getScriptCompilationDefinesDelegates;
 
     [RequiredByNativeCode]
-    internal class BuildDefines
+    public static string[] GetScriptCompilationDefines(BuildTarget target, string[] defines)
     {
-        public static event GetScriptCompilationDefinesDelegate getScriptCompilationDefinesDelegates;
-
-        [RequiredByNativeCode]
-        public static string[] GetScriptCompilationDefines(BuildTarget target, string[] defines)
-        {
-            var hashSet = new HashSet<string>(defines);
-            if (getScriptCompilationDefinesDelegates != null)
-                getScriptCompilationDefinesDelegates(target, hashSet);
-            var array = new string[hashSet.Count];
-            hashSet.CopyTo(array);
-            return array;
-        }
+        var hashSet = new HashSet<string>(defines);
+        if (getScriptCompilationDefinesDelegates != null)
+            getScriptCompilationDefinesDelegates(target, hashSet);
+        var array = new string[hashSet.Count];
+        hashSet.CopyTo(array);
+        return array;
     }
+}
 }

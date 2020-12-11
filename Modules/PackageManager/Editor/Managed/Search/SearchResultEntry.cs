@@ -10,70 +10,70 @@ using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCode
 
 namespace UnityEditor.PackageManager
 {
-    [Serializable]
-    [StructLayout(LayoutKind.Sequential)]
-    [RequiredByNativeCode]
-    [NativeAsStruct]
-    internal class SearchResultEntry
+[Serializable]
+[StructLayout(LayoutKind.Sequential)]
+[RequiredByNativeCode]
+[NativeAsStruct]
+internal class SearchResultEntry
+{
+    [SerializeField]
+    [NativeName("name")]
+    private string m_Name = "";
+
+    [SerializeField]
+    [NativeName("displayName")]
+    private string m_DisplayName = "";
+
+    [SerializeField]
+    [NativeName("description")]
+    private string m_Description = "";
+
+    [SerializeField]
+    [NativeName("latest")]
+    private string m_Latest = "";
+
+    [SerializeField]
+    [NativeName("versions")]
+    private string[] m_Versions;
+
+    public string name
     {
-        [SerializeField]
-        [NativeName("name")]
-        private string m_Name = "";
-
-        [SerializeField]
-        [NativeName("displayName")]
-        private string m_DisplayName = "";
-
-        [SerializeField]
-        [NativeName("description")]
-        private string m_Description = "";
-
-        [SerializeField]
-        [NativeName("latest")]
-        private string m_Latest = "";
-
-        [SerializeField]
-        [NativeName("versions")]
-        private string[] m_Versions;
-
-        public string name
+        get
         {
-            get
-            {
-                return m_Name;
-            }
-        }
-
-        public string displayName
-        {
-            get
-            {
-                return m_DisplayName;
-            }
-        }
-
-        public string description
-        {
-            get
-            {
-                return m_Description;
-            }
-        }
-
-        public string latest
-        {
-            get
-            {
-                return m_Latest;
-            }
-        }
-
-        public string[] versions
-        {
-            get
-            {
-                return m_Versions;
-            }
+            return m_Name;
         }
     }
+
+    public string displayName
+    {
+        get
+        {
+            return m_DisplayName;
+        }
+    }
+
+    public string description
+    {
+        get
+        {
+            return m_Description;
+        }
+    }
+
+    public string latest
+    {
+        get
+        {
+            return m_Latest;
+        }
+    }
+
+    public string[] versions
+    {
+        get
+        {
+            return m_Versions;
+        }
+    }
+}
 }

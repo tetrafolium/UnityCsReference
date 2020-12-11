@@ -10,13 +10,13 @@ using UnityEngine.Playables;
 namespace UnityEngine.Audio
 {
 
-    [NativeHeader("Modules/Audio/Public/ScriptBindings/AudioPlayableGraphExtensions.bindings.h")]
-    [NativeHeader("Runtime/Director/Core/HPlayableOutput.h")]
-    [StaticAccessor("AudioPlayableGraphExtensionsBindings", StaticAccessorType.DoubleColon)]
-    internal static class AudioPlayableGraphExtensions
-    {
-        [NativeThrows]
-        extern internal static bool InternalCreateAudioOutput(ref PlayableGraph graph, string name, out PlayableOutputHandle handle);
-    }
+[NativeHeader("Modules/Audio/Public/ScriptBindings/AudioPlayableGraphExtensions.bindings.h")]
+[NativeHeader("Runtime/Director/Core/HPlayableOutput.h")]
+[StaticAccessor("AudioPlayableGraphExtensionsBindings", StaticAccessorType.DoubleColon)]
+internal static class AudioPlayableGraphExtensions
+{
+    [NativeThrows]
+    extern internal static bool InternalCreateAudioOutput(ref PlayableGraph graph, string name, out PlayableOutputHandle handle);
+}
 
 }

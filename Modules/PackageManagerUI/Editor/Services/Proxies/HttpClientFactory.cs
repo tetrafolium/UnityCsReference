@@ -4,16 +4,18 @@
 
 namespace UnityEditor.PackageManager.UI
 {
-    internal class HttpClientFactory
+internal class HttpClientFactory
+{
+    public virtual IAsyncHTTPClient GetASyncHTTPClient(string url)
     {
-        public virtual IAsyncHTTPClient GetASyncHTTPClient(string url)
-        {
-            return new AsyncHTTPClient(url);
-        }
-
-        public virtual IAsyncHTTPClient PostASyncHTTPClient(string url, string postData)
-        {
-            return new AsyncHTTPClient(url, "POST") { postData = postData };
-        }
+        return new AsyncHTTPClient(url);
     }
+
+    public virtual IAsyncHTTPClient PostASyncHTTPClient(string url, string postData)
+    {
+        return new AsyncHTTPClient(url, "POST") {
+            postData = postData
+        };
+    }
+}
 }

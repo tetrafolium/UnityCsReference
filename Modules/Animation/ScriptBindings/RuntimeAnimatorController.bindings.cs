@@ -8,13 +8,15 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine
 {
-    [NativeHeader("Modules/Animation/RuntimeAnimatorController.h")]
-    [UsedByNativeCode]
-    [ExcludeFromObjectFactory]
-    public partial class RuntimeAnimatorController : Object
-    {
-        protected RuntimeAnimatorController() {}
+[NativeHeader("Modules/Animation/RuntimeAnimatorController.h")]
+[UsedByNativeCode]
+[ExcludeFromObjectFactory]
+public partial class RuntimeAnimatorController : Object
+{
+    protected RuntimeAnimatorController() {}
 
-        extern public AnimationClip[] animationClips { get; }
+    extern public AnimationClip[] animationClips {
+        get;
     }
+}
 }

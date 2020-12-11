@@ -10,17 +10,17 @@ using UnityEngine.Profiling;
 
 namespace UnityEditorInternal.Profiling
 {
-    [Serializable]
-    internal class NetworkingMessagesProfilerModule : ProfilerModuleBase
+[Serializable]
+internal class NetworkingMessagesProfilerModule : ProfilerModuleBase
+{
+    public override void DrawToolbar(Rect position)
     {
-        public override void DrawToolbar(Rect position)
-        {
-            DrawOtherToolbar(ProfilerArea.NetworkMessages);
-        }
-
-        public override void DrawView(Rect position)
-        {
-            DrawOverviewText(ProfilerArea.NetworkMessages, position);
-        }
+        DrawOtherToolbar(ProfilerArea.NetworkMessages);
     }
+
+    public override void DrawView(Rect position)
+    {
+        DrawOverviewText(ProfilerArea.NetworkMessages, position);
+    }
+}
 }

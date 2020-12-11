@@ -7,8 +7,8 @@ using System.Collections.Generic;
 
 namespace UnityEditor.Experimental.GraphView
 {
-    public interface ICollectibleElement
-    {
-        void CollectElements(HashSet<GraphElement> collectedElementSet, Func<GraphElement, bool> conditionFunc);
-    }
+public interface ICollectibleElement
+{
+    void CollectElements(HashSet<GraphElement> collectedElementSet, Func<GraphElement, bool> conditionFunc);
+}
 }

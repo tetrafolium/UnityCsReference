@@ -4,13 +4,13 @@
 
 namespace UnityEditor.PackageManager
 {
-    enum NativeStatusCode
-    {
-        InQueue,
-        InProgress,
-        Done,
-        Error,
-        NotFound,
-        Cancelled
-    }
+enum NativeStatusCode
+{
+    InQueue,
+    InProgress,
+    Done,
+    Error,
+    NotFound,
+    Cancelled
+}
 }

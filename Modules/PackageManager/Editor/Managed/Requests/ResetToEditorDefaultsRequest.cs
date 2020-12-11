@@ -6,19 +6,19 @@ using System;
 
 namespace UnityEditor.PackageManager.Requests
 {
-    [Serializable]
-    public sealed class ResetToEditorDefaultsRequest : Request
+[Serializable]
+public sealed class ResetToEditorDefaultsRequest : Request
+{
+    /// <summary>
+    /// Constructor to support serialization
+    /// </summary>
+    private ResetToEditorDefaultsRequest()
     {
-        /// <summary>
-        /// Constructor to support serialization
-        /// </summary>
-        private ResetToEditorDefaultsRequest()
-        {
-        }
-
-        internal ResetToEditorDefaultsRequest(long operationId, NativeStatusCode initialStatus)
-            : base(operationId, initialStatus)
-        {
-        }
     }
+
+    internal ResetToEditorDefaultsRequest(long operationId, NativeStatusCode initialStatus)
+        : base(operationId, initialStatus)
+    {
+    }
+}
 }

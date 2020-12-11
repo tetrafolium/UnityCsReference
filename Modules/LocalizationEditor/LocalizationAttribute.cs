@@ -10,46 +10,54 @@ using UnityEngine.Scripting;
 
 namespace UnityEditor
 {
-    /// <summary>
-    /// An attribute to the assembly for Localization.
-    /// </summary>
-    [RequiredByNativeCode]
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public sealed class LocalizationAttribute : Attribute
-    {
-        string m_LocGroupName;
+/// <summary>
+/// An attribute to the assembly for Localization.
+/// </summary>
+[RequiredByNativeCode]
+[AttributeUsage(AttributeTargets.Assembly)]
+public sealed class LocalizationAttribute : Attribute
+{
+    string m_LocGroupName;
 
-        internal string locGroupName { get { return m_LocGroupName; } }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public LocalizationAttribute(string locGroupName = null)
-        {
-            m_LocGroupName = locGroupName;
+    internal string locGroupName {
+        get {
+            return m_LocGroupName;
         }
     }
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    public LocalizationAttribute(string locGroupName = null)
+    {
+        m_LocGroupName = locGroupName;
+    }
+}
 }
 
 namespace UnityEditor.Localization.Editor
 {
-    /// <summary>
-    /// An attribute to the assembly for Localization.
-    /// </summary>
-    [System.Obsolete("Please use UnityEditor.LocalizationAttribute instead. (UnityUpgradable) -> UnityEditor.LocalizationAttribute", true)]
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public sealed class LocalizationAttribute : Attribute
-    {
-        string m_LocGroupName;
+/// <summary>
+/// An attribute to the assembly for Localization.
+/// </summary>
+[System.Obsolete("Please use UnityEditor.LocalizationAttribute instead. (UnityUpgradable) -> UnityEditor.LocalizationAttribute", true)]
+[AttributeUsage(AttributeTargets.Assembly)]
+public sealed class LocalizationAttribute : Attribute
+{
+    string m_LocGroupName;
 
-        internal string locGroupName { get { return m_LocGroupName; } }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public LocalizationAttribute(string locGroupName = null)
-        {
-            m_LocGroupName = locGroupName;
+    internal string locGroupName {
+        get {
+            return m_LocGroupName;
         }
     }
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    public LocalizationAttribute(string locGroupName = null)
+    {
+        m_LocGroupName = locGroupName;
+    }
+}
 }

@@ -4,11 +4,11 @@
 
 namespace UnityEditor.PackageManager.UI
 {
-    internal enum PackageFilterTab
-    {
-        All = 0,
-        InProject,
-        BuiltIn,
-        AssetStore
-    }
+internal enum PackageFilterTab
+{
+    All = 0,
+    InProject,
+    BuiltIn,
+    AssetStore
+}
 }

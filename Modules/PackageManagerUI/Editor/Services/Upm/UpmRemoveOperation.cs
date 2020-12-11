@@ -7,21 +7,21 @@ using UnityEditor.PackageManager.Requests;
 
 namespace UnityEditor.PackageManager.UI
 {
-    [Serializable]
-    internal class UpmRemoveOperation : UpmBaseOperation<RemoveRequest>
+[Serializable]
+internal class UpmRemoveOperation : UpmBaseOperation<RemoveRequest>
+{
+    public override RefreshOptions refreshOptions => RefreshOptions.None;
+
+    public void Remove(string packageName, string packageUniqueId = null)
     {
-        public override RefreshOptions refreshOptions => RefreshOptions.None;
-
-        public void Remove(string packageName, string packageUniqueId = null)
-        {
-            m_PackageName = packageName;
-            m_PackageUniqueId = packageUniqueId ?? packageName;
-            Start();
-        }
-
-        protected override RemoveRequest CreateRequest()
-        {
-            return Client.Remove(packageName);
-        }
+        m_PackageName = packageName;
+        m_PackageUniqueId = packageUniqueId ?? packageName;
+        Start();
     }
+
+    protected override RemoveRequest CreateRequest()
+    {
+        return Client.Remove(packageName);
+    }
+}
 }

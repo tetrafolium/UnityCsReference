@@ -4,10 +4,10 @@
 
 namespace UnityEditor.PackageManager
 {
-    public enum StatusCode
-    {
-        InProgress,
-        Success,
-        Failure
-    }
+public enum StatusCode
+{
+    InProgress,
+    Success,
+    Failure
+}
 }

@@ -8,17 +8,19 @@ using UnityEngine.Internal;
 
 namespace UnityEngine.Audio
 {
-    [NativeHeader("Modules/Audio/Public/AudioMixerSnapshot.h")]
-    public partial class AudioMixerSnapshot : Object, ISubAssetNotDuplicatable
-    {
-        internal AudioMixerSnapshot() {}
+[NativeHeader("Modules/Audio/Public/AudioMixerSnapshot.h")]
+public partial class AudioMixerSnapshot : Object, ISubAssetNotDuplicatable
+{
+    internal AudioMixerSnapshot() {}
 
-        [NativeProperty]
-        public extern AudioMixer audioMixer { get; }
-
-        public void TransitionTo(float timeToReach)
-        {
-            audioMixer.TransitionToSnapshot(this, timeToReach);
-        }
+    [NativeProperty]
+    public extern AudioMixer audioMixer {
+        get;
     }
+
+    public void TransitionTo(float timeToReach)
+    {
+        audioMixer.TransitionToSnapshot(this, timeToReach);
+    }
+}
 }

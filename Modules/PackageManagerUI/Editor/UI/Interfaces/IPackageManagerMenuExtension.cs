@@ -7,27 +7,27 @@ using UnityEngine.UIElements;
 
 namespace UnityEditor.PackageManager.UI
 {
+/// <summary>
+/// Interface for Package Manager UI Menu Extension
+/// </summary>
+internal interface IPackageManagerMenuExtensions
+{
     /// <summary>
-    /// Interface for Package Manager UI Menu Extension
+    /// Called by the Package Manager UI when the advanced menu is being created. You can add your own items to the menu.
     /// </summary>
-    internal interface IPackageManagerMenuExtensions
-    {
-        /// <summary>
-        /// Called by the Package Manager UI when the advanced menu is being created. You can add your own items to the menu.
-        /// </summary>
-        /// <param name="menu">The menu item being created</param>
-        void OnAdvancedMenuCreate(DropdownMenu menu);
+    /// <param name="menu">The menu item being created</param>
+    void OnAdvancedMenuCreate(DropdownMenu menu);
 
-        /// <summary>
-        /// Called by the Package Manager UI when the add menu is being created. You can add your own items to the menu.
-        /// </summary>
-        /// <param name="menu">The menu item being created</param>
-        void OnAddMenuCreate(DropdownMenu menu);
+    /// <summary>
+    /// Called by the Package Manager UI when the add menu is being created. You can add your own items to the menu.
+    /// </summary>
+    /// <param name="menu">The menu item being created</param>
+    void OnAddMenuCreate(DropdownMenu menu);
 
-        /// <summary>
-        /// Called by the Package Manager UI when the filter menu is being created. You can add your own items to the menu.
-        /// </summary>
-        /// <param name="menu">The menu item being created</param>
-        void OnFilterMenuCreate(DropdownMenu menu);
-    }
+    /// <summary>
+    /// Called by the Package Manager UI when the filter menu is being created. You can add your own items to the menu.
+    /// </summary>
+    /// <param name="menu">The menu item being created</param>
+    void OnFilterMenuCreate(DropdownMenu menu);
+}
 }

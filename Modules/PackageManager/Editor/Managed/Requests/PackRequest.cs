@@ -8,21 +8,21 @@ using UnityEngine;
 
 namespace UnityEditor.PackageManager.Requests
 {
-    [Serializable]
-    public sealed partial class PackRequest : Request<PackOperationResult>
+[Serializable]
+public sealed partial class PackRequest : Request<PackOperationResult>
+{
+    private PackRequest()
     {
-        private PackRequest()
-        {
-        }
-
-        internal PackRequest(long operationId, NativeStatusCode initialStatus)
-            : base(operationId, initialStatus)
-        {
-        }
-
-        protected override PackOperationResult GetResult()
-        {
-            return GetOperationData(Id);
-        }
     }
+
+    internal PackRequest(long operationId, NativeStatusCode initialStatus)
+        : base(operationId, initialStatus)
+    {
+    }
+
+    protected override PackOperationResult GetResult()
+    {
+        return GetOperationData(Id);
+    }
+}
 }

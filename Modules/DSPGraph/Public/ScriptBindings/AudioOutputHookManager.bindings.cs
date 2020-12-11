@@ -7,14 +7,14 @@ using UnityEngine.Bindings;
 
 namespace Unity.Audio
 {
-    [NativeType(Header = "Modules/DSPGraph/Public/AudioOutputHookManager.bindings.h")]
-    internal struct AudioOutputHookManager
-    {
-        [NativeMethod(IsFreeFunction = true, ThrowsException = true)]
-        public static extern unsafe void Internal_CreateAudioOutputHook(out Handle outputHook, void* jobReflectionData, void* jobData);
+[NativeType(Header = "Modules/DSPGraph/Public/AudioOutputHookManager.bindings.h")]
+internal struct AudioOutputHookManager
+{
+    [NativeMethod(IsFreeFunction = true, ThrowsException = true)]
+    public static extern unsafe void Internal_CreateAudioOutputHook(out Handle outputHook, void* jobReflectionData, void* jobData);
 
-        [NativeMethod(IsFreeFunction = true, ThrowsException = true)]
-        public static extern unsafe void Internal_DisposeAudioOutputHook(ref Handle outputHook);
-    }
+    [NativeMethod(IsFreeFunction = true, ThrowsException = true)]
+    public static extern unsafe void Internal_DisposeAudioOutputHook(ref Handle outputHook);
+}
 }
 

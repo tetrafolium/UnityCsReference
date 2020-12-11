@@ -10,48 +10,48 @@ using UnityEngine.Profiling;
 
 namespace UnityEditorInternal.Profiling
 {
-    [Serializable]
-    internal class UIProfilerModule : ProfilerModuleBase
+[Serializable]
+internal class UIProfilerModule : ProfilerModuleBase
+{
+    protected static WeakReference instance;
+    [SerializeField]
+    UISystemProfiler m_UISystemProfiler;
+
+    static UISystemProfiler sharedUISystemProfiler
     {
-        protected static WeakReference instance;
-        [SerializeField]
-        UISystemProfiler m_UISystemProfiler;
-
-        static UISystemProfiler sharedUISystemProfiler
+        get
         {
-            get
-            {
-                return instance.IsAlive ? (instance.Target as UIProfilerModule)?.m_UISystemProfiler : null;
-            }
-        }
-
-        public override void OnEnable(IProfilerWindowController profilerWindow)
-        {
-            if (this.GetType() == typeof(UIProfilerModule))
-            {
-                instance = new WeakReference(this);
-            }
-
-            base.OnEnable(profilerWindow);
-
-            if (m_UISystemProfiler == null)
-                m_UISystemProfiler = new UISystemProfiler();
-        }
-
-        public override void OnDisable()
-        {
-            base.OnDisable();
-            sharedUISystemProfiler?.CurrentAreaChanged(null);
-        }
-
-        public override void DrawToolbar(Rect position)
-        {
-            // This module still needs to be broken apart into Toolbar and View.
-        }
-
-        public override void DrawView(Rect position)
-        {
-            sharedUISystemProfiler?.DrawUIPane(m_ProfilerWindow);
+            return instance.IsAlive ? (instance.Target as UIProfilerModule)?.m_UISystemProfiler : null;
         }
     }
+
+    public override void OnEnable(IProfilerWindowController profilerWindow)
+    {
+        if (this.GetType() == typeof(UIProfilerModule))
+        {
+            instance = new WeakReference(this);
+        }
+
+        base.OnEnable(profilerWindow);
+
+        if (m_UISystemProfiler == null)
+            m_UISystemProfiler = new UISystemProfiler();
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        sharedUISystemProfiler?.CurrentAreaChanged(null);
+    }
+
+    public override void DrawToolbar(Rect position)
+    {
+        // This module still needs to be broken apart into Toolbar and View.
+    }
+
+    public override void DrawView(Rect position)
+    {
+        sharedUISystemProfiler?.DrawUIPane(m_ProfilerWindow);
+    }
+}
 }

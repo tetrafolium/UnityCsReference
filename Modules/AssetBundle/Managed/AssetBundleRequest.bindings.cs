@@ -13,22 +13,22 @@ using UnityEngineInternal;
 
 namespace UnityEngine
 {
-    // Asynchronous load request from an [[AssetBundle]].
-    [StructLayout(LayoutKind.Sequential)]
-    [RequiredByNativeCode]
-    [NativeHeader("Modules/AssetBundle/Public/AssetBundleLoadAssetOperation.h")]
-    public class AssetBundleRequest : AsyncOperation
+// Asynchronous load request from an [[AssetBundle]].
+[StructLayout(LayoutKind.Sequential)]
+[RequiredByNativeCode]
+[NativeHeader("Modules/AssetBundle/Public/AssetBundleLoadAssetOperation.h")]
+public class AssetBundleRequest : AsyncOperation
+{
+    public extern Object asset
     {
-        public extern Object asset
-        {
-            [NativeMethod("GetLoadedAsset")]
-            get;
-        }
-
-        public extern Object[] allAssets
-        {
-            [NativeMethod("GetAllLoadedAssets")]
-            get;
-        }
+        [NativeMethod("GetLoadedAsset")]
+        get;
     }
+
+    public extern Object[] allAssets
+    {
+        [NativeMethod("GetAllLoadedAssets")]
+        get;
+    }
+}
 }

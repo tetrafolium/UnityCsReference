@@ -4,22 +4,22 @@
 
 namespace UnityEditor.Presets
 {
-    class PresetManagerPostProcessor : AssetPostprocessor
+class PresetManagerPostProcessor : AssetPostprocessor
+{
+    public override int GetPostprocessOrder()
     {
-        public override int GetPostprocessOrder()
-        {
-            return -1000;
-        }
+        return -1000;
+    }
 
-        public void OnPreprocessAsset()
+    public void OnPreprocessAsset()
+    {
+        if (assetImporter != null && assetImporter.importSettingsMissing)
         {
-            if (assetImporter != null && assetImporter.importSettingsMissing)
+            foreach (var preset in Preset.GetDefaultPresetsForObject(assetImporter))
             {
-                foreach (var preset in Preset.GetDefaultPresetsForObject(assetImporter))
-                {
-                    preset.ApplyTo(assetImporter);
-                }
+                preset.ApplyTo(assetImporter);
             }
         }
     }
+}
 }

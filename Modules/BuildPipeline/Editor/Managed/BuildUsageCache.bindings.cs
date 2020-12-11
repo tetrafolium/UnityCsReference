@@ -10,41 +10,41 @@ using UnityEngine;
 
 namespace UnityEditor.Build.Content
 {
-    [UsedByNativeCode]
-    [NativeHeader("Modules/BuildPipeline/Editor/Public/BuildUsageCache.h")]
-    public class BuildUsageCache : IDisposable
+[UsedByNativeCode]
+[NativeHeader("Modules/BuildPipeline/Editor/Public/BuildUsageCache.h")]
+public class BuildUsageCache : IDisposable
+{
+    private IntPtr m_Ptr;
+
+    public BuildUsageCache()
     {
-        private IntPtr m_Ptr;
-
-        public BuildUsageCache()
-        {
-            m_Ptr = Internal_Create();
-        }
-
-        ~BuildUsageCache()
-        {
-            Dispose(false);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (m_Ptr != IntPtr.Zero)
-            {
-                Internal_Destroy(m_Ptr);
-                m_Ptr = IntPtr.Zero;
-            }
-        }
-
-        [NativeMethod(IsThreadSafe = true)]
-        private static extern IntPtr Internal_Create();
-
-        [NativeMethod(IsThreadSafe = true)]
-        private static extern void Internal_Destroy(IntPtr ptr);
+        m_Ptr = Internal_Create();
     }
+
+    ~BuildUsageCache()
+    {
+        Dispose(false);
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (m_Ptr != IntPtr.Zero)
+        {
+            Internal_Destroy(m_Ptr);
+            m_Ptr = IntPtr.Zero;
+        }
+    }
+
+    [NativeMethod(IsThreadSafe = true)]
+    private static extern IntPtr Internal_Create();
+
+    [NativeMethod(IsThreadSafe = true)]
+    private static extern void Internal_Destroy(IntPtr ptr);
+}
 }

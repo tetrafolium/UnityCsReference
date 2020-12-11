@@ -10,35 +10,47 @@ using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCode
 
 namespace UnityEditor.PackageManager
 {
-    [Serializable]
-    [StructLayout(LayoutKind.Sequential)]
-    [RequiredByNativeCode]
-    [NativeAsStruct]
-    public class AuthorInfo
+[Serializable]
+[StructLayout(LayoutKind.Sequential)]
+[RequiredByNativeCode]
+[NativeAsStruct]
+public class AuthorInfo
+{
+    [SerializeField]
+    [NativeName("name")]
+    private string m_Name;
+
+    [SerializeField]
+    [NativeName("email")]
+    private string m_Email;
+
+    [SerializeField]
+    [NativeName("url")]
+    private string m_Url;
+
+    internal AuthorInfo() : this("", "", "") {}
+
+    internal AuthorInfo(string name, string email, string url)
     {
-        [SerializeField]
-        [NativeName("name")]
-        private string m_Name;
-
-        [SerializeField]
-        [NativeName("email")]
-        private string m_Email;
-
-        [SerializeField]
-        [NativeName("url")]
-        private string m_Url;
-
-        internal AuthorInfo() : this("", "", "") {}
-
-        internal AuthorInfo(string name, string email, string url)
-        {
-            m_Name = name;
-            m_Email = email;
-            m_Url = url;
-        }
-
-        public string name { get { return m_Name;  } }
-        public string email { get { return m_Email;  } }
-        public string url { get { return m_Url;  } }
+        m_Name = name;
+        m_Email = email;
+        m_Url = url;
     }
+
+    public string name {
+        get {
+            return m_Name;
+        }
+    }
+    public string email {
+        get {
+            return m_Email;
+        }
+    }
+    public string url {
+        get {
+            return m_Url;
+        }
+    }
+}
 }

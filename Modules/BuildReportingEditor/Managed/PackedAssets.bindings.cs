@@ -8,36 +8,44 @@ using Object = UnityEngine.Object;
 
 namespace UnityEditor.Build.Reporting
 {
-    [NativeType(Header = "Modules/BuildReportingEditor/Public/PackedAssets.h")]
-    [NativeClass("BuildReporting::PackedAssets")]
-    public sealed class PackedAssets : Object
+[NativeType(Header = "Modules/BuildReportingEditor/Public/PackedAssets.h")]
+[NativeClass("BuildReporting::PackedAssets")]
+public sealed class PackedAssets : Object
+{
+    public uint file
     {
-        public uint file
-        {
-            get { return GetFile(); }
+        get {
+            return GetFile();
         }
-
-        public string shortPath
-        {
-            get { return GetShortPath(); }
-        }
-
-        public ulong overhead
-        {
-            get { return GetOverhead(); }
-        }
-
-        public PackedAssetInfo[] contents
-        {
-            get { return GetContents(); }
-        }
-
-        internal extern uint GetFile();
-
-        internal extern string GetShortPath();
-
-        internal extern ulong GetOverhead();
-
-        internal extern PackedAssetInfo[] GetContents();
     }
+
+    public string shortPath
+    {
+        get {
+            return GetShortPath();
+        }
+    }
+
+    public ulong overhead
+    {
+        get {
+            return GetOverhead();
+        }
+    }
+
+    public PackedAssetInfo[] contents
+    {
+        get {
+            return GetContents();
+        }
+    }
+
+    internal extern uint GetFile();
+
+    internal extern string GetShortPath();
+
+    internal extern ulong GetOverhead();
+
+    internal extern PackedAssetInfo[] GetContents();
+}
 }

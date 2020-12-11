@@ -6,31 +6,31 @@ using UnityEngine;
 
 namespace UnityEditor.PackageManager.UI
 {
-    internal class AssetDatabaseProxy
+internal class AssetDatabaseProxy
+{
+    public virtual void ImportPackage(string packagePath, bool interactive)
     {
-        public virtual void ImportPackage(string packagePath, bool interactive)
-        {
-            AssetDatabase.ImportPackage(packagePath, interactive);
-        }
-
-        public virtual void Refresh()
-        {
-            AssetDatabase.Refresh();
-        }
-
-        public virtual T LoadAssetAtPath<T>(string assetPath) where T : Object
-        {
-            return AssetDatabase.LoadAssetAtPath<T>(assetPath);
-        }
-
-        public virtual Object LoadMainAssetAtPath(string assetPath)
-        {
-            return AssetDatabase.LoadMainAssetAtPath(assetPath);
-        }
-
-        public virtual bool GetAssetFolderInfo(string path, out bool rootFolder, out bool immutable)
-        {
-            return AssetDatabase.GetAssetFolderInfo(path, out rootFolder, out immutable);
-        }
+        AssetDatabase.ImportPackage(packagePath, interactive);
     }
+
+    public virtual void Refresh()
+    {
+        AssetDatabase.Refresh();
+    }
+
+    public virtual T LoadAssetAtPath<T>(string assetPath) where T : Object
+    {
+        return AssetDatabase.LoadAssetAtPath<T>(assetPath);
+    }
+
+    public virtual Object LoadMainAssetAtPath(string assetPath)
+    {
+        return AssetDatabase.LoadMainAssetAtPath(assetPath);
+    }
+
+    public virtual bool GetAssetFolderInfo(string path, out bool rootFolder, out bool immutable)
+    {
+        return AssetDatabase.GetAssetFolderInfo(path, out rootFolder, out immutable);
+    }
+}
 }

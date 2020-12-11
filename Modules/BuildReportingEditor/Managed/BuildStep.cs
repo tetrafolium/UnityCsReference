@@ -8,22 +8,32 @@ using UnityEngine.Bindings;
 
 namespace UnityEditor.Build.Reporting
 {
-    [NativeType(Header = "Modules/BuildReportingEditor/Public/BuildReport.h")]
-    public struct BuildStep
-    {
-        [NativeName("stepName")]
-        public string name { get; }
+[NativeType(Header = "Modules/BuildReportingEditor/Public/BuildReport.h")]
+public struct BuildStep
+{
+    [NativeName("stepName")]
+    public string name {
+        get;
+    }
 
-        internal ulong durationTicks;
-        public TimeSpan duration {  get {  return new TimeSpan((long)durationTicks); } }
-
-        public BuildStepMessage[] messages { get; }
-
-        public int depth { get; }
-
-        public override string ToString()
-        {
-            return UnityString.Format("{0} ({1}ms)", name, duration.TotalMilliseconds);
+    internal ulong durationTicks;
+    public TimeSpan duration {
+        get {
+            return new TimeSpan((long)durationTicks);
         }
     }
+
+    public BuildStepMessage[] messages {
+        get;
+    }
+
+    public int depth {
+        get;
+    }
+
+    public override string ToString()
+    {
+        return UnityString.Format("{0} ({1}ms)", name, duration.TotalMilliseconds);
+    }
+}
 }

@@ -4,14 +4,14 @@
 
 namespace UnityEditor.PackageManager
 {
-    public enum ErrorCode
-    {
-        Unknown,
-        NotFound,
-        Forbidden,
-        InvalidParameter,
-        Conflict,
-        // NOTE: Error code success from the C++ API is not defined here
-        // since we never create errors for successful requests
-    }
+public enum ErrorCode
+{
+    Unknown,
+    NotFound,
+    Forbidden,
+    InvalidParameter,
+    Conflict,
+    // NOTE: Error code success from the C++ API is not defined here
+    // since we never create errors for successful requests
+}
 }

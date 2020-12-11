@@ -9,32 +9,36 @@ using UnityEditor.Profiling;
 
 namespace UnityEditorInternal
 {
-    internal enum ProfilerViewType
-    {
-        Hierarchy = 0,
-        Timeline = 1,
-        RawHierarchy = 2
+internal enum ProfilerViewType
+{
+    Hierarchy = 0,
+    Timeline = 1,
+    RawHierarchy = 2
+}
+
+internal interface IProfilerWindowController
+{
+    event ProfilerWindow.SelectionChangedCallback selectionChanged;
+
+    void SetSelectedPropertyPath(string path);
+    void ClearSelectedPropertyPath();
+
+    void SetClearOnPlay(bool enabled);
+    bool GetClearOnPlay();
+
+    HierarchyFrameDataView GetFrameDataView(string threadName, HierarchyFrameDataView.ViewModes viewMode, int profilerSortColumn, bool sortAscending);
+    int GetActiveVisibleFrameIndex();
+    bool IsRecording();
+    void Repaint();
+
+    string ConnectedTargetName {
+        get;
+    }
+    bool ConnectedToEditor {
+        get;
     }
 
-    internal interface IProfilerWindowController
-    {
-        event ProfilerWindow.SelectionChangedCallback selectionChanged;
-
-        void SetSelectedPropertyPath(string path);
-        void ClearSelectedPropertyPath();
-
-        void SetClearOnPlay(bool enabled);
-        bool GetClearOnPlay();
-
-        HierarchyFrameDataView GetFrameDataView(string threadName, HierarchyFrameDataView.ViewModes viewMode, int profilerSortColumn, bool sortAscending);
-        int GetActiveVisibleFrameIndex();
-        bool IsRecording();
-        void Repaint();
-
-        string ConnectedTargetName { get; }
-        bool ConnectedToEditor { get; }
-
-        ProfilerProperty CreateProperty();
-        ProfilerProperty CreateProperty(int sortType);
-    }
+    ProfilerProperty CreateProperty();
+    ProfilerProperty CreateProperty(int sortType);
+}
 }

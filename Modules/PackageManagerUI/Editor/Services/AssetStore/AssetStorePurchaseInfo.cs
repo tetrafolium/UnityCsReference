@@ -8,33 +8,33 @@ using System.Collections.Generic;
 
 namespace UnityEditor.PackageManager.UI
 {
-    [Serializable]
-    internal class AssetStorePurchaseInfo
+[Serializable]
+internal class AssetStorePurchaseInfo
+{
+    public long productId;
+    public string purchasedTime;
+    public string displayName;
+    public List<string> tags;
+
+    public static AssetStorePurchaseInfo ParsePurchaseInfo(IDictionary<string, object> rawInfo)
     {
-        public long productId;
-        public string purchasedTime;
-        public string displayName;
-        public List<string> tags;
+        if (rawInfo?.Any() != true)
+            return null;
 
-        public static AssetStorePurchaseInfo ParsePurchaseInfo(IDictionary<string, object> rawInfo)
+        try
         {
-            if (rawInfo?.Any() != true)
-                return null;
-
-            try
+            return new AssetStorePurchaseInfo
             {
-                return new AssetStorePurchaseInfo
-                {
-                    productId = (long)rawInfo["packageId"],
-                    purchasedTime = rawInfo.GetString("grantTime"),
-                    displayName = rawInfo.GetString("displayName"),
-                    tags = rawInfo.GetList<string>("tagging")?.ToList()
-                };
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+                productId = (long)rawInfo["packageId"],
+                purchasedTime = rawInfo.GetString("grantTime"),
+                displayName = rawInfo.GetString("displayName"),
+                tags = rawInfo.GetList<string>("tagging")?.ToList()
+            };
+        }
+        catch (Exception)
+        {
+            return null;
         }
     }
+}
 }

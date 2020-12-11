@@ -6,14 +6,20 @@ using UnityEngine;
 
 namespace UnityEditor.Experimental.GraphView
 {
-    struct Line2
-    {
-        public Vector2 start { get; set; }
-        public Vector2 end { get; set; }
-        public Line2(Vector2 start, Vector2 end)
-        {
-            this.start = start;
-            this.end = end;
-        }
+struct Line2
+{
+    public Vector2 start {
+        get;
+        set;
     }
+    public Vector2 end {
+        get;
+        set;
+    }
+    public Line2(Vector2 start, Vector2 end)
+    {
+        this.start = start;
+        this.end = end;
+    }
+}
 }

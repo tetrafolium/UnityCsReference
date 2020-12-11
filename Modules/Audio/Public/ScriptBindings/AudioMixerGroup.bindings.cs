@@ -8,13 +8,15 @@ using UnityEngine.Internal;
 
 namespace UnityEngine.Audio
 {
-    [NativeHeader("Modules/Audio/Public/AudioMixerGroup.h")]
-    public class AudioMixerGroup : Object, ISubAssetNotDuplicatable
-    {
-        // Make constructor internal
-        internal AudioMixerGroup() {}
+[NativeHeader("Modules/Audio/Public/AudioMixerGroup.h")]
+public class AudioMixerGroup : Object, ISubAssetNotDuplicatable
+{
+    // Make constructor internal
+    internal AudioMixerGroup() {}
 
-        [NativeProperty]
-        public extern AudioMixer audioMixer { get; }
+    [NativeProperty]
+    public extern AudioMixer audioMixer {
+        get;
     }
+}
 }

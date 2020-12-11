@@ -4,13 +4,13 @@
 
 namespace UnityEditor.PackageManager
 {
-    public enum LogLevel
-    {
-        Error,
-        Warn,
-        Info,
-        Verbose,
-        Debug,
-        Silly
-    }
+public enum LogLevel
+{
+    Error,
+    Warn,
+    Info,
+    Verbose,
+    Debug,
+    Silly
+}
 }

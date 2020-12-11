@@ -4,14 +4,14 @@
 
 namespace UnityEditor.PackageManager
 {
-    internal enum NativeErrorCode
-    {
-        Unknown,
-        NotFound,
-        Forbidden,
-        InvalidParameter,
-        Conflict,
-        Cancelled,
-        Success
-    }
+internal enum NativeErrorCode
+{
+    Unknown,
+    NotFound,
+    Forbidden,
+    InvalidParameter,
+    Conflict,
+    Cancelled,
+    Success
+}
 }

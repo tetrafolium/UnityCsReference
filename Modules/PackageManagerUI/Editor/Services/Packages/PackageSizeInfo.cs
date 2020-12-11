@@ -8,36 +8,36 @@ using UnityEngine;
 
 namespace UnityEditor.PackageManager.UI
 {
-    [Serializable]
-    internal class PackageSizeInfo : ISerializationCallbackReceiver
+[Serializable]
+internal class PackageSizeInfo : ISerializationCallbackReceiver
+{
+    [SerializeField]
+    private string m_SupportedUnityVersionString;
+    private SemVersion m_SupportedUnityVersion;
+    public SemVersion supportedUnityVersion
     {
-        [SerializeField]
-        private string m_SupportedUnityVersionString;
-        private SemVersion m_SupportedUnityVersion;
-        public SemVersion supportedUnityVersion
+        get
         {
-            get
-            {
-                return m_SupportedUnityVersion;
-            }
-            set
-            {
-                m_SupportedUnityVersion = value;
-                m_SupportedUnityVersionString = value.ToString();
-            }
+            return m_SupportedUnityVersion;
         }
-
-        public ulong assetCount;
-        public ulong downloadSize;
-
-        public void OnBeforeSerialize()
+        set
         {
-        }
-
-        public void OnAfterDeserialize()
-        {
-            // m_SupportedUnityVersionString will always be valid because it is set from an existing SemVersion
-            m_SupportedUnityVersion = SemVersionParser.Parse(m_SupportedUnityVersionString);
+            m_SupportedUnityVersion = value;
+            m_SupportedUnityVersionString = value.ToString();
         }
     }
+
+    public ulong assetCount;
+    public ulong downloadSize;
+
+    public void OnBeforeSerialize()
+    {
+    }
+
+    public void OnAfterDeserialize()
+    {
+        // m_SupportedUnityVersionString will always be valid because it is set from an existing SemVersion
+        m_SupportedUnityVersion = SemVersionParser.Parse(m_SupportedUnityVersionString);
+    }
+}
 }

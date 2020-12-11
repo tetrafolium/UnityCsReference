@@ -6,36 +6,36 @@ using System;
 
 namespace UnityEditor.PackageManager.UI
 {
-    [Serializable]
-    internal class VisualState : IEquatable<VisualState>
+[Serializable]
+internal class VisualState : IEquatable<VisualState>
+{
+    public string packageUniqueId;
+    public bool visible;
+    public bool expanded;
+    public bool seeAllVersions;
+    public string selectedVersionId;
+
+    public VisualState(string packageUniqueId)
     {
-        public string packageUniqueId;
-        public bool visible;
-        public bool expanded;
-        public bool seeAllVersions;
-        public string selectedVersionId;
-
-        public VisualState(string packageUniqueId)
-        {
-            this.packageUniqueId = packageUniqueId;
-            visible = true;
-            expanded = false;
-            seeAllVersions = false;
-            selectedVersionId = string.Empty;
-        }
-
-        public bool Equals(VisualState other)
-        {
-            return packageUniqueId == other.packageUniqueId
-                && visible == other.visible
-                && expanded == other.expanded
-                && seeAllVersions == other.seeAllVersions
-                && selectedVersionId == other.selectedVersionId;
-        }
-
-        public VisualState Clone()
-        {
-            return (VisualState)MemberwiseClone();
-        }
+        this.packageUniqueId = packageUniqueId;
+        visible = true;
+        expanded = false;
+        seeAllVersions = false;
+        selectedVersionId = string.Empty;
     }
+
+    public bool Equals(VisualState other)
+    {
+        return packageUniqueId == other.packageUniqueId
+               && visible == other.visible
+               && expanded == other.expanded
+               && seeAllVersions == other.seeAllVersions
+               && selectedVersionId == other.selectedVersionId;
+    }
+
+    public VisualState Clone()
+    {
+        return (VisualState)MemberwiseClone();
+    }
+}
 }

@@ -4,9 +4,9 @@
 
 namespace UnityEditor.PackageManager
 {
-    internal enum SearchOrder
-    {
-        Ascending,
-        Descending,
-    }
+internal enum SearchOrder
+{
+    Ascending,
+    Descending,
+}
 }

@@ -9,57 +9,57 @@ using UnityEngine;
 
 namespace UnityEditorInternal.Profiling
 {
-    internal abstract class ProfilerDetailedView
+internal abstract class ProfilerDetailedView
+{
+    protected static readonly string kNoneText = LocalizationDatabase.GetLocalizedString("None");
+
+    protected static class Styles
     {
-        protected static readonly string kNoneText = LocalizationDatabase.GetLocalizedString("None");
+        public static GUIContent emptyText = new GUIContent("");
+        public static GUIContent selectLineText = EditorGUIUtility.TrTextContent("Select Line for the detailed information");
 
-        protected static class Styles
+        public static readonly GUIStyle expandedArea = new GUIStyle();
+        public static readonly GUIStyle callstackScroll = new GUIStyle("CN Box");
+        public static readonly GUIStyle callstackTextArea = new GUIStyle("CN Message");
+
+        static Styles()
         {
-            public static GUIContent emptyText = new GUIContent("");
-            public static GUIContent selectLineText = EditorGUIUtility.TrTextContent("Select Line for the detailed information");
+            expandedArea.stretchWidth = true;
+            expandedArea.stretchHeight = true;
+            expandedArea.padding = new RectOffset(0, 0, 0, 0);
 
-            public static readonly GUIStyle expandedArea = new GUIStyle();
-            public static readonly GUIStyle callstackScroll = new GUIStyle("CN Box");
-            public static readonly GUIStyle callstackTextArea = new GUIStyle("CN Message");
+            callstackScroll.padding = new RectOffset(5, 5, 5, 5);
 
-            static Styles()
-            {
-                expandedArea.stretchWidth = true;
-                expandedArea.stretchHeight = true;
-                expandedArea.padding = new RectOffset(0, 0, 0, 0);
-
-                callstackScroll.padding = new RectOffset(5, 5, 5, 5);
-
-                callstackTextArea.margin = new RectOffset(0, 0, 0, 0);
-                callstackTextArea.padding = new RectOffset(3, 3, 3, 3);
-                callstackTextArea.wordWrap = false;
-                callstackTextArea.stretchWidth = true;
-                callstackTextArea.stretchHeight = true;
-            }
+            callstackTextArea.margin = new RectOffset(0, 0, 0, 0);
+            callstackTextArea.padding = new RectOffset(3, 3, 3, 3);
+            callstackTextArea.wordWrap = false;
+            callstackTextArea.stretchWidth = true;
+            callstackTextArea.stretchHeight = true;
         }
-
-        protected HierarchyFrameDataView m_FrameDataView;
-
-        [SerializeField]
-        protected int m_SelectedID = -1;
-
-        protected void DrawEmptyPane(GUIStyle headerStyle)
-        {
-            GUILayout.Box(Styles.emptyText, headerStyle);
-
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            GUILayout.BeginVertical();
-            GUILayout.FlexibleSpace();
-            GUILayout.Label(Styles.selectLineText, EditorStyles.wordWrappedLabel);
-            GUILayout.FlexibleSpace();
-            GUILayout.EndVertical();
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
-        }
-
-        public abstract void SaveViewSettings();
-        public abstract void OnEnable(CPUorGPUProfilerModule cpuModule);
-        public abstract void OnDisable();
     }
+
+    protected HierarchyFrameDataView m_FrameDataView;
+
+    [SerializeField]
+    protected int m_SelectedID = -1;
+
+    protected void DrawEmptyPane(GUIStyle headerStyle)
+    {
+        GUILayout.Box(Styles.emptyText, headerStyle);
+
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        GUILayout.BeginVertical();
+        GUILayout.FlexibleSpace();
+        GUILayout.Label(Styles.selectLineText, EditorStyles.wordWrappedLabel);
+        GUILayout.FlexibleSpace();
+        GUILayout.EndVertical();
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+    }
+
+    public abstract void SaveViewSettings();
+    public abstract void OnEnable(CPUorGPUProfilerModule cpuModule);
+    public abstract void OnDisable();
+}
 }

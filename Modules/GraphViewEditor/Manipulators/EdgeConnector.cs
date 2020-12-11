@@ -7,151 +7,153 @@ using UnityEngine.UIElements;
 
 namespace UnityEditor.Experimental.GraphView
 {
-    public interface IEdgeConnectorListener
+public interface IEdgeConnectorListener
+{
+    void OnDropOutsidePort(Edge edge, Vector2 position);
+    void OnDrop(GraphView graphView, Edge edge);
+}
+
+public abstract class EdgeConnector : MouseManipulator
+{
+    public abstract EdgeDragHelper edgeDragHelper {
+        get;
+    }
+}
+
+public class EdgeConnector<TEdge> : EdgeConnector where TEdge : Edge, new()
+{
+    readonly EdgeDragHelper m_EdgeDragHelper;
+    Edge m_EdgeCandidate;
+    private bool m_Active;
+    Vector2 m_MouseDownPosition;
+
+    internal const float k_ConnectionDistanceTreshold = 10f;
+
+    public EdgeConnector(IEdgeConnectorListener listener)
     {
-        void OnDropOutsidePort(Edge edge, Vector2 position);
-        void OnDrop(GraphView graphView, Edge edge);
+        m_EdgeDragHelper = new EdgeDragHelper<TEdge>(listener);
+        m_Active = false;
+        activators.Add(new ManipulatorActivationFilter { button = MouseButton.LeftMouse });
     }
 
-    public abstract class EdgeConnector : MouseManipulator
+    public override EdgeDragHelper edgeDragHelper => m_EdgeDragHelper;
+
+    protected override void RegisterCallbacksOnTarget()
     {
-        public abstract EdgeDragHelper edgeDragHelper { get; }
+        target.RegisterCallback<MouseDownEvent>(OnMouseDown);
+        target.RegisterCallback<MouseMoveEvent>(OnMouseMove);
+        target.RegisterCallback<MouseUpEvent>(OnMouseUp);
+        target.RegisterCallback<KeyDownEvent>(OnKeyDown);
+        target.RegisterCallback<MouseCaptureOutEvent>(OnCaptureOut);
     }
 
-    public class EdgeConnector<TEdge> : EdgeConnector where TEdge : Edge, new()
+    protected override void UnregisterCallbacksFromTarget()
     {
-        readonly EdgeDragHelper m_EdgeDragHelper;
-        Edge m_EdgeCandidate;
-        private bool m_Active;
-        Vector2 m_MouseDownPosition;
+        target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
+        target.UnregisterCallback<MouseMoveEvent>(OnMouseMove);
+        target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
+        target.UnregisterCallback<KeyDownEvent>(OnKeyDown);
+    }
 
-        internal const float k_ConnectionDistanceTreshold = 10f;
-
-        public EdgeConnector(IEdgeConnectorListener listener)
+    protected virtual void OnMouseDown(MouseDownEvent e)
+    {
+        if (m_Active)
         {
-            m_EdgeDragHelper = new EdgeDragHelper<TEdge>(listener);
-            m_Active = false;
-            activators.Add(new ManipulatorActivationFilter { button = MouseButton.LeftMouse });
+            e.StopImmediatePropagation();
+            return;
         }
 
-        public override EdgeDragHelper edgeDragHelper => m_EdgeDragHelper;
-
-        protected override void RegisterCallbacksOnTarget()
+        if (!CanStartManipulation(e))
         {
-            target.RegisterCallback<MouseDownEvent>(OnMouseDown);
-            target.RegisterCallback<MouseMoveEvent>(OnMouseMove);
-            target.RegisterCallback<MouseUpEvent>(OnMouseUp);
-            target.RegisterCallback<KeyDownEvent>(OnKeyDown);
-            target.RegisterCallback<MouseCaptureOutEvent>(OnCaptureOut);
+            return;
         }
 
-        protected override void UnregisterCallbacksFromTarget()
+        var graphElement = target as Port;
+        if (graphElement == null)
         {
-            target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
-            target.UnregisterCallback<MouseMoveEvent>(OnMouseMove);
-            target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
-            target.UnregisterCallback<KeyDownEvent>(OnKeyDown);
+            return;
         }
 
-        protected virtual void OnMouseDown(MouseDownEvent e)
+        m_MouseDownPosition = e.localMousePosition;
+
+        m_EdgeCandidate = new TEdge();
+        m_EdgeDragHelper.draggedPort = graphElement;
+        m_EdgeDragHelper.edgeCandidate = m_EdgeCandidate;
+
+        if (m_EdgeDragHelper.HandleMouseDown(e))
         {
-            if (m_Active)
-            {
-                e.StopImmediatePropagation();
-                return;
-            }
+            m_Active = true;
+            target.CaptureMouse();
 
-            if (!CanStartManipulation(e))
-            {
-                return;
-            }
-
-            var graphElement = target as Port;
-            if (graphElement == null)
-            {
-                return;
-            }
-
-            m_MouseDownPosition = e.localMousePosition;
-
-            m_EdgeCandidate = new TEdge();
-            m_EdgeDragHelper.draggedPort = graphElement;
-            m_EdgeDragHelper.edgeCandidate = m_EdgeCandidate;
-
-            if (m_EdgeDragHelper.HandleMouseDown(e))
-            {
-                m_Active = true;
-                target.CaptureMouse();
-
-                e.StopPropagation();
-            }
-            else
-            {
-                m_EdgeDragHelper.Reset();
-                m_EdgeCandidate = null;
-            }
-        }
-
-        void OnCaptureOut(MouseCaptureOutEvent e)
-        {
-            m_Active = false;
-            if (m_EdgeCandidate != null)
-                Abort();
-        }
-
-        protected virtual void OnMouseMove(MouseMoveEvent e)
-        {
-            if (!m_Active) return;
-
-            m_EdgeDragHelper.HandleMouseMove(e);
-            m_EdgeCandidate.candidatePosition = e.mousePosition;
-            m_EdgeCandidate.UpdateEdgeControl();
             e.StopPropagation();
         }
-
-        protected virtual void OnMouseUp(MouseUpEvent e)
+        else
         {
-            if (!m_Active || !CanStopManipulation(e))
-                return;
-
-            if (CanPerformConnection(e.localMousePosition))
-                m_EdgeDragHelper.HandleMouseUp(e);
-            else
-                Abort();
-
-            m_Active = false;
+            m_EdgeDragHelper.Reset();
             m_EdgeCandidate = null;
-            target.ReleaseMouse();
-            e.StopPropagation();
         }
+    }
 
-        private void OnKeyDown(KeyDownEvent e)
-        {
-            if (e.keyCode != KeyCode.Escape || !m_Active)
-                return;
+    void OnCaptureOut(MouseCaptureOutEvent e)
+    {
+        m_Active = false;
+        if (m_EdgeCandidate != null)
+            Abort();
+    }
 
+    protected virtual void OnMouseMove(MouseMoveEvent e)
+    {
+        if (!m_Active) return;
+
+        m_EdgeDragHelper.HandleMouseMove(e);
+        m_EdgeCandidate.candidatePosition = e.mousePosition;
+        m_EdgeCandidate.UpdateEdgeControl();
+        e.StopPropagation();
+    }
+
+    protected virtual void OnMouseUp(MouseUpEvent e)
+    {
+        if (!m_Active || !CanStopManipulation(e))
+            return;
+
+        if (CanPerformConnection(e.localMousePosition))
+            m_EdgeDragHelper.HandleMouseUp(e);
+        else
             Abort();
 
-            m_Active = false;
-            target.ReleaseMouse();
-            e.StopPropagation();
-        }
-
-        void Abort()
-        {
-            var graphView = target?.GetFirstAncestorOfType<GraphView>();
-            graphView?.RemoveElement(m_EdgeCandidate);
-
-            m_EdgeCandidate.input = null;
-            m_EdgeCandidate.output = null;
-            m_EdgeCandidate = null;
-
-            m_EdgeDragHelper.Reset();
-        }
-
-        bool CanPerformConnection(Vector2 mousePosition)
-        {
-            return Vector2.Distance(m_MouseDownPosition, mousePosition) > k_ConnectionDistanceTreshold;
-        }
+        m_Active = false;
+        m_EdgeCandidate = null;
+        target.ReleaseMouse();
+        e.StopPropagation();
     }
+
+    private void OnKeyDown(KeyDownEvent e)
+    {
+        if (e.keyCode != KeyCode.Escape || !m_Active)
+            return;
+
+        Abort();
+
+        m_Active = false;
+        target.ReleaseMouse();
+        e.StopPropagation();
+    }
+
+    void Abort()
+    {
+        var graphView = target?.GetFirstAncestorOfType<GraphView>();
+        graphView?.RemoveElement(m_EdgeCandidate);
+
+        m_EdgeCandidate.input = null;
+        m_EdgeCandidate.output = null;
+        m_EdgeCandidate = null;
+
+        m_EdgeDragHelper.Reset();
+    }
+
+    bool CanPerformConnection(Vector2 mousePosition)
+    {
+        return Vector2.Distance(m_MouseDownPosition, mousePosition) > k_ConnectionDistanceTreshold;
+    }
+}
 }

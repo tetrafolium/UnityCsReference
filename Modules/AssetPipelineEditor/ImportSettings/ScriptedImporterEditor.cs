@@ -4,13 +4,15 @@
 
 namespace UnityEditor.Experimental.AssetImporters
 {
-    [CustomEditor(typeof(ScriptedImporter), true)]
-    [CanEditMultipleObjects]
-    public class ScriptedImporterEditor : AssetImporterEditor
+[CustomEditor(typeof(ScriptedImporter), true)]
+[CanEditMultipleObjects]
+public class ScriptedImporterEditor : AssetImporterEditor
+{
+    internal override string targetTitle
     {
-        internal override string targetTitle
-        {
-            get { return base.targetTitle + " (" + ObjectNames.NicifyVariableName(target.GetType().Name) + ")"; }
+        get {
+            return base.targetTitle + " (" + ObjectNames.NicifyVariableName(target.GetType().Name) + ")";
         }
     }
+}
 }

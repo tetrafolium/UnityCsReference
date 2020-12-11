@@ -5,27 +5,39 @@
 using System;
 namespace UnityEngine
 {
+[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+[Obsolete("Use AnimatorClipInfo instead (UnityUpgradable) -> AnimatorClipInfo", true)]
+public struct AnimationInfo
+{
+    public AnimationClip clip {
+        get {
+            return default(AnimationClip);
+        }
+    }
+    public float weight {
+        get {
+            return 0.0f;
+        }
+    }
+}
+
+partial class Animator
+{
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    [Obsolete("Use AnimatorClipInfo instead (UnityUpgradable) -> AnimatorClipInfo", true)]
-    public struct AnimationInfo
-    {
-        public AnimationClip clip { get { return default(AnimationClip); }  }
-        public float weight { get { return 0.0f; } }
+    [Obsolete("GetCurrentAnimationClipState is obsolete. Use GetCurrentAnimatorClipInfo instead (UnityUpgradable) -> GetCurrentAnimatorClipInfo(*)", true)]
+    public AnimationInfo[] GetCurrentAnimationClipState(int layerIndex) {
+        return null;
     }
 
-    partial class Animator
-    {
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        [Obsolete("GetCurrentAnimationClipState is obsolete. Use GetCurrentAnimatorClipInfo instead (UnityUpgradable) -> GetCurrentAnimatorClipInfo(*)", true)]
-        public AnimationInfo[] GetCurrentAnimationClipState(int layerIndex) { return null; }
-
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        [Obsolete("GetNextAnimationClipState is obsolete. Use GetNextAnimatorClipInfo instead (UnityUpgradable) -> GetNextAnimatorClipInfo(*)", true)]
-        public AnimationInfo[] GetNextAnimationClipState(int layerIndex) { return null; }
-
-
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        [Obsolete("Stop is obsolete. Use Animator.enabled = false instead", true)]
-        public void Stop() {}
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    [Obsolete("GetNextAnimationClipState is obsolete. Use GetNextAnimatorClipInfo instead (UnityUpgradable) -> GetNextAnimatorClipInfo(*)", true)]
+    public AnimationInfo[] GetNextAnimationClipState(int layerIndex) {
+        return null;
     }
+
+
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    [Obsolete("Stop is obsolete. Use Animator.enabled = false instead", true)]
+    public void Stop() {}
+}
 }

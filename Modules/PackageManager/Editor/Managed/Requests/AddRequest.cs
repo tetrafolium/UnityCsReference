@@ -6,25 +6,25 @@ using System;
 
 namespace UnityEditor.PackageManager.Requests
 {
-    [Serializable]
-    public sealed partial class AddRequest : Request<PackageInfo>
+[Serializable]
+public sealed partial class AddRequest : Request<PackageInfo>
+{
+    /// <summary>
+    /// Constructor to support serialization
+    /// </summary>
+    private AddRequest()
+        : base()
     {
-        /// <summary>
-        /// Constructor to support serialization
-        /// </summary>
-        private AddRequest()
-            : base()
-        {
-        }
-
-        internal AddRequest(long operationId, NativeStatusCode initialStatus)
-            : base(operationId, initialStatus)
-        {
-        }
-
-        protected override PackageInfo GetResult()
-        {
-            return GetOperationData(Id);
-        }
     }
+
+    internal AddRequest(long operationId, NativeStatusCode initialStatus)
+        : base(operationId, initialStatus)
+    {
+    }
+
+    protected override PackageInfo GetResult()
+    {
+        return GetOperationData(Id);
+    }
+}
 }

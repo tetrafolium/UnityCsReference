@@ -4,14 +4,14 @@
 
 namespace UnityEditor.PackageManager.UI
 {
-    internal enum PackageProgress
-    {
-        None = 0,
-        Refreshing,
-        Downloading,
-        Pausing,
-        Resuming,
-        Installing,
-        Removing
-    }
+internal enum PackageProgress
+{
+    None = 0,
+    Refreshing,
+    Downloading,
+    Pausing,
+    Resuming,
+    Installing,
+    Removing
+}
 }

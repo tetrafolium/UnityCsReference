@@ -9,66 +9,78 @@ using UnityEngine.Scripting.APIUpdating;
 
 namespace UnityEngine
 {
-    public enum CompressionType
+public enum CompressionType
+{
+    None,
+    Lzma,
+    Lz4,
+    Lz4HC,
+}
+
+public enum CompressionLevel
+{
+    None,
+    Fastest,
+    Fast,
+    Normal,
+    High,
+    Maximum,
+}
+
+[Serializable]
+[UsedByNativeCode]
+public partial struct BuildCompression
+{
+    public static readonly BuildCompression Uncompressed = new BuildCompression(CompressionType.None, CompressionLevel.Maximum, 128 * 1024);
+    public static readonly BuildCompression LZ4 = new BuildCompression(CompressionType.Lz4HC, CompressionLevel.Maximum, 128 * 1024);
+    public static readonly BuildCompression LZMA = new BuildCompression(CompressionType.Lzma, CompressionLevel.Maximum, 128 * 1024);
+
+    //Supported [[BuildCompression]] modes for runtime recompression of [[AssetBundles]] in AssetBundle.RecompressAssetBundleAsync
+    public static readonly BuildCompression UncompressedRuntime = Uncompressed;
+    public static readonly BuildCompression LZ4Runtime = new BuildCompression(CompressionType.Lz4, CompressionLevel.Maximum, 128 * 1024);
+
+    [NativeName("compression")]
+    private CompressionType _compression;
+    public CompressionType compression
     {
-        None,
-        Lzma,
-        Lz4,
-        Lz4HC,
+        get {
+            return _compression;
+        }
+        private set {
+            _compression = value;
+        }
     }
 
-    public enum CompressionLevel
+    [NativeName("level")]
+    private CompressionLevel _level;
+    public CompressionLevel level
     {
-        None,
-        Fastest,
-        Fast,
-        Normal,
-        High,
-        Maximum,
+        get {
+            return _level;
+        }
+        private set {
+            _level = value;
+        }
     }
 
-    [Serializable]
-    [UsedByNativeCode]
-    public partial struct BuildCompression
+    [NativeName("blockSize")]
+    private uint _blockSize;
+    public uint blockSize
     {
-        public static readonly BuildCompression Uncompressed = new BuildCompression(CompressionType.None, CompressionLevel.Maximum, 128 * 1024);
-        public static readonly BuildCompression LZ4 = new BuildCompression(CompressionType.Lz4HC, CompressionLevel.Maximum, 128 * 1024);
-        public static readonly BuildCompression LZMA = new BuildCompression(CompressionType.Lzma, CompressionLevel.Maximum, 128 * 1024);
-
-        //Supported [[BuildCompression]] modes for runtime recompression of [[AssetBundles]] in AssetBundle.RecompressAssetBundleAsync
-        public static readonly BuildCompression UncompressedRuntime = Uncompressed;
-        public static readonly BuildCompression LZ4Runtime = new BuildCompression(CompressionType.Lz4, CompressionLevel.Maximum, 128 * 1024);
-
-        [NativeName("compression")]
-        private CompressionType _compression;
-        public CompressionType compression
-        {
-            get { return _compression; }
-            private set { _compression = value; }
+        get {
+            return _blockSize;
         }
-
-        [NativeName("level")]
-        private CompressionLevel _level;
-        public CompressionLevel level
-        {
-            get { return _level; }
-            private set { _level = value; }
-        }
-
-        [NativeName("blockSize")]
-        private uint _blockSize;
-        public uint blockSize
-        {
-            get { return _blockSize; }
-            private set { _blockSize = value; }
-        }
-
-        //Custom versions of this struct are not currently supported
-        private BuildCompression(CompressionType in_compression, CompressionLevel in_level, uint in_blockSize) : this()
-        {
-            compression = in_compression;
-            level = in_level;
-            blockSize = in_blockSize;
+        private set {
+            _blockSize = value;
         }
     }
+
+    //Custom versions of this struct are not currently supported
+    private BuildCompression(CompressionType in_compression, CompressionLevel in_level, uint in_blockSize) : this()
+    {
+        compression = in_compression;
+        level = in_level;
+        blockSize = in_blockSize;
+    }
+}
 }

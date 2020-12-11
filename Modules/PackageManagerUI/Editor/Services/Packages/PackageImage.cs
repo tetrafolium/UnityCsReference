@@ -6,20 +6,20 @@ using System;
 
 namespace UnityEditor.PackageManager.UI
 {
-    [Serializable]
-    internal class PackageImage
+[Serializable]
+internal class PackageImage
+{
+    public enum ImageType
     {
-        public enum ImageType
-        {
-            Main,
-            Screenshot,
-            Sketchfab,
-            Youtube,
-            Vimeo
-        }
-
-        public ImageType type;
-        public string thumbnailUrl;
-        public string url;
+        Main,
+        Screenshot,
+        Sketchfab,
+        Youtube,
+        Vimeo
     }
+
+    public ImageType type;
+    public string thumbnailUrl;
+    public string url;
+}
 }

@@ -7,21 +7,21 @@ using System.Linq;
 
 namespace UnityEditor.PackageManager.UI
 {
-    internal static class IOUtils
+internal static class IOUtils
+{
+    public static string SanitizeFileName(string name)
     {
-        public static string SanitizeFileName(string name)
-        {
-            foreach (char c in Path.GetInvalidFileNameChars())
-                name = name.Replace(c, '_');
-            // Remove additional special characters that Unity doesn't like
-            foreach (char c in "/:?<>*|\\~")
-                name = name.Replace(c, '_');
-            return name.Trim();
-        }
-
-        public static string CombinePaths(params string[] paths)
-        {
-            return paths.Aggregate(Path.Combine);
-        }
+        foreach (char c in Path.GetInvalidFileNameChars())
+            name = name.Replace(c, '_');
+        // Remove additional special characters that Unity doesn't like
+        foreach (char c in "/:?<>*|\\~")
+            name = name.Replace(c, '_');
+        return name.Trim();
     }
+
+    public static string CombinePaths(params string[] paths)
+    {
+        return paths.Aggregate(Path.Combine);
+    }
+}
 }

@@ -11,190 +11,190 @@ using UnityEngine;
 
 namespace UnityEditor.Presets
 {
-    class AddPresetTypeDataSource : AdvancedDropdownDataSource
+class AddPresetTypeDataSource : AdvancedDropdownDataSource
+{
+    private static readonly string kSearchHeader = L10n.Tr("Search");
+
+    protected override AdvancedDropdownItem FetchData()
     {
-        private static readonly string kSearchHeader = L10n.Tr("Search");
+        return RebuildTree();
+    }
 
-        protected override AdvancedDropdownItem FetchData()
+    protected AdvancedDropdownItem RebuildTree()
+    {
+        m_SearchableElements = new List<AdvancedDropdownItem>();
+        AdvancedDropdownItem root = new PresetTypeDropdownItem(L10n.Tr("Add Default Type"));
+
+        var type = UnityType.FindTypeByName("AssetImporter");
+        var presetTypes = UnityType.GetTypes()
+                          .Where(t => t.IsDerivedFrom(type) && !t.isAbstract)
+                          .Select(t => new PresetType(t.persistentTypeID))
+                          .Union(
+                              TypeCache.GetTypesDerivedFrom<ScriptedImporter>()
+                              .Where(t => !t.IsAbstract)
+                              .Select(t => new PresetType(t))
+                          )
+                          .Distinct()
+                          .Where(pt => pt.IsValidDefault());
+
+        // Add Importers
+        var importersRoot = new PresetTypeDropdownItem(L10n.Tr("Importer"));
+        root.AddChild(importersRoot);
+        foreach (var presetType in presetTypes)
         {
-            return RebuildTree();
+            var menuPath = presetType.GetManagedTypeName();
+            var paths = menuPath.Split('.').Last();
+            var element = new PresetTypeDropdownItem(paths, presetType);
+            importersRoot.AddChild(element);
+            m_SearchableElements.Add(element);
         }
 
-        protected AdvancedDropdownItem RebuildTree()
+        // Add Components
+        var menuDictionary = GetMenuDictionary();
+        menuDictionary.Sort(CompareItems);
+        for (var i = 0; i < menuDictionary.Count; i++)
         {
-            m_SearchableElements = new List<AdvancedDropdownItem>();
-            AdvancedDropdownItem root = new PresetTypeDropdownItem(L10n.Tr("Add Default Type"));
-
-            var type = UnityType.FindTypeByName("AssetImporter");
-            var presetTypes = UnityType.GetTypes()
-                .Where(t => t.IsDerivedFrom(type) && !t.isAbstract)
-                .Select(t => new PresetType(t.persistentTypeID))
-                .Union(
-                    TypeCache.GetTypesDerivedFrom<ScriptedImporter>()
-                        .Where(t => !t.IsAbstract)
-                        .Select(t => new PresetType(t))
-                )
-                .Distinct()
-                .Where(pt => pt.IsValidDefault());
-
-            // Add Importers
-            var importersRoot = new PresetTypeDropdownItem(L10n.Tr("Importer"));
-            root.AddChild(importersRoot);
-            foreach (var presetType in presetTypes)
+            var menu = menuDictionary[i];
+            if (menu.Value == "ADD")
             {
-                var menuPath = presetType.GetManagedTypeName();
-                var paths = menuPath.Split('.').Last();
-                var element = new PresetTypeDropdownItem(paths, presetType);
-                importersRoot.AddChild(element);
-                m_SearchableElements.Add(element);
+                continue;
             }
 
-            // Add Components
-            var menuDictionary = GetMenuDictionary();
-            menuDictionary.Sort(CompareItems);
-            for (var i = 0; i < menuDictionary.Count; i++)
+            var menuPath = menu.Key;
+            var paths = menuPath.Split('/');
+
+            var parent = root;
+            for (var j = 0; j < paths.Length; j++)
             {
-                var menu = menuDictionary[i];
-                if (menu.Value == "ADD")
+                var path = paths[j];
+                if (j == paths.Length - 1)
                 {
+                    var element = new PresetTypeDropdownItem(path, menu.Value);
+                    parent.AddChild(element);
+                    m_SearchableElements.Add(element);
                     continue;
                 }
-
-                var menuPath = menu.Key;
-                var paths = menuPath.Split('/');
-
-                var parent = root;
-                for (var j = 0; j < paths.Length; j++)
+                var group = (PresetTypeDropdownItem)parent.children.SingleOrDefault(c => c.name == path);
+                if (group == null)
                 {
-                    var path = paths[j];
-                    if (j == paths.Length - 1)
-                    {
-                        var element = new PresetTypeDropdownItem(path, menu.Value);
-                        parent.AddChild(element);
-                        m_SearchableElements.Add(element);
-                        continue;
-                    }
-                    var group = (PresetTypeDropdownItem)parent.children.SingleOrDefault(c => c.name == path);
-                    if (group == null)
-                    {
-                        group = new PresetTypeDropdownItem(path);
-                        parent.AddChild(group);
-                    }
-                    parent = group;
+                    group = new PresetTypeDropdownItem(path);
+                    parent.AddChild(group);
                 }
+                parent = group;
             }
-
-            // Add ScriptableObjects
-            var scriptableObjectRoot = new PresetTypeDropdownItem(L10n.Tr("ScriptableObject"));
-            root.AddChild(scriptableObjectRoot);
-            foreach (var entry in GetScriptableObjectMenuItem())
-            {
-                var menuPath = entry.Item2;
-                var paths = menuPath.Split('/');
-
-                AdvancedDropdownItem parent = scriptableObjectRoot;
-                for (var j = 0; j < paths.Length; j++)
-                {
-                    var path = paths[j];
-                    if (j == paths.Length - 1)
-                    {
-                        var presetType = new PresetType(entry.Item1);
-                        var element = new PresetTypeDropdownItem(path, presetType);
-                        parent.AddChild(element);
-                        m_SearchableElements.Add(element);
-                        continue;
-                    }
-                    var group = parent.children.SingleOrDefault(c => c.name == path);
-                    if (group == null)
-                    {
-                        group = new PresetTypeDropdownItem(path);
-                        parent.AddChild(group);
-                    }
-                    parent = group;
-                }
-            }
-
-            return root;
         }
 
-        IEnumerable<Tuple<Type, string>> GetScriptableObjectMenuItem()
+        // Add ScriptableObjects
+        var scriptableObjectRoot = new PresetTypeDropdownItem(L10n.Tr("ScriptableObject"));
+        root.AddChild(scriptableObjectRoot);
+        foreach (var entry in GetScriptableObjectMenuItem())
         {
-            foreach (var type in TypeCache.GetTypesWithAttribute<CreateAssetMenuAttribute>())
-            {
-                var attr = type.GetCustomAttributes(typeof(CreateAssetMenuAttribute), false).FirstOrDefault() as CreateAssetMenuAttribute;
-                if (attr == null)
-                    continue;
+            var menuPath = entry.Item2;
+            var paths = menuPath.Split('/');
 
-                if (!type.IsSubclassOf(typeof(ScriptableObject)))
+            AdvancedDropdownItem parent = scriptableObjectRoot;
+            for (var j = 0; j < paths.Length; j++)
+            {
+                var path = paths[j];
+                if (j == paths.Length - 1)
                 {
-                    Debug.LogWarningFormat("CreateAssetMenu attribute on {0} will be ignored as {0} is not derived from ScriptableObject.", type.FullName);
+                    var presetType = new PresetType(entry.Item1);
+                    var element = new PresetTypeDropdownItem(path, presetType);
+                    parent.AddChild(element);
+                    m_SearchableElements.Add(element);
                     continue;
                 }
-
-                string menuItemName = (string.IsNullOrEmpty(attr.menuName)) ? ObjectNames.NicifyVariableName(type.Name) : attr.menuName;
-
-                yield return new Tuple<Type, string>(type, menuItemName);
+                var group = parent.children.SingleOrDefault(c => c.name == path);
+                if (group == null)
+                {
+                    group = new PresetTypeDropdownItem(path);
+                    parent.AddChild(group);
+                }
+                parent = group;
             }
         }
 
-        private static List<KeyValuePair<string, string>> GetMenuDictionary()
+        return root;
+    }
+
+    IEnumerable<Tuple<Type, string>> GetScriptableObjectMenuItem()
+    {
+        foreach (var type in TypeCache.GetTypesWithAttribute<CreateAssetMenuAttribute>())
         {
-            var menus = Unsupported.GetSubmenus("Component");
-            var commands = Unsupported.GetSubmenusCommands("Component");
+            var attr = type.GetCustomAttributes(typeof(CreateAssetMenuAttribute), false).FirstOrDefault() as CreateAssetMenuAttribute;
+            if (attr == null)
+                continue;
 
-            var menuDictionary = new Dictionary<string, string>(menus.Length);
-            for (var i = 0; i < menus.Length; i++)
+            if (!type.IsSubclassOf(typeof(ScriptableObject)))
             {
-                menuDictionary.Add(menus[i], commands[i]);
-            }
-            return menuDictionary.ToList();
-        }
-
-        private int CompareItems(KeyValuePair<string, string> x, KeyValuePair<string, string> y)
-        {
-            var legacyString = "legacy";
-            var isStr1Legacy = x.Key.ToLower().Contains(legacyString);
-            var isStr2Legacy = y.Key.ToLower().Contains(legacyString);
-            if (isStr1Legacy && isStr2Legacy)
-                return x.Key.CompareTo(y.Key);
-            if (isStr1Legacy)
-                return 1;
-            if (isStr2Legacy)
-                return -1;
-            return x.Key.CompareTo(y.Key);
-        }
-
-        protected override AdvancedDropdownItem Search(string searchString)
-        {
-            if (string.IsNullOrEmpty(searchString) || m_SearchableElements == null)
-                return null;
-
-            // Support multiple search words separated by spaces.
-            var searchWords = searchString.ToLower().Split(' ');
-
-            // We keep two lists. Matches that matches the start of an item always get first priority.
-            var matchesStart = new List<AdvancedDropdownItem>();
-            var matchesWithin = new List<AdvancedDropdownItem>();
-
-            foreach (var e in m_SearchableElements)
-            {
-                var addComponentItem = (PresetTypeDropdownItem)e;
-                var name = addComponentItem.searchableName.ToLower().Replace(" ", "");
-                AddMatchItem(e, name, searchWords, matchesStart, matchesWithin);
+                Debug.LogWarningFormat("CreateAssetMenu attribute on {0} will be ignored as {0} is not derived from ScriptableObject.", type.FullName);
+                continue;
             }
 
-            var searchTree = new AdvancedDropdownItem(kSearchHeader);
-            matchesStart.Sort();
-            foreach (var element in matchesStart)
-            {
-                searchTree.AddChild(element);
-            }
-            matchesWithin.Sort();
-            foreach (var element in matchesWithin)
-            {
-                searchTree.AddChild(element);
-            }
-            return searchTree;
+            string menuItemName = (string.IsNullOrEmpty(attr.menuName)) ? ObjectNames.NicifyVariableName(type.Name) : attr.menuName;
+
+            yield return new Tuple<Type, string>(type, menuItemName);
         }
     }
+
+    private static List<KeyValuePair<string, string>> GetMenuDictionary()
+    {
+        var menus = Unsupported.GetSubmenus("Component");
+        var commands = Unsupported.GetSubmenusCommands("Component");
+
+        var menuDictionary = new Dictionary<string, string>(menus.Length);
+        for (var i = 0; i < menus.Length; i++)
+        {
+            menuDictionary.Add(menus[i], commands[i]);
+        }
+        return menuDictionary.ToList();
+    }
+
+    private int CompareItems(KeyValuePair<string, string> x, KeyValuePair<string, string> y)
+    {
+        var legacyString = "legacy";
+        var isStr1Legacy = x.Key.ToLower().Contains(legacyString);
+        var isStr2Legacy = y.Key.ToLower().Contains(legacyString);
+        if (isStr1Legacy && isStr2Legacy)
+            return x.Key.CompareTo(y.Key);
+        if (isStr1Legacy)
+            return 1;
+        if (isStr2Legacy)
+            return -1;
+        return x.Key.CompareTo(y.Key);
+    }
+
+    protected override AdvancedDropdownItem Search(string searchString)
+    {
+        if (string.IsNullOrEmpty(searchString) || m_SearchableElements == null)
+            return null;
+
+        // Support multiple search words separated by spaces.
+        var searchWords = searchString.ToLower().Split(' ');
+
+        // We keep two lists. Matches that matches the start of an item always get first priority.
+        var matchesStart = new List<AdvancedDropdownItem>();
+        var matchesWithin = new List<AdvancedDropdownItem>();
+
+        foreach (var e in m_SearchableElements)
+        {
+            var addComponentItem = (PresetTypeDropdownItem)e;
+            var name = addComponentItem.searchableName.ToLower().Replace(" ", "");
+            AddMatchItem(e, name, searchWords, matchesStart, matchesWithin);
+        }
+
+        var searchTree = new AdvancedDropdownItem(kSearchHeader);
+        matchesStart.Sort();
+        foreach (var element in matchesStart)
+        {
+            searchTree.AddChild(element);
+        }
+        matchesWithin.Sort();
+        foreach (var element in matchesWithin)
+        {
+            searchTree.AddChild(element);
+        }
+        return searchTree;
+    }
+}
 }

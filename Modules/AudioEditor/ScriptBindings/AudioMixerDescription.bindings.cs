@@ -6,31 +6,31 @@ using UnityEngine.Bindings;
 
 namespace UnityEditor.Audio
 {
-    internal struct MixerParameterDefinition
-    {
-        public string name;
-        public string description;
-        public string units;
-        public float  displayScale;
-        public float  displayExponent;
-        public float  minRange;
-        public float  maxRange;
-        public float  defaultValue;
-    }
+internal struct MixerParameterDefinition
+{
+    public string name;
+    public string description;
+    public string units;
+    public float  displayScale;
+    public float  displayExponent;
+    public float  minRange;
+    public float  maxRange;
+    public float  defaultValue;
+}
 
-    [StaticAccessor("AudioMixerDescriptionBindings", StaticAccessorType.DoubleColon)]
-    [NativeHeader("Modules/AudioEditor/ScriptBindings/AudioMixerDescription.bindings.h")]
-    internal partial class MixerEffectDefinitions
-    {
-        private extern static void ClearDefinitionsRuntime();
+[StaticAccessor("AudioMixerDescriptionBindings", StaticAccessorType.DoubleColon)]
+[NativeHeader("Modules/AudioEditor/ScriptBindings/AudioMixerDescription.bindings.h")]
+internal partial class MixerEffectDefinitions
+{
+    private extern static void ClearDefinitionsRuntime();
 
-        extern private static void AddDefinitionRuntime(string name, MixerParameterDefinition[] parameters);
+    extern private static void AddDefinitionRuntime(string name, MixerParameterDefinition[] parameters);
 
-        extern public static string[] GetAudioEffectNames();
+    extern public static string[] GetAudioEffectNames();
 
-        extern public static MixerParameterDefinition[] GetAudioEffectParameterDesc(string effectName);
+    extern public static MixerParameterDefinition[] GetAudioEffectParameterDesc(string effectName);
 
-        //Change to use effect
-        public extern static bool EffectCanBeSidechainTarget(AudioMixerEffectController effect);
-    }
+    //Change to use effect
+    public extern static bool EffectCanBeSidechainTarget(AudioMixerEffectController effect);
+}
 }
