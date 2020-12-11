@@ -65,9 +65,9 @@ inspecode:
       auto-fix: true
       thresholds: {num-issues: 1}
 
-    #### StyleCop was aborted unexpectedly.
-    # stylecop:
-    #   thresholds: {num-issues: 999}
+    stylecop:
+      machine: {cpu: 0.5}             # to avoid Abort by Killed (codelift#2124)
+      thresholds: {num-issues: 999}   # too many issues detected: 10000 > 1000
 
     stylelint:
       auto-fix: true
