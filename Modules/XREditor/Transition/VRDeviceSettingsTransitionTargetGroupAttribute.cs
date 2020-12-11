@@ -12,15 +12,19 @@ using UnityEditorInternal.VR;
 
 namespace UnityEditor.XR
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-    internal class VRDeviceSettingsTransitionTargetGroupAttribute : Attribute
-    {
-        BuildTargetGroup m_BuildTargetGroup;
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
+internal class VRDeviceSettingsTransitionTargetGroupAttribute : Attribute
+{
+    BuildTargetGroup m_BuildTargetGroup;
 
-        public BuildTargetGroup TargetGroup { get { return m_BuildTargetGroup;} }
-        public VRDeviceSettingsTransitionTargetGroupAttribute(BuildTargetGroup targetGroup)
-        {
-            m_BuildTargetGroup = targetGroup;
+    public BuildTargetGroup TargetGroup {
+        get {
+            return m_BuildTargetGroup;
         }
     }
+    public VRDeviceSettingsTransitionTargetGroupAttribute(BuildTargetGroup targetGroup)
+    {
+        m_BuildTargetGroup = targetGroup;
+    }
+}
 }

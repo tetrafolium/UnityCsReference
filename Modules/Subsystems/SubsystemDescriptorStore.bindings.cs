@@ -8,25 +8,25 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine.SubsystemsImplementation
 {
-    [NativeHeader("Modules/Subsystems/SubsystemManager.h")]
-    public static partial class SubsystemDescriptorStore
+[NativeHeader("Modules/Subsystems/SubsystemManager.h")]
+public static partial class SubsystemDescriptorStore
+{
+    [RequiredByNativeCode]
+    internal static void InitializeManagedDescriptor(IntPtr ptr, IntegratedSubsystemDescriptor desc)
     {
-        [RequiredByNativeCode]
-        internal static void InitializeManagedDescriptor(IntPtr ptr, IntegratedSubsystemDescriptor desc)
-        {
-            desc.m_Ptr = ptr;
-            s_IntegratedDescriptors.Add(desc);
-        }
-
-        [RequiredByNativeCode]
-        internal static void ClearManagedDescriptors()
-        {
-            foreach (var descriptor in s_IntegratedDescriptors)
-                descriptor.m_Ptr = IntPtr.Zero;
-
-            s_IntegratedDescriptors.Clear();
-        }
-
-        static extern void ReportSingleSubsystemAnalytics(string id);
+        desc.m_Ptr = ptr;
+        s_IntegratedDescriptors.Add(desc);
     }
+
+    [RequiredByNativeCode]
+    internal static void ClearManagedDescriptors()
+    {
+        foreach (var descriptor in s_IntegratedDescriptors)
+            descriptor.m_Ptr = IntPtr.Zero;
+
+        s_IntegratedDescriptors.Clear();
+    }
+
+    static extern void ReportSingleSubsystemAnalytics(string id);
+}
 }

@@ -11,14 +11,14 @@ using System.Collections;
 
 namespace UnityEngine
 {
-    public partial class ProceduralMaterial : Material
+public partial class ProceduralMaterial : Material
+{
+    static void FeatureRemoved()
     {
-        static void FeatureRemoved()
-        {
-            throw new Exception("Built-in support for Substance Designer materials has been removed from Unity. To continue using Substance Designer materials, you will need to install Allegorithmic's external importer from the Asset Store.");
-        }
-
-        //static extern void BindingsGeneratorTrigger();
+        throw new Exception("Built-in support for Substance Designer materials has been removed from Unity. To continue using Substance Designer materials, you will need to install Allegorithmic's external importer from the Asset Store.");
     }
+
+    //static extern void BindingsGeneratorTrigger();
+}
 
 } // namespace UnityEngine

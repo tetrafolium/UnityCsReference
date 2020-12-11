@@ -13,40 +13,40 @@ using UnityEngine.Scripting;
 
 namespace UnityEditor.XR
 {
-    [NativeType(Header = "Modules/XREditor/Build/XRBuildSystem.h")]
-    [StaticAccessor("XRBuildSystem", StaticAccessorType.DoubleColon)]
-    internal class BuildUtilities
+[NativeType(Header = "Modules/XREditor/Build/XRBuildSystem.h")]
+[StaticAccessor("XRBuildSystem", StaticAccessorType.DoubleColon)]
+internal class BuildUtilities
+{
+    internal static bool IsLibraryRegisteredWithXR(string libraryName)
     {
-        internal static bool IsLibraryRegisteredWithXR(string libraryName)
-        {
-            return Internal_IsLibraryRegisteredWithXR(libraryName);
-        }
-
-        internal static bool HasRegisteredPlugins()
-        {
-            return Internal_HasRegisteredPlugins();
-        }
-
-        internal static bool ShouldDisableLegacyVR()
-        {
-            List<ISubsystemDescriptor> descriptors = new List<ISubsystemDescriptor>();
-            SubsystemManager.GetAllSubsystemDescriptors(descriptors);
-
-            foreach (var descriptor in descriptors)
-            {
-                if (descriptor.GetType() == typeof(XRDisplaySubsystemDescriptor))
-                {
-                    XRDisplaySubsystemDescriptor displayDescriptor = (XRDisplaySubsystemDescriptor)descriptor;
-
-                    if (displayDescriptor.disablesLegacyVr)
-                        return true;
-                }
-            }
-            return false;
-        }
-
-        extern internal static bool Internal_IsLibraryRegisteredWithXR(string libraryName);
-
-        extern internal static bool Internal_HasRegisteredPlugins();
+        return Internal_IsLibraryRegisteredWithXR(libraryName);
     }
+
+    internal static bool HasRegisteredPlugins()
+    {
+        return Internal_HasRegisteredPlugins();
+    }
+
+    internal static bool ShouldDisableLegacyVR()
+    {
+        List<ISubsystemDescriptor> descriptors = new List<ISubsystemDescriptor>();
+        SubsystemManager.GetAllSubsystemDescriptors(descriptors);
+
+        foreach (var descriptor in descriptors)
+        {
+            if (descriptor.GetType() == typeof(XRDisplaySubsystemDescriptor))
+            {
+                XRDisplaySubsystemDescriptor displayDescriptor = (XRDisplaySubsystemDescriptor)descriptor;
+
+                if (displayDescriptor.disablesLegacyVr)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    extern internal static bool Internal_IsLibraryRegisteredWithXR(string libraryName);
+
+    extern internal static bool Internal_HasRegisteredPlugins();
+}
 }

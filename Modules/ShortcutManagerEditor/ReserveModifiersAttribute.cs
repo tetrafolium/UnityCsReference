@@ -6,14 +6,16 @@ using System;
 
 namespace UnityEditor.ShortcutManagement
 {
-    [AttributeUsage(AttributeTargets.Class)]
-    class ReserveModifiersAttribute : Attribute
-    {
-        public ShortcutModifiers modifier { get; }
-
-        public ReserveModifiersAttribute(ShortcutModifiers modifier)
-        {
-            this.modifier = modifier;
-        }
+[AttributeUsage(AttributeTargets.Class)]
+class ReserveModifiersAttribute : Attribute
+{
+    public ShortcutModifiers modifier {
+        get;
     }
+
+    public ReserveModifiersAttribute(ShortcutModifiers modifier)
+    {
+        this.modifier = modifier;
+    }
+}
 }

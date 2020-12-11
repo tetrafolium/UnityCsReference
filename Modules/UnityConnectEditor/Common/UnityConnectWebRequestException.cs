@@ -9,19 +9,43 @@ using System.Collections.Generic;
 
 namespace UnityEditor.Connect
 {
-    internal class UnityConnectWebRequestException : Exception
-    {
-        public string error { get; set; }
-        public string method { get; set; }
-        public string url { get; set; }
-        public long responseCode { get; set; }
-        public bool isHttpError { get; set; }
-        public bool isNetworkError { get; set; }
-        public Dictionary<string, string> responseHeaders { get; set; }
-        public int timeout { get; set; }
-
-        public UnityConnectWebRequestException(string message) : base(message)
-        {
-        }
+internal class UnityConnectWebRequestException : Exception
+{
+    public string error {
+        get;
+        set;
     }
+    public string method {
+        get;
+        set;
+    }
+    public string url {
+        get;
+        set;
+    }
+    public long responseCode {
+        get;
+        set;
+    }
+    public bool isHttpError {
+        get;
+        set;
+    }
+    public bool isNetworkError {
+        get;
+        set;
+    }
+    public Dictionary<string, string> responseHeaders {
+        get;
+        set;
+    }
+    public int timeout {
+        get;
+        set;
+    }
+
+    public UnityConnectWebRequestException(string message) : base(message)
+    {
+    }
+}
 }

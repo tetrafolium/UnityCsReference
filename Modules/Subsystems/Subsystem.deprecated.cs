@@ -4,30 +4,32 @@
 
 namespace UnityEngine
 {
-    public abstract class Subsystem : ISubsystem
-    {
-        abstract public bool running { get; }
-
-        abstract public void Start();
-        abstract public void Stop();
-
-        public void Destroy()
-        {
-            if (SubsystemManager.RemoveDeprecatedSubsystem(this))
-                OnDestroy();
-        }
-
-        abstract protected void OnDestroy();
-
-        internal ISubsystemDescriptor m_SubsystemDescriptor;
+public abstract class Subsystem : ISubsystem
+{
+    abstract public bool running {
+        get;
     }
 
-    public abstract class Subsystem<TSubsystemDescriptor>
+    abstract public void Start();
+    abstract public void Stop();
+
+    public void Destroy()
+    {
+        if (SubsystemManager.RemoveDeprecatedSubsystem(this))
+            OnDestroy();
+    }
+
+    abstract protected void OnDestroy();
+
+    internal ISubsystemDescriptor m_SubsystemDescriptor;
+}
+
+public abstract class Subsystem<TSubsystemDescriptor>
 #pragma warning disable CS0618
-        : Subsystem
+    : Subsystem
 #pragma warning restore CS0618
-        where TSubsystemDescriptor : ISubsystemDescriptor
-    {
-        public TSubsystemDescriptor SubsystemDescriptor => (TSubsystemDescriptor)m_SubsystemDescriptor;
-    }
+      where TSubsystemDescriptor : ISubsystemDescriptor
+{
+    public TSubsystemDescriptor SubsystemDescriptor => (TSubsystemDescriptor)m_SubsystemDescriptor;
+}
 }

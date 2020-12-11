@@ -4,44 +4,50 @@
 
 namespace UnityEditor.Connect
 {
-    /// <summary>
-    /// Class to contain config stuff for the IAP service, URLs and such.
-    /// </summary>
-    internal class PurchasingConfiguration
+/// <summary>
+/// Class to contain config stuff for the IAP service, URLs and such.
+/// </summary>
+internal class PurchasingConfiguration
+{
+    static readonly PurchasingConfiguration k_Instance;
+
+    readonly string m_PurchasingPackageUrl;
+    readonly string m_AnalyticsApiUrl;
+    readonly string m_GooglePlayDevConsoleUrl;
+
+    static PurchasingConfiguration()
     {
-        static readonly PurchasingConfiguration k_Instance;
+        k_Instance = new PurchasingConfiguration();
+    }
 
-        readonly string m_PurchasingPackageUrl;
-        readonly string m_AnalyticsApiUrl;
-        readonly string m_GooglePlayDevConsoleUrl;
+    PurchasingConfiguration()
+    {
+        m_PurchasingPackageUrl = "https://public-cdn.cloud.unity3d.com/UnityEngine.Cloud.Purchasing.unitypackage";
+        m_AnalyticsApiUrl = "https://analytics.cloud.unity3d.com";
+        m_GooglePlayDevConsoleUrl = "https://play.google.com/apps/publish/";
+    }
 
-        static PurchasingConfiguration()
-        {
-            k_Instance = new PurchasingConfiguration();
-        }
+    public static PurchasingConfiguration instance => k_Instance;
 
-        PurchasingConfiguration()
-        {
-            m_PurchasingPackageUrl = "https://public-cdn.cloud.unity3d.com/UnityEngine.Cloud.Purchasing.unitypackage";
-            m_AnalyticsApiUrl = "https://analytics.cloud.unity3d.com";
-            m_GooglePlayDevConsoleUrl = "https://play.google.com/apps/publish/";
-        }
-
-        public static PurchasingConfiguration instance => k_Instance;
-
-        public string purchasingPackageUrl
-        {
-            get { return m_PurchasingPackageUrl; }
-        }
-
-        public string analyticsApiUrl
-        {
-            get { return m_AnalyticsApiUrl; }
-        }
-
-        public string googlePlayDevConsoleUrl
-        {
-            get { return m_GooglePlayDevConsoleUrl; }
+    public string purchasingPackageUrl
+    {
+        get {
+            return m_PurchasingPackageUrl;
         }
     }
+
+    public string analyticsApiUrl
+    {
+        get {
+            return m_AnalyticsApiUrl;
+        }
+    }
+
+    public string googlePlayDevConsoleUrl
+    {
+        get {
+            return m_GooglePlayDevConsoleUrl;
+        }
+    }
+}
 }

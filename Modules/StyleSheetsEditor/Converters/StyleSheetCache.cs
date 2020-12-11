@@ -7,49 +7,64 @@ using UnityEngine.UIElements;
 
 namespace UnityEditor.StyleSheets
 {
-    internal class StyleSheetCache
+internal class StyleSheetCache
+{
+    public StyleSheet sheet {
+        get;
+        private set;
+    }
+    public Dictionary<string, StyleComplexSelector> customStyleSelectors {
+        get;
+        private set;
+    }
+    public Dictionary<string, StyleComplexSelector> selectors {
+        get;
+        private set;
+    }
+    public Dictionary<string, StyleComplexSelector> typeStyleSelectors {
+        get;
+        private set;
+    }
+    public Dictionary<string, StyleComplexSelector> abstractStyleSelectors {
+        get;
+        private set;
+    }
+
+    public StyleSheetCache(StyleSheet sheet)
     {
-        public StyleSheet sheet { get; private set; }
-        public Dictionary<string, StyleComplexSelector> customStyleSelectors { get; private set; }
-        public Dictionary<string, StyleComplexSelector> selectors { get; private set; }
-        public Dictionary<string, StyleComplexSelector> typeStyleSelectors { get; private set; }
-        public Dictionary<string, StyleComplexSelector> abstractStyleSelectors { get; private set; }
+        this.sheet = sheet;
+        customStyleSelectors = new Dictionary<string, StyleComplexSelector>();
+        selectors = new Dictionary<string, StyleComplexSelector>();
+        typeStyleSelectors = new Dictionary<string, StyleComplexSelector>();
+        abstractStyleSelectors = new Dictionary<string, StyleComplexSelector>();
+        IndexSheet();
+    }
 
-        public StyleSheetCache(StyleSheet sheet)
+    public void AddSelector(StyleComplexSelector selector)
+    {
+        var selectorStr = StyleSheetToUss.ToUssSelector(selector);
+        if (ConverterUtils.IsCustomStyleSelector(selectorStr))
         {
-            this.sheet = sheet;
-            customStyleSelectors = new Dictionary<string, StyleComplexSelector>();
-            selectors = new Dictionary<string, StyleComplexSelector>();
-            typeStyleSelectors = new Dictionary<string, StyleComplexSelector>();
-            abstractStyleSelectors = new Dictionary<string, StyleComplexSelector>();
-            IndexSheet();
+            customStyleSelectors.TryAdd(selectorStr, selector);
+        }
+        else if (ConverterUtils.IsTypeStyleSelector(selectorStr))
+        {
+            typeStyleSelectors.TryAdd(selectorStr, selector);
+        }
+        else if (ConverterUtils.IsAbstractStyleSelector(selectorStr))
+        {
+            abstractStyleSelectors.TryAdd(selectorStr, selector);
         }
 
-        public void AddSelector(StyleComplexSelector selector)
-        {
-            var selectorStr = StyleSheetToUss.ToUssSelector(selector);
-            if (ConverterUtils.IsCustomStyleSelector(selectorStr))
-            {
-                customStyleSelectors.TryAdd(selectorStr, selector);
-            }
-            else if (ConverterUtils.IsTypeStyleSelector(selectorStr))
-            {
-                typeStyleSelectors.TryAdd(selectorStr, selector);
-            }
-            else if (ConverterUtils.IsAbstractStyleSelector(selectorStr))
-            {
-                abstractStyleSelectors.TryAdd(selectorStr, selector);
-            }
+        selectors.TryAdd(selectorStr, selector);
+    }
 
-            selectors.TryAdd(selectorStr, selector);
-        }
-
-        private void IndexSheet()
+    private void IndexSheet()
+    {
+        foreach (var complexSelector in sheet.complexSelectors)
         {
-            foreach (var complexSelector in sheet.complexSelectors)
-            {
-                AddSelector(complexSelector);
-            }
+            AddSelector(complexSelector);
         }
     }
+}
 }

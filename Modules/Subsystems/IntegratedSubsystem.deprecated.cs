@@ -6,9 +6,9 @@ using System;
 
 namespace UnityEngine
 {
-    public partial class IntegratedSubsystem<TSubsystemDescriptor> : IntegratedSubsystem
-        where TSubsystemDescriptor : ISubsystemDescriptor
-    {
-        public TSubsystemDescriptor SubsystemDescriptor => subsystemDescriptor;
-    }
+public partial class IntegratedSubsystem<TSubsystemDescriptor> : IntegratedSubsystem
+    where TSubsystemDescriptor : ISubsystemDescriptor
+{
+    public TSubsystemDescriptor SubsystemDescriptor => subsystemDescriptor;
+}
 }

@@ -9,41 +9,41 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine
 {
-    [UsedByNativeCode]
-    [StructLayout(LayoutKind.Sequential)]
-    [NativeHeader("Modules/Subsystems/Subsystem.h")]
-    public class IntegratedSubsystem : ISubsystem
+[UsedByNativeCode]
+[StructLayout(LayoutKind.Sequential)]
+[NativeHeader("Modules/Subsystems/Subsystem.h")]
+public class IntegratedSubsystem : ISubsystem
+{
+    internal IntPtr m_Ptr;
+    internal ISubsystemDescriptor m_SubsystemDescriptor;
+
+    extern internal void SetHandle(IntegratedSubsystem subsystem);
+    extern public void Start();
+    extern public void Stop();
+    public void Destroy()
     {
-        internal IntPtr m_Ptr;
-        internal ISubsystemDescriptor m_SubsystemDescriptor;
-
-        extern internal void SetHandle(IntegratedSubsystem subsystem);
-        extern public void Start();
-        extern public void Stop();
-        public void Destroy()
-        {
-            IntPtr removedPtr = m_Ptr;
-            SubsystemManager.RemoveIntegratedSubsystemByPtr(m_Ptr);
-            SubsystemBindings.DestroySubsystem(removedPtr);
-            m_Ptr = IntPtr.Zero;
-        }
-
-        public bool running => valid && IsRunning();
-
-        internal bool valid => m_Ptr != IntPtr.Zero;
-
-        extern internal bool IsRunning();
+        IntPtr removedPtr = m_Ptr;
+        SubsystemManager.RemoveIntegratedSubsystemByPtr(m_Ptr);
+        SubsystemBindings.DestroySubsystem(removedPtr);
+        m_Ptr = IntPtr.Zero;
     }
 
-    [UsedByNativeCode("Subsystem_TSubsystemDescriptor")]
-    public partial class IntegratedSubsystem<TSubsystemDescriptor> : IntegratedSubsystem
-        where TSubsystemDescriptor : ISubsystemDescriptor
-    {
-        public TSubsystemDescriptor subsystemDescriptor => (TSubsystemDescriptor)m_SubsystemDescriptor;
-    }
+    public bool running => valid && IsRunning();
 
-    internal static class SubsystemBindings
-    {
-        internal static extern void DestroySubsystem(IntPtr nativePtr);
-    }
+    internal bool valid => m_Ptr != IntPtr.Zero;
+
+    extern internal bool IsRunning();
+}
+
+[UsedByNativeCode("Subsystem_TSubsystemDescriptor")]
+public partial class IntegratedSubsystem<TSubsystemDescriptor> : IntegratedSubsystem
+    where TSubsystemDescriptor : ISubsystemDescriptor
+{
+    public TSubsystemDescriptor subsystemDescriptor => (TSubsystemDescriptor)m_SubsystemDescriptor;
+}
+
+internal static class SubsystemBindings
+{
+    internal static extern void DestroySubsystem(IntPtr nativePtr);
+}
 }

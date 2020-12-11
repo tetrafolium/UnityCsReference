@@ -5,12 +5,14 @@
 
 namespace UnityEngine.Networking
 {
-    public partial class UnityWebRequest
+public partial class UnityWebRequest
+{
+    [System.Obsolete("UnityWebRequest.isError has been renamed to isNetworkError for clarity. (UnityUpgradable) -> isNetworkError", false)]
+    public bool isError
     {
-        [System.Obsolete("UnityWebRequest.isError has been renamed to isNetworkError for clarity. (UnityUpgradable) -> isNetworkError", false)]
-        public bool isError
-        {
-            get { return isNetworkError; }
+        get {
+            return isNetworkError;
         }
     }
+}
 }

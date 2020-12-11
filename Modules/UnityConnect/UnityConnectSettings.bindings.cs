@@ -6,49 +6,49 @@ using UnityEngine.Bindings;
 
 namespace UnityEngine.Connect
 {
-    [NativeHeader("Modules/UnityConnect/UnityConnectSettings.h")]
-    internal class UnityConnectSettings : Object
+[NativeHeader("Modules/UnityConnect/UnityConnectSettings.h")]
+internal class UnityConnectSettings : Object
+{
+    [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
+    public extern static bool enabled
     {
-        [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
-        public extern static bool enabled
-        {
-            get;
-            set;
-        }
-
-        [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
-        public extern static bool testMode
-        {
-            get;
-            set;
-        }
-
-        [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
-        public extern static string eventUrl
-        {
-            get;
-            set;
-        }
-
-        [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
-        public extern static string eventOldUrl
-        {
-            get;
-            set;
-        }
-
-        [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
-        public extern static string configUrl
-        {
-            get;
-            set;
-        }
-
-        [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
-        public extern static int testInitMode
-        {
-            get;
-            set;
-        }
+        get;
+        set;
     }
+
+    [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
+    public extern static bool testMode
+    {
+        get;
+        set;
+    }
+
+    [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
+    public extern static string eventUrl
+    {
+        get;
+        set;
+    }
+
+    [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
+    public extern static string eventOldUrl
+    {
+        get;
+        set;
+    }
+
+    [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
+    public extern static string configUrl
+    {
+        get;
+        set;
+    }
+
+    [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
+    public extern static int testInitMode
+    {
+        get;
+        set;
+    }
+}
 }

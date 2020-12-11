@@ -9,16 +9,16 @@ using System.Runtime.InteropServices;
 
 namespace UnityEngine.UIElements
 {
-    [NativeHeader("Modules/UIElementsNative/ImmediateStylePainter.h")]
-    [StructLayout(LayoutKind.Sequential)]
-    internal class ImmediateStylePainter
-    {
-        internal static extern void DrawRect(Rect screenRect, Color color, Vector4 borderWidths, Vector4 borderRadiuses);
+[NativeHeader("Modules/UIElementsNative/ImmediateStylePainter.h")]
+[StructLayout(LayoutKind.Sequential)]
+internal class ImmediateStylePainter
+{
+    internal static extern void DrawRect(Rect screenRect, Color color, Vector4 borderWidths, Vector4 borderRadiuses);
 
-        internal static extern void DrawTexture(Rect screenRect, Texture texture, Rect sourceRect, Color color, Vector4 borderWidths, Vector4 borderRadiuses, int leftBorder, int topBorder,
-            int rightBorder, int bottomBorder, bool usePremultiplyAlpha);
+    internal static extern void DrawTexture(Rect screenRect, Texture texture, Rect sourceRect, Color color, Vector4 borderWidths, Vector4 borderRadiuses, int leftBorder, int topBorder,
+                                            int rightBorder, int bottomBorder, bool usePremultiplyAlpha);
 
-        internal static extern void DrawText(Rect screenRect, string text, Font font, int fontSize, FontStyle fontStyle, Color fontColor, TextAnchor anchor, bool wordWrap,
-            float wordWrapWidth, bool richText, TextClipping textClipping);
-    }
+    internal static extern void DrawText(Rect screenRect, string text, Font font, int fontSize, FontStyle fontStyle, Color fontColor, TextAnchor anchor, bool wordWrap,
+                                         float wordWrapWidth, bool richText, TextClipping textClipping);
+}
 }

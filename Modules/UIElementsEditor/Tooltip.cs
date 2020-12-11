@@ -8,24 +8,24 @@ using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCode
 
 namespace UnityEditor.UIElements
 {
-    static class Tooltip
+static class Tooltip
+{
+    [RequiredByNativeCode]
+    internal static void SetTooltip(float mouseX, float mouseY)
     {
-        [RequiredByNativeCode]
-        internal static void SetTooltip(float mouseX, float mouseY)
+        //mouseX,mouseY are screen relative.
+        GUIView view = GUIView.mouseOverView;
+        if (view != null && view.windowBackend != null)
         {
-            //mouseX,mouseY are screen relative.
-            GUIView view = GUIView.mouseOverView;
-            if (view != null && view.windowBackend != null)
+            // Pick expect view relative coordinates.
+            string tooltip;
+            Rect screenRectPosition;
+            if (view.windowBackend.GetTooltip(new Vector2(mouseX, mouseY) - view.screenPosition.position,
+                                              out tooltip, out screenRectPosition))
             {
-                // Pick expect view relative coordinates.
-                string tooltip;
-                Rect screenRectPosition;
-                if (view.windowBackend.GetTooltip(new Vector2(mouseX, mouseY) - view.screenPosition.position,
-                    out tooltip, out screenRectPosition))
-                {
-                    GUIStyle.SetMouseTooltip(tooltip, screenRectPosition);
-                }
+                GUIStyle.SetMouseTooltip(tooltip, screenRectPosition);
             }
         }
     }
+}
 }

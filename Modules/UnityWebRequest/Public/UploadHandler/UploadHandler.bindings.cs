@@ -11,107 +11,115 @@ using UnityEngine.Bindings;
 
 namespace UnityEngine.Networking
 {
-    [StructLayout(LayoutKind.Sequential)]
-    [NativeHeader("Modules/UnityWebRequest/Public/UploadHandler/UploadHandler.h")]
-    public class UploadHandler : IDisposable
+[StructLayout(LayoutKind.Sequential)]
+[NativeHeader("Modules/UnityWebRequest/Public/UploadHandler/UploadHandler.h")]
+public class UploadHandler : IDisposable
+{
+    [System.NonSerialized]
+    internal IntPtr m_Ptr;
+
+    [NativeMethod(IsThreadSafe = true)]
+    private extern void Release();
+
+    internal UploadHandler() {}
+
+    ~UploadHandler()
     {
-        [System.NonSerialized]
-        internal IntPtr m_Ptr;
-
-        [NativeMethod(IsThreadSafe = true)]
-        private extern void Release();
-
-        internal UploadHandler() {}
-
-        ~UploadHandler()
-        {
-            Dispose();
-        }
-
-        public void Dispose()
-        {
-            if (m_Ptr != IntPtr.Zero)
-            {
-                Release();
-                m_Ptr = IntPtr.Zero;
-            }
-        }
-
-        public byte[] data
-        {
-            get
-            {
-                return GetData();
-            }
-        }
-
-        public string contentType
-        {
-            get
-            {
-                return GetContentType();
-            }
-            set
-            {
-                SetContentType(value);
-            }
-        }
-
-        public float progress
-        {
-            get
-            {
-                return GetProgress();
-            }
-        }
-
-        internal virtual byte[] GetData() { return null; }
-        internal virtual string GetContentType() { return InternalGetContentType(); }
-        internal virtual void   SetContentType(string newContentType) { InternalSetContentType(newContentType); }
-        internal virtual float  GetProgress() { return InternalGetProgress(); }
-
-        [NativeMethod("GetContentType")]
-        private extern string InternalGetContentType();
-
-        [NativeMethod("SetContentType")]
-        private extern void InternalSetContentType(string newContentType);
-
-        [NativeMethod("GetProgress")]
-        private extern float InternalGetProgress();
+        Dispose();
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    [NativeHeader("Modules/UnityWebRequest/Public/UploadHandler/UploadHandlerRaw.h")]
-    public sealed class UploadHandlerRaw : UploadHandler
+    public void Dispose()
     {
-        private static extern IntPtr Create(UploadHandlerRaw self, byte[] data);
-
-        public UploadHandlerRaw(byte[] data)
+        if (m_Ptr != IntPtr.Zero)
         {
-            if (data != null && data.Length == 0)
-                throw new ArgumentException("Cannot create a data handler without payload data");
-            m_Ptr = Create(this, data);
+            Release();
+            m_Ptr = IntPtr.Zero;
         }
-
-        private extern byte[] InternalGetData();
-
-        internal override byte[] GetData()
-        {
-            return InternalGetData();
-        }
-
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    [NativeHeader("Modules/UnityWebRequest/Public/UploadHandler/UploadHandlerFile.h")]
-    public sealed class UploadHandlerFile : UploadHandler
+    public byte[] data
     {
-        [NativeThrows]
-        private static extern IntPtr Create(UploadHandlerFile self, string filePath);
-
-        public UploadHandlerFile(string filePath)
+        get
         {
-            m_Ptr = Create(this, filePath);
+            return GetData();
         }
     }
+
+    public string contentType
+    {
+        get
+        {
+            return GetContentType();
+        }
+        set
+        {
+            SetContentType(value);
+        }
+    }
+
+    public float progress
+    {
+        get
+        {
+            return GetProgress();
+        }
+    }
+
+    internal virtual byte[] GetData() {
+        return null;
+    }
+    internal virtual string GetContentType() {
+        return InternalGetContentType();
+    }
+    internal virtual void   SetContentType(string newContentType) {
+        InternalSetContentType(newContentType);
+    }
+    internal virtual float  GetProgress() {
+        return InternalGetProgress();
+    }
+
+    [NativeMethod("GetContentType")]
+    private extern string InternalGetContentType();
+
+    [NativeMethod("SetContentType")]
+    private extern void InternalSetContentType(string newContentType);
+
+    [NativeMethod("GetProgress")]
+    private extern float InternalGetProgress();
+}
+
+[StructLayout(LayoutKind.Sequential)]
+[NativeHeader("Modules/UnityWebRequest/Public/UploadHandler/UploadHandlerRaw.h")]
+public sealed class UploadHandlerRaw : UploadHandler
+{
+    private static extern IntPtr Create(UploadHandlerRaw self, byte[] data);
+
+    public UploadHandlerRaw(byte[] data)
+    {
+        if (data != null && data.Length == 0)
+            throw new ArgumentException("Cannot create a data handler without payload data");
+        m_Ptr = Create(this, data);
+    }
+
+    private extern byte[] InternalGetData();
+
+    internal override byte[] GetData()
+    {
+        return InternalGetData();
+    }
+
+}
+
+[StructLayout(LayoutKind.Sequential)]
+[NativeHeader("Modules/UnityWebRequest/Public/UploadHandler/UploadHandlerFile.h")]
+public sealed class UploadHandlerFile : UploadHandler
+{
+    [NativeThrows]
+    private static extern IntPtr Create(UploadHandlerFile self, string filePath);
+
+    public UploadHandlerFile(string filePath)
+    {
+        m_Ptr = Create(this, filePath);
+    }
+}
 }

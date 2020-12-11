@@ -9,201 +9,201 @@ using UnityEngine.Video;
 
 namespace UnityEditor
 {
-    [CustomEditor(typeof(VideoClip))]
-    [CanEditMultipleObjects]
-    internal class VideoClipInspector : Editor
-    {
+[CustomEditor(typeof(VideoClip))]
+[CanEditMultipleObjects]
+internal class VideoClipInspector : Editor
+{
 #pragma warning disable 649
-        static readonly GUID kEmptyGUID;
+    static readonly GUID kEmptyGUID;
 
-        private VideoClip m_PlayingClip;
-        private Texture m_Texture;
-        private GUID m_PreviewID;
-        Vector2 m_Position = Vector2.zero;
-        private bool m_UseAssetPreview = true;
+    private VideoClip m_PlayingClip;
+    private Texture m_Texture;
+    private GUID m_PreviewID;
+    Vector2 m_Position = Vector2.zero;
+    private bool m_UseAssetPreview = true;
 
-        override public void OnInspectorGUI()
-        {
-            // Override with inspector that doesn't show anything
-        }
+    override public void OnInspectorGUI()
+    {
+        // Override with inspector that doesn't show anything
+    }
 
-        static void Init()
-        {
-        }
+    static void Init()
+    {
+    }
 
-        public void OnDisable()
-        {
-        }
+    public void OnDisable()
+    {
+    }
 
-        public void OnEnable()
-        {
-        }
+    public void OnEnable()
+    {
+    }
 
-        public void OnDestroy()
-        {
-            StopPreview();
-        }
+    public void OnDestroy()
+    {
+        StopPreview();
+    }
 
-        public override bool HasPreviewGUI()
-        {
-            return (targets != null);
-        }
+    public override bool HasPreviewGUI()
+    {
+        return (targets != null);
+    }
 
-        private void PlayPreview()
-        {
-            m_PreviewID = VideoUtil.StartPreview(m_PlayingClip);
-            VideoUtil.PlayPreview(m_PreviewID, true);
-        }
+    private void PlayPreview()
+    {
+        m_PreviewID = VideoUtil.StartPreview(m_PlayingClip);
+        VideoUtil.PlayPreview(m_PreviewID, true);
+    }
 
-        private void StopPreview()
-        {
-            m_UseAssetPreview = true;
-            if (!m_PreviewID.Empty())
-                VideoUtil.StopPreview(m_PreviewID);
-            m_PlayingClip = null;
-            m_PreviewID = kEmptyGUID;
-        }
+    private void StopPreview()
+    {
+        m_UseAssetPreview = true;
+        if (!m_PreviewID.Empty())
+            VideoUtil.StopPreview(m_PreviewID);
+        m_PlayingClip = null;
+        m_PreviewID = kEmptyGUID;
+    }
 
-        public override void OnPreviewGUI(Rect r, GUIStyle background)
-        {
-            VideoClip clip = target as VideoClip;
+    public override void OnPreviewGUI(Rect r, GUIStyle background)
+    {
+        VideoClip clip = target as VideoClip;
 
-            Event evt = Event.current;
-            if (evt.type != EventType.Repaint &&
+        Event evt = Event.current;
+        if (evt.type != EventType.Repaint &&
                 evt.type != EventType.Layout &&
                 evt.type != EventType.Used)
+        {
+            switch (evt.type)
             {
-                switch (evt.type)
+            case EventType.MouseDown:
+            {
+                if (r.Contains(evt.mousePosition))
                 {
-                    case EventType.MouseDown:
+                    if (m_PlayingClip != null)
                     {
-                        if (r.Contains(evt.mousePosition))
+                        if (m_PreviewID.Empty() || !VideoUtil.IsPreviewPlaying(m_PreviewID))
                         {
-                            if (m_PlayingClip != null)
-                            {
-                                if (m_PreviewID.Empty() || !VideoUtil.IsPreviewPlaying(m_PreviewID))
-                                {
-                                    PlayPreview();
-                                }
-                                else
-                                {
-                                    StopPreview();
-                                }
-                            }
-                            evt.Use();
+                            PlayPreview();
+                        }
+                        else
+                        {
+                            StopPreview();
                         }
                     }
-                    break;
+                    evt.Use();
                 }
-                return;
             }
-
-            if (clip != m_PlayingClip)
-            {
-                StopPreview();
-                m_PlayingClip = clip;
+            break;
             }
+            return;
+        }
 
-            Texture image = null;
+        if (clip != m_PlayingClip)
+        {
+            StopPreview();
+            m_PlayingClip = clip;
+        }
 
-            if (!m_PreviewID.Empty() && VideoUtil.IsPreviewPlaying(m_PreviewID))
-            {
-                image = VideoUtil.GetPreviewTexture(m_PreviewID);
-                if (image != null && m_UseAssetPreview)
-                    m_UseAssetPreview = false;
-            }
+        Texture image = null;
+
+        if (!m_PreviewID.Empty() && VideoUtil.IsPreviewPlaying(m_PreviewID))
+        {
+            image = VideoUtil.GetPreviewTexture(m_PreviewID);
+            if (image != null && m_UseAssetPreview)
+                m_UseAssetPreview = false;
+        }
+        else
+            image = GetAssetPreviewTexture();
+
+        if (image != null && image.width != 0 && image.height != 0)
+            m_Texture = image;
+
+        if (!m_Texture)
+            return;
+
+        if (Event.current.type == EventType.Repaint)
+            background.Draw(r, false, false, false, false);
+
+        float previewWidth = m_Texture.width;
+        float previewHeight = m_Texture.height;
+
+        if (m_PlayingClip.pixelAspectRatioDenominator > 0)
+        {
+            float pixelAspectRatio = (float)m_PlayingClip.pixelAspectRatioNumerator /
+                                     (float)m_PlayingClip.pixelAspectRatioDenominator;
+
+            if (pixelAspectRatio > 1.0F)
+                previewWidth *= pixelAspectRatio;
             else
-                image = GetAssetPreviewTexture();
+                previewHeight /= pixelAspectRatio;
+        }
 
-            if (image != null && image.width != 0 && image.height != 0)
-                m_Texture = image;
+        float zoomLevel = 1.0f;
 
-            if (!m_Texture)
-                return;
+        if ((r.width / previewWidth * previewHeight) > r.height)
+            zoomLevel = r.height / previewHeight;
+        else
+            zoomLevel = r.width / previewWidth;
 
-            if (Event.current.type == EventType.Repaint)
-                background.Draw(r, false, false, false, false);
+        zoomLevel = Mathf.Clamp01(zoomLevel);
 
-            float previewWidth = m_Texture.width;
-            float previewHeight = m_Texture.height;
+        Rect wantedRect = !m_UseAssetPreview ? new Rect(r.x, r.y, previewWidth * zoomLevel, m_Texture.height * zoomLevel) : r;
 
-            if (m_PlayingClip.pixelAspectRatioDenominator > 0)
-            {
-                float pixelAspectRatio = (float)m_PlayingClip.pixelAspectRatioNumerator /
-                    (float)m_PlayingClip.pixelAspectRatioDenominator;
+        PreviewGUI.BeginScrollView(
+            r, m_Position, wantedRect, "PreHorizontalScrollbar", "PreHorizontalScrollbarThumb");
 
-                if (pixelAspectRatio > 1.0F)
-                    previewWidth *= pixelAspectRatio;
-                else
-                    previewHeight /= pixelAspectRatio;
-            }
+        if (!m_UseAssetPreview)
+            EditorGUI.DrawTextureTransparent(wantedRect, m_Texture, ScaleMode.StretchToFill);
+        else
+            GUI.DrawTexture(wantedRect, m_Texture, ScaleMode.ScaleToFit);
 
-            float zoomLevel = 1.0f;
+        m_Position = PreviewGUI.EndScrollView();
 
-            if ((r.width / previewWidth * previewHeight) > r.height)
-                zoomLevel = r.height / previewHeight;
-            else
-                zoomLevel = r.width / previewWidth;
-
-            zoomLevel = Mathf.Clamp01(zoomLevel);
-
-            Rect wantedRect = !m_UseAssetPreview ? new Rect(r.x, r.y, previewWidth * zoomLevel, m_Texture.height * zoomLevel) : r;
-
-            PreviewGUI.BeginScrollView(
-                r, m_Position, wantedRect, "PreHorizontalScrollbar", "PreHorizontalScrollbarThumb");
-
-            if (!m_UseAssetPreview)
-                EditorGUI.DrawTextureTransparent(wantedRect, m_Texture, ScaleMode.StretchToFill);
-            else
-                GUI.DrawTexture(wantedRect, m_Texture, ScaleMode.ScaleToFit);
-
-            m_Position = PreviewGUI.EndScrollView();
-
-            if (!m_PreviewID.Empty() &&
+        if (!m_PreviewID.Empty() &&
                 VideoUtil.IsPreviewPlaying(m_PreviewID) &&
                 Event.current.type == EventType.Repaint)
-                GUIView.current.Repaint();
-        }
-
-        Texture GetAssetPreviewTexture()
-        {
-            Texture tex = null;
-            bool isLoadingAssetPreview = AssetPreview.IsLoadingAssetPreview(target.GetInstanceID());
-            tex = AssetPreview.GetAssetPreview(target);
-            if (!tex)
-            {
-                // We have a static preview it just hasn't been loaded yet. Repaint until we have it loaded.
-                if (isLoadingAssetPreview)
-                    GUIView.current.Repaint();
-                tex = AssetPreview.GetMiniThumbnail(target);
-            }
-            return tex;
-        }
-
-        internal override void OnHeaderIconGUI(Rect iconRect)
-        {
-            GUI.DrawTexture(iconRect, GetAssetPreviewTexture(), ScaleMode.StretchToFill);
-        }
-
-        public override string GetInfoString()
-        {
-            VideoClip clip = target as VideoClip;
-            var frameCount = clip.frameCount;
-            var frameRate = clip.frameRate;
-
-            var duration = frameRate > 0
-                ? TimeSpan.FromSeconds(frameCount / frameRate).ToString()
-                : new TimeSpan(0).ToString();
-
-            // TimeSpan uses 7 digits for fractional seconds.  Limit this to 3 digits.
-            if (duration.IndexOf('.') != -1)
-                duration = duration.Substring(0, duration.Length - 4);
-
-            string s = duration;
-            s += ", " + frameCount + " frames";
-            s += ", " + frameRate.ToString("F2", CultureInfo.InvariantCulture.NumberFormat) + " FPS";
-            s += ", " + clip.width + "x" + clip.height;
-            return s;
-        }
+            GUIView.current.Repaint();
     }
+
+    Texture GetAssetPreviewTexture()
+    {
+        Texture tex = null;
+        bool isLoadingAssetPreview = AssetPreview.IsLoadingAssetPreview(target.GetInstanceID());
+        tex = AssetPreview.GetAssetPreview(target);
+        if (!tex)
+        {
+            // We have a static preview it just hasn't been loaded yet. Repaint until we have it loaded.
+            if (isLoadingAssetPreview)
+                GUIView.current.Repaint();
+            tex = AssetPreview.GetMiniThumbnail(target);
+        }
+        return tex;
+    }
+
+    internal override void OnHeaderIconGUI(Rect iconRect)
+    {
+        GUI.DrawTexture(iconRect, GetAssetPreviewTexture(), ScaleMode.StretchToFill);
+    }
+
+    public override string GetInfoString()
+    {
+        VideoClip clip = target as VideoClip;
+        var frameCount = clip.frameCount;
+        var frameRate = clip.frameRate;
+
+        var duration = frameRate > 0
+                       ? TimeSpan.FromSeconds(frameCount / frameRate).ToString()
+                       : new TimeSpan(0).ToString();
+
+        // TimeSpan uses 7 digits for fractional seconds.  Limit this to 3 digits.
+        if (duration.IndexOf('.') != -1)
+            duration = duration.Substring(0, duration.Length - 4);
+
+        string s = duration;
+        s += ", " + frameCount + " frames";
+        s += ", " + frameRate.ToString("F2", CultureInfo.InvariantCulture.NumberFormat) + " FPS";
+        s += ", " + clip.width + "x" + clip.height;
+        return s;
+    }
+}
 }

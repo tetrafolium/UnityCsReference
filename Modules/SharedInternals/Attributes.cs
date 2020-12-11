@@ -8,126 +8,148 @@ using UnityEngine.Bindings;
 
 namespace UnityEngine.Scripting
 {
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Field | AttributeTargets.Struct | AttributeTargets.Property | AttributeTargets.Constructor | AttributeTargets.Interface | AttributeTargets.Enum, Inherited = false)]
-    [VisibleToOtherModules]
-    internal class UsedByNativeCodeAttribute : Attribute
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Field | AttributeTargets.Struct | AttributeTargets.Property | AttributeTargets.Constructor | AttributeTargets.Interface | AttributeTargets.Enum, Inherited = false)]
+[VisibleToOtherModules]
+internal class UsedByNativeCodeAttribute : Attribute
+{
+    public UsedByNativeCodeAttribute()
     {
-        public UsedByNativeCodeAttribute()
-        {
-        }
-
-        public UsedByNativeCodeAttribute(string name)
-        {
-            Name = name;
-        }
-
-        public string Name { get; set; }
     }
 
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Field | AttributeTargets.Struct | AttributeTargets.Property | AttributeTargets.Constructor | AttributeTargets.Interface | AttributeTargets.Enum, Inherited = false)]
-    [VisibleToOtherModules]
-    internal class RequiredByNativeCodeAttribute : Attribute
+    public UsedByNativeCodeAttribute(string name)
     {
-        public RequiredByNativeCodeAttribute()
-        {
-        }
-
-        public RequiredByNativeCodeAttribute(string name)
-        {
-            Name = name;
-        }
-
-        public RequiredByNativeCodeAttribute(bool optional)
-        {
-            Optional = optional;
-        }
-
-        public RequiredByNativeCodeAttribute(string name, bool optional)
-        {
-            Name = name;
-            Optional = optional;
-        }
-
-        public string Name { get; set; }
-        public bool Optional { get; set; }
-        public bool GenerateProxy { get; set; }
+        Name = name;
     }
+
+    public string Name {
+        get;
+        set;
+    }
+}
+
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Field | AttributeTargets.Struct | AttributeTargets.Property | AttributeTargets.Constructor | AttributeTargets.Interface | AttributeTargets.Enum, Inherited = false)]
+[VisibleToOtherModules]
+internal class RequiredByNativeCodeAttribute : Attribute
+{
+    public RequiredByNativeCodeAttribute()
+    {
+    }
+
+    public RequiredByNativeCodeAttribute(string name)
+    {
+        Name = name;
+    }
+
+    public RequiredByNativeCodeAttribute(bool optional)
+    {
+        Optional = optional;
+    }
+
+    public RequiredByNativeCodeAttribute(string name, bool optional)
+    {
+        Name = name;
+        Optional = optional;
+    }
+
+    public string Name {
+        get;
+        set;
+    }
+    public bool Optional {
+        get;
+        set;
+    }
+    public bool GenerateProxy {
+        get;
+        set;
+    }
+}
 }
 
 namespace UnityEngine
 {
-    [VisibleToOtherModules]
-    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-    internal sealed class AssetFileNameExtensionAttribute : Attribute
-    {
-        // the extension that should be given to assets of the decorated type when created from contexts that have limited information about the type
-        public string preferredExtension { get; }
-        // other extensions that assets of the decorated type might be given in special contexts
-        public IEnumerable<string> otherExtensions { get; }
-
-        public AssetFileNameExtensionAttribute(string preferredExtension, params string[] otherExtensions)
-        {
-            this.preferredExtension = preferredExtension;
-            this.otherExtensions = otherExtensions;
-        }
+[VisibleToOtherModules]
+[AttributeUsage(AttributeTargets.Class, Inherited = false)]
+internal sealed class AssetFileNameExtensionAttribute : Attribute
+{
+    // the extension that should be given to assets of the decorated type when created from contexts that have limited information about the type
+    public string preferredExtension {
+        get;
+    }
+    // other extensions that assets of the decorated type might be given in special contexts
+    public IEnumerable<string> otherExtensions {
+        get;
     }
 
-    [VisibleToOtherModules]
-    [System.AttributeUsage(System.AttributeTargets.Method)]
-    internal class ThreadAndSerializationSafeAttribute : System.Attribute
+    public AssetFileNameExtensionAttribute(string preferredExtension, params string[] otherExtensions)
     {
-        public ThreadAndSerializationSafeAttribute()
-        {
-        }
+        this.preferredExtension = preferredExtension;
+        this.otherExtensions = otherExtensions;
     }
+}
 
-
-    [System.AttributeUsage(System.AttributeTargets.Struct)]
-    [VisibleToOtherModules]
-    internal class IL2CPPStructAlignmentAttribute : System.Attribute
-    {
-        public int Align;
-        public IL2CPPStructAlignmentAttribute()
-        {
-            Align = 1;
-        }
-    }
-
-    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
-    [VisibleToOtherModules]
-    internal class WritableAttribute : Attribute
+[VisibleToOtherModules]
+[System.AttributeUsage(System.AttributeTargets.Method)]
+internal class ThreadAndSerializationSafeAttribute : System.Attribute
+{
+    public ThreadAndSerializationSafeAttribute()
     {
     }
+}
 
-    [AttributeUsage(AttributeTargets.Class)]
-    [VisibleToOtherModules]
-    internal class RejectDragAndDropMaterial : Attribute
+
+[System.AttributeUsage(System.AttributeTargets.Struct)]
+[VisibleToOtherModules]
+internal class IL2CPPStructAlignmentAttribute : System.Attribute
+{
+    public int Align;
+    public IL2CPPStructAlignmentAttribute()
     {
+        Align = 1;
+    }
+}
+
+[AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
+[VisibleToOtherModules]
+internal class WritableAttribute : Attribute
+{
+}
+
+[AttributeUsage(AttributeTargets.Class)]
+[VisibleToOtherModules]
+internal class RejectDragAndDropMaterial : Attribute
+{
+}
+
+[AttributeUsage(AttributeTargets.Assembly)]
+[VisibleToOtherModules]
+internal class UnityEngineModuleAssembly : Attribute
+{
+}
+
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, Inherited = false)]
+[VisibleToOtherModules]
+internal sealed class NativeClassAttribute : Attribute
+{
+    public string QualifiedNativeName {
+        get;
+        private set;
+    }
+    public string Declaration {
+        get;
+        private set;
     }
 
-    [AttributeUsage(AttributeTargets.Assembly)]
-    [VisibleToOtherModules]
-    internal class UnityEngineModuleAssembly : Attribute
+    public NativeClassAttribute(string qualifiedCppName)
     {
+        QualifiedNativeName = qualifiedCppName;
+        Declaration = "class " + qualifiedCppName;
     }
 
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, Inherited = false)]
-    [VisibleToOtherModules]
-    internal sealed class NativeClassAttribute : Attribute
+    public NativeClassAttribute(string qualifiedCppName, string declaration)
     {
-        public string QualifiedNativeName { get; private set; }
-        public string Declaration { get; private set; }
-
-        public NativeClassAttribute(string qualifiedCppName)
-        {
-            QualifiedNativeName = qualifiedCppName;
-            Declaration = "class " + qualifiedCppName;
-        }
-
-        public NativeClassAttribute(string qualifiedCppName, string declaration)
-        {
-            QualifiedNativeName = qualifiedCppName;
-            Declaration = declaration;
-        }
+        QualifiedNativeName = qualifiedCppName;
+        Declaration = declaration;
     }
+}
 }

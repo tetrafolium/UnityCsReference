@@ -10,13 +10,21 @@ using System.Runtime.InteropServices;
 
 namespace UnityEngine.Subsystems
 {
-    [NativeType(Header = "Modules/Subsystems/Example/ExampleSubsystemDescriptor.h")]
-    [UsedByNativeCode]
-    public class ExampleSubsystemDescriptor : IntegratedSubsystemDescriptor<ExampleSubsystem>
-    {
-        public extern bool supportsEditorMode { get; }
-        public extern bool disableBackbufferMSAA { get; }
-        public extern bool stereoscopicBackbuffer { get; }
-        public extern bool usePBufferEGL { get; }
+[NativeType(Header = "Modules/Subsystems/Example/ExampleSubsystemDescriptor.h")]
+[UsedByNativeCode]
+public class ExampleSubsystemDescriptor : IntegratedSubsystemDescriptor<ExampleSubsystem>
+{
+    public extern bool supportsEditorMode {
+        get;
     }
+    public extern bool disableBackbufferMSAA {
+        get;
+    }
+    public extern bool stereoscopicBackbuffer {
+        get;
+    }
+    public extern bool usePBufferEGL {
+        get;
+    }
+}
 }

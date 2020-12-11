@@ -4,9 +4,11 @@
 
 namespace UnityEngine
 {
-    public interface ISubsystemDescriptor
-    {
-        string id { get; }
-        ISubsystem Create();
+public interface ISubsystemDescriptor
+{
+    string id {
+        get;
     }
+    ISubsystem Create();
+}
 }

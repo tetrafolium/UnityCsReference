@@ -4,10 +4,10 @@
 
 namespace UnityEngine.SubsystemsImplementation
 {
-    public static partial class SubsystemDescriptorStore
-    {
+public static partial class SubsystemDescriptorStore
+{
 #pragma warning disable CS0618
-        internal static void RegisterDeprecatedDescriptor(SubsystemDescriptor descriptor) => RegisterDescriptor(descriptor, s_DeprecatedDescriptors);
+    internal static void RegisterDeprecatedDescriptor(SubsystemDescriptor descriptor) => RegisterDescriptor(descriptor, s_DeprecatedDescriptors);
 #pragma warning restore CS0618
-    }
+}
 }

@@ -9,37 +9,57 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine.Video
 {
-    [RequiredByNativeCode]
-    [NativeHeader("Modules/Video/Public/VideoClip.h")]
-    public sealed class VideoClip : Object
-    {
-        private VideoClip() {}
+[RequiredByNativeCode]
+[NativeHeader("Modules/Video/Public/VideoClip.h")]
+public sealed class VideoClip : Object
+{
+    private VideoClip() {}
 
-        public extern string originalPath { get; }
-
-        public extern ulong frameCount { get; }
-
-        public extern double frameRate { get; }
-
-        [NativeName("Duration")]
-        public extern double length { get; }
-
-        public extern uint width { get; }
-
-        public extern uint height { get; }
-
-        public extern uint pixelAspectRatioNumerator { get; }
-
-        public extern uint pixelAspectRatioDenominator { get; }
-
-        public extern bool sRGB { [NativeName("IssRGB")] get; }
-
-        public extern ushort audioTrackCount { get; }
-
-        public extern ushort GetAudioChannelCount(ushort audioTrackIdx);
-
-        public extern uint GetAudioSampleRate(ushort audioTrackIdx);
-
-        public extern string GetAudioLanguage(ushort audioTrackIdx);
+    public extern string originalPath {
+        get;
     }
+
+    public extern ulong frameCount {
+        get;
+    }
+
+    public extern double frameRate {
+        get;
+    }
+
+    [NativeName("Duration")]
+    public extern double length {
+        get;
+    }
+
+    public extern uint width {
+        get;
+    }
+
+    public extern uint height {
+        get;
+    }
+
+    public extern uint pixelAspectRatioNumerator {
+        get;
+    }
+
+    public extern uint pixelAspectRatioDenominator {
+        get;
+    }
+
+    public extern bool sRGB {
+        [NativeName("IssRGB")] get;
+    }
+
+    public extern ushort audioTrackCount {
+        get;
+    }
+
+    public extern ushort GetAudioChannelCount(ushort audioTrackIdx);
+
+    public extern uint GetAudioSampleRate(ushort audioTrackIdx);
+
+    public extern string GetAudioLanguage(ushort audioTrackIdx);
+}
 }

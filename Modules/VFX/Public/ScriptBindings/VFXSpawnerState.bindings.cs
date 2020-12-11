@@ -9,96 +9,127 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine.VFX
 {
-    public enum VFXSpawnerLoopState
+public enum VFXSpawnerLoopState
+{
+    Finished,
+    DelayingBeforeLoop,
+    Looping,
+    DelayingAfterLoop
+}
+
+[RequiredByNativeCode]
+[StructLayout(LayoutKind.Sequential)]
+[NativeType(Header = "Modules/VFX/Public/VFXSpawnerState.h")]
+public sealed class VFXSpawnerState : IDisposable
+{
+    private IntPtr m_Ptr;
+    private bool m_Owner;
+    internal VFXSpawnerState(IntPtr ptr, bool owner)
     {
-        Finished,
-        DelayingBeforeLoop,
-        Looping,
-        DelayingAfterLoop
+        m_Ptr = ptr;
+        m_Owner = owner;
+    }
+
+    extern static internal IntPtr Internal_Create();
+
+    [RequiredByNativeCode]
+    internal static VFXSpawnerState CreateSpawnerStateWrapper()
+    {
+        var spawnerState = new VFXSpawnerState(IntPtr.Zero, false);
+        return spawnerState;
     }
 
     [RequiredByNativeCode]
-    [StructLayout(LayoutKind.Sequential)]
-    [NativeType(Header = "Modules/VFX/Public/VFXSpawnerState.h")]
-    public sealed class VFXSpawnerState : IDisposable
+    internal void SetWrapValue(IntPtr ptr)
     {
-        private IntPtr m_Ptr;
-        private bool m_Owner;
-        internal VFXSpawnerState(IntPtr ptr, bool owner)
+        if (m_Owner)
         {
-            m_Ptr = ptr;
-            m_Owner = owner;
+            throw new Exception("VFXSpawnerState : SetWrapValue is reserved to CreateWrapper object");
         }
-
-        extern static internal IntPtr Internal_Create();
-
-        [RequiredByNativeCode]
-        internal static VFXSpawnerState CreateSpawnerStateWrapper()
-        {
-            var spawnerState = new VFXSpawnerState(IntPtr.Zero, false);
-            return spawnerState;
-        }
-
-        [RequiredByNativeCode]
-        internal void SetWrapValue(IntPtr ptr)
-        {
-            if (m_Owner)
-            {
-                throw new Exception("VFXSpawnerState : SetWrapValue is reserved to CreateWrapper object");
-            }
-            m_Ptr = ptr;
-        }
-
-        internal IntPtr GetPtr()
-        {
-            return m_Ptr;
-        }
-
-
-        private void Release()
-        {
-            if (m_Ptr != IntPtr.Zero && m_Owner)
-            {
-                Internal_Destroy(m_Ptr);
-            }
-            m_Ptr = IntPtr.Zero;
-        }
-
-        ~VFXSpawnerState()
-        {
-            Release();
-        }
-
-        public void Dispose()
-        {
-            Release();
-            GC.SuppressFinalize(this);
-        }
-
-        [NativeMethod(IsThreadSafe = true)]
-        extern static private void Internal_Destroy(IntPtr ptr);
-
-        public bool playing
-        {
-            get
-            {
-                return loopState == VFXSpawnerLoopState.Looping;
-            }
-            set
-            {
-                loopState = value ? VFXSpawnerLoopState.Looping : VFXSpawnerLoopState.Finished;
-            }
-        }
-        extern public bool newLoop { get; }
-        extern public VFXSpawnerLoopState loopState { get; set; }
-        extern public float spawnCount { get; set; }
-        extern public float deltaTime { get; set; }
-        extern public float totalTime { get; set; }
-        extern public float delayBeforeLoop { get; set; }
-        extern public float loopDuration { get; set; }
-        extern public float delayAfterLoop { get; set; }
-        extern public int loopIndex { get; set; }
-        extern public int loopCount { get; set; }
-        extern public VFXEventAttribute vfxEventAttribute { get; }
+        m_Ptr = ptr;
     }
+
+    internal IntPtr GetPtr()
+    {
+        return m_Ptr;
+    }
+
+
+    private void Release()
+    {
+        if (m_Ptr != IntPtr.Zero && m_Owner)
+        {
+            Internal_Destroy(m_Ptr);
+        }
+        m_Ptr = IntPtr.Zero;
+    }
+
+    ~VFXSpawnerState()
+    {
+        Release();
+    }
+
+    public void Dispose()
+    {
+        Release();
+        GC.SuppressFinalize(this);
+    }
+
+    [NativeMethod(IsThreadSafe = true)]
+    extern static private void Internal_Destroy(IntPtr ptr);
+
+    public bool playing
+    {
+        get
+        {
+            return loopState == VFXSpawnerLoopState.Looping;
+        }
+        set
+        {
+            loopState = value ? VFXSpawnerLoopState.Looping : VFXSpawnerLoopState.Finished;
+        }
+    }
+    extern public bool newLoop {
+        get;
+    }
+    extern public VFXSpawnerLoopState loopState {
+        get;
+        set;
+    }
+    extern public float spawnCount {
+        get;
+        set;
+    }
+    extern public float deltaTime {
+        get;
+        set;
+    }
+    extern public float totalTime {
+        get;
+        set;
+    }
+    extern public float delayBeforeLoop {
+        get;
+        set;
+    }
+    extern public float loopDuration {
+        get;
+        set;
+    }
+    extern public float delayAfterLoop {
+        get;
+        set;
+    }
+    extern public int loopIndex {
+        get;
+        set;
+    }
+    extern public int loopCount {
+        get;
+        set;
+    }
+    extern public VFXEventAttribute vfxEventAttribute {
+        get;
+    }
+}
 }

@@ -7,23 +7,23 @@ using UnityEngine.Bindings;
 
 namespace UnityEditor
 {
-    [StaticAccessor("UnityEditorAnalytics", StaticAccessorType.DoubleColon)]
-    [NativeHeader("Modules/UnityEditorAnalyticsEditor/UnityEditorAnalytics.h")]
-    internal static partial class UsabilityAnalytics
+[StaticAccessor("UnityEditorAnalytics", StaticAccessorType.DoubleColon)]
+[NativeHeader("Modules/UnityEditorAnalyticsEditor/UnityEditorAnalytics.h")]
+internal static partial class UsabilityAnalytics
+{
+    internal static void SendEvent(string subType, DateTime startTime, TimeSpan duration, bool isBlocking, object parameters)
     {
-        internal static void SendEvent(string subType, DateTime startTime, TimeSpan duration, bool isBlocking, object parameters)
-        {
-            if (startTime.Kind == DateTimeKind.Local)
-                throw new ArgumentException("Local DateTimes are not supported, use UTC instead.");
+        if (startTime.Kind == DateTimeKind.Local)
+            throw new ArgumentException("Local DateTimes are not supported, use UTC instead.");
 
-            SendUsabilityEventStatic(subType, startTime.Ticks, duration.Ticks, isBlocking, parameters);
-        }
-
-        extern private static void SendUsabilityEventStatic(
-            string subType,
-            Int64 startTimeTicks,
-            long durationTicks,
-            bool isBlocking,
-            object parameters);
+        SendUsabilityEventStatic(subType, startTime.Ticks, duration.Ticks, isBlocking, parameters);
     }
+
+    extern private static void SendUsabilityEventStatic(
+        string subType,
+        Int64 startTimeTicks,
+        long durationTicks,
+        bool isBlocking,
+        object parameters);
+}
 }

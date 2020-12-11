@@ -6,9 +6,9 @@ using UnityEditor;
 
 namespace UnityEditor.UIAutomation
 {
-    //TODO: Should this be part of the framework?
-    class TestEditorWindow : EditorWindow
-    {
-        public FakeCursor fakeCursor = new FakeCursor();
-    }
+//TODO: Should this be part of the framework?
+class TestEditorWindow : EditorWindow
+{
+    public FakeCursor fakeCursor = new FakeCursor();
+}
 }

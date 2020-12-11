@@ -6,20 +6,20 @@ using System;
 
 namespace UnityEngine.XR.WSA
 {
-    partial class HolographicSettings
+partial class HolographicSettings
+{
+    [Obsolete("Support for toggling latent frame presentation has been removed", true)]
+    static public void ActivateLatentFramePresentation(bool activated)
     {
-        [Obsolete("Support for toggling latent frame presentation has been removed", true)]
-        static public void ActivateLatentFramePresentation(bool activated)
-        {
-        }
+    }
 
-        [Obsolete("Support for toggling latent frame presentation has been removed, and IsLatentFramePresentation will always return true", false)]
-        static public bool IsLatentFramePresentation
+    [Obsolete("Support for toggling latent frame presentation has been removed, and IsLatentFramePresentation will always return true", false)]
+    static public bool IsLatentFramePresentation
+    {
+        get
         {
-            get
-            {
-                return true;
-            }
+            return true;
         }
     }
+}
 }

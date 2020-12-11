@@ -6,27 +6,27 @@ using System;
 
 namespace UnityEngine.Networking
 {
-    public static class UnityWebRequestTexture
+public static class UnityWebRequestTexture
+{
+    public static UnityWebRequest GetTexture(string uri)
     {
-        public static UnityWebRequest GetTexture(string uri)
-        {
-            return UnityWebRequestTexture.GetTexture(uri, false);
-        }
-
-        public static UnityWebRequest GetTexture(Uri uri)
-        {
-            return UnityWebRequestTexture.GetTexture(uri, false);
-        }
-
-        public static UnityWebRequest GetTexture(string uri, bool nonReadable)
-        {
-            return new UnityWebRequest(uri, UnityWebRequest.kHttpVerbGET, new DownloadHandlerTexture(!nonReadable), null);
-        }
-
-        public static UnityWebRequest GetTexture(Uri uri, bool nonReadable)
-        {
-            return new UnityWebRequest(uri, UnityWebRequest.kHttpVerbGET, new DownloadHandlerTexture(!nonReadable), null);
-        }
-
+        return UnityWebRequestTexture.GetTexture(uri, false);
     }
+
+    public static UnityWebRequest GetTexture(Uri uri)
+    {
+        return UnityWebRequestTexture.GetTexture(uri, false);
+    }
+
+    public static UnityWebRequest GetTexture(string uri, bool nonReadable)
+    {
+        return new UnityWebRequest(uri, UnityWebRequest.kHttpVerbGET, new DownloadHandlerTexture(!nonReadable), null);
+    }
+
+    public static UnityWebRequest GetTexture(Uri uri, bool nonReadable)
+    {
+        return new UnityWebRequest(uri, UnityWebRequest.kHttpVerbGET, new DownloadHandlerTexture(!nonReadable), null);
+    }
+
+}
 }

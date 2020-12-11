@@ -7,21 +7,25 @@ using UnityEditor;
 
 namespace UnityEditor
 {
-    [CustomEditor(typeof(SketchUpImporter))]
-    [CanEditMultipleObjects]
-    internal class SketchUpImporterEditor : ModelImporterEditor
+[CustomEditor(typeof(SketchUpImporter))]
+[CanEditMultipleObjects]
+internal class SketchUpImporterEditor : ModelImporterEditor
+{
+    public override void OnEnable()
     {
-        public override void OnEnable()
+        if (tabs == null)
         {
-            if (tabs == null)
-            {
-                tabs = new BaseAssetImporterTabUI[] { new SketchUpImporterModelEditor(this), new ModelImporterMaterialEditor(this) };
-                m_TabNames = new string[] {"Sketch Up", "Materials"};
-            }
-            base.OnEnable();
+            tabs = new BaseAssetImporterTabUI[] { new SketchUpImporterModelEditor(this), new ModelImporterMaterialEditor(this) };
+            m_TabNames = new string[] {"Sketch Up", "Materials"};
         }
-
-        // Only show the imported GameObject when the Model tab is active; not when the Animation tab is active
-        public override bool showImportedObject { get { return activeTab is SketchUpImporterModelEditor; } }
+        base.OnEnable();
     }
+
+    // Only show the imported GameObject when the Model tab is active; not when the Animation tab is active
+    public override bool showImportedObject {
+        get {
+            return activeTab is SketchUpImporterModelEditor;
+        }
+    }
+}
 }

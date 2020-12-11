@@ -11,184 +11,184 @@ using UnityEngine;
 
 namespace UnityEditor.XR
 {
-    internal static class VRDeviceTransition
+internal static class VRDeviceTransition
+{
+    class AssetCallbacks : AssetPostprocessor
     {
-        class AssetCallbacks : AssetPostprocessor
+        static bool s_EditorUpdateCalled = false;
+
+        static AssetCallbacks()
         {
-            static bool s_EditorUpdateCalled = false;
-
-            static AssetCallbacks()
+            if (!s_EditorUpdateCalled)
             {
-                if (!s_EditorUpdateCalled)
-                {
-                    EditorApplication.update += OnEditorUpdate;
-                }
-                EditorApplication.projectChanged += OnProjectChanged;
+                EditorApplication.update += OnEditorUpdate;
             }
-
-            static void OnEditorUpdate()
-            {
-                s_EditorUpdateCalled = true;
-                EditorApplication.update -= OnEditorUpdate;
-                HandleVRDeviceTransition();
-            }
-
-            static void OnProjectChanged()
-            {
-                HandleVRDeviceTransition();
-            }
+            EditorApplication.projectChanged += OnProjectChanged;
         }
 
-
-        static VRDeviceTransition()
+        static void OnEditorUpdate()
         {
-            SubsystemManager.beforeReloadSubsystems += SubsystemReloadStarted;
-            SubsystemManager.afterReloadSubsystems += SubsystemReloadCompleted;
-        }
-
-        static void SubsystemReloadStarted()
-        {
-        }
-
-        static void SubsystemReloadCompleted()
-        {
+            s_EditorUpdateCalled = true;
+            EditorApplication.update -= OnEditorUpdate;
             HandleVRDeviceTransition();
         }
 
-        static void HandleVRDeviceTransition()
+        static void OnProjectChanged()
         {
-            if (BuildUtilities.ShouldDisableLegacyVR())
-            {
-                DisableVRSettings();
-            }
-            else
-            {
-                EnableVRSettings();
-            }
+            HandleVRDeviceTransition();
         }
+    }
 
-        static Dictionary<BuildTargetGroup, IVRDeviceSettingsTransition> s_DeviceSettingsTransitionCache = new Dictionary<BuildTargetGroup, IVRDeviceSettingsTransition>();
 
-        static IVRDeviceSettingsTransition GetTypeWithBuildTargetGroupAttribute(BuildTargetGroup targetGroup)
+    static VRDeviceTransition()
+    {
+        SubsystemManager.beforeReloadSubsystems += SubsystemReloadStarted;
+        SubsystemManager.afterReloadSubsystems += SubsystemReloadCompleted;
+    }
+
+    static void SubsystemReloadStarted()
+    {
+    }
+
+    static void SubsystemReloadCompleted()
+    {
+        HandleVRDeviceTransition();
+    }
+
+    static void HandleVRDeviceTransition()
+    {
+        if (BuildUtilities.ShouldDisableLegacyVR())
         {
-            IVRDeviceSettingsTransition ret = null;
+            DisableVRSettings();
+        }
+        else
+        {
+            EnableVRSettings();
+        }
+    }
 
-            if (s_DeviceSettingsTransitionCache.TryGetValue(targetGroup, out ret))
-                return ret;
+    static Dictionary<BuildTargetGroup, IVRDeviceSettingsTransition> s_DeviceSettingsTransitionCache = new Dictionary<BuildTargetGroup, IVRDeviceSettingsTransition>();
 
-            foreach (var type in TypeCache.GetTypesDerivedFrom<IVRDeviceSettingsTransition>())
-            {
-                foreach (var att in type.GetCustomAttributes(typeof(VRDeviceSettingsTransitionTargetGroupAttribute), false))
-                {
-                    VRDeviceSettingsTransitionTargetGroupAttribute btgattr = att as VRDeviceSettingsTransitionTargetGroupAttribute;
-                    if (btgattr != null && btgattr.TargetGroup == targetGroup)
-                    {
-                        try
-                        {
-                            ret = Activator.CreateInstance(type) as IVRDeviceSettingsTransition;
-                        }
-                        catch (Exception ex)
-                        {
-                            String logMsg = String.Format("Error getting settings transition instance for buildtarget {0}.\n", targetGroup);
-                            logMsg += ex.Message;
+    static IVRDeviceSettingsTransition GetTypeWithBuildTargetGroupAttribute(BuildTargetGroup targetGroup)
+    {
+        IVRDeviceSettingsTransition ret = null;
 
-                            Debug.LogError(logMsg);
-                            ret = null;
-                        }
-                        if (ret != null)
-                        {
-                            s_DeviceSettingsTransitionCache.Add(targetGroup, ret);
-                        }
-                    }
-                }
-            }
-
+        if (s_DeviceSettingsTransitionCache.TryGetValue(targetGroup, out ret))
             return ret;
-        }
 
-        static void EnableVRSettings()
+        foreach (var type in TypeCache.GetTypesDerivedFrom<IVRDeviceSettingsTransition>())
         {
-            string storedGroupsTransitioned = "";
-            List<string> groupsTransitioned = new List<string>();
-
-            XRProjectSettings.SetBool(XRProjectSettings.KnownSettings.k_VRDeviceDisabled, false);
-            XRProjectSettings.SetBool(XRProjectSettings.KnownSettings.k_VRDeviceDidAlertUser, false);
-
-            if (XRProjectSettings.HasSetting(XRProjectSettings.KnownSettings.k_VRDeviceTransitionGroups))
+            foreach (var att in type.GetCustomAttributes(typeof(VRDeviceSettingsTransitionTargetGroupAttribute), false))
             {
-                storedGroupsTransitioned = XRProjectSettings.GetString(XRProjectSettings.KnownSettings.k_VRDeviceTransitionGroups);
-                groupsTransitioned.AddRange(storedGroupsTransitioned.Split(new char[] { ',' }));
-
-                foreach (var tg in groupsTransitioned)
+                VRDeviceSettingsTransitionTargetGroupAttribute btgattr = att as VRDeviceSettingsTransitionTargetGroupAttribute;
+                if (btgattr != null && btgattr.TargetGroup == targetGroup)
                 {
-                    BuildTargetGroup targetGroup;
-
                     try
                     {
-                        targetGroup = (BuildTargetGroup)Enum.Parse(typeof(BuildTargetGroup), tg);
+                        ret = Activator.CreateInstance(type) as IVRDeviceSettingsTransition;
                     }
                     catch (Exception ex)
                     {
-                        String logMsg = String.Format("Error converting build target group names {0}.\n", tg);
+                        String logMsg = String.Format("Error getting settings transition instance for buildtarget {0}.\n", targetGroup);
                         logMsg += ex.Message;
 
                         Debug.LogError(logMsg);
-                        continue;
+                        ret = null;
                     }
-
-                    Debug.LogFormat("No XR SDK Provider detected in project. Re-enabling VR Device settings for {0}", targetGroup);
-                    VREditor.SetVREnabledOnTargetGroup(targetGroup, true);
-                    IVRDeviceSettingsTransition settingsTransition = GetTypeWithBuildTargetGroupAttribute(targetGroup);
-                    if (settingsTransition != null)
+                    if (ret != null)
                     {
-                        settingsTransition.EnableSettings();
+                        s_DeviceSettingsTransitionCache.Add(targetGroup, ret);
                     }
                 }
-
-                XRProjectSettings.RemoveSetting(XRProjectSettings.KnownSettings.k_VRDeviceTransitionGroups);
             }
         }
 
-        static void DisableVRSettings()
+        return ret;
+    }
+
+    static void EnableVRSettings()
+    {
+        string storedGroupsTransitioned = "";
+        List<string> groupsTransitioned = new List<string>();
+
+        XRProjectSettings.SetBool(XRProjectSettings.KnownSettings.k_VRDeviceDisabled, false);
+        XRProjectSettings.SetBool(XRProjectSettings.KnownSettings.k_VRDeviceDidAlertUser, false);
+
+        if (XRProjectSettings.HasSetting(XRProjectSettings.KnownSettings.k_VRDeviceTransitionGroups))
         {
-            bool didTransitionVRDevice = false;
-            string storedGroupsTransitioned = "";
-            List<string> groupsTransitioned = new List<string>();
+            storedGroupsTransitioned = XRProjectSettings.GetString(XRProjectSettings.KnownSettings.k_VRDeviceTransitionGroups);
+            groupsTransitioned.AddRange(storedGroupsTransitioned.Split(new char[] { ',' }));
 
-            if (XRProjectSettings.HasSetting(XRProjectSettings.KnownSettings.k_VRDeviceTransitionGroups))
+            foreach (var tg in groupsTransitioned)
             {
-                XRProjectSettings.GetString(XRProjectSettings.KnownSettings.k_VRDeviceTransitionGroups, storedGroupsTransitioned);
-                groupsTransitioned.AddRange(storedGroupsTransitioned.Split(new char[] { ',' }));
-            }
+                BuildTargetGroup targetGroup;
 
-            foreach (BuildTargetGroup targetGroup in (BuildTargetGroup[])Enum.GetValues(typeof(BuildTargetGroup)))
-            {
-                string targetGroupString = targetGroup.ToString();
-                if (VREditor.GetVREnabledOnTargetGroup(targetGroup))
+                try
                 {
-                    Debug.LogFormat("XR SDK Provider detected in project. Disabling VR Device settings for {0}", targetGroup);
-                    IVRDeviceSettingsTransition settingsTransition = GetTypeWithBuildTargetGroupAttribute(targetGroup);
-                    if (settingsTransition != null)
-                    {
-                        settingsTransition.DisableSettings();
-                    }
+                    targetGroup = (BuildTargetGroup)Enum.Parse(typeof(BuildTargetGroup), tg);
+                }
+                catch (Exception ex)
+                {
+                    String logMsg = String.Format("Error converting build target group names {0}.\n", tg);
+                    logMsg += ex.Message;
 
-                    VREditor.SetVREnabledOnTargetGroup(targetGroup, false);
-                    didTransitionVRDevice = true;
-                    if (!groupsTransitioned.Contains(targetGroupString))
-                    {
-                        groupsTransitioned.Add(targetGroupString);
-                    }
+                    Debug.LogError(logMsg);
+                    continue;
+                }
+
+                Debug.LogFormat("No XR SDK Provider detected in project. Re-enabling VR Device settings for {0}", targetGroup);
+                VREditor.SetVREnabledOnTargetGroup(targetGroup, true);
+                IVRDeviceSettingsTransition settingsTransition = GetTypeWithBuildTargetGroupAttribute(targetGroup);
+                if (settingsTransition != null)
+                {
+                    settingsTransition.EnableSettings();
                 }
             }
 
-            if (didTransitionVRDevice)
-            {
-                storedGroupsTransitioned = String.Join(",", groupsTransitioned.ToArray());
-                XRProjectSettings.SetString(XRProjectSettings.KnownSettings.k_VRDeviceTransitionGroups, storedGroupsTransitioned);
-            }
-
-            XRProjectSettings.SetBool(XRProjectSettings.KnownSettings.k_VRDeviceDisabled, true);
+            XRProjectSettings.RemoveSetting(XRProjectSettings.KnownSettings.k_VRDeviceTransitionGroups);
         }
     }
+
+    static void DisableVRSettings()
+    {
+        bool didTransitionVRDevice = false;
+        string storedGroupsTransitioned = "";
+        List<string> groupsTransitioned = new List<string>();
+
+        if (XRProjectSettings.HasSetting(XRProjectSettings.KnownSettings.k_VRDeviceTransitionGroups))
+        {
+            XRProjectSettings.GetString(XRProjectSettings.KnownSettings.k_VRDeviceTransitionGroups, storedGroupsTransitioned);
+            groupsTransitioned.AddRange(storedGroupsTransitioned.Split(new char[] { ',' }));
+        }
+
+        foreach (BuildTargetGroup targetGroup in (BuildTargetGroup[])Enum.GetValues(typeof(BuildTargetGroup)))
+        {
+            string targetGroupString = targetGroup.ToString();
+            if (VREditor.GetVREnabledOnTargetGroup(targetGroup))
+            {
+                Debug.LogFormat("XR SDK Provider detected in project. Disabling VR Device settings for {0}", targetGroup);
+                IVRDeviceSettingsTransition settingsTransition = GetTypeWithBuildTargetGroupAttribute(targetGroup);
+                if (settingsTransition != null)
+                {
+                    settingsTransition.DisableSettings();
+                }
+
+                VREditor.SetVREnabledOnTargetGroup(targetGroup, false);
+                didTransitionVRDevice = true;
+                if (!groupsTransitioned.Contains(targetGroupString))
+                {
+                    groupsTransitioned.Add(targetGroupString);
+                }
+            }
+        }
+
+        if (didTransitionVRDevice)
+        {
+            storedGroupsTransitioned = String.Join(",", groupsTransitioned.ToArray());
+            XRProjectSettings.SetString(XRProjectSettings.KnownSettings.k_VRDeviceTransitionGroups, storedGroupsTransitioned);
+        }
+
+        XRProjectSettings.SetBool(XRProjectSettings.KnownSettings.k_VRDeviceDisabled, true);
+    }
+}
 }

@@ -6,21 +6,21 @@ using System.Collections.Generic;
 
 namespace UnityEditor.ShortcutManagement
 {
-    interface IDiscovery
-    {
-        IEnumerable<ShortcutEntry> GetAllShortcuts();
-    }
+interface IDiscovery
+{
+    IEnumerable<ShortcutEntry> GetAllShortcuts();
+}
 
-    interface IShortcutEntryDiscoveryInfo
-    {
-        ShortcutEntry GetShortcutEntry();
-        string GetFullMemberName();
-        int GetLineNumber();
-        string GetFilePath();
-    }
+interface IShortcutEntryDiscoveryInfo
+{
+    ShortcutEntry GetShortcutEntry();
+    string GetFullMemberName();
+    int GetLineNumber();
+    string GetFilePath();
+}
 
-    interface IDiscoveryShortcutProvider
-    {
-        IEnumerable<IShortcutEntryDiscoveryInfo> GetDefinedShortcuts();
-    }
+interface IDiscoveryShortcutProvider
+{
+    IEnumerable<IShortcutEntryDiscoveryInfo> GetDefinedShortcuts();
+}
 }

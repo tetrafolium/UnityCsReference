@@ -4,17 +4,17 @@
 
 namespace UnityEngine.XR
 {
-    // Matches UnityVRTrackedNodeType in IUnityVR.h
-    public enum XRNode
-    {
-        LeftEye,
-        RightEye,
-        CenterEye,
-        Head,
-        LeftHand,
-        RightHand,
-        GameController,
-        TrackingReference,
-        HardwareTracker
-    }
+// Matches UnityVRTrackedNodeType in IUnityVR.h
+public enum XRNode
+{
+    LeftEye,
+    RightEye,
+    CenterEye,
+    Head,
+    LeftHand,
+    RightHand,
+    GameController,
+    TrackingReference,
+    HardwareTracker
+}
 }

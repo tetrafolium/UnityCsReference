@@ -4,8 +4,10 @@
 
 namespace UnityEditor.ShortcutManagement
 {
-    interface IShortcutToolContext
-    {
-        bool active { get; }
+interface IShortcutToolContext
+{
+    bool active {
+        get;
     }
+}
 }
