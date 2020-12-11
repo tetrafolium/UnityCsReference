@@ -7,31 +7,31 @@ using UnityEngine.Experimental.TerrainAPI;
 
 namespace UnityEditor {
 internal class TerrainModificationProcessor : AssetModificationProcessor {
-  public static string[] OnWillSaveAssets(string[] paths) {
-    PaintContext.ApplyDelayedActions();
-    return paths;
-  }
+public static string[] OnWillSaveAssets(string[] paths) {
+	PaintContext.ApplyDelayedActions();
+	return paths;
+}
 }
 
 internal class TerrainEditorUtility {
-  internal static void RemoveTree(Terrain terrain, int index) {
-    TerrainData terrainData = terrain.terrainData;
-    if (terrainData == null)
-      return;
-    Undo.RegisterCompleteObjectUndo(terrainData, "Remove tree");
-    terrainData.RemoveTreePrototype(index);
-  }
+internal static void RemoveTree(Terrain terrain, int index) {
+	TerrainData terrainData = terrain.terrainData;
+	if (terrainData == null)
+		return;
+	Undo.RegisterCompleteObjectUndo(terrainData, "Remove tree");
+	terrainData.RemoveTreePrototype(index);
+}
 
-  internal static void RemoveDetail(Terrain terrain, int index) {
-    TerrainData terrainData = terrain.terrainData;
-    if (terrainData == null)
-      return;
-    Undo.RegisterCompleteObjectUndo(terrainData, "Remove detail object");
-    terrainData.RemoveDetailPrototype(index);
-  }
+internal static void RemoveDetail(Terrain terrain, int index) {
+	TerrainData terrainData = terrain.terrainData;
+	if (terrainData == null)
+		return;
+	Undo.RegisterCompleteObjectUndo(terrainData, "Remove detail object");
+	terrainData.RemoveDetailPrototype(index);
+}
 
-  internal static bool IsLODTreePrototype(GameObject prefab) {
-    return prefab != null && prefab.GetComponent<LODGroup>() != null;
-  }
+internal static bool IsLODTreePrototype(GameObject prefab) {
+	return prefab != null && prefab.GetComponent<LODGroup>() != null;
+}
 }
 } // namespace

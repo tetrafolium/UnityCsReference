@@ -13,17 +13,17 @@ using UnityEngine.Experimental.Rendering;
 using UnityEditor;
 
 namespace UnityEngine.Rendering {
-  namespace VirtualTexturingEditor {
-  [NativeHeader(
-      "Modules/VirtualTexturingEditor/ScriptBindings/VirtualTexturingEditor.bindings.h")]
-  [StaticAccessor("VirtualTexturingEditor::Building",
-                  StaticAccessorType.DoubleColon)]
-  internal static class Building {
-    extern internal static bool
-    IsPlatformSupportedForPlayer(BuildTarget platform);
-    extern internal static bool IsRenderAPISupported(GraphicsDeviceType type,
-                                                     BuildTarget platform,
-                                                     bool checkEditor);
-  }
-  }
+namespace VirtualTexturingEditor {
+[NativeHeader(
+	 "Modules/VirtualTexturingEditor/ScriptBindings/VirtualTexturingEditor.bindings.h")]
+[StaticAccessor("VirtualTexturingEditor::Building",
+                StaticAccessorType.DoubleColon)]
+internal static class Building {
+extern internal static bool
+IsPlatformSupportedForPlayer(BuildTarget platform);
+extern internal static bool IsRenderAPISupported(GraphicsDeviceType type,
+                                                 BuildTarget platform,
+                                                 bool checkEditor);
+}
+}
 }

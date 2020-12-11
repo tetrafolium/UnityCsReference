@@ -4,11 +4,11 @@
 
 using System;
 namespace UnityEditor.UIElements {
-  static partial class UIElementsTemplate {
-    public static string CreateCSharpTemplate(string cSharpName,
-                                              string uxmlName, string ussName,
-                                              string folder) {
-        string csTemplate = string.Format(@"using UnityEditor;
+static partial class UIElementsTemplate {
+public static string CreateCSharpTemplate(string cSharpName,
+                                          string uxmlName, string ussName,
+                                          string folder) {
+	string csTemplate = string.Format(@"using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
@@ -36,17 +36,17 @@ public class {0} : EditorWindow
               root.Add(label);
               ", cSharpName);
 
-                  if (uxmlName != String.Empty) {
-            csTemplate = csTemplate + string.Format(@"
+	if (uxmlName != String.Empty) {
+		csTemplate = csTemplate + string.Format(@"
 
         // Import UXML
         var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(""{0}/{1}.uxml"");
         VisualElement labelFromUXML = visualTree.Instantiate();
         root.Add(labelFromUXML);", folder, uxmlName);
-              }
+	}
 
-              if (ussName != String.Empty) {
-            csTemplate += string.Format(@"
+	if (ussName != String.Empty) {
+		csTemplate += string.Format(@"
 
         // A stylesheet can be added to a VisualElement.
         // The style will be applied to the VisualElement and all of its children.
@@ -54,13 +54,13 @@ public class {0} : EditorWindow
         VisualElement labelWithStyle = new Label(""Hello World! With Style"");
         labelWithStyle.styleSheets.Add(styleSheet);
         root.Add(labelWithStyle);", folder, ussName);
-              }
+	}
 
-              csTemplate += @"
+	csTemplate += @"
             }
           }
           ";
-              return csTemplate;
-        }
+	return csTemplate;
 }
-    }
+}
+}

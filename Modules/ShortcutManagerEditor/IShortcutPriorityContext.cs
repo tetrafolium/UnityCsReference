@@ -3,7 +3,9 @@
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
 namespace UnityEditor.ShortcutManagement {
-  interface IShortcutToolContext {
-    bool active { get; }
-  }
+interface IShortcutToolContext {
+bool active {
+	get;
+}
+}
 }

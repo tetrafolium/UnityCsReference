@@ -6,17 +6,17 @@ using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
 namespace UnityEngine.VFX {
-  [System.Serializable]
-  [RequiredByNativeCode]
-  public abstract class VFXSpawnerCallbacks : ScriptableObject {
-    public abstract void OnPlay(VFXSpawnerState state,
-                                VFXExpressionValues vfxValues,
-                                VisualEffect vfxComponent);
-    public abstract void OnUpdate(VFXSpawnerState state,
-                                  VFXExpressionValues vfxValues,
-                                  VisualEffect vfxComponent);
-    public abstract void OnStop(VFXSpawnerState state,
-                                VFXExpressionValues vfxValues,
-                                VisualEffect vfxComponent);
-  }
+[System.Serializable]
+[RequiredByNativeCode]
+public abstract class VFXSpawnerCallbacks : ScriptableObject {
+public abstract void OnPlay(VFXSpawnerState state,
+                            VFXExpressionValues vfxValues,
+                            VisualEffect vfxComponent);
+public abstract void OnUpdate(VFXSpawnerState state,
+                              VFXExpressionValues vfxValues,
+                              VisualEffect vfxComponent);
+public abstract void OnStop(VFXSpawnerState state,
+                            VFXExpressionValues vfxValues,
+                            VisualEffect vfxComponent);
+}
 }

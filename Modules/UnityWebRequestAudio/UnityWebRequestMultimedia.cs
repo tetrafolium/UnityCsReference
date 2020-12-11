@@ -5,30 +5,30 @@
 using System;
 
 namespace UnityEngine.Networking {
-  public static class UnityWebRequestMultimedia {
-    public static UnityWebRequest GetAudioClip(string uri,
-                                               AudioType audioType) {
-      return new UnityWebRequest(uri, UnityWebRequest.kHttpVerbGET,
-                                 new DownloadHandlerAudioClip(uri, audioType),
-                                 null);
-    }
+public static class UnityWebRequestMultimedia {
+public static UnityWebRequest GetAudioClip(string uri,
+                                           AudioType audioType) {
+	return new UnityWebRequest(uri, UnityWebRequest.kHttpVerbGET,
+	                           new DownloadHandlerAudioClip(uri, audioType),
+	                           null);
+}
 
-    public static UnityWebRequest GetAudioClip(Uri uri, AudioType audioType) {
-      return new UnityWebRequest(uri, UnityWebRequest.kHttpVerbGET,
-                                 new DownloadHandlerAudioClip(uri, audioType),
-                                 null);
-    }
+public static UnityWebRequest GetAudioClip(Uri uri, AudioType audioType) {
+	return new UnityWebRequest(uri, UnityWebRequest.kHttpVerbGET,
+	                           new DownloadHandlerAudioClip(uri, audioType),
+	                           null);
+}
 
-    [System.Obsolete("MovieTexture is deprecated. Use VideoPlayer instead.",
-                     true)]
-    public static UnityWebRequest GetMovieTexture(string uri) {
-      return null;
-    }
+[System.Obsolete("MovieTexture is deprecated. Use VideoPlayer instead.",
+                 true)]
+public static UnityWebRequest GetMovieTexture(string uri) {
+	return null;
+}
 
-    [System.Obsolete("MovieTexture is deprecated. Use VideoPlayer instead.",
-                     true)]
-    public static UnityWebRequest GetMovieTexture(Uri uri) {
-      return null;
-    }
-  }
+[System.Obsolete("MovieTexture is deprecated. Use VideoPlayer instead.",
+                 true)]
+public static UnityWebRequest GetMovieTexture(Uri uri) {
+	return null;
+}
+}
 }

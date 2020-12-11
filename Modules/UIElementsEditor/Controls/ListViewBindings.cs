@@ -10,299 +10,314 @@ using UnityEngine.UIElements;
 using System.Collections;
 
 namespace UnityEditor.UIElements {
-  class ListViewSerializedObjectBinding
-      : DefaultSerializedObjectBindingImplementation
-            .SerializedObjectBindingBase {
-    ListView listView {
-      get { return boundElement as ListView; }
-      set { boundElement = value; }
-    }
+class ListViewSerializedObjectBinding
+	: DefaultSerializedObjectBindingImplementation
+	.SerializedObjectBindingBase {
+ListView listView {
+	get { return boundElement as ListView; }
+	set { boundElement = value; }
+}
 
-    SerializedObjectList m_DataList;
+SerializedObjectList m_DataList;
 
-    SerializedProperty m_ArraySize;
-    int m_ListViewArraySize;
+SerializedProperty m_ArraySize;
+int m_ListViewArraySize;
 
-    public static void CreateBind(ListView listView,
-                                  DefaultSerializedObjectBindingImplementation
-                                      .SerializedObjectUpdateWrapper objWrapper,
-                                  SerializedProperty prop) {
-      var newBinding = new ListViewSerializedObjectBinding();
-      newBinding.SetBinding(listView, objWrapper, prop);
-    }
-
-    protected void SetBinding(ListView listView,
+public static void CreateBind(ListView listView,
                               DefaultSerializedObjectBindingImplementation
-                                  .SerializedObjectUpdateWrapper objWrapper,
+                              .SerializedObjectUpdateWrapper objWrapper,
                               SerializedProperty prop) {
-      boundObject = objWrapper;
-      boundProperty = prop;
-      boundPropertyPath = prop.propertyPath;
+	var newBinding = new ListViewSerializedObjectBinding();
+	newBinding.SetBinding(listView, objWrapper, prop);
+}
 
-      m_DataList =
-          new SerializedObjectList(prop, listView.showBoundCollectionSize);
-      m_ArraySize = m_DataList.ArraySize;
-      m_ListViewArraySize = m_DataList.ArraySize.intValue;
-      this.listView = listView;
+protected void SetBinding(ListView listView,
+                          DefaultSerializedObjectBindingImplementation
+                          .SerializedObjectUpdateWrapper objWrapper,
+                          SerializedProperty prop) {
+	boundObject = objWrapper;
+	boundProperty = prop;
+	boundPropertyPath = prop.propertyPath;
 
-      if (listView.makeItem == null) {
-        listView.makeItem = () => MakeListViewItem();
-      }
+	m_DataList =
+		new SerializedObjectList(prop, listView.showBoundCollectionSize);
+	m_ArraySize = m_DataList.ArraySize;
+	m_ListViewArraySize = m_DataList.ArraySize.intValue;
+	this.listView = listView;
 
-      if (listView.bindItem == null) {
-        listView.bindItem = (v, i) => BindListViewItem(v, i);
-      }
+	if (listView.makeItem == null) {
+		listView.makeItem = () => MakeListViewItem();
+	}
 
-      listView.itemsSource = m_DataList;
+	if (listView.bindItem == null) {
+		listView.bindItem = (v, i) => BindListViewItem(v, i);
+	}
 
-      listView.SetDragAndDropController(
-          new SerializedObjectListReorderableDragAndDropController(listView));
-    }
+	listView.itemsSource = m_DataList;
 
-    VisualElement MakeListViewItem() { return new PropertyField(); }
+	listView.SetDragAndDropController(
+		new SerializedObjectListReorderableDragAndDropController(listView));
+}
 
-    void BindListViewItem(VisualElement ve, int index) {
-      var field = ve as IBindable;
-      if (field == null) {
-        // we find the first Bindable
-        field = ve.Query().Where(x => x is IBindable).First() as IBindable;
-      }
+VisualElement MakeListViewItem() {
+	return new PropertyField();
+}
 
-      if (field == null) {
-        // can't default bind to anything!
-        throw new InvalidOperationException(
-            "Can't find BindableElement: please provide BindableVisualElements or provide your own Listview.bindItem callback");
-      }
+void BindListViewItem(VisualElement ve, int index) {
+	var field = ve as IBindable;
+	if (field == null) {
+		// we find the first Bindable
+		field = ve.Query().Where(x => x is IBindable).First() as IBindable;
+	}
 
-      object item = listView.itemsSource[index];
-      var itemProp = item as SerializedProperty;
-      field.bindingPath = itemProp.propertyPath;
-      BindingExtensions.bindingImpl.Bind(ve, boundObject, itemProp);
-    }
+	if (field == null) {
+		// can't default bind to anything!
+		throw new InvalidOperationException(
+			      "Can't find BindableElement: please provide BindableVisualElements or provide your own Listview.bindItem callback");
+	}
 
-    void UpdateArraySize() {
-      m_DataList.RefreshProperties(boundProperty,
-                                   listView.showBoundCollectionSize);
-      m_ArraySize = m_DataList.ArraySize;
-      m_ListViewArraySize = m_ArraySize.intValue;
-      listView.Refresh();
-    }
+	object item = listView.itemsSource[index];
+	var itemProp = item as SerializedProperty;
+	field.bindingPath = itemProp.propertyPath;
+	BindingExtensions.bindingImpl.Bind(ve, boundObject, itemProp);
+}
 
-    public override void Release() { isReleased = true; }
+void UpdateArraySize() {
+	m_DataList.RefreshProperties(boundProperty,
+	                             listView.showBoundCollectionSize);
+	m_ArraySize = m_DataList.ArraySize;
+	m_ListViewArraySize = m_ArraySize.intValue;
+	listView.Refresh();
+}
 
-    private UInt64 lastUpdatedRevision = 0xFFFFFFFFFFFFFFFF;
+public override void Release() {
+	isReleased = true;
+}
 
-    protected override void ResetCachedValues() {
-      m_ListViewArraySize = -1;
-      UpdateFieldIsAttached();
-    }
+private UInt64 lastUpdatedRevision = 0xFFFFFFFFFFFFFFFF;
 
-    public override void Update() {
-      if (isReleased) {
-        return;
-      }
+protected override void ResetCachedValues() {
+	m_ListViewArraySize = -1;
+	UpdateFieldIsAttached();
+}
 
-      try {
-        ResetUpdate();
-        isUpdating = true;
+public override void Update() {
+	if (isReleased) {
+		return;
+	}
 
-        if (boundObject.IsValid() && IsPropertyValid()) {
-          if (lastUpdatedRevision == boundObject.LastRevision) {
-            // nothing to do
-            return;
-          }
+	try {
+		ResetUpdate();
+		isUpdating = true;
 
-          lastUpdatedRevision = boundObject.LastRevision;
+		if (boundObject.IsValid() && IsPropertyValid()) {
+			if (lastUpdatedRevision == boundObject.LastRevision) {
+				// nothing to do
+				return;
+			}
 
-          int currentArraySize = m_ArraySize.intValue;
+			lastUpdatedRevision = boundObject.LastRevision;
 
-          if (currentArraySize != m_ListViewArraySize) {
-            UpdateArraySize();
-          }
-          return;
-        }
-      } catch (ArgumentNullException) {
-        // this can happen when serializedObject has been disposed of
-      } finally {
-        isUpdating = false;
-      }
-      // We unbind here
-      Release();
-    }
-  }
+			int currentArraySize = m_ArraySize.intValue;
 
-  class SerializedObjectListReorderableDragAndDropController
-      : ListViewReorderableDragAndDropController {
-    private SerializedObjectList objectList =>
-        m_ListView.itemsSource as SerializedObjectList;
-    public SerializedObjectListReorderableDragAndDropController(
-        ListView listView)
-        : base(listView) {}
+			if (currentArraySize != m_ListViewArraySize) {
+				UpdateArraySize();
+			}
+			return;
+		}
+	} catch (ArgumentNullException) {
+		// this can happen when serializedObject has been disposed of
+	} finally {
+		isUpdating = false;
+	}
+	// We unbind here
+	Release();
+}
+}
 
-    public override void OnDrop(IListDragAndDropArgs args) {
-      switch (args.dragAndDropPosition) {
-      case DragAndDropPosition.OutsideItems:
-      case DragAndDropPosition.BetweenItems:
-        // we're ok'
-        break;
-      default:
-        throw new ArgumentException(
-            $"{args.dragAndDropPosition} is not supported by {nameof(SerializedObjectListReorderableDragAndDropController)}.");
-      }
+class SerializedObjectListReorderableDragAndDropController
+	: ListViewReorderableDragAndDropController {
+private SerializedObjectList objectList =>
+m_ListView.itemsSource as SerializedObjectList;
+public SerializedObjectListReorderableDragAndDropController(
+	ListView listView)
+	: base(listView) {
+}
 
-      var array = objectList;
-      var selection = m_ListView.selectedIndices.OrderBy((i) => i).ToArray();
+public override void OnDrop(IListDragAndDropArgs args) {
+	switch (args.dragAndDropPosition) {
+	case DragAndDropPosition.OutsideItems:
+	case DragAndDropPosition.BetweenItems:
+		// we're ok'
+		break;
+	default:
+		throw new ArgumentException(
+			      $"{args.dragAndDropPosition} is not supported by {nameof(SerializedObjectListReorderableDragAndDropController)}.");
+	}
 
-      var baseOffset = 0;
-      if (m_ListView.showBoundCollectionSize) {
-        // we must offset everything by 1
-        baseOffset = -1;
-      }
+	var array = objectList;
+	var selection = m_ListView.selectedIndices.OrderBy((i) => i).ToArray();
 
-      var insertIndex = args.insertAtIndex + baseOffset;
+	var baseOffset = 0;
+	if (m_ListView.showBoundCollectionSize) {
+		// we must offset everything by 1
+		baseOffset = -1;
+	}
 
-      int insertIndexShift = 0;
-      int srcIndexShift = 0;
-      for (int i = selection.Length - 1; i >= 0; --i) {
-        var index = selection[i] + baseOffset;
+	var insertIndex = args.insertAtIndex + baseOffset;
 
-        if (index < 0)
-          continue;
+	int insertIndexShift = 0;
+	int srcIndexShift = 0;
+	for (int i = selection.Length - 1; i >= 0; --i) {
+		var index = selection[i] + baseOffset;
 
-        var newIndex = insertIndex - insertIndexShift;
+		if (index < 0)
+			continue;
 
-        if (index > insertIndex) {
-          index += srcIndexShift;
-          srcIndexShift++;
-        } else if (index < newIndex) {
-          insertIndexShift++;
-          newIndex--;
-        }
+		var newIndex = insertIndex - insertIndexShift;
 
-        array.Move(index, newIndex);
+		if (index > insertIndex) {
+			index += srcIndexShift;
+			srcIndexShift++;
+		} else if (index < newIndex) {
+			insertIndexShift++;
+			newIndex--;
+		}
 
-        onItemMoved?.Invoke(new ItemMoveArgs<object>{item = objectList[index],
-                                                     newIndex = newIndex,
-                                                     previousIndex = index});
-      }
+		array.Move(index, newIndex);
 
-      array.ApplyChanges();
+		onItemMoved?.Invoke(new ItemMoveArgs<object> {
+					item = objectList[index],
+					newIndex = newIndex,
+					previousIndex = index
+				});
+	}
 
-      var newSelection = new List<int>();
+	array.ApplyChanges();
 
-      for (int i = 0; i < selection.Length; ++i) {
-        newSelection.Add(insertIndex - insertIndexShift + i - baseOffset);
-      }
+	var newSelection = new List<int>();
 
-      m_ListView.SetSelectionWithoutNotify(newSelection);
-    }
-  }
+	for (int i = 0; i < selection.Length; ++i) {
+		newSelection.Add(insertIndex - insertIndexShift + i - baseOffset);
+	}
 
-  internal class SerializedObjectList : IList {
-    public SerializedProperty ArrayProperty {
-      get;
-      private set;
-    }
-    public SerializedProperty ArraySize {
-      get;
-      private set;
-    }
+	m_ListView.SetSelectionWithoutNotify(newSelection);
+}
+}
 
-    List<SerializedProperty> properties;
-    public SerializedObjectList(SerializedProperty parentProperty,
-                                bool includeArraySize) {
-      RefreshProperties(parentProperty, includeArraySize);
-    }
+internal class SerializedObjectList : IList {
+public SerializedProperty ArrayProperty {
+	get;
+	private set;
+}
+public SerializedProperty ArraySize {
+	get;
+	private set;
+}
 
-    public void RefreshProperties(SerializedProperty parentProperty,
-                                  bool includeArraySize) {
-      ArrayProperty = parentProperty.Copy();
-      var property = ArrayProperty.Copy();
-      var endProperty = property.GetEndProperty();
+List<SerializedProperty> properties;
+public SerializedObjectList(SerializedProperty parentProperty,
+                            bool includeArraySize) {
+	RefreshProperties(parentProperty, includeArraySize);
+}
 
-      property.NextVisible(true); // Expand the first child.
+public void RefreshProperties(SerializedProperty parentProperty,
+                              bool includeArraySize) {
+	ArrayProperty = parentProperty.Copy();
+	var property = ArrayProperty.Copy();
+	var endProperty = property.GetEndProperty();
 
-      properties = new List<SerializedProperty>();
-      do {
-        if (SerializedProperty.EqualContents(property, endProperty))
-          break;
+	property.NextVisible(true); // Expand the first child.
 
-        if (property.propertyType == SerializedPropertyType.ArraySize) {
-          ArraySize = property.Copy();
-          if (includeArraySize) {
-            properties.Add(ArraySize);
-          }
-        } else {
-          properties.Add(property.Copy());
-        }
-      } while (property.NextVisible(false)); // Never expand children.
+	properties = new List<SerializedProperty>();
+	do {
+		if (SerializedProperty.EqualContents(property, endProperty))
+			break;
 
-      if (ArraySize == null) {
-        throw new ArgumentException("Can't find array size property!");
-      }
-    }
+		if (property.propertyType == SerializedPropertyType.ArraySize) {
+			ArraySize = property.Copy();
+			if (includeArraySize) {
+				properties.Add(ArraySize);
+			}
+		} else {
+			properties.Add(property.Copy());
+		}
+	} while (property.NextVisible(false)); // Never expand children.
 
-    public object this[int index] {
-      get { return properties[index]; }
-      set { throw new NotImplementedException(); }
-    }
+	if (ArraySize == null) {
+		throw new ArgumentException("Can't find array size property!");
+	}
+}
 
-    public bool IsReadOnly => true;
+public object this[int index] {
+	get { return properties[index]; }
+	set { throw new NotImplementedException(); }
+}
 
-    public bool IsFixedSize => true;
+public bool IsReadOnly => true;
 
-    public int Count => properties.Count;
+public bool IsFixedSize => true;
 
-    bool ICollection.IsSynchronized {
-      get { return (properties as ICollection).IsSynchronized; }
-    }
+public int Count => properties.Count;
 
-    object ICollection.SyncRoot {
-      get { return (properties as ICollection).SyncRoot; }
-    }
+bool ICollection.IsSynchronized {
+	get { return (properties as ICollection).IsSynchronized; }
+}
 
-    public int Add(object value) { throw new NotImplementedException(); }
+object ICollection.SyncRoot {
+	get { return (properties as ICollection).SyncRoot; }
+}
 
-    public void Clear() { throw new NotImplementedException(); }
+public int Add(object value) {
+	throw new NotImplementedException();
+}
 
-    public bool Contains(object value) { return IndexOf(value) >= 0; }
+public void Clear() {
+	throw new NotImplementedException();
+}
 
-    public void CopyTo(Array array, int index) {
-      throw new NotImplementedException();
-    }
+public bool Contains(object value) {
+	return IndexOf(value) >= 0;
+}
 
-    public IEnumerator GetEnumerator() { return properties.GetEnumerator(); }
+public void CopyTo(Array array, int index) {
+	throw new NotImplementedException();
+}
 
-    public int IndexOf(object value) {
-      var prop = value as SerializedProperty;
+public IEnumerator GetEnumerator() {
+	return properties.GetEnumerator();
+}
 
-      if (value != null && prop != null) {
-        return properties.IndexOf(prop);
-      }
-      return -1;
-    }
+public int IndexOf(object value) {
+	var prop = value as SerializedProperty;
 
-    public void Move(int srcIndex, int destIndex) {
-      ArrayProperty.MoveArrayElement(srcIndex, destIndex);
-    }
+	if (value != null && prop != null) {
+		return properties.IndexOf(prop);
+	}
+	return -1;
+}
 
-    public void ApplyChanges() {
-      ArrayProperty.serializedObject.ApplyModifiedProperties();
-    }
+public void Move(int srcIndex, int destIndex) {
+	ArrayProperty.MoveArrayElement(srcIndex, destIndex);
+}
 
-    public void Insert(int index, object value) {
-      throw new NotImplementedException();
-    }
+public void ApplyChanges() {
+	ArrayProperty.serializedObject.ApplyModifiedProperties();
+}
 
-    public void Remove(object value) {
-      var index = IndexOf(value);
-      if (index >= 0) {
-        RemoveAt(index);
-      }
-    }
+public void Insert(int index, object value) {
+	throw new NotImplementedException();
+}
 
-    public void RemoveAt(int index) {
-      ArrayProperty.DeleteArrayElementAtIndex(index);
-    }
-  }
+public void Remove(object value) {
+	var index = IndexOf(value);
+	if (index >= 0) {
+		RemoveAt(index);
+	}
+}
+
+public void RemoveAt(int index) {
+	ArrayProperty.DeleteArrayElementAtIndex(index);
+}
+}
 }

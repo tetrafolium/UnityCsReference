@@ -5,15 +5,15 @@
 using System;
 using UnityEngine.Bindings;
 using UsedByNativeCodeAttribute =
-    UnityEngine.Scripting.UsedByNativeCodeAttribute;
+	      UnityEngine.Scripting.UsedByNativeCodeAttribute;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace UnityEngine.XR {
-  [NativeHeader("Modules/XR/XRPrefix.h")]
-  [NativeType(Header =
-                  "Modules/XR/Subsystems/Planes/XRMeshSubsystemDescriptor.h")]
-  [UsedByNativeCode]
-  public class XRMeshSubsystemDescriptor
-      : IntegratedSubsystemDescriptor<XRMeshSubsystem> {}
+[NativeHeader("Modules/XR/XRPrefix.h")]
+[NativeType(Header =
+		    "Modules/XR/Subsystems/Planes/XRMeshSubsystemDescriptor.h")]
+[UsedByNativeCode]
+public class XRMeshSubsystemDescriptor
+	: IntegratedSubsystemDescriptor<XRMeshSubsystem> {}
 }

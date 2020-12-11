@@ -8,34 +8,34 @@ using UnityEditor;
 using UnityEngine;
 
 namespace UnityEditor.UIAutomation {
-  class KeyInputOverTime {
-    float intervalBetweenKeyInput;
-    float nextEventTime;
+class KeyInputOverTime {
+float intervalBetweenKeyInput;
+float nextEventTime;
 
-    List<KeyCode> keyCodes;
-    int caretPosition;
+List<KeyCode> keyCodes;
+int caretPosition;
 
-    public void KeyInput(EditorWindow window, List<KeyCode> keyCodeInput,
-                         float seconds) {
-      keyCodes = keyCodeInput;
-      caretPosition = 0;
-      nextEventTime = 0;
-      intervalBetweenKeyInput = seconds / keyCodeInput.Count;
-    }
+public void KeyInput(EditorWindow window, List<KeyCode> keyCodeInput,
+                     float seconds) {
+	keyCodes = keyCodeInput;
+	caretPosition = 0;
+	nextEventTime = 0;
+	intervalBetweenKeyInput = seconds / keyCodeInput.Count;
+}
 
-    public bool Update(EditorWindow window) {
-      float curtime = (float) EditorApplication.timeSinceStartup;
-      if (curtime > nextEventTime) {
-        bool shouldContinue = caretPosition < keyCodes.Count;
-        if (caretPosition < keyCodes.Count) {
-          EventUtility.KeyDownAndUp(window, keyCodes[caretPosition]);
-          caretPosition++;
-          nextEventTime = curtime + intervalBetweenKeyInput;
-          window.Repaint();
-        }
-        return shouldContinue;
-      }
-      return true;
-    }
-  }
+public bool Update(EditorWindow window) {
+	float curtime = (float) EditorApplication.timeSinceStartup;
+	if (curtime > nextEventTime) {
+		bool shouldContinue = caretPosition < keyCodes.Count;
+		if (caretPosition < keyCodes.Count) {
+			EventUtility.KeyDownAndUp(window, keyCodes[caretPosition]);
+			caretPosition++;
+			nextEventTime = curtime + intervalBetweenKeyInput;
+			window.Repaint();
+		}
+		return shouldContinue;
+	}
+	return true;
+}
+}
 }

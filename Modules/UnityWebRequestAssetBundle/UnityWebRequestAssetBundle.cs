@@ -5,86 +5,86 @@
 using System;
 
 namespace UnityEngine.Networking {
-  public static class UnityWebRequestAssetBundle {
-    public static UnityWebRequest GetAssetBundle(string uri) {
-      return GetAssetBundle(uri, 0);
-    }
+public static class UnityWebRequestAssetBundle {
+public static UnityWebRequest GetAssetBundle(string uri) {
+	return GetAssetBundle(uri, 0);
+}
 
-    public static UnityWebRequest GetAssetBundle(Uri uri) {
-      return GetAssetBundle(uri, 0);
-    }
+public static UnityWebRequest GetAssetBundle(Uri uri) {
+	return GetAssetBundle(uri, 0);
+}
 
-    public static UnityWebRequest GetAssetBundle(string uri, uint crc) {
-      UnityWebRequest request =
-          new UnityWebRequest(uri, UnityWebRequest.kHttpVerbGET,
-                              new DownloadHandlerAssetBundle(uri, crc), null);
+public static UnityWebRequest GetAssetBundle(string uri, uint crc) {
+	UnityWebRequest request =
+		new UnityWebRequest(uri, UnityWebRequest.kHttpVerbGET,
+		                    new DownloadHandlerAssetBundle(uri, crc), null);
 
-      return request;
-    }
+	return request;
+}
 
-    public static UnityWebRequest GetAssetBundle(Uri uri, uint crc) {
-      UnityWebRequest request = new UnityWebRequest(
-          uri, UnityWebRequest.kHttpVerbGET,
-          new DownloadHandlerAssetBundle(uri.AbsoluteUri, crc), null);
+public static UnityWebRequest GetAssetBundle(Uri uri, uint crc) {
+	UnityWebRequest request = new UnityWebRequest(
+		uri, UnityWebRequest.kHttpVerbGET,
+		new DownloadHandlerAssetBundle(uri.AbsoluteUri, crc), null);
 
-      return request;
-    }
+	return request;
+}
 
-    public static UnityWebRequest GetAssetBundle(string uri, uint version,
-                                                 uint crc) {
-      UnityWebRequest request = new UnityWebRequest(
-          uri, UnityWebRequest.kHttpVerbGET,
-          new DownloadHandlerAssetBundle(uri, version, crc), null);
+public static UnityWebRequest GetAssetBundle(string uri, uint version,
+                                             uint crc) {
+	UnityWebRequest request = new UnityWebRequest(
+		uri, UnityWebRequest.kHttpVerbGET,
+		new DownloadHandlerAssetBundle(uri, version, crc), null);
 
-      return request;
-    }
+	return request;
+}
 
-    public static UnityWebRequest GetAssetBundle(Uri uri, uint version,
-                                                 uint crc) {
-      UnityWebRequest request = new UnityWebRequest(
-          uri, UnityWebRequest.kHttpVerbGET,
-          new DownloadHandlerAssetBundle(uri.AbsoluteUri, version, crc), null);
+public static UnityWebRequest GetAssetBundle(Uri uri, uint version,
+                                             uint crc) {
+	UnityWebRequest request = new UnityWebRequest(
+		uri, UnityWebRequest.kHttpVerbGET,
+		new DownloadHandlerAssetBundle(uri.AbsoluteUri, version, crc), null);
 
-      return request;
-    }
+	return request;
+}
 
-    public static UnityWebRequest GetAssetBundle(string uri, Hash128 hash,
-                                                 uint crc = 0) {
-      UnityWebRequest request = new UnityWebRequest(
-          uri, UnityWebRequest.kHttpVerbGET,
-          new DownloadHandlerAssetBundle(uri, hash, crc), null);
+public static UnityWebRequest GetAssetBundle(string uri, Hash128 hash,
+                                             uint crc = 0) {
+	UnityWebRequest request = new UnityWebRequest(
+		uri, UnityWebRequest.kHttpVerbGET,
+		new DownloadHandlerAssetBundle(uri, hash, crc), null);
 
-      return request;
-    }
+	return request;
+}
 
-    public static UnityWebRequest GetAssetBundle(Uri uri, Hash128 hash,
-                                                 uint crc = 0) {
-      UnityWebRequest request = new UnityWebRequest(
-          uri, UnityWebRequest.kHttpVerbGET,
-          new DownloadHandlerAssetBundle(uri.AbsoluteUri, hash, crc), null);
+public static UnityWebRequest GetAssetBundle(Uri uri, Hash128 hash,
+                                             uint crc = 0) {
+	UnityWebRequest request = new UnityWebRequest(
+		uri, UnityWebRequest.kHttpVerbGET,
+		new DownloadHandlerAssetBundle(uri.AbsoluteUri, hash, crc), null);
 
-      return request;
-    }
+	return request;
+}
 
-    public static UnityWebRequest
-    GetAssetBundle(string uri, CachedAssetBundle cachedAssetBundle,
-                   uint crc = 0) {
-      UnityWebRequest request = new UnityWebRequest(
-          uri, UnityWebRequest.kHttpVerbGET,
-          new DownloadHandlerAssetBundle(uri, cachedAssetBundle, crc), null);
+public static UnityWebRequest
+GetAssetBundle(string uri, CachedAssetBundle cachedAssetBundle,
+               uint crc = 0) {
+	UnityWebRequest request = new UnityWebRequest(
+		uri, UnityWebRequest.kHttpVerbGET,
+		new DownloadHandlerAssetBundle(uri, cachedAssetBundle, crc), null);
 
-      return request;
-    }
+	return request;
+}
 
-    public static UnityWebRequest
-    GetAssetBundle(Uri uri, CachedAssetBundle cachedAssetBundle, uint crc = 0) {
-      UnityWebRequest request =
-          new UnityWebRequest(uri, UnityWebRequest.kHttpVerbGET,
-                              new DownloadHandlerAssetBundle(
-                                  uri.AbsoluteUri, cachedAssetBundle, crc),
-                              null);
+public static UnityWebRequest
+GetAssetBundle(Uri uri, CachedAssetBundle cachedAssetBundle, uint crc = 0) {
+	UnityWebRequest request =
+		new UnityWebRequest(uri, UnityWebRequest.kHttpVerbGET,
+		                    new DownloadHandlerAssetBundle(
+					    uri.AbsoluteUri, cachedAssetBundle, crc),
+		                    null);
 
-      return request;
-    }
-  }
+	return request;
+}
+}
 }

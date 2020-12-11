@@ -7,10 +7,10 @@ using System.Collections.Generic;
 using UnityEditor.ShortcutManagement;
 
 interface IConflictResolver {
-  void ResolveConflict(IEnumerable<KeyCombination> keyCombinationSequence,
-                       IEnumerable<ShortcutEntry> entries);
-  void Cancel();
-  void ExecuteOnce(ShortcutEntry entry);
-  void ExecuteAlways(ShortcutEntry entry);
-  void GoToShortcutManagerConflictCategory();
+void ResolveConflict(IEnumerable<KeyCombination> keyCombinationSequence,
+                     IEnumerable<ShortcutEntry> entries);
+void Cancel();
+void ExecuteOnce(ShortcutEntry entry);
+void ExecuteAlways(ShortcutEntry entry);
+void GoToShortcutManagerConflictCategory();
 }

@@ -9,35 +9,35 @@ using Object = UnityEngine.Object;
 
 namespace UnityEngine {
 public interface ICanvasRaycastFilter {
-  bool IsRaycastLocationValid(Vector2 sp, Camera eventCamera);
+bool IsRaycastLocationValid(Vector2 sp, Camera eventCamera);
 }
 
 [NativeClass("UI::CanvasGroup"), NativeHeader("Modules/UI/CanvasGroup.h")]
 public sealed class CanvasGroup : Behaviour,
-                                  ICanvasRaycastFilter {
-  [NativeProperty("Alpha", false, TargetType.Function)]
-  public extern float alpha {
-    get;
-    set;
-  }
-  [NativeProperty("Interactable", false, TargetType.Function)]
-  public extern bool interactable {
-    get;
-    set;
-  }
-  [NativeProperty("BlocksRaycasts", false, TargetType.Function)]
-  public extern bool blocksRaycasts {
-    get;
-    set;
-  }
-  [NativeProperty("IgnoreParentGroups", false, TargetType.Function)]
-  public extern bool ignoreParentGroups {
-    get;
-    set;
-  }
+	                          ICanvasRaycastFilter {
+[NativeProperty("Alpha", false, TargetType.Function)]
+public extern float alpha {
+	get;
+	set;
+}
+[NativeProperty("Interactable", false, TargetType.Function)]
+public extern bool interactable {
+	get;
+	set;
+}
+[NativeProperty("BlocksRaycasts", false, TargetType.Function)]
+public extern bool blocksRaycasts {
+	get;
+	set;
+}
+[NativeProperty("IgnoreParentGroups", false, TargetType.Function)]
+public extern bool ignoreParentGroups {
+	get;
+	set;
+}
 
-  public bool IsRaycastLocationValid(Vector2 sp, Camera eventCamera) {
-    return blocksRaycasts;
-  }
+public bool IsRaycastLocationValid(Vector2 sp, Camera eventCamera) {
+	return blocksRaycasts;
+}
 }
 }

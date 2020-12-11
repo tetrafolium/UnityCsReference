@@ -5,6 +5,6 @@
 using System;
 
 namespace UnityEditor.ShortcutManagement {
-  [AttributeUsage(AttributeTargets.Class)]
-  class PriorityContextAttribute : Attribute {}
+[AttributeUsage(AttributeTargets.Class)]
+class PriorityContextAttribute : Attribute {}
 }

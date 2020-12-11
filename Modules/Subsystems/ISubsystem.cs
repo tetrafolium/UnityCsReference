@@ -4,10 +4,12 @@
 
 namespace UnityEngine {
 public interface ISubsystem {
-  bool running { get; }
+bool running {
+	get;
+}
 
-  void Start();
-  void Stop();
-  void Destroy();
+void Start();
+void Stop();
+void Destroy();
 }
 }

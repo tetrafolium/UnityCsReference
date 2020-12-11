@@ -11,11 +11,11 @@ using UnityEngine.Rendering;
 using UnityEngine.Scripting;
 
 namespace UnityEditor.VFX {
-  [NativeHeader("Modules/VFXEditor/Public/VisualEffectTest.h")]
-  internal static class VisualEffectTest {
-    [FreeFunction(
-        Name =
-            "VisualEffectTest::DebugCopyBufferComputeTest")] extern public static bool
-    DebugCopyBufferComputeTest();
-  }
+[NativeHeader("Modules/VFXEditor/Public/VisualEffectTest.h")]
+internal static class VisualEffectTest {
+[FreeFunction(
+	 Name =
+		 "VisualEffectTest::DebugCopyBufferComputeTest")] extern public static bool
+DebugCopyBufferComputeTest();
+}
 }

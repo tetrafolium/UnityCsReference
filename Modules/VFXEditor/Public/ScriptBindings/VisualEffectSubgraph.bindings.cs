@@ -8,31 +8,35 @@ using UnityEngine.Scripting;
 using UnityEngine.VFX;
 
 namespace UnityEditor.VFX {
-  [UsedByNativeCode]
-  [NativeHeader("Modules/VFXEditor/Public/VisualEffectSubgraph.h")]
-  [NativeHeader("VFXScriptingClasses.h")]
-  internal abstract class VisualEffectSubgraph : VisualEffectObject {}
+[UsedByNativeCode]
+[NativeHeader("Modules/VFXEditor/Public/VisualEffectSubgraph.h")]
+[NativeHeader("VFXScriptingClasses.h")]
+internal abstract class VisualEffectSubgraph : VisualEffectObject {}
 
-  [UsedByNativeCode]
-  [NativeHeader("Modules/VFXEditor/Public/VisualEffectSubgraph.h")]
-  [NativeHeader("VFXScriptingClasses.h")]
-  internal class VisualEffectSubgraphOperator : VisualEffectSubgraph {
-    public const string Extension = ".vfxoperator";
+[UsedByNativeCode]
+[NativeHeader("Modules/VFXEditor/Public/VisualEffectSubgraph.h")]
+[NativeHeader("VFXScriptingClasses.h")]
+internal class VisualEffectSubgraphOperator : VisualEffectSubgraph {
+public const string Extension = ".vfxoperator";
 
-    public VisualEffectSubgraphOperator() { CreateVisualEffectSubgraph(this); }
+public VisualEffectSubgraphOperator() {
+	CreateVisualEffectSubgraph(this);
+}
 
-    private static extern void CreateVisualEffectSubgraph(
-        [ Writable ] VisualEffectSubgraphOperator subGraph);
-  }
+private static extern void CreateVisualEffectSubgraph(
+	[ Writable ] VisualEffectSubgraphOperator subGraph);
+}
 
-  [UsedByNativeCode]
-  [NativeHeader("Modules/VFXEditor/Public/VisualEffectSubgraph.h")]
-  [NativeHeader("VFXScriptingClasses.h")]
-  internal class VisualEffectSubgraphBlock : VisualEffectSubgraph {
-    public const string Extension = ".vfxblock";
-    public VisualEffectSubgraphBlock() { CreateVisualEffectSubgraph(this); }
+[UsedByNativeCode]
+[NativeHeader("Modules/VFXEditor/Public/VisualEffectSubgraph.h")]
+[NativeHeader("VFXScriptingClasses.h")]
+internal class VisualEffectSubgraphBlock : VisualEffectSubgraph {
+public const string Extension = ".vfxblock";
+public VisualEffectSubgraphBlock() {
+	CreateVisualEffectSubgraph(this);
+}
 
-    private static extern void
-    CreateVisualEffectSubgraph([ Writable ] VisualEffectSubgraphBlock subGraph);
-  }
+private static extern void
+CreateVisualEffectSubgraph([ Writable ] VisualEffectSubgraphBlock subGraph);
+}
 }

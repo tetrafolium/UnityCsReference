@@ -6,13 +6,13 @@ using UnityEngine;
 using UnityEngine.Bindings;
 
 namespace UnityEditor.TextCore.LowLevel {
-  [NativeHeader(
-      "Modules/TextCoreEditor/Native/FontEngine/FontEngineEditorUtilities.h")]
-  internal sealed class FontEngineEditorUtilities {
-    [NativeMethod(
-        Name = "TextCore::FontEngineEditorUtilities::SetAtlasTextureIsReadable",
-        IsFreeFunction = true)]
-    internal extern static void SetAtlasTextureIsReadable(Texture2D texture,
-                                                          bool isReadable);
-  }
+[NativeHeader(
+	 "Modules/TextCoreEditor/Native/FontEngine/FontEngineEditorUtilities.h")]
+internal sealed class FontEngineEditorUtilities {
+[NativeMethod(
+	 Name = "TextCore::FontEngineEditorUtilities::SetAtlasTextureIsReadable",
+	 IsFreeFunction = true)]
+internal extern static void SetAtlasTextureIsReadable(Texture2D texture,
+                                                      bool isReadable);
+}
 }

@@ -8,35 +8,39 @@ using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
 namespace UnityEngine.Networking {
-  [StructLayout(LayoutKind.Sequential)]
-  [NativeHeader(
-      "Modules/UnityWebRequest/Public/CertificateHandler/CertificateHandlerScript.h")]
-  public class CertificateHandler : IDisposable {
-    [System.NonSerialized]
-    internal IntPtr m_Ptr;
+[StructLayout(LayoutKind.Sequential)]
+[NativeHeader(
+	 "Modules/UnityWebRequest/Public/CertificateHandler/CertificateHandlerScript.h")]
+public class CertificateHandler : IDisposable {
+[System.NonSerialized]
+internal IntPtr m_Ptr;
 
-    extern private static IntPtr Create(CertificateHandler obj);
+extern private static IntPtr Create(CertificateHandler obj);
 
-    [NativeMethod(IsThreadSafe = true)] extern private void Release();
+[NativeMethod(IsThreadSafe = true)] extern private void Release();
 
-    protected CertificateHandler() { m_Ptr = Create(this); }
+protected CertificateHandler() {
+	m_Ptr = Create(this);
+}
 
-    ~CertificateHandler() { Dispose(); }
+~CertificateHandler() {
+	Dispose();
+}
 
-    protected virtual bool ValidateCertificate(byte[] certificateData) {
-      return false;
-    }
+protected virtual bool ValidateCertificate(byte[] certificateData) {
+	return false;
+}
 
-    [RequiredByNativeCode]
-    internal bool ValidateCertificateNative(byte[] certificateData) {
-      return ValidateCertificate(certificateData);
-    }
+[RequiredByNativeCode]
+internal bool ValidateCertificateNative(byte[] certificateData) {
+	return ValidateCertificate(certificateData);
+}
 
-    public void Dispose() {
-      if (m_Ptr != IntPtr.Zero) {
-        Release();
-        m_Ptr = IntPtr.Zero;
-      }
-    }
-  }
+public void Dispose() {
+	if (m_Ptr != IntPtr.Zero) {
+		Release();
+		m_Ptr = IntPtr.Zero;
+	}
+}
+}
 }

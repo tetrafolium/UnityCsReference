@@ -9,19 +9,19 @@ using UnityEngine.Scripting;
 using Unity.Profiling;
 
 namespace UnityEngine.UIElements {
-  // This is the required interface to UIElementsUtility for Runtime game
-  // components.
-  [NativeHeader("Modules/UIElementsNative/UIElementsRuntimeUtilityNative.h")]
-  [VisibleToOtherModules("Unity.UIElements")]
-  internal static class UIElementsRuntimeUtilityNative {
-    internal static Action RepaintOverlayPanelsCallback;
+// This is the required interface to UIElementsUtility for Runtime game
+// components.
+[NativeHeader("Modules/UIElementsNative/UIElementsRuntimeUtilityNative.h")]
+[VisibleToOtherModules("Unity.UIElements")]
+internal static class UIElementsRuntimeUtilityNative {
+internal static Action RepaintOverlayPanelsCallback;
 
-    [RequiredByNativeCode]
-    public static void RepaintOverlayPanels() {
-      RepaintOverlayPanelsCallback?.Invoke();
-    }
+[RequiredByNativeCode]
+public static void RepaintOverlayPanels() {
+	RepaintOverlayPanelsCallback?.Invoke();
+}
 
-    public extern static void RegisterPlayerloopCallback();
-    public extern static void UnregisterPlayerloopCallback();
-  }
+public extern static void RegisterPlayerloopCallback();
+public extern static void UnregisterPlayerloopCallback();
+}
 }

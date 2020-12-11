@@ -11,214 +11,222 @@ using Mono.Cecil.Cil;
 using UnityEngine;
 
 namespace UnityEditor.ShortcutManagement {
-  class ShortcutAttributeDiscoveryProvider : IDiscoveryShortcutProvider {
-    public IEnumerable<IShortcutEntryDiscoveryInfo> GetDefinedShortcuts() {
-      const BindingFlags staticMethodsBindings =
-          BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
-      var methods =
-          EditorAssemblies.GetAllMethodsWithAttribute<ShortcutBaseAttribute>(
-              staticMethodsBindings);
+class ShortcutAttributeDiscoveryProvider : IDiscoveryShortcutProvider {
+public IEnumerable<IShortcutEntryDiscoveryInfo> GetDefinedShortcuts() {
+	const BindingFlags staticMethodsBindings =
+		BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+	var methods =
+		EditorAssemblies.GetAllMethodsWithAttribute<ShortcutBaseAttribute>(
+			staticMethodsBindings);
 
-      var results = new List<IShortcutEntryDiscoveryInfo>(methods.Count());
-      foreach (var methodInfo in methods) {
-        var attributes =
-            (ShortcutBaseAttribute[]) methodInfo.GetCustomAttributes(
-                typeof(ShortcutBaseAttribute), true);
-        foreach (var attribute in attributes) {
-          var discoveredAttributeEntry =
-              new ShortcutAttributeEntryInfo(methodInfo, attribute);
-          results.Add(discoveredAttributeEntry);
-        }
-      }
+	var results = new List<IShortcutEntryDiscoveryInfo>(methods.Count());
+	foreach (var methodInfo in methods) {
+		var attributes =
+			(ShortcutBaseAttribute[]) methodInfo.GetCustomAttributes(
+				typeof(ShortcutBaseAttribute), true);
+		foreach (var attribute in attributes) {
+			var discoveredAttributeEntry =
+				new ShortcutAttributeEntryInfo(methodInfo, attribute);
+			results.Add(discoveredAttributeEntry);
+		}
+	}
 
-      return results;
-    }
-  }
+	return results;
+}
+}
 
-  class ShortcutMenuItemDiscoveryProvider : IDiscoveryShortcutProvider {
-    public IEnumerable<IShortcutEntryDiscoveryInfo> GetDefinedShortcuts() {
-      var entries = new List<IShortcutEntryDiscoveryInfo>();
-      var names = new List<string>();
-      var defaultShortcuts = new List<string>();
-      Menu.GetMenuItemDefaultShortcuts(names, defaultShortcuts);
-      entries.Capacity += names.Count;
+class ShortcutMenuItemDiscoveryProvider : IDiscoveryShortcutProvider {
+public IEnumerable<IShortcutEntryDiscoveryInfo> GetDefinedShortcuts() {
+	var entries = new List<IShortcutEntryDiscoveryInfo>();
+	var names = new List<string>();
+	var defaultShortcuts = new List<string>();
+	Menu.GetMenuItemDefaultShortcuts(names, defaultShortcuts);
+	entries.Capacity += names.Count;
 
-      for (var index = 0; index < names.Count; ++index) {
-        var keys = new List<KeyCombination>();
-        KeyCombination keyCombination;
-        if (KeyCombination.TryParseMenuItemBindingString(
-                defaultShortcuts[index], out keyCombination))
-          keys.Add(keyCombination);
-        entries.Add(new MenuItemEntryDiscoveryInfo(names[index], keys));
-      }
+	for (var index = 0; index < names.Count; ++index) {
+		var keys = new List<KeyCombination>();
+		KeyCombination keyCombination;
+		if (KeyCombination.TryParseMenuItemBindingString(
+			    defaultShortcuts[index], out keyCombination))
+			keys.Add(keyCombination);
+		entries.Add(new MenuItemEntryDiscoveryInfo(names[index], keys));
+	}
 
-      return entries;
-    }
-  }
+	return entries;
+}
+}
 
-  class MethodSourceFinderUtility {
-    internal struct SourceInfo {
-      public int lineNumber;
-      public string filePath;
-    }
+class MethodSourceFinderUtility {
+internal struct SourceInfo {
+	public int lineNumber;
+	public string filePath;
+}
 
-    internal static SequencePoint
-    FindSequencePoint(MethodDefinition methodWithBody) {
-      foreach (var instruction in methodWithBody.Body.Instructions) {
-        var seq = methodWithBody.DebugInformation.GetSequencePoint(instruction);
-        if (seq != null)
-          return seq;
-      }
+internal static SequencePoint
+FindSequencePoint(MethodDefinition methodWithBody) {
+	foreach (var instruction in methodWithBody.Body.Instructions) {
+		var seq = methodWithBody.DebugInformation.GetSequencePoint(instruction);
+		if (seq != null)
+			return seq;
+	}
 
-      return null;
-    }
+	return null;
+}
 
-    internal static MethodDefinition FromMethodInfo(MethodInfo methodInfo) {
-      var assembly = methodInfo.DeclaringType.Assembly;
-      var parms = new ReaderParameters{ReadSymbols = true};
-      var module = ModuleDefinition.ReadModule(assembly.Location, parms);
+internal static MethodDefinition FromMethodInfo(MethodInfo methodInfo) {
+	var assembly = methodInfo.DeclaringType.Assembly;
+	var parms = new ReaderParameters {
+		ReadSymbols = true
+	};
+	var module = ModuleDefinition.ReadModule(assembly.Location, parms);
 
-      var convertedFullName =
-          methodInfo.DeclaringType.FullName.Replace("+", "/");
-      var typeDefinition = module.GetType(convertedFullName);
-      var expectedParams = methodInfo.GetParameters();
+	var convertedFullName =
+		methodInfo.DeclaringType.FullName.Replace("+", "/");
+	var typeDefinition = module.GetType(convertedFullName);
+	var expectedParams = methodInfo.GetParameters();
 
-      foreach (var methodDefinition in typeDefinition.Methods) {
-        if (methodDefinition.Name != methodInfo.Name)
-          continue;
+	foreach (var methodDefinition in typeDefinition.Methods) {
+		if (methodDefinition.Name != methodInfo.Name)
+			continue;
 
-        var paramz = methodDefinition.Parameters;
-        if (paramz.Count != expectedParams.Length)
-          continue;
+		var paramz = methodDefinition.Parameters;
+		if (paramz.Count != expectedParams.Length)
+			continue;
 
-        var sameParameters = true;
-        for (int i = 0; i < expectedParams.Length; ++i) {
-          var typeEquals = paramz[i].ParameterType.FullName ==
-                           expectedParams[i].ParameterType.FullName;
-          sameParameters = sameParameters && typeEquals;
-          if (!sameParameters)
-            break;
-        }
+		var sameParameters = true;
+		for (int i = 0; i < expectedParams.Length; ++i) {
+			var typeEquals = paramz[i].ParameterType.FullName ==
+			                 expectedParams[i].ParameterType.FullName;
+			sameParameters = sameParameters && typeEquals;
+			if (!sameParameters)
+				break;
+		}
 
-        if (sameParameters)
-          return methodDefinition;
-      }
+		if (sameParameters)
+			return methodDefinition;
+	}
 
-      return null;
-    }
+	return null;
+}
 
-    internal static SourceInfo GetSourceInfo(MethodInfo methodInfo) {
-      var methodWithBody = FromMethodInfo(methodInfo);
-      var seq = FindSequencePoint(methodWithBody);
-      SourceInfo sourceInfo = new SourceInfo(){lineNumber = seq.StartLine,
-                                               filePath = seq.Document.Url};
+internal static SourceInfo GetSourceInfo(MethodInfo methodInfo) {
+	var methodWithBody = FromMethodInfo(methodInfo);
+	var seq = FindSequencePoint(methodWithBody);
+	SourceInfo sourceInfo = new SourceInfo(){
+		lineNumber = seq.StartLine,
+		filePath = seq.Document.Url
+	};
 
-      return sourceInfo;
-    }
-  }
+	return sourceInfo;
+}
+}
 
-  class MenuItemEntryDiscoveryInfo : IShortcutEntryDiscoveryInfo {
-    string m_MenuItemPath;
-    List<KeyCombination> m_KeyCombinations;
-    ShortcutEntry m_ShortcutEntry;
-    bool m_DebugInfoFetched;
-    string m_FilePath;
-    int m_LineNumber = -1;
-    string m_FullMemberName;
+class MenuItemEntryDiscoveryInfo : IShortcutEntryDiscoveryInfo {
+string m_MenuItemPath;
+List<KeyCombination> m_KeyCombinations;
+ShortcutEntry m_ShortcutEntry;
+bool m_DebugInfoFetched;
+string m_FilePath;
+int m_LineNumber = -1;
+string m_FullMemberName;
 
-    public MenuItemEntryDiscoveryInfo(string menuItemPath,
-                                      List<KeyCombination> keys) {
-      m_KeyCombinations = keys;
-      m_MenuItemPath = menuItemPath;
+public MenuItemEntryDiscoveryInfo(string menuItemPath,
+                                  List<KeyCombination> keys) {
+	m_KeyCombinations = keys;
+	m_MenuItemPath = menuItemPath;
 
-      Action<ShortcutArguments> menuAction =
-          (args) => { EditorApplication.ExecuteMenuItem(m_MenuItemPath); };
-      m_ShortcutEntry = new ShortcutEntry(
-          new Identifier(Discovery.k_MainMenuShortcutPrefix + m_MenuItemPath),
-          m_KeyCombinations, menuAction, null, ShortcutType.Menu);
-    }
+	Action<ShortcutArguments> menuAction =
+		(args) => { EditorApplication.ExecuteMenuItem(m_MenuItemPath); };
+	m_ShortcutEntry = new ShortcutEntry(
+		new Identifier(Discovery.k_MainMenuShortcutPrefix + m_MenuItemPath),
+		m_KeyCombinations, menuAction, null, ShortcutType.Menu);
+}
 
-    public ShortcutEntry GetShortcutEntry() { return m_ShortcutEntry; }
+public ShortcutEntry GetShortcutEntry() {
+	return m_ShortcutEntry;
+}
 
-    public string GetFullMemberName() {
-      GetMenuItemExtraInfoIfNeeded();
-      return m_FullMemberName;
-    }
+public string GetFullMemberName() {
+	GetMenuItemExtraInfoIfNeeded();
+	return m_FullMemberName;
+}
 
-    public int GetLineNumber() {
-      GetMenuItemExtraInfoIfNeeded();
-      return m_LineNumber;
-    }
+public int GetLineNumber() {
+	GetMenuItemExtraInfoIfNeeded();
+	return m_LineNumber;
+}
 
-    public string GetFilePath() {
-      GetMenuItemExtraInfoIfNeeded();
-      return m_FilePath;
-    }
+public string GetFilePath() {
+	GetMenuItemExtraInfoIfNeeded();
+	return m_FilePath;
+}
 
-    void GetMenuItemExtraInfoIfNeeded() {
-      if (m_DebugInfoFetched)
-        return;
+void GetMenuItemExtraInfoIfNeeded() {
+	if (m_DebugInfoFetched)
+		return;
 
-      m_DebugInfoFetched = true;
-      var managedMenuItemMethods =
-          EditorAssemblies.GetAllMethodsWithAttribute<MenuItem>();
-      foreach (var managedMenuItemMethod in managedMenuItemMethods) {
-        var attributes =
-            managedMenuItemMethod.GetCustomAttributes(typeof(MenuItem), false);
-        foreach (var attribute in attributes) {
-          var menuAttribute = (MenuItem) attribute;
-          if (menuAttribute.menuItem == m_MenuItemPath) {
-            var sourceInfo =
-                MethodSourceFinderUtility.GetSourceInfo(managedMenuItemMethod);
-            m_FilePath = sourceInfo.filePath;
-            m_LineNumber = sourceInfo.lineNumber;
-            m_FullMemberName = managedMenuItemMethod.DeclaringType.FullName +
-                               "." + managedMenuItemMethod.Name;
-            return;
-          }
-        }
-      }
-    }
-  }
+	m_DebugInfoFetched = true;
+	var managedMenuItemMethods =
+		EditorAssemblies.GetAllMethodsWithAttribute<MenuItem>();
+	foreach (var managedMenuItemMethod in managedMenuItemMethods) {
+		var attributes =
+			managedMenuItemMethod.GetCustomAttributes(typeof(MenuItem), false);
+		foreach (var attribute in attributes) {
+			var menuAttribute = (MenuItem) attribute;
+			if (menuAttribute.menuItem == m_MenuItemPath) {
+				var sourceInfo =
+					MethodSourceFinderUtility.GetSourceInfo(managedMenuItemMethod);
+				m_FilePath = sourceInfo.filePath;
+				m_LineNumber = sourceInfo.lineNumber;
+				m_FullMemberName = managedMenuItemMethod.DeclaringType.FullName +
+				                   "." + managedMenuItemMethod.Name;
+				return;
+			}
+		}
+	}
+}
+}
 
-  class ShortcutAttributeEntryInfo : IShortcutEntryDiscoveryInfo {
-    ShortcutEntry m_ShortcutEntry;
-    MethodInfo m_MethodInfo;
-    string m_FilePath;
-    int m_LineNumber = -1;
-    bool m_DebugInfoFetched;
+class ShortcutAttributeEntryInfo : IShortcutEntryDiscoveryInfo {
+ShortcutEntry m_ShortcutEntry;
+MethodInfo m_MethodInfo;
+string m_FilePath;
+int m_LineNumber = -1;
+bool m_DebugInfoFetched;
 
-    public ShortcutAttributeEntryInfo(MethodInfo methodInfo,
-                                      ShortcutBaseAttribute attribute) {
-      m_MethodInfo = methodInfo;
-      m_ShortcutEntry = attribute.CreateShortcutEntry(m_MethodInfo);
-    }
+public ShortcutAttributeEntryInfo(MethodInfo methodInfo,
+                                  ShortcutBaseAttribute attribute) {
+	m_MethodInfo = methodInfo;
+	m_ShortcutEntry = attribute.CreateShortcutEntry(m_MethodInfo);
+}
 
-    public ShortcutEntry GetShortcutEntry() { return m_ShortcutEntry; }
+public ShortcutEntry GetShortcutEntry() {
+	return m_ShortcutEntry;
+}
 
-    public string GetFullMemberName() {
-      return m_MethodInfo.DeclaringType.FullName + "." + m_MethodInfo.Name;
-    }
+public string GetFullMemberName() {
+	return m_MethodInfo.DeclaringType.FullName + "." + m_MethodInfo.Name;
+}
 
-    public int GetLineNumber() {
-      GetMethodDefinitionInfoIfNeeded();
+public int GetLineNumber() {
+	GetMethodDefinitionInfoIfNeeded();
 
-      return m_LineNumber;
-    }
+	return m_LineNumber;
+}
 
-    public string GetFilePath() {
-      GetMethodDefinitionInfoIfNeeded();
+public string GetFilePath() {
+	GetMethodDefinitionInfoIfNeeded();
 
-      return m_FilePath;
-    }
+	return m_FilePath;
+}
 
-    void GetMethodDefinitionInfoIfNeeded() {
-      if (m_DebugInfoFetched)
-        return;
-      m_DebugInfoFetched = true;
-      var sourceInfo = MethodSourceFinderUtility.GetSourceInfo(m_MethodInfo);
-      m_FilePath = sourceInfo.filePath;
-      m_LineNumber = sourceInfo.lineNumber;
-    }
-  }
+void GetMethodDefinitionInfoIfNeeded() {
+	if (m_DebugInfoFetched)
+		return;
+	m_DebugInfoFetched = true;
+	var sourceInfo = MethodSourceFinderUtility.GetSourceInfo(m_MethodInfo);
+	m_FilePath = sourceInfo.filePath;
+	m_LineNumber = sourceInfo.lineNumber;
+}
+}
 }

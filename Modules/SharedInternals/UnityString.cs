@@ -16,8 +16,8 @@ namespace UnityEngine {
 // TODO: remove this when the dependency goes away.
 [VisibleToOtherModules]
 internal sealed partial class UnityString {
-  public static string Format(string fmt, params object[] args) {
-    return String.Format(CultureInfo.InvariantCulture.NumberFormat, fmt, args);
-  }
+public static string Format(string fmt, params object[] args) {
+	return String.Format(CultureInfo.InvariantCulture.NumberFormat, fmt, args);
+}
 }
 }

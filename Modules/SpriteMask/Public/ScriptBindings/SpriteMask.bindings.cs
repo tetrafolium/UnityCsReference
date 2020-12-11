@@ -12,40 +12,40 @@ namespace UnityEngine {
 [RejectDragAndDropMaterial]
 [NativeType(Header = "Modules/SpriteMask/Public/SpriteMask.h")]
 public sealed partial class SpriteMask : Renderer {
-  extern public int frontSortingLayerID {
-    get;
-    set;
-  }
-  extern public int frontSortingOrder {
-    get;
-    set;
-  }
-  extern public int backSortingLayerID {
-    get;
-    set;
-  }
-  extern public int backSortingOrder {
-    get;
-    set;
-  }
-  extern public float alphaCutoff {
-    get;
-    set;
-  }
-  extern public Sprite sprite {
-    get;
-    set;
-  }
-  extern public bool isCustomRangeActive {
-    [NativeMethod("IsCustomRangeActive")] get;
-    [NativeMethod("SetCustomRangeActive")] set;
-  }
+extern public int frontSortingLayerID {
+	get;
+	set;
+}
+extern public int frontSortingOrder {
+	get;
+	set;
+}
+extern public int backSortingLayerID {
+	get;
+	set;
+}
+extern public int backSortingOrder {
+	get;
+	set;
+}
+extern public float alphaCutoff {
+	get;
+	set;
+}
+extern public Sprite sprite {
+	get;
+	set;
+}
+extern public bool isCustomRangeActive {
+	[NativeMethod("IsCustomRangeActive")] get;
+	[NativeMethod("SetCustomRangeActive")] set;
+}
 
-  public extern SpriteSortPoint spriteSortPoint {
-    get;
-    set;
-  }
+public extern SpriteSortPoint spriteSortPoint {
+	get;
+	set;
+}
 
-  internal extern Bounds GetSpriteBounds();
+internal extern Bounds GetSpriteBounds();
 }
 }

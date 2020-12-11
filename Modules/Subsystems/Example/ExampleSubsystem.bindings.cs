@@ -5,16 +5,16 @@
 using System;
 using UnityEngine.Bindings;
 using UsedByNativeCodeAttribute =
-    UnityEngine.Scripting.UsedByNativeCodeAttribute;
+	      UnityEngine.Scripting.UsedByNativeCodeAttribute;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace UnityEngine.Subsystems {
-  [NativeType(Header = "Modules/Subsystems/Example/ExampleSubsystem.h")]
-  [UsedByNativeCode]
-  public class ExampleSubsystem
-      : IntegratedSubsystem<ExampleSubsystemDescriptor> {
-    public extern void PrintExample();
-    public extern bool GetBool();
-  }
+[NativeType(Header = "Modules/Subsystems/Example/ExampleSubsystem.h")]
+[UsedByNativeCode]
+public class ExampleSubsystem
+	: IntegratedSubsystem<ExampleSubsystemDescriptor> {
+public extern void PrintExample();
+public extern bool GetBool();
+}
 }
