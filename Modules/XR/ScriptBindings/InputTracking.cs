@@ -6,17 +6,14 @@ using System;
 using UnityEngine.Scripting;
 using UnityEngine.Scripting.APIUpdating;
 
-namespace UnityEngine.XR
-{
-[RequiredByNativeCode]
-public static partial class InputTracking
-{
-    private enum TrackingStateEventType
-    {
-        NodeAdded,
-        NodeRemoved,
-        TrackingAcquired,
-        TrackingLost
+namespace UnityEngine.XR {
+  [RequiredByNativeCode]
+  public static partial class InputTracking {
+    private enum TrackingStateEventType {
+      NodeAdded,
+      NodeRemoved,
+      TrackingAcquired,
+      TrackingLost
     }
 
     public static event Action<XRNodeState> trackingAcquired = null;
@@ -25,37 +22,37 @@ public static partial class InputTracking
     public static event Action<XRNodeState> nodeRemoved = null;
 
     [RequiredByNativeCode]
-    private static void InvokeTrackingEvent(TrackingStateEventType eventType, XRNode nodeType, long uniqueID, bool tracked)
-    {
-        Action<XRNodeState> callback = null;
-        XRNodeState callbackParam = new XRNodeState();
+    private static void InvokeTrackingEvent(TrackingStateEventType eventType,
+                                            XRNode nodeType, long uniqueID,
+                                            bool tracked) {
+      Action<XRNodeState> callback = null;
+      XRNodeState callbackParam = new XRNodeState();
 
-        callbackParam.uniqueID = (ulong)uniqueID;
-        callbackParam.nodeType = nodeType;
-        callbackParam.tracked = tracked;
+      callbackParam.uniqueID = (ulong) uniqueID;
+      callbackParam.nodeType = nodeType;
+      callbackParam.tracked = tracked;
 
-        switch (eventType)
-        {
-        case TrackingStateEventType.TrackingAcquired:
-            callback = trackingAcquired;
-            break;
-        case TrackingStateEventType.TrackingLost:
-            callback = trackingLost;
-            break;
-        case TrackingStateEventType.NodeAdded:
-            callback = nodeAdded;
-            break;
-        case TrackingStateEventType.NodeRemoved:
-            callback = nodeRemoved;
-            break;
-        default:
-            throw new ArgumentException("TrackingEventHandler - Invalid EventType: " + eventType);
-        }
+      switch (eventType) {
+      case TrackingStateEventType.TrackingAcquired:
+        callback = trackingAcquired;
+        break;
+      case TrackingStateEventType.TrackingLost:
+        callback = trackingLost;
+        break;
+      case TrackingStateEventType.NodeAdded:
+        callback = nodeAdded;
+        break;
+      case TrackingStateEventType.NodeRemoved:
+        callback = nodeRemoved;
+        break;
+      default:
+        throw new ArgumentException(
+            "TrackingEventHandler - Invalid EventType: " + eventType);
+      }
 
-        if (null != callback)
-        {
-            callback(callbackParam);
-        }
+      if (null != callback) {
+        callback(callbackParam);
+      }
     }
-}
+  }
 }

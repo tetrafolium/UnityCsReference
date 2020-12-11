@@ -7,10 +7,8 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace UnityEditor.UIAutomation
-{
-class DragOverTime
-{
+namespace UnityEditor.UIAutomation {
+  class DragOverTime {
     public float numEventsPerSecond = 10;
 
     float nextEventTime;
@@ -20,53 +18,52 @@ class DragOverTime
     Vector2 mouseStart;
     Vector2 mouseEnd;
 
-
-    public void DragAndDrop(EditorWindow window, Vector2 mousePositionStart, Vector2 mousePositionEnd, float seconds)
-    {
-        DragAndDrop(window, mousePositionStart, mousePositionEnd, seconds, EventModifiers.None);
+    public void DragAndDrop(EditorWindow window, Vector2 mousePositionStart,
+                            Vector2 mousePositionEnd, float seconds) {
+      DragAndDrop(window, mousePositionStart, mousePositionEnd, seconds,
+                  EventModifiers.None);
     }
 
-    public void DragAndDrop(EditorWindow window, Vector2 mousePositionStart, Vector2 mousePositionEnd, float seconds, EventModifiers modifiers)
-    {
-        mouseStart = mousePositionStart;
-        mouseEnd = mousePositionEnd;
-        mouseStart.y += 23f;
-        mouseEnd.y += 23f;
-        startTime = (float)EditorApplication.timeSinceStartup;
-        endTime = startTime + seconds;
+    public void DragAndDrop(EditorWindow window, Vector2 mousePositionStart,
+                            Vector2 mousePositionEnd, float seconds,
+                            EventModifiers modifiers) {
+      mouseStart = mousePositionStart;
+      mouseEnd = mousePositionEnd;
+      mouseStart.y += 23f;
+      mouseEnd.y += 23f;
+      startTime = (float) EditorApplication.timeSinceStartup;
+      endTime = startTime + seconds;
 
-        EventUtility.BeginDragAndDrop(window, mouseStart);
+      EventUtility.BeginDragAndDrop(window, mouseStart);
     }
 
-    public bool Update(EditorWindow window)
-    {
-        return Update(window, EventModifiers.None);
+    public bool Update(EditorWindow window) {
+      return Update(window, EventModifiers.None);
     }
 
-    public bool Update(EditorWindow window, EventModifiers modifiers)
-    {
-        float curtime = (float)EditorApplication.timeSinceStartup;
+    public bool Update(EditorWindow window, EventModifiers modifiers) {
+      float curtime = (float) EditorApplication.timeSinceStartup;
 
-        if (curtime > nextEventTime)
-        {
-            // Dispatch fake drag and drop events
-            float frac = Mathf.Clamp01((curtime - startTime) / (endTime - startTime));
+      if (curtime > nextEventTime) {
+        // Dispatch fake drag and drop events
+        float frac =
+            Mathf.Clamp01((curtime - startTime) / (endTime - startTime));
 
-            frac = Easing.Quadratic.InOut(frac);
+        frac = Easing.Quadratic.InOut(frac);
 
-            Vector2 mousePosition = Vector2.Lerp(mouseStart, mouseEnd, frac);
+        Vector2 mousePosition = Vector2.Lerp(mouseStart, mouseEnd, frac);
 
-            EventUtility.UpdateDragAndDrop(window, mousePosition);
+        EventUtility.UpdateDragAndDrop(window, mousePosition);
 
-            bool shouldContinue = frac < 1.0f;
-            if (!shouldContinue)
-                EventUtility.EndDragAndDrop(window, mousePosition);
+        bool shouldContinue = frac < 1.0f;
+        if (!shouldContinue)
+          EventUtility.EndDragAndDrop(window, mousePosition);
 
-            nextEventTime = curtime + (1 / numEventsPerSecond);
-            window.Repaint();
-            return shouldContinue;
-        }
-        return true;
+        nextEventTime = curtime + (1 / numEventsPerSecond);
+        window.Repaint();
+        return shouldContinue;
+      }
+      return true;
     }
-}
+  }
 }

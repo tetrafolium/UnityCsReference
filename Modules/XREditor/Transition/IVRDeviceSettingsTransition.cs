@@ -4,11 +4,9 @@
 
 using System;
 
-namespace UnityEditor.XR
-{
-internal interface IVRDeviceSettingsTransition
-{
+namespace UnityEditor.XR {
+  internal interface IVRDeviceSettingsTransition {
     void DisableSettings();
     void EnableSettings();
-}
+  }
 }

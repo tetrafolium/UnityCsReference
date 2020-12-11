@@ -4,10 +4,7 @@
 
 using System;
 
-namespace UnityEditor.ShortcutManagement
-{
-[AttributeUsage(AttributeTargets.Class)]
-class PriorityContextAttribute : Attribute
-{
-}
+namespace UnityEditor.ShortcutManagement {
+  [AttributeUsage(AttributeTargets.Class)]
+  class PriorityContextAttribute : Attribute {}
 }

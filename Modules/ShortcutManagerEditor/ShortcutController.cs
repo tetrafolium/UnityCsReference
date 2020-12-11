@@ -10,386 +10,369 @@ using UnityEngine.Scripting;
 using Attribute = System.Attribute;
 using Event = UnityEngine.Event;
 
-namespace UnityEditor.ShortcutManagement
-{
-interface ILastUsedProfileIdProvider
-{
+namespace UnityEditor.ShortcutManagement {
+  interface ILastUsedProfileIdProvider {
     string lastUsedProfileId {
-        get;
-        set;
+      get;
+      set;
     }
-}
+  }
 
-interface IAvailableShortcutsChangedNotifier
-{
+  interface IAvailableShortcutsChangedNotifier {
     event Action availableShortcutsChanged;
-}
+  }
 
-[InitializeOnLoad]
-static class ShortcutIntegration
-{
-    class LastUsedProfileIdProvider : ILastUsedProfileIdProvider
-    {
-        static string lastUsedProfileIdEditorPrefKey => $"ShortcutManagement_LastUsedShortcutProfileId_{ModeService.currentId}";
+  [InitializeOnLoad]
+  static class ShortcutIntegration {
+    class LastUsedProfileIdProvider : ILastUsedProfileIdProvider {
+      static string lastUsedProfileIdEditorPrefKey =>
+          $"ShortcutManagement_LastUsedShortcutProfileId_{ModeService.currentId}";
 
-        public string lastUsedProfileId
-        {
-            get
-            {
-                var profileId = EditorPrefs.GetString(lastUsedProfileIdEditorPrefKey);
-                return profileId == "" ? null : profileId;
-            }
-
-            set
-            {
-                EditorPrefs.SetString(lastUsedProfileIdEditorPrefKey, value ?? "");
-            }
+      public string lastUsedProfileId {
+        get {
+          var profileId = EditorPrefs.GetString(lastUsedProfileIdEditorPrefKey);
+          return profileId == "" ? null : profileId;
         }
+
+        set {
+          EditorPrefs.SetString(lastUsedProfileIdEditorPrefKey, value ?? "");
+        }
+      }
     }
 
     private static ShortcutController s_Instance;
-    public static ShortcutController instance
-    {
-        get
-        {
-            EnsureShortcutControllerCreated();
-            return s_Instance;
-        }
+    public static ShortcutController instance {
+      get {
+        EnsureShortcutControllerCreated();
+        return s_Instance;
+      }
     }
 
     private static bool s_Enabled;
-    internal static bool enabled
-    {
-        get
-        {
-            return s_Enabled;
-        }
-        set
-        {
-            if (value == s_Enabled) return;
+    internal static bool enabled {
+      get { return s_Enabled; }
+      set {
+        if (value == s_Enabled)
+          return;
 
-            if (value)
-            {
-                EditorApplication.globalEventHandler += EventHandler;
-            }
-            else
-            {
-                EditorApplication.globalEventHandler -= EventHandler;
-            }
-
-            s_Enabled = value;
+        if (value) {
+          EditorApplication.globalEventHandler += EventHandler;
+        } else {
+          EditorApplication.globalEventHandler -= EventHandler;
         }
+
+        s_Enabled = value;
+      }
     }
 
     [RequiredByNativeCode]
-    internal static void SetShortcutIntegrationEnabled(bool enable)
-    {
-        enabled = enable;
+    internal static void SetShortcutIntegrationEnabled(bool enable) {
+      enabled = enable;
     }
 
-    static ShortcutIntegration()
-    {
-        // There is cases where the ShortcutIntegration was not requested even after the project was initialized, such as running tests.
-        EditorApplication.delayCall += EnsureShortcutControllerCreated;
+    static ShortcutIntegration() {
+      // There is cases where the ShortcutIntegration was not requested even
+      // after the project was initialized, such as running tests.
+      EditorApplication.delayCall += EnsureShortcutControllerCreated;
     }
 
-    static void EnsureShortcutControllerCreated()
-    {
-        if (s_Instance == null)
-            InitializeController();
-        Debug.Assert(s_Instance != null);
+    static void EnsureShortcutControllerCreated() {
+      if (s_Instance == null)
+        InitializeController();
+      Debug.Assert(s_Instance != null);
     }
 
-    static bool HasAnyEntriesHandler()
-    {
-        return instance.HasAnyEntries(Event.current);
+    static bool HasAnyEntriesHandler() {
+      return instance.HasAnyEntries(Event.current);
     }
 
-    static void EventHandler()
-    {
-        instance.contextManager.SetFocusedWindow(EditorWindow.focusedWindow);
-        instance.HandleKeyEvent(Event.current);
+    static void EventHandler() {
+      instance.contextManager.SetFocusedWindow(EditorWindow.focusedWindow);
+      instance.HandleKeyEvent(Event.current);
     }
 
-    static void OnInvokingAction(ShortcutEntry shortcutEntry, ShortcutArguments shortcutArguments)
-    {
-        // Separate shortcut actions into different undo groups
-        Undo.IncrementCurrentGroup();
+    static void OnInvokingAction(ShortcutEntry shortcutEntry,
+                                 ShortcutArguments shortcutArguments) {
+      // Separate shortcut actions into different undo groups
+      Undo.IncrementCurrentGroup();
     }
 
-    static void OnFocusChanged(bool isFocused)
-    {
-        instance.trigger.ResetActiveClutches();
+    static void OnFocusChanged(bool isFocused) {
+      instance.trigger.ResetActiveClutches();
     }
 
-    static void InitializeController()
-    {
-        var shortcutProviders = new IDiscoveryShortcutProvider[]
-        {
-            new ShortcutAttributeDiscoveryProvider(),
-            new ShortcutMenuItemDiscoveryProvider()
-        };
-        var bindingValidator = new BindingValidator();
-        var invalidContextReporter = new DiscoveryInvalidShortcutReporter();
-        var discovery = new Discovery(shortcutProviders, bindingValidator, invalidContextReporter);
-        IContextManager contextManager = new ContextManager();
+    static void InitializeController() {
+      var shortcutProviders = new IDiscoveryShortcutProvider[]{
+          new ShortcutAttributeDiscoveryProvider(),
+          new ShortcutMenuItemDiscoveryProvider()};
+      var bindingValidator = new BindingValidator();
+      var invalidContextReporter = new DiscoveryInvalidShortcutReporter();
+      var discovery = new Discovery(shortcutProviders, bindingValidator,
+                                    invalidContextReporter);
+      IContextManager contextManager = new ContextManager();
 
-        s_Instance = new ShortcutController(discovery, contextManager, bindingValidator, new ShortcutProfileStore(), new LastUsedProfileIdProvider());
-        s_Instance.trigger.invokingAction += OnInvokingAction;
+      s_Instance = new ShortcutController(
+          discovery, contextManager, bindingValidator,
+          new ShortcutProfileStore(), new LastUsedProfileIdProvider());
+      s_Instance.trigger.invokingAction += OnInvokingAction;
 
-        enabled = true;
-        EditorApplication.doPressedKeysTriggerAnyShortcut += HasAnyEntriesHandler;
-        EditorApplication.focusChanged += OnFocusChanged;
+      enabled = true;
+      EditorApplication.doPressedKeysTriggerAnyShortcut += HasAnyEntriesHandler;
+      EditorApplication.focusChanged += OnFocusChanged;
     }
-}
+  }
 
-class ShortcutController : IAvailableShortcutsChangedNotifier
-{
+  class ShortcutController : IAvailableShortcutsChangedNotifier {
     const string k_MigratedProfileId = "UserProfile";
-    const string k_ProfileMigratedEditorPrefKey = "ShortcutManager_ProfileMigrated";
+    const string k_ProfileMigratedEditorPrefKey =
+        "ShortcutManager_ProfileMigrated";
 
     Directory m_Directory;
     IDiscovery m_Discovery;
 
-    public IShortcutProfileManager profileManager {
-        get;
-    }
+    public IShortcutProfileManager profileManager { get; }
     public IDirectory directory => m_Directory;
-    public IBindingValidator bindingValidator {
-        get;
-    }
-    public Trigger trigger {
-        get;
-    }
-    public IContextManager contextManager {
-        get;
-    }
+    public IBindingValidator bindingValidator { get; }
+    public Trigger trigger { get; }
+    public IContextManager contextManager { get; }
     ILastUsedProfileIdProvider m_LastUsedProfileIdProvider;
 
     public event Action availableShortcutsChanged;
 
-    public ShortcutController(IDiscovery discovery, IContextManager contextManager, IBindingValidator bindingValidator, IShortcutProfileStore profileStore, ILastUsedProfileIdProvider lastUsedProfileIdProvider)
-    {
-        m_Discovery = discovery;
-        this.bindingValidator = bindingValidator;
-        m_LastUsedProfileIdProvider = lastUsedProfileIdProvider;
+    public ShortcutController(
+        IDiscovery discovery, IContextManager contextManager,
+        IBindingValidator bindingValidator, IShortcutProfileStore profileStore,
+        ILastUsedProfileIdProvider lastUsedProfileIdProvider) {
+      m_Discovery = discovery;
+      this.bindingValidator = bindingValidator;
+      m_LastUsedProfileIdProvider = lastUsedProfileIdProvider;
 
-        profileManager = new ShortcutProfileManager(m_Discovery.GetAllShortcuts(), bindingValidator, profileStore);
-        profileManager.shortcutBindingChanged += OnShortcutBindingChanged;
-        profileManager.activeProfileChanged += OnActiveProfileChanged;
+      profileManager = new ShortcutProfileManager(
+          m_Discovery.GetAllShortcuts(), bindingValidator, profileStore);
+      profileManager.shortcutBindingChanged += OnShortcutBindingChanged;
+      profileManager.activeProfileChanged += OnActiveProfileChanged;
+      profileManager.ReloadProfiles();
+
+      var conflictResolverView = new ConflictResolverView();
+      var conflictResolver = new ConflictResolver(
+          profileManager, contextManager, conflictResolverView);
+
+      this.contextManager = contextManager;
+
+      m_Directory = new Directory(profileManager.GetAllShortcuts());
+      trigger = new Trigger(m_Directory, conflictResolver);
+
+      ActivateLastUsedProfile();
+      MigrateUserSpecifiedPrefKeys();
+
+      ModeService.modeChanged += HandleModeChanged;
+    }
+
+    internal void RebuildShortcuts() {
+      profileManager.UpdateBaseProfile(m_Discovery.GetAllShortcuts());
+      Initialize();
+    }
+
+    void Initialize() {
+      m_Directory.Initialize(profileManager.GetAllShortcuts());
+      availableShortcutsChanged?.Invoke();
+    }
+
+    void HandleModeChanged(ModeService.ModeChangedArgs args) {
+      // Install profile specific to the current mode.
+      var shortcutProfiles =
+          ModeService
+              .GetModeDataSection(args.nextIndex, ModeDescriptor.ShortcutsKey)
+                  as System.Collections.IList;
+      if (shortcutProfiles == null || shortcutProfiles.Count == 0)
+        return;
+
+      string defaultMode = null;
+      try {
+        var shortcutProfilePath = ShortcutProfileStore.GetShortcutFolderPath();
+        if (!System.IO.Directory.Exists(shortcutProfilePath))
+          System.IO.Directory.CreateDirectory(shortcutProfilePath);
+        for (var i = 0; i < shortcutProfiles.Count; ++i) {
+          var srcProfilePath = shortcutProfiles[i] as string;
+          if (String.IsNullOrEmpty(srcProfilePath) ||
+              !File.Exists(srcProfilePath))
+            continue;
+          var baseName = Path.GetFileName(srcProfilePath);
+          var dstPath = Path.Combine(shortcutProfilePath, baseName);
+          if (!File.Exists(dstPath)) {
+            File.Copy(srcProfilePath, dstPath);
+          }
+
+          if (i == 0) {
+            // Assume first item is the default mode if needed.
+            defaultMode = Path.GetFileNameWithoutExtension(srcProfilePath);
+          }
+        }
+      } catch (Exception) {
+        Debug.LogError("Error while installing new profile for mode: " +
+                       ModeService.currentId);
+      }
+
+      // Reload profiles will unset the lastUsedProfile so make a copy of it:
+      var lastUsedProfileId =
+          m_LastUsedProfileIdProvider.lastUsedProfileId ?? defaultMode;
+      if (!String.IsNullOrEmpty(lastUsedProfileId)) {
         profileManager.ReloadProfiles();
-
-        var conflictResolverView = new ConflictResolverView();
-        var conflictResolver = new ConflictResolver(profileManager, contextManager, conflictResolverView);
-
-        this.contextManager = contextManager;
-
-        m_Directory = new Directory(profileManager.GetAllShortcuts());
-        trigger = new Trigger(m_Directory, conflictResolver);
-
-        ActivateLastUsedProfile();
-        MigrateUserSpecifiedPrefKeys();
-
-        ModeService.modeChanged += HandleModeChanged;
+        LoadProfileById(lastUsedProfileId);
+      }
     }
 
-    internal void RebuildShortcuts()
-    {
-        profileManager.UpdateBaseProfile(m_Discovery.GetAllShortcuts());
-        Initialize();
+    void OnShortcutBindingChanged(IShortcutProfileManager sender,
+                                  Identifier identifier,
+                                  ShortcutBinding oldBinding,
+                                  ShortcutBinding newBinding) {
+      Initialize();
     }
 
-    void Initialize()
-    {
-        m_Directory.Initialize(profileManager.GetAllShortcuts());
-        availableShortcutsChanged?.Invoke();
+    void OnActiveProfileChanged(IShortcutProfileManager sender,
+                                ShortcutProfile oldActiveProfile,
+                                ShortcutProfile newActiveProfile) {
+      m_LastUsedProfileIdProvider.lastUsedProfileId =
+          profileManager.activeProfile?.id;
+      Initialize();
     }
 
-    void HandleModeChanged(ModeService.ModeChangedArgs args)
-    {
-        // Install profile specific to the current mode.
-        var shortcutProfiles = ModeService.GetModeDataSection(args.nextIndex, ModeDescriptor.ShortcutsKey) as System.Collections.IList;
-        if (shortcutProfiles == null || shortcutProfiles.Count == 0)
-            return;
+    internal bool HasAnyEntries(Event evt) { return trigger.HasAnyEntries(); }
 
-        string defaultMode = null;
-        try
-        {
-            var shortcutProfilePath = ShortcutProfileStore.GetShortcutFolderPath();
-            if (!System.IO.Directory.Exists(shortcutProfilePath))
-                System.IO.Directory.CreateDirectory(shortcutProfilePath);
-            for (var i = 0; i < shortcutProfiles.Count; ++i)
-            {
-                var srcProfilePath = shortcutProfiles[i] as string;
-                if (String.IsNullOrEmpty(srcProfilePath) || !File.Exists(srcProfilePath))
-                    continue;
-                var baseName = Path.GetFileName(srcProfilePath);
-                var dstPath = Path.Combine(shortcutProfilePath, baseName);
-                if (!File.Exists(dstPath))
-                {
-                    File.Copy(srcProfilePath, dstPath);
-                }
-
-                if (i == 0)
-                {
-                    // Assume first item is the default mode if needed.
-                    defaultMode = Path.GetFileNameWithoutExtension(srcProfilePath);
-                }
-            }
-        }
-        catch (Exception)
-        {
-            Debug.LogError("Error while installing new profile for mode: " + ModeService.currentId);
-        }
-
-        // Reload profiles will unset the lastUsedProfile so make a copy of it:
-        var lastUsedProfileId = m_LastUsedProfileIdProvider.lastUsedProfileId ?? defaultMode;
-        if (!String.IsNullOrEmpty(lastUsedProfileId))
-        {
-            profileManager.ReloadProfiles();
-            LoadProfileById(lastUsedProfileId);
-        }
+    internal void HandleKeyEvent(Event evt) {
+      trigger.HandleKeyEvent(evt, contextManager);
     }
 
-    void OnShortcutBindingChanged(IShortcutProfileManager sender, Identifier identifier, ShortcutBinding oldBinding, ShortcutBinding newBinding)
-    {
-        Initialize();
+    internal string GetKeyCombinationFor(string shortcutId) {
+      var shortcutEntry = directory.FindShortcutEntry(shortcutId);
+      if (shortcutEntry != null) {
+        return KeyCombination.SequenceToString(shortcutEntry.combinations);
+      }
+      throw new System.ArgumentException(shortcutId + " is not defined.",
+                                         nameof(shortcutId));
     }
 
-    void OnActiveProfileChanged(IShortcutProfileManager sender, ShortcutProfile oldActiveProfile, ShortcutProfile newActiveProfile)
-    {
-        m_LastUsedProfileIdProvider.lastUsedProfileId = profileManager.activeProfile?.id;
-        Initialize();
+    void ActivateLastUsedProfile() {
+      LoadProfileById(m_LastUsedProfileIdProvider.lastUsedProfileId);
     }
 
-    internal bool HasAnyEntries(Event evt)
-    {
-        return trigger.HasAnyEntries();
+    void LoadProfileById(string profileId) {
+      if (profileId == null)
+        return;
+
+      var lastUsedProfile = profileManager.GetProfileById(profileId);
+      if (lastUsedProfile != null)
+        profileManager.activeProfile = lastUsedProfile;
     }
 
-    internal void HandleKeyEvent(Event evt)
-    {
-        trigger.HandleKeyEvent(evt, contextManager);
+    static bool TryParseUniquePrefKeyString(string prefString, out string name,
+                                            out Event keyboardEvent,
+                                            out string shortcut) {
+      int i = prefString.IndexOf(";", StringComparison.Ordinal);
+      if (i < 0) {
+        name = null;
+        keyboardEvent = null;
+        shortcut = null;
+        return false;
+      }
+      name = prefString.Substring(0, i);
+      shortcut = prefString.Substring(i + 1);
+      keyboardEvent = Event.KeyboardEvent(shortcut);
+      return true;
     }
 
-    internal string GetKeyCombinationFor(string shortcutId)
-    {
-        var shortcutEntry = directory.FindShortcutEntry(shortcutId);
-        if (shortcutEntry != null)
-        {
-            return KeyCombination.SequenceToString(shortcutEntry.combinations);
-        }
-        throw new System.ArgumentException(shortcutId + " is not defined.", nameof(shortcutId));
-    }
+    void MigrateUserSpecifiedPrefKeys() {
+      // If migration already happened then don't do anything
+      if (EditorPrefs.GetBool(k_ProfileMigratedEditorPrefKey, false))
+        return;
 
-    void ActivateLastUsedProfile()
-    {
-        LoadProfileById(m_LastUsedProfileIdProvider.lastUsedProfileId);
-    }
+      EditorPrefs.SetBool(k_ProfileMigratedEditorPrefKey, true);
 
-    void LoadProfileById(string profileId)
-    {
-        if (profileId == null)
-            return;
+      // Find shortcut entries that might need to be migrated
+      var allShortcuts = new List<ShortcutEntry>();
+      directory.GetAllShortcuts(allShortcuts);
 
-        var lastUsedProfile = profileManager.GetProfileById(profileId);
-        if (lastUsedProfile != null)
-            profileManager.activeProfile = lastUsedProfile;
-    }
+      // Find existing or create migrated profile and make it active so we can
+      // amend it
+      var originalActiveProfile = profileManager.activeProfile;
+      var migratedProfile = profileManager.GetProfileById(k_MigratedProfileId);
+      var migratedProfileAlreadyExisted = migratedProfile != null;
+      if (!migratedProfileAlreadyExisted)
+        migratedProfile = profileManager.CreateProfile(k_MigratedProfileId);
+      profileManager.activeProfile = migratedProfile;
 
-    static bool TryParseUniquePrefKeyString(string prefString, out string name, out Event keyboardEvent, out string shortcut)
-    {
-        int i = prefString.IndexOf(";", StringComparison.Ordinal);
-        if (i < 0)
-        {
-            name = null;
-            keyboardEvent = null;
-            shortcut = null;
-            return false;
-        }
-        name = prefString.Substring(0, i);
-        shortcut = prefString.Substring(i + 1);
-        keyboardEvent = Event.KeyboardEvent(shortcut);
-        return true;
-    }
+      var migratedProfileModified = false;
 
-    void MigrateUserSpecifiedPrefKeys()
-    {
-        // If migration already happened then don't do anything
-        if (EditorPrefs.GetBool(k_ProfileMigratedEditorPrefKey, false))
-            return;
+      var tempKeyCombinations = new KeyCombination[1];
+      var methodsWithFormerlyPrefKeyAs =
+          EditorAssemblies
+              .GetAllMethodsWithAttribute<FormerlyPrefKeyAsAttribute>();
+      foreach (var method in methodsWithFormerlyPrefKeyAs) {
+        var shortcutAttr = Attribute.GetCustomAttribute(
+            method, typeof(ShortcutAttribute), true) as ShortcutAttribute;
+        if (shortcutAttr == null)
+          continue;
 
-        EditorPrefs.SetBool(k_ProfileMigratedEditorPrefKey, true);
+        var entry = allShortcuts.Find(
+            e => string.Equals(e.identifier.path, shortcutAttr.identifier));
+        if (entry == null)
+          continue;
 
-        // Find shortcut entries that might need to be migrated
-        var allShortcuts = new List<ShortcutEntry>();
-        directory.GetAllShortcuts(allShortcuts);
+        // Ignore former PrefKey if it is overriden in existing migrated profile
+        if (entry.overridden)
+          continue;
 
-        // Find existing or create migrated profile and make it active so we can amend it
-        var originalActiveProfile = profileManager.activeProfile;
-        var migratedProfile = profileManager.GetProfileById(k_MigratedProfileId);
-        var migratedProfileAlreadyExisted = migratedProfile != null;
-        if (!migratedProfileAlreadyExisted)
-            migratedProfile = profileManager.CreateProfile(k_MigratedProfileId);
-        profileManager.activeProfile = migratedProfile;
+        // Parse default pref key value from FormerlyPrefKeyAs attribute
+        var prefKeyAttr =
+            (FormerlyPrefKeyAsAttribute) Attribute.GetCustomAttribute(
+                method, typeof(FormerlyPrefKeyAsAttribute));
+        var editorPrefDefaultValue =
+            $"{prefKeyAttr.name};{prefKeyAttr.defaultValue}";
+        string name;
+        Event keyboardEvent;
+        string shortcut;
+        if (!TryParseUniquePrefKeyString(editorPrefDefaultValue, out name,
+                                         out keyboardEvent, out shortcut))
+          continue;
+        var prefKeyDefaultKeyCombination =
+            KeyCombination.FromPrefKeyKeyboardEvent(keyboardEvent);
 
-        var migratedProfileModified = false;
+        // Parse current pref key value (falling back on default pref key value)
+        if (!TryParseUniquePrefKeyString(
+                EditorPrefs.GetString(prefKeyAttr.name, editorPrefDefaultValue),
+                out name, out keyboardEvent, out shortcut))
+          continue;
+        var prefKeyCurrentKeyCombination =
+            KeyCombination.FromPrefKeyKeyboardEvent(keyboardEvent);
 
-        var tempKeyCombinations = new KeyCombination[1];
-        var methodsWithFormerlyPrefKeyAs = EditorAssemblies.GetAllMethodsWithAttribute<FormerlyPrefKeyAsAttribute>();
-        foreach (var method in methodsWithFormerlyPrefKeyAs)
-        {
-            var shortcutAttr = Attribute.GetCustomAttribute(method, typeof(ShortcutAttribute), true) as ShortcutAttribute;
-            if (shortcutAttr == null)
-                continue;
+        // Only migrate pref keys that the user actually overwrote
+        if (prefKeyCurrentKeyCombination.Equals(prefKeyDefaultKeyCombination))
+          continue;
 
-            var entry = allShortcuts.Find(e => string.Equals(e.identifier.path, shortcutAttr.identifier));
-            if (entry == null)
-                continue;
-
-            // Ignore former PrefKey if it is overriden in existing migrated profile
-            if (entry.overridden)
-                continue;
-
-            // Parse default pref key value from FormerlyPrefKeyAs attribute
-            var prefKeyAttr = (FormerlyPrefKeyAsAttribute)Attribute.GetCustomAttribute(method, typeof(FormerlyPrefKeyAsAttribute));
-            var editorPrefDefaultValue = $"{prefKeyAttr.name};{prefKeyAttr.defaultValue}";
-            string name;
-            Event keyboardEvent;
-            string shortcut;
-            if (!TryParseUniquePrefKeyString(editorPrefDefaultValue, out name, out keyboardEvent, out shortcut))
-                continue;
-            var prefKeyDefaultKeyCombination = KeyCombination.FromPrefKeyKeyboardEvent(keyboardEvent);
-
-            // Parse current pref key value (falling back on default pref key value)
-            if (!TryParseUniquePrefKeyString(EditorPrefs.GetString(prefKeyAttr.name, editorPrefDefaultValue), out name, out keyboardEvent, out shortcut))
-                continue;
-            var prefKeyCurrentKeyCombination = KeyCombination.FromPrefKeyKeyboardEvent(keyboardEvent);
-
-            // Only migrate pref keys that the user actually overwrote
-            if (prefKeyCurrentKeyCombination.Equals(prefKeyDefaultKeyCombination))
-                continue;
-
-            string invalidBindingMessage;
-            tempKeyCombinations[0] = prefKeyCurrentKeyCombination;
-            if (!bindingValidator.IsBindingValid(tempKeyCombinations, out invalidBindingMessage))
-            {
-                Debug.LogWarning($"Could not migrate existing binding for shortcut \"{entry.identifier.path}\" with invalid binding.\n{invalidBindingMessage}.");
-                continue;
-            }
-
-            profileManager.ModifyShortcutEntry(entry.identifier, new List<KeyCombination> { prefKeyCurrentKeyCombination });
-
-            migratedProfileModified = true;
+        string invalidBindingMessage;
+        tempKeyCombinations[0] = prefKeyCurrentKeyCombination;
+        if (!bindingValidator.IsBindingValid(tempKeyCombinations,
+                                             out invalidBindingMessage)) {
+          Debug.LogWarning(
+              $"Could not migrate existing binding for shortcut \"{entry.identifier.path}\" with invalid binding.\n{invalidBindingMessage}.");
+          continue;
         }
 
-        // Delete migrated profile if it was created and not modified
-        if (!migratedProfileAlreadyExisted && !migratedProfileModified)
-            profileManager.DeleteProfile(migratedProfile);
+        profileManager.ModifyShortcutEntry(
+            entry.identifier,
+            new List<KeyCombination>{prefKeyCurrentKeyCombination});
 
-        // Restore original active profile unless last loaded profile was null and the migrated profile was created
-        if (originalActiveProfile != null || migratedProfileAlreadyExisted)
-            profileManager.activeProfile = originalActiveProfile;
+        migratedProfileModified = true;
+      }
+
+      // Delete migrated profile if it was created and not modified
+      if (!migratedProfileAlreadyExisted && !migratedProfileModified)
+        profileManager.DeleteProfile(migratedProfile);
+
+      // Restore original active profile unless last loaded profile was null and
+      // the migrated profile was created
+      if (originalActiveProfile != null || migratedProfileAlreadyExisted)
+        profileManager.activeProfile = originalActiveProfile;
     }
-}
+  }
 }

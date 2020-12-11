@@ -4,23 +4,19 @@
 
 using System.Collections.Generic;
 
-namespace UnityEditor.ShortcutManagement
-{
-interface IDiscovery
-{
+namespace UnityEditor.ShortcutManagement {
+  interface IDiscovery {
     IEnumerable<ShortcutEntry> GetAllShortcuts();
-}
+  }
 
-interface IShortcutEntryDiscoveryInfo
-{
+  interface IShortcutEntryDiscoveryInfo {
     ShortcutEntry GetShortcutEntry();
     string GetFullMemberName();
     int GetLineNumber();
     string GetFilePath();
-}
+  }
 
-interface IDiscoveryShortcutProvider
-{
+  interface IDiscoveryShortcutProvider {
     IEnumerable<IShortcutEntryDiscoveryInfo> GetDefinedShortcuts();
-}
+  }
 }

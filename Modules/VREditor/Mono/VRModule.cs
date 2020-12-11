@@ -7,32 +7,32 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 
-namespace UnityEditorInternal.VR
-{
-public class VRModule
-{
-    private static bool IsTargetingCardboardOnIOS(BuildTarget target)
-    {
-        return PlayerSettings.virtualRealitySupported && target == BuildTarget.iOS &&
-               UnityEditorInternal.VR.VREditor.IsVRDeviceEnabledForBuildTarget(target, "cardboard");
+namespace UnityEditorInternal.VR {
+  public class VRModule {
+    private static bool IsTargetingCardboardOnIOS(BuildTarget target) {
+      return PlayerSettings.virtualRealitySupported &&
+             target == BuildTarget.iOS &&
+             UnityEditorInternal.VR.VREditor.IsVRDeviceEnabledForBuildTarget(
+                 target, "cardboard");
     }
 
-    public static void SetupBuildSettings(BuildTarget target, int osVerMajor)
-    {
-        if (IsTargetingCardboardOnIOS(target) && osVerMajor < 8)
-        {
-            Debug.LogWarning(string.Format("Deployment target version is set to {0}, but Cardboard supports only versions starting from 8.0.", osVerMajor));
-        }
+    public static void SetupBuildSettings(BuildTarget target, int osVerMajor) {
+      if (IsTargetingCardboardOnIOS(target) && osVerMajor < 8) {
+        Debug.LogWarning(string.Format(
+            "Deployment target version is set to {0}, but Cardboard supports only versions starting from 8.0.",
+            osVerMajor));
+      }
     }
 
-    public static bool ShouldInjectVRDependenciesForBuildTarget(BuildTarget target)
-    {
-        if (!PlayerSettings.virtualRealitySupported)
-            return false;
+    public static bool
+    ShouldInjectVRDependenciesForBuildTarget(BuildTarget target) {
+      if (!PlayerSettings.virtualRealitySupported)
+        return false;
 
-        VRDeviceInfoEditor[] enabledVRDevices = VREditor.GetEnabledVRDeviceInfo(target);
+      VRDeviceInfoEditor[] enabledVRDevices =
+          VREditor.GetEnabledVRDeviceInfo(target);
 
-        return (enabledVRDevices.Length > 0);
+      return (enabledVRDevices.Length > 0);
     }
-}
+  }
 }

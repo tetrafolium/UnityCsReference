@@ -4,77 +4,77 @@
 
 using System.Collections.Generic;
 
-namespace UnityEngine.TextCore
-{
-class MaterialReferenceManager
-{
+namespace UnityEngine.TextCore {
+  class MaterialReferenceManager {
     static MaterialReferenceManager s_Instance;
 
     // Dictionaries used to track Asset references.
-    Dictionary<int, Material> m_FontMaterialReferenceLookup = new Dictionary<int, Material>();
-    Dictionary<int, FontAsset> m_FontAssetReferenceLookup = new Dictionary<int, FontAsset>();
-    Dictionary<int, TextSpriteAsset> m_SpriteAssetReferenceLookup = new Dictionary<int, TextSpriteAsset>();
-    Dictionary<int, TextGradientPreset> m_ColorGradientReferenceLookup = new Dictionary<int, TextGradientPreset>();
+    Dictionary<int, Material> m_FontMaterialReferenceLookup =
+        new Dictionary<int, Material>();
+    Dictionary<int, FontAsset> m_FontAssetReferenceLookup =
+        new Dictionary<int, FontAsset>();
+    Dictionary<int, TextSpriteAsset> m_SpriteAssetReferenceLookup =
+        new Dictionary<int, TextSpriteAsset>();
+    Dictionary<int, TextGradientPreset> m_ColorGradientReferenceLookup =
+        new Dictionary<int, TextGradientPreset>();
 
     /// <summary>
     /// Get a singleton instance of the registry
     /// </summary>
-    public static MaterialReferenceManager instance
-    {
-        get
-        {
-            if (s_Instance == null)
-                s_Instance = new MaterialReferenceManager();
-            return s_Instance;
-        }
+    public static MaterialReferenceManager instance {
+      get {
+        if (s_Instance == null)
+          s_Instance = new MaterialReferenceManager();
+        return s_Instance;
+      }
     }
 
     /// <summary>
     /// Add new font asset reference to dictionary.
     /// </summary>
     /// <param name="fontAsset"></param>
-    public static void AddFontAsset(FontAsset fontAsset)
-    {
-        instance.AddFontAssetInternal(fontAsset);
+    public static void AddFontAsset(FontAsset fontAsset) {
+      instance.AddFontAssetInternal(fontAsset);
     }
 
     /// <summary>
     ///  Add new Font Asset reference to dictionary.
     /// </summary>
     /// <param name="fontAsset"></param>
-    void AddFontAssetInternal(FontAsset fontAsset)
-    {
-        if (m_FontAssetReferenceLookup.ContainsKey(fontAsset.hashCode)) return;
+    void AddFontAssetInternal(FontAsset fontAsset) {
+      if (m_FontAssetReferenceLookup.ContainsKey(fontAsset.hashCode))
+        return;
 
-        // Add reference to the font asset.
-        m_FontAssetReferenceLookup.Add(fontAsset.hashCode, fontAsset);
+      // Add reference to the font asset.
+      m_FontAssetReferenceLookup.Add(fontAsset.hashCode, fontAsset);
 
-        // Add reference to the font material.
-        m_FontMaterialReferenceLookup.Add(fontAsset.materialHashCode, fontAsset.material);
+      // Add reference to the font material.
+      m_FontMaterialReferenceLookup.Add(fontAsset.materialHashCode,
+                                        fontAsset.material);
     }
 
     /// <summary>
     /// Add new Sprite Asset to dictionary.
     /// </summary>
     /// <param name="spriteAsset"></param>
-    public static void AddSpriteAsset(TextSpriteAsset spriteAsset)
-    {
-        instance.AddSpriteAssetInternal(spriteAsset);
+    public static void AddSpriteAsset(TextSpriteAsset spriteAsset) {
+      instance.AddSpriteAssetInternal(spriteAsset);
     }
 
     /// <summary>
     /// Internal method to add a new sprite asset to the dictionary.
     /// </summary>
     /// <param name="spriteAsset"></param>
-    void AddSpriteAssetInternal(TextSpriteAsset spriteAsset)
-    {
-        if (m_SpriteAssetReferenceLookup.ContainsKey(spriteAsset.hashCode)) return;
+    void AddSpriteAssetInternal(TextSpriteAsset spriteAsset) {
+      if (m_SpriteAssetReferenceLookup.ContainsKey(spriteAsset.hashCode))
+        return;
 
-        // Add reference to sprite asset.
-        m_SpriteAssetReferenceLookup.Add(spriteAsset.hashCode, spriteAsset);
+      // Add reference to sprite asset.
+      m_SpriteAssetReferenceLookup.Add(spriteAsset.hashCode, spriteAsset);
 
-        // Adding reference to the sprite asset material as well
-        m_FontMaterialReferenceLookup.Add(spriteAsset.hashCode, spriteAsset.material);
+      // Adding reference to the sprite asset material as well
+      m_FontMaterialReferenceLookup.Add(spriteAsset.hashCode,
+                                        spriteAsset.material);
     }
 
     /// <summary>
@@ -82,9 +82,9 @@ class MaterialReferenceManager
     /// </summary>
     /// <param name="hashCode"></param>
     /// <param name="spriteAsset"></param>
-    public static void AddSpriteAsset(int hashCode, TextSpriteAsset spriteAsset)
-    {
-        instance.AddSpriteAssetInternal(hashCode, spriteAsset);
+    public static void AddSpriteAsset(int hashCode,
+                                      TextSpriteAsset spriteAsset) {
+      instance.AddSpriteAssetInternal(hashCode, spriteAsset);
     }
 
     /// <summary>
@@ -92,19 +92,19 @@ class MaterialReferenceManager
     /// </summary>
     /// <param name="hashCode"></param>
     /// <param name="spriteAsset"></param>
-    void AddSpriteAssetInternal(int hashCode, TextSpriteAsset spriteAsset)
-    {
-        if (m_SpriteAssetReferenceLookup.ContainsKey(hashCode)) return;
+    void AddSpriteAssetInternal(int hashCode, TextSpriteAsset spriteAsset) {
+      if (m_SpriteAssetReferenceLookup.ContainsKey(hashCode))
+        return;
 
-        // Add reference to Sprite Asset.
-        m_SpriteAssetReferenceLookup.Add(hashCode, spriteAsset);
+      // Add reference to Sprite Asset.
+      m_SpriteAssetReferenceLookup.Add(hashCode, spriteAsset);
 
-        // Add reference to Sprite Asset using the asset hashcode.
-        m_FontMaterialReferenceLookup.Add(hashCode, spriteAsset.material);
+      // Add reference to Sprite Asset using the asset hashcode.
+      m_FontMaterialReferenceLookup.Add(hashCode, spriteAsset.material);
 
-        // Compatibility check
-        if (spriteAsset.hashCode == 0)
-            spriteAsset.hashCode = hashCode;
+      // Compatibility check
+      if (spriteAsset.hashCode == 0)
+        spriteAsset.hashCode = hashCode;
     }
 
     /// <summary>
@@ -112,9 +112,8 @@ class MaterialReferenceManager
     /// </summary>
     /// <param name="hashCode"></param>
     /// <param name="material"></param>
-    public static void AddFontMaterial(int hashCode, Material material)
-    {
-        instance.AddFontMaterialInternal(hashCode, material);
+    public static void AddFontMaterial(int hashCode, Material material) {
+      instance.AddFontMaterialInternal(hashCode, material);
     }
 
     /// <summary>
@@ -122,11 +121,10 @@ class MaterialReferenceManager
     /// </summary>
     /// <param name="hashCode"></param>
     /// <param name="material"></param>
-    void AddFontMaterialInternal(int hashCode, Material material)
-    {
-        // Since this function is called after checking if the material is
-        // contained in the dictionary, there is no need to check again.
-        m_FontMaterialReferenceLookup.Add(hashCode, material);
+    void AddFontMaterialInternal(int hashCode, Material material) {
+      // Since this function is called after checking if the material is
+      // contained in the dictionary, there is no need to check again.
+      m_FontMaterialReferenceLookup.Add(hashCode, material);
     }
 
     /// <summary>
@@ -134,9 +132,9 @@ class MaterialReferenceManager
     /// </summary>
     /// <param name="hashCode"></param>
     /// <param name="spriteAsset"></param>
-    public static void AddColorGradientPreset(int hashCode, TextGradientPreset spriteAsset)
-    {
-        instance.AddColorGradientPreset_Internal(hashCode, spriteAsset);
+    public static void AddColorGradientPreset(int hashCode,
+                                              TextGradientPreset spriteAsset) {
+      instance.AddColorGradientPreset_Internal(hashCode, spriteAsset);
     }
 
     /// <summary>
@@ -144,12 +142,13 @@ class MaterialReferenceManager
     /// </summary>
     /// <param name="hashCode"></param>
     /// <param name="spriteAsset"></param>
-    void AddColorGradientPreset_Internal(int hashCode, TextGradientPreset spriteAsset)
-    {
-        if (m_ColorGradientReferenceLookup.ContainsKey(hashCode)) return;
+    void AddColorGradientPreset_Internal(int hashCode,
+                                         TextGradientPreset spriteAsset) {
+      if (m_ColorGradientReferenceLookup.ContainsKey(hashCode))
+        return;
 
-        // Add reference to Color Gradient Preset Asset.
-        m_ColorGradientReferenceLookup.Add(hashCode, spriteAsset);
+      // Add reference to Color Gradient Preset Asset.
+      m_ColorGradientReferenceLookup.Add(hashCode, spriteAsset);
     }
 
     /// <summary>
@@ -157,9 +156,8 @@ class MaterialReferenceManager
     /// </summary>
     /// <param name="font"></param>
     /// <returns></returns>
-    public bool Contains(FontAsset font)
-    {
-        return m_FontAssetReferenceLookup.ContainsKey(font.hashCode);
+    public bool Contains(FontAsset font) {
+      return m_FontAssetReferenceLookup.ContainsKey(font.hashCode);
     }
 
     /// <summary>
@@ -167,105 +165,113 @@ class MaterialReferenceManager
     /// </summary>
     /// <param name="sprite"></param>
     /// <returns></returns>
-    public bool Contains(TextSpriteAsset sprite)
-    {
-        return m_FontAssetReferenceLookup.ContainsKey(sprite.hashCode);
+    public bool Contains(TextSpriteAsset sprite) {
+      return m_FontAssetReferenceLookup.ContainsKey(sprite.hashCode);
     }
 
     /// <summary>
-    /// Function returning the Font Asset corresponding to the provided hash code.
+    /// Function returning the Font Asset corresponding to the provided hash
+    /// code.
     /// </summary>
     /// <param name="hashCode"></param>
     /// <param name="fontAsset"></param>
     /// <returns></returns>
-    public static bool TryGetFontAsset(int hashCode, out FontAsset fontAsset)
-    {
-        return instance.TryGetFontAssetInternal(hashCode, out fontAsset);
+    public static bool TryGetFontAsset(int hashCode, out FontAsset fontAsset) {
+      return instance.TryGetFontAssetInternal(hashCode, out fontAsset);
     }
 
     /// <summary>
-    /// Internal Function returning the Font Asset corresponding to the provided hash code.
+    /// Internal Function returning the Font Asset corresponding to the provided
+    /// hash code.
     /// </summary>
     /// <param name="hashCode"></param>
     /// <param name="fontAsset"></param>
     /// <returns></returns>
-    bool TryGetFontAssetInternal(int hashCode, out FontAsset fontAsset)
-    {
-        fontAsset = null;
+    bool TryGetFontAssetInternal(int hashCode, out FontAsset fontAsset) {
+      fontAsset = null;
 
-        return m_FontAssetReferenceLookup.TryGetValue(hashCode, out fontAsset);
+      return m_FontAssetReferenceLookup.TryGetValue(hashCode, out fontAsset);
     }
 
     /// <summary>
-    /// Function returning the Sprite Asset corresponding to the provided hash code.
+    /// Function returning the Sprite Asset corresponding to the provided hash
+    /// code.
     /// </summary>
     /// <param name="hashCode"></param>
     /// <param name="spriteAsset"></param>
     /// <returns></returns>
-    public static bool TryGetSpriteAsset(int hashCode, out TextSpriteAsset spriteAsset)
-    {
-        return instance.TryGetSpriteAssetInternal(hashCode, out spriteAsset);
+    public static bool TryGetSpriteAsset(int hashCode,
+                                         out TextSpriteAsset spriteAsset) {
+      return instance.TryGetSpriteAssetInternal(hashCode, out spriteAsset);
     }
 
     /// <summary>
-    /// Internal function returning the Sprite Asset corresponding to the provided hash code.
+    /// Internal function returning the Sprite Asset corresponding to the
+    /// provided hash code.
     /// </summary>
     /// <param name="hashCode"></param>
     /// <param name="spriteAsset"></param>
     /// <returns></returns>
-    bool TryGetSpriteAssetInternal(int hashCode, out TextSpriteAsset spriteAsset)
-    {
-        spriteAsset = null;
+    bool TryGetSpriteAssetInternal(int hashCode,
+                                   out TextSpriteAsset spriteAsset) {
+      spriteAsset = null;
 
-        return m_SpriteAssetReferenceLookup.TryGetValue(hashCode, out spriteAsset);
+      return m_SpriteAssetReferenceLookup.TryGetValue(hashCode,
+                                                      out spriteAsset);
     }
 
     /// <summary>
-    /// Function returning the Color Gradient Preset corresponding to the provided hash code.
+    /// Function returning the Color Gradient Preset corresponding to the
+    /// provided hash code.
     /// </summary>
     /// <param name="hashCode"></param>
     /// <param name="gradientPreset"></param>
     /// <returns></returns>
-    public static bool TryGetColorGradientPreset(int hashCode, out TextGradientPreset gradientPreset)
-    {
-        return instance.TryGetColorGradientPresetInternal(hashCode, out gradientPreset);
+    public static bool
+    TryGetColorGradientPreset(int hashCode,
+                              out TextGradientPreset gradientPreset) {
+      return instance.TryGetColorGradientPresetInternal(hashCode,
+                                                        out gradientPreset);
     }
 
     /// <summary>
-    /// Internal function returning the Color Gradient Preset corresponding to the provided hash code.
+    /// Internal function returning the Color Gradient Preset corresponding to
+    /// the provided hash code.
     /// </summary>
     /// <param name="hashCode"></param>
     /// <param name="gradientPreset"></param>
     /// <returns></returns>
-    bool TryGetColorGradientPresetInternal(int hashCode, out TextGradientPreset gradientPreset)
-    {
-        gradientPreset = null;
+    bool
+    TryGetColorGradientPresetInternal(int hashCode,
+                                      out TextGradientPreset gradientPreset) {
+      gradientPreset = null;
 
-        return m_ColorGradientReferenceLookup.TryGetValue(hashCode, out gradientPreset);
+      return m_ColorGradientReferenceLookup.TryGetValue(hashCode,
+                                                        out gradientPreset);
     }
 
     /// <summary>
-    /// Function returning the Font Material corresponding to the provided hash code.
+    /// Function returning the Font Material corresponding to the provided hash
+    /// code.
     /// </summary>
     /// <param name="hashCode"></param>
     /// <param name="material"></param>
     /// <returns></returns>
-    public static bool TryGetMaterial(int hashCode, out Material material)
-    {
-        return instance.TryGetMaterialInternal(hashCode, out material);
+    public static bool TryGetMaterial(int hashCode, out Material material) {
+      return instance.TryGetMaterialInternal(hashCode, out material);
     }
 
     /// <summary>
-    /// Internal function returning the Font Material corresponding to the provided hash code.
+    /// Internal function returning the Font Material corresponding to the
+    /// provided hash code.
     /// </summary>
     /// <param name="hashCode"></param>
     /// <param name="material"></param>
     /// <returns></returns>
-    bool TryGetMaterialInternal(int hashCode, out Material material)
-    {
-        material = null;
+    bool TryGetMaterialInternal(int hashCode, out Material material) {
+      material = null;
 
-        return m_FontMaterialReferenceLookup.TryGetValue(hashCode, out material);
+      return m_FontMaterialReferenceLookup.TryGetValue(hashCode, out material);
     }
-}
+  }
 }

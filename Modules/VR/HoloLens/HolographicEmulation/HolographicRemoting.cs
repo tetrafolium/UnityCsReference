@@ -6,28 +6,18 @@ using System;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace UnityEngine.XR.WSA
-{
-public partial class HolographicRemoting
-{
-    public static HolographicStreamerConnectionState ConnectionState
-    {
-        get
-        {
-            return HolographicStreamerConnectionState.Disconnected;
-        }
+namespace UnityEngine.XR.WSA {
+  public partial class HolographicRemoting {
+    public static HolographicStreamerConnectionState ConnectionState {
+      get { return HolographicStreamerConnectionState.Disconnected; }
     }
-    public static void Connect(string clientName, int maxBitRate = 9999)
-    {
-        Connect(clientName, maxBitRate, RemoteDeviceVersion.V1);
+    public static void Connect(string clientName, int maxBitRate = 9999) {
+      Connect(clientName, maxBitRate, RemoteDeviceVersion.V1);
     }
 
-    public static void Connect(string clientName, int maxBitRate, RemoteDeviceVersion deviceVersion)
-    {
-    }
+    public static void Connect(string clientName, int maxBitRate,
+                               RemoteDeviceVersion deviceVersion) {}
 
-    public static void Disconnect()
-    {
-    }
-}
+    public static void Disconnect() {}
+  }
 }

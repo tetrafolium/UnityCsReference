@@ -5,35 +5,29 @@
 using System.Runtime.InteropServices;
 using UnityEngine.Bindings;
 
-namespace UnityEngine.Analytics
-{
+namespace UnityEngine.Analytics {
 
-[StructLayout(LayoutKind.Sequential)]
-[NativeHeader("Modules/UnityAnalytics/Public/UnityAnalytics.h")]
-[NativeHeader("Modules/UnityConnect/UnityConnectSettings.h")]
-[NativeHeader("Modules/UnityAnalytics/Public/Events/UserCustomEvent.h")]
-public static partial class Analytics
-{
-    public static bool initializeOnStartup
-    {
-        get
-        {
-            if (!IsInitialized())
-                return false;
-            return initializeOnStartupInternal;
-        }
-        set
-        {
-            if (IsInitialized())
-                initializeOnStartupInternal = value;
-        }
+  [StructLayout(LayoutKind.Sequential)]
+  [NativeHeader("Modules/UnityAnalytics/Public/UnityAnalytics.h")]
+  [NativeHeader("Modules/UnityConnect/UnityConnectSettings.h")]
+  [NativeHeader("Modules/UnityAnalytics/Public/Events/UserCustomEvent.h")]
+  public static partial class Analytics {
+    public static bool initializeOnStartup {
+      get {
+        if (!IsInitialized())
+          return false;
+        return initializeOnStartupInternal;
+      }
+      set {
+        if (IsInitialized())
+          initializeOnStartupInternal = value;
+      }
     }
 
-    public static AnalyticsResult ResumeInitialization()
-    {
-        if (!IsInitialized())
-            return AnalyticsResult.NotInitialized;
-        return ResumeInitializationInternal();
+    public static AnalyticsResult ResumeInitialization() {
+      if (!IsInitialized())
+        return AnalyticsResult.NotInitialized;
+      return ResumeInitializationInternal();
     }
 
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
@@ -41,63 +35,45 @@ public static partial class Analytics
     private static extern AnalyticsResult ResumeInitializationInternal();
 
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    private extern static bool initializeOnStartupInternal
-    {
-        [NativeMethod("GetInitializeOnStartup")]
-        get;
-        [NativeMethod("SetInitializeOnStartup")]
-        set;
+    private extern static bool initializeOnStartupInternal {
+      [NativeMethod("GetInitializeOnStartup")] get;
+      [NativeMethod("SetInitializeOnStartup")] set;
     }
 
     [ThreadSafe]
     internal static extern bool IsInitialized();
 
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    private extern static bool enabledInternal
-    {
-        [NativeMethod("GetEnabled")]
-        get;
-        [NativeMethod("SetEnabled")]
-        set;
+    private extern static bool enabledInternal {
+      [NativeMethod("GetEnabled")] get;
+      [NativeMethod("SetEnabled")] set;
     }
 
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    private extern static bool playerOptedOutInternal
-    {
-        [NativeMethod("GetPlayerOptedOut")]
-        get;
+    private extern static bool playerOptedOutInternal {
+      [NativeMethod("GetPlayerOptedOut")] get;
     }
 
     [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
-    private extern static string eventUrlInternal
-    {
-        [NativeMethod("GetEventUrl")]
-        get;
+    private extern static string eventUrlInternal {
+      [NativeMethod("GetEventUrl")] get;
     }
 
     [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
-    private extern static string configUrlInternal
-    {
-        [NativeMethod("GetConfigUrl")]
-        get;
+    private extern static string configUrlInternal {
+      [NativeMethod("GetConfigUrl")] get;
     }
 
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    private extern static bool limitUserTrackingInternal
-    {
-        [NativeMethod("GetLimitUserTracking")]
-        get;
-        [NativeMethod("SetLimitUserTracking")]
-        set;
+    private extern static bool limitUserTrackingInternal {
+      [NativeMethod("GetLimitUserTracking")] get;
+      [NativeMethod("SetLimitUserTracking")] set;
     }
 
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    private extern static bool deviceStatsEnabledInternal
-    {
-        [NativeMethod("GetDeviceStatsEnabled")]
-        get;
-        [NativeMethod("SetDeviceStatsEnabled")]
-        set;
+    private extern static bool deviceStatsEnabledInternal {
+      [NativeMethod("GetDeviceStatsEnabled")] get;
+      [NativeMethod("SetDeviceStatsEnabled")] set;
     }
 
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
@@ -105,46 +81,68 @@ public static partial class Analytics
     private static extern bool FlushArchivedEvents();
 
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    private static extern AnalyticsResult Transaction(string productId, double amount, string currency, string receiptPurchaseData, string signature, bool usingIAPService);
+    private static extern AnalyticsResult
+    Transaction(string productId, double amount, string currency,
+                string receiptPurchaseData, string signature,
+                bool usingIAPService);
 
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    private static extern AnalyticsResult SendCustomEventName(string customEventName);
+    private static extern AnalyticsResult
+    SendCustomEventName(string customEventName);
 
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    private static extern AnalyticsResult SendCustomEvent(CustomEventData eventData);
+    private static extern AnalyticsResult
+    SendCustomEvent(CustomEventData eventData);
 
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    internal static extern AnalyticsResult IsCustomEventWithLimitEnabled(string customEventName);
+    internal static extern AnalyticsResult
+    IsCustomEventWithLimitEnabled(string customEventName);
 
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    internal static extern AnalyticsResult EnableCustomEventWithLimit(string customEventName, bool enable);
+    internal static extern AnalyticsResult
+    EnableCustomEventWithLimit(string customEventName, bool enable);
 
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    internal static extern AnalyticsResult IsEventWithLimitEnabled(string eventName, int ver, string prefix);
+    internal static extern AnalyticsResult
+    IsEventWithLimitEnabled(string eventName, int ver, string prefix);
 
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    internal static extern AnalyticsResult EnableEventWithLimit(string eventName, bool enable, int ver, string prefix);
+    internal static extern AnalyticsResult
+    EnableEventWithLimit(string eventName, bool enable, int ver, string prefix);
 
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    internal static extern AnalyticsResult RegisterEventWithLimit(string eventName, int maxEventPerHour, int maxItems, string vendorKey, int ver, string prefix, string assemblyInfo, bool notifyServer);
+    internal static extern AnalyticsResult
+    RegisterEventWithLimit(string eventName, int maxEventPerHour, int maxItems,
+                           string vendorKey, int ver, string prefix,
+                           string assemblyInfo, bool notifyServer);
 
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    internal static extern AnalyticsResult RegisterEventsWithLimit(string[] eventName, int maxEventPerHour, int maxItems, string vendorKey, int ver, string prefix, string assemblyInfo, bool notifyServer);
+    internal static extern AnalyticsResult RegisterEventsWithLimit(
+        string[] eventName, int maxEventPerHour, int maxItems, string vendorKey,
+        int ver, string prefix, string assemblyInfo, bool notifyServer);
 
     [ThreadSafe]
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    internal static extern AnalyticsResult SendEventWithLimit(string eventName, object parameters, int ver, string prefix);
+    internal static extern AnalyticsResult
+    SendEventWithLimit(string eventName, object parameters, int ver,
+                       string prefix);
 
     [ThreadSafe]
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    internal static extern AnalyticsResult SetEventWithLimitEndPoint(string eventName, string endPoint, int ver, string prefix);
+    internal static extern AnalyticsResult
+    SetEventWithLimitEndPoint(string eventName, string endPoint, int ver,
+                              string prefix);
 
     [ThreadSafe]
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    internal static extern AnalyticsResult SetEventWithLimitPriority(string eventName, AnalyticsEventPriority eventPriority, int ver, string prefix);
+    internal static extern AnalyticsResult
+    SetEventWithLimitPriority(string eventName,
+                              AnalyticsEventPriority eventPriority, int ver,
+                              string prefix);
 
     [ThreadSafe]
     [StaticAccessor("GetUnityAnalytics()", StaticAccessorType.Dot)]
-    internal static extern bool QueueEvent(string eventName, object parameters, int ver, string prefix);
-}
+    internal static extern bool QueueEvent(string eventName, object parameters,
+                                           int ver, string prefix);
+  }
 }

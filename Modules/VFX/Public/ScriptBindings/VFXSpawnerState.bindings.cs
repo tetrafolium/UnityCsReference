@@ -7,129 +7,105 @@ using System.Runtime.InteropServices;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace UnityEngine.VFX
-{
-public enum VFXSpawnerLoopState
-{
+namespace UnityEngine.VFX {
+  public enum VFXSpawnerLoopState {
     Finished,
     DelayingBeforeLoop,
     Looping,
     DelayingAfterLoop
-}
+  }
 
-[RequiredByNativeCode]
-[StructLayout(LayoutKind.Sequential)]
-[NativeType(Header = "Modules/VFX/Public/VFXSpawnerState.h")]
-public sealed class VFXSpawnerState : IDisposable
-{
+  [RequiredByNativeCode]
+  [StructLayout(LayoutKind.Sequential)]
+  [NativeType(Header = "Modules/VFX/Public/VFXSpawnerState.h")]
+  public sealed class VFXSpawnerState : IDisposable {
     private IntPtr m_Ptr;
     private bool m_Owner;
-    internal VFXSpawnerState(IntPtr ptr, bool owner)
-    {
-        m_Ptr = ptr;
-        m_Owner = owner;
+    internal VFXSpawnerState(IntPtr ptr, bool owner) {
+      m_Ptr = ptr;
+      m_Owner = owner;
     }
 
     extern static internal IntPtr Internal_Create();
 
     [RequiredByNativeCode]
-    internal static VFXSpawnerState CreateSpawnerStateWrapper()
-    {
-        var spawnerState = new VFXSpawnerState(IntPtr.Zero, false);
-        return spawnerState;
+    internal static VFXSpawnerState CreateSpawnerStateWrapper() {
+      var spawnerState = new VFXSpawnerState(IntPtr.Zero, false);
+      return spawnerState;
     }
 
     [RequiredByNativeCode]
-    internal void SetWrapValue(IntPtr ptr)
-    {
-        if (m_Owner)
-        {
-            throw new Exception("VFXSpawnerState : SetWrapValue is reserved to CreateWrapper object");
-        }
-        m_Ptr = ptr;
+    internal void SetWrapValue(IntPtr ptr) {
+      if (m_Owner) {
+        throw new Exception(
+            "VFXSpawnerState : SetWrapValue is reserved to CreateWrapper object");
+      }
+      m_Ptr = ptr;
     }
 
-    internal IntPtr GetPtr()
-    {
-        return m_Ptr;
+    internal IntPtr GetPtr() { return m_Ptr; }
+
+    private void Release() {
+      if (m_Ptr != IntPtr.Zero && m_Owner) {
+        Internal_Destroy(m_Ptr);
+      }
+      m_Ptr = IntPtr.Zero;
     }
 
+    ~VFXSpawnerState() { Release(); }
 
-    private void Release()
-    {
-        if (m_Ptr != IntPtr.Zero && m_Owner)
-        {
-            Internal_Destroy(m_Ptr);
-        }
-        m_Ptr = IntPtr.Zero;
+    public void Dispose() {
+      Release();
+      GC.SuppressFinalize(this);
     }
 
-    ~VFXSpawnerState()
-    {
-        Release();
-    }
+    [NativeMethod(IsThreadSafe = true)] extern static private void
+    Internal_Destroy(IntPtr ptr);
 
-    public void Dispose()
-    {
-        Release();
-        GC.SuppressFinalize(this);
+    public bool playing {
+      get { return loopState == VFXSpawnerLoopState.Looping; }
+      set {
+        loopState =
+            value ? VFXSpawnerLoopState.Looping : VFXSpawnerLoopState.Finished;
+      }
     }
-
-    [NativeMethod(IsThreadSafe = true)]
-    extern static private void Internal_Destroy(IntPtr ptr);
-
-    public bool playing
-    {
-        get
-        {
-            return loopState == VFXSpawnerLoopState.Looping;
-        }
-        set
-        {
-            loopState = value ? VFXSpawnerLoopState.Looping : VFXSpawnerLoopState.Finished;
-        }
-    }
-    extern public bool newLoop {
-        get;
-    }
+    extern public bool newLoop { get; }
     extern public VFXSpawnerLoopState loopState {
-        get;
-        set;
+      get;
+      set;
     }
     extern public float spawnCount {
-        get;
-        set;
+      get;
+      set;
     }
     extern public float deltaTime {
-        get;
-        set;
+      get;
+      set;
     }
     extern public float totalTime {
-        get;
-        set;
+      get;
+      set;
     }
     extern public float delayBeforeLoop {
-        get;
-        set;
+      get;
+      set;
     }
     extern public float loopDuration {
-        get;
-        set;
+      get;
+      set;
     }
     extern public float delayAfterLoop {
-        get;
-        set;
+      get;
+      set;
     }
     extern public int loopIndex {
-        get;
-        set;
+      get;
+      set;
     }
     extern public int loopCount {
-        get;
-        set;
+      get;
+      set;
     }
-    extern public VFXEventAttribute vfxEventAttribute {
-        get;
-    }
-}
+    extern public VFXEventAttribute vfxEventAttribute { get; }
+  }
 }

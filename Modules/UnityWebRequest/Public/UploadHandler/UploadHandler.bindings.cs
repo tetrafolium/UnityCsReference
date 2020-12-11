@@ -9,12 +9,10 @@ using System.Collections.Generic;
 using UnityEngineInternal;
 using UnityEngine.Bindings;
 
-namespace UnityEngine.Networking
-{
-[StructLayout(LayoutKind.Sequential)]
-[NativeHeader("Modules/UnityWebRequest/Public/UploadHandler/UploadHandler.h")]
-public class UploadHandler : IDisposable
-{
+namespace UnityEngine.Networking {
+  [StructLayout(LayoutKind.Sequential)]
+  [NativeHeader("Modules/UnityWebRequest/Public/UploadHandler/UploadHandler.h")]
+  public class UploadHandler : IDisposable {
     [System.NonSerialized]
     internal IntPtr m_Ptr;
 
@@ -23,60 +21,36 @@ public class UploadHandler : IDisposable
 
     internal UploadHandler() {}
 
-    ~UploadHandler()
-    {
-        Dispose();
+    ~UploadHandler() { Dispose(); }
+
+    public void Dispose() {
+      if (m_Ptr != IntPtr.Zero) {
+        Release();
+        m_Ptr = IntPtr.Zero;
+      }
     }
 
-    public void Dispose()
-    {
-        if (m_Ptr != IntPtr.Zero)
-        {
-            Release();
-            m_Ptr = IntPtr.Zero;
-        }
+    public byte[] data {
+      get { return GetData(); }
     }
 
-    public byte[] data
-    {
-        get
-        {
-            return GetData();
-        }
+    public string contentType {
+      get { return GetContentType(); }
+      set { SetContentType(value); }
     }
 
-    public string contentType
-    {
-        get
-        {
-            return GetContentType();
-        }
-        set
-        {
-            SetContentType(value);
-        }
+    public float progress {
+      get { return GetProgress(); }
     }
 
-    public float progress
-    {
-        get
-        {
-            return GetProgress();
-        }
-    }
-
-    internal virtual byte[] GetData() {
-        return null;
-    }
+    internal virtual byte[] GetData() { return null; }
     internal virtual string GetContentType() {
-        return InternalGetContentType();
+      return InternalGetContentType();
     }
-    internal virtual void   SetContentType(string newContentType) {
-        InternalSetContentType(newContentType);
+    internal virtual void SetContentType(string newContentType) {
+      InternalSetContentType(newContentType);
     }
-    internal virtual float  GetProgress() {
-        return InternalGetProgress();
-    }
+    internal virtual float GetProgress() { return InternalGetProgress(); }
 
     [NativeMethod("GetContentType")]
     private extern string InternalGetContentType();
@@ -86,40 +60,36 @@ public class UploadHandler : IDisposable
 
     [NativeMethod("GetProgress")]
     private extern float InternalGetProgress();
-}
+  }
 
-[StructLayout(LayoutKind.Sequential)]
-[NativeHeader("Modules/UnityWebRequest/Public/UploadHandler/UploadHandlerRaw.h")]
-public sealed class UploadHandlerRaw : UploadHandler
-{
+  [StructLayout(LayoutKind.Sequential)]
+  [NativeHeader(
+      "Modules/UnityWebRequest/Public/UploadHandler/UploadHandlerRaw.h")]
+  public sealed class UploadHandlerRaw : UploadHandler {
     private static extern IntPtr Create(UploadHandlerRaw self, byte[] data);
 
-    public UploadHandlerRaw(byte[] data)
-    {
-        if (data != null && data.Length == 0)
-            throw new ArgumentException("Cannot create a data handler without payload data");
-        m_Ptr = Create(this, data);
+    public UploadHandlerRaw(byte[] data) {
+      if (data != null && data.Length == 0)
+        throw new ArgumentException(
+            "Cannot create a data handler without payload data");
+      m_Ptr = Create(this, data);
     }
 
     private extern byte[] InternalGetData();
 
-    internal override byte[] GetData()
-    {
-        return InternalGetData();
-    }
+    internal override byte[] GetData() { return InternalGetData(); }
+  }
 
-}
-
-[StructLayout(LayoutKind.Sequential)]
-[NativeHeader("Modules/UnityWebRequest/Public/UploadHandler/UploadHandlerFile.h")]
-public sealed class UploadHandlerFile : UploadHandler
-{
+  [StructLayout(LayoutKind.Sequential)]
+  [NativeHeader(
+      "Modules/UnityWebRequest/Public/UploadHandler/UploadHandlerFile.h")]
+  public sealed class UploadHandlerFile : UploadHandler {
     [NativeThrows]
-    private static extern IntPtr Create(UploadHandlerFile self, string filePath);
+    private static extern IntPtr Create(UploadHandlerFile self,
+                                        string filePath);
 
-    public UploadHandlerFile(string filePath)
-    {
-        m_Ptr = Create(this, filePath);
+    public UploadHandlerFile(string filePath) {
+      m_Ptr = Create(this, filePath);
     }
-}
+  }
 }

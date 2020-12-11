@@ -4,25 +4,21 @@
 
 using UnityEngine.Bindings;
 
-namespace UnityEngine.XR.WSA
-{
-[StaticAccessor("HolographicSettings::GetInstance()", StaticAccessorType.Dot)]
-[NativeHeader("Modules/VR/HoloLens/HolographicSettings.h")]
-public partial class HolographicSettings
-{
-    public static void SetFocusPointForFrame(Vector3 position)
-    {
-        InternalSetFocusPointForFrameP(position);
+namespace UnityEngine.XR.WSA {
+  [StaticAccessor("HolographicSettings::GetInstance()", StaticAccessorType.Dot)]
+  [NativeHeader("Modules/VR/HoloLens/HolographicSettings.h")]
+  public partial class HolographicSettings {
+    public static void SetFocusPointForFrame(Vector3 position) {
+      InternalSetFocusPointForFrameP(position);
     }
 
-    public static void SetFocusPointForFrame(Vector3 position, Vector3 normal)
-    {
-        InternalSetFocusPointForFramePN(position, normal);
+    public static void SetFocusPointForFrame(Vector3 position, Vector3 normal) {
+      InternalSetFocusPointForFramePN(position, normal);
     }
 
-    public static void SetFocusPointForFrame(Vector3 position, Vector3 normal, Vector3 velocity)
-    {
-        InternalSetFocusPointForFramePNV(position, normal, velocity);
+    public static void SetFocusPointForFrame(Vector3 position, Vector3 normal,
+                                             Vector3 velocity) {
+      InternalSetFocusPointForFramePNV(position, normal, velocity);
     }
 
     [NativeConditional("ENABLE_HOLOLENS_MODULE")]
@@ -31,41 +27,38 @@ public partial class HolographicSettings
 
     [NativeConditional("ENABLE_HOLOLENS_MODULE")]
     [NativeName("SetFocusPointForFrame")]
-    private static extern void InternalSetFocusPointForFramePN(Vector3 position, Vector3 normal);
-
+    private static extern void InternalSetFocusPointForFramePN(Vector3 position,
+                                                               Vector3 normal);
 
     [NativeConditional("ENABLE_HOLOLENS_MODULE")]
     [NativeName("SetFocusPointForFrame")]
-    private static extern void InternalSetFocusPointForFramePNV(Vector3 position, Vector3 normal, Vector3 velocity);
+    private static extern void
+    InternalSetFocusPointForFramePNV(Vector3 position, Vector3 normal,
+                                     Vector3 velocity);
 
-    // This method returns whether or not the display is opaque by asking WinRT if the device family is Windows.Holographic or Windows.Desktop.
+    // This method returns whether or not the display is opaque by asking WinRT
+    // if the device family is Windows.Holographic or Windows.Desktop.
     //
     // "true" is the default value returned in case of error.
     public static bool IsDisplayOpaque {
-        get {
-            return true;
-        }
+      get { return true; }
     }
 
     [NativeConditional("ENABLE_HOLOLENS_MODULE")]
     public static extern bool IsContentProtectionEnabled {
-        get;
-        set;
+      get;
+      set;
     }
 
-    public enum HolographicReprojectionMode
-    {
-        PositionAndOrientation = 0,
-        OrientationOnly = 1,
-        Disabled = 2,
+    public enum HolographicReprojectionMode {
+      PositionAndOrientation = 0,
+      OrientationOnly = 1,
+      Disabled = 2,
     }
 
-    public static HolographicReprojectionMode ReprojectionMode
-    {
-        get {
-            return HolographicReprojectionMode.Disabled;
-        }
-        set {}
+    public static HolographicReprojectionMode ReprojectionMode {
+      get { return HolographicReprojectionMode.Disabled; }
+      set {}
     }
-}
+  }
 }

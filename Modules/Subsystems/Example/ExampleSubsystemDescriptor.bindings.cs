@@ -4,27 +4,20 @@
 
 using System;
 using UnityEngine.Bindings;
-using UsedByNativeCodeAttribute = UnityEngine.Scripting.UsedByNativeCodeAttribute;
+using UsedByNativeCodeAttribute =
+    UnityEngine.Scripting.UsedByNativeCodeAttribute;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace UnityEngine.Subsystems
-{
-[NativeType(Header = "Modules/Subsystems/Example/ExampleSubsystemDescriptor.h")]
-[UsedByNativeCode]
-public class ExampleSubsystemDescriptor : IntegratedSubsystemDescriptor<ExampleSubsystem>
-{
-    public extern bool supportsEditorMode {
-        get;
-    }
-    public extern bool disableBackbufferMSAA {
-        get;
-    }
-    public extern bool stereoscopicBackbuffer {
-        get;
-    }
-    public extern bool usePBufferEGL {
-        get;
-    }
-}
+namespace UnityEngine.Subsystems {
+  [NativeType(Header =
+                  "Modules/Subsystems/Example/ExampleSubsystemDescriptor.h")]
+  [UsedByNativeCode]
+  public class ExampleSubsystemDescriptor
+      : IntegratedSubsystemDescriptor<ExampleSubsystem> {
+    public extern bool supportsEditorMode { get; }
+    public extern bool disableBackbufferMSAA { get; }
+    public extern bool stereoscopicBackbuffer { get; }
+    public extern bool usePBufferEGL { get; }
+  }
 }

@@ -4,51 +4,43 @@
 
 using UnityEngine.Bindings;
 
-namespace UnityEngine.Connect
-{
-[NativeHeader("Modules/UnityConnect/UnityConnectSettings.h")]
-internal class UnityConnectSettings : Object
-{
+namespace UnityEngine.Connect {
+  [NativeHeader("Modules/UnityConnect/UnityConnectSettings.h")]
+  internal class UnityConnectSettings : Object {
     [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
-    public extern static bool enabled
-    {
-        get;
-        set;
+    public extern static bool enabled {
+      get;
+      set;
     }
 
     [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
-    public extern static bool testMode
-    {
-        get;
-        set;
+    public extern static bool testMode {
+      get;
+      set;
     }
 
     [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
-    public extern static string eventUrl
-    {
-        get;
-        set;
+    public extern static string eventUrl {
+      get;
+      set;
     }
 
     [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
-    public extern static string eventOldUrl
-    {
-        get;
-        set;
+    public extern static string eventOldUrl {
+      get;
+      set;
     }
 
     [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
-    public extern static string configUrl
-    {
-        get;
-        set;
+    public extern static string configUrl {
+      get;
+      set;
     }
 
     [StaticAccessor("GetUnityConnectSettings()", StaticAccessorType.Dot)]
-    public extern static int testInitMode
-    {
-        get;
-        set;
+    public extern static int testInitMode {
+      get;
+      set;
     }
-}
+  }
 }

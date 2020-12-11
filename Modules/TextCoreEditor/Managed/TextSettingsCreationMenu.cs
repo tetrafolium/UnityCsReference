@@ -6,35 +6,33 @@ using UnityEngine;
 using UnityEngine.TextCore;
 using System.IO;
 
-
-namespace UnityEditor.TextCore
-{
-static class TextSettingsCreationMenu
-{
+namespace UnityEditor.TextCore {
+  static class TextSettingsCreationMenu {
     [MenuItem("Assets/Create/TextCore/Text Settings", false, 200, true)]
-    public static void CreateTextSettingsAsset()
-    {
-        Object target = Selection.activeObject;
+    public static void CreateTextSettingsAsset() {
+      Object target = Selection.activeObject;
 
-        // Make sure the selection is a font file
-        if (target == null)
-        {
-            //Debug.LogWarning("A Font file must first be selected in order to create a Font Asset.");
-            return;
-        }
+      // Make sure the selection is a font file
+      if (target == null) {
+        // Debug.LogWarning("A Font file must first be selected in order to
+        // create a Font Asset.");
+        return;
+      }
 
-        string targetPath = AssetDatabase.GetAssetPath(target);
-        string folderPath = Path.GetDirectoryName(targetPath);
-        string newAssetFilePathWithName = AssetDatabase.GenerateUniqueAssetPath(folderPath + "/Text Settings.asset");
+      string targetPath = AssetDatabase.GetAssetPath(target);
+      string folderPath = Path.GetDirectoryName(targetPath);
+      string newAssetFilePathWithName = AssetDatabase.GenerateUniqueAssetPath(
+          folderPath + "/Text Settings.asset");
 
-        //// Create new TM Font Asset.
-        TextSettings textSettings = ScriptableObject.CreateInstance<TextSettings>();
-        AssetDatabase.CreateAsset(textSettings, newAssetFilePathWithName);
+      //// Create new TM Font Asset.
+      TextSettings textSettings =
+          ScriptableObject.CreateInstance<TextSettings>();
+      AssetDatabase.CreateAsset(textSettings, newAssetFilePathWithName);
 
-        // Not sure if this is still necessary in newer versions of Unity.
-        EditorUtility.SetDirty(textSettings);
+      // Not sure if this is still necessary in newer versions of Unity.
+      EditorUtility.SetDirty(textSettings);
 
-        AssetDatabase.SaveAssets();
+      AssetDatabase.SaveAssets();
     }
-}
+  }
 }

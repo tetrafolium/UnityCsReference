@@ -10,16 +10,14 @@ using UnityEngine;
 using UnityEngine.Bindings;
 using UnityEngine.Internal;
 
-namespace UnityEditor.XR
-{
-/// <summary>
-/// Helper class to allow us to provide a *hidden* API for setting boot config options
-/// without actually making boot config public.
-/// </summary>
-[ExcludeFromDocs]
-[NativeType(Header = "Modules/XREditor/Boot/XRBoot.h")]
-public class BootOptions
-{
+namespace UnityEditor.XR {
+  /// <summary>
+  /// Helper class to allow us to provide a *hidden* API for setting boot config
+  /// options without actually making boot config public.
+  /// </summary>
+  [ExcludeFromDocs]
+  [NativeType(Header = "Modules/XREditor/Boot/XRBoot.h")]
+  public class BootOptions {
     /// <summary>
     /// API to allow an XR SDK provider to make sure that correct VR tasks are
     /// completed at boot time. Calling this with a valid library name will set
@@ -30,9 +28,9 @@ public class BootOptions
     /// <param name="bootConfigPath">The path to the boot config file</param>
     /// <param name="libraryName">The library name</param>
     [ExcludeFromDocs]
-    public static void SetXRSDKPreInitLibrary(string bootConfigPath, string libraryName)
-    {
-        Internal_SetXRSDKPreInitLibrary(bootConfigPath, libraryName);
+    public static void SetXRSDKPreInitLibrary(string bootConfigPath,
+                                              string libraryName) {
+      Internal_SetXRSDKPreInitLibrary(bootConfigPath, libraryName);
     }
 
     [ExcludeFromDocs]
@@ -40,6 +38,7 @@ public class BootOptions
     [NativeConditional("ENABLE_XR")]
     [StaticAccessor("XRBoot", StaticAccessorType.DoubleColon)]
     [NativeName("SetXRSDKPreInitLibrary")]
-    internal static extern void Internal_SetXRSDKPreInitLibrary(string bootConfigPath, string libraryName);
-}
+    internal static extern void
+    Internal_SetXRSDKPreInitLibrary(string bootConfigPath, string libraryName);
+  }
 }

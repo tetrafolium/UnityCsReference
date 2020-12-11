@@ -6,20 +6,17 @@ using UnityEngine;
 using UnityEditor;
 
 using UnityEngine.VFX;
-namespace UnityEditor.VFX
-{
-[CustomEditor(typeof(VisualEffect))]
-[CanEditMultipleObjects]
-class VisualEffectEditorDefault : Editor
-{
-    class Styles
-    {
-        public static GUIContent message = EditorGUIUtility.TrTextContent("The Visual Effect component requires the com.unity.visualeffectgraph package.");
+namespace UnityEditor.VFX {
+  [CustomEditor(typeof(VisualEffect))]
+  [CanEditMultipleObjects]
+  class VisualEffectEditorDefault : Editor {
+    class Styles {
+      public static GUIContent message = EditorGUIUtility.TrTextContent(
+          "The Visual Effect component requires the com.unity.visualeffectgraph package.");
     }
 
-    public override void OnInspectorGUI()
-    {
-        EditorGUILayout.LabelField(Styles.message);
+    public override void OnInspectorGUI() {
+      EditorGUILayout.LabelField(Styles.message);
     }
-}
+  }
 }

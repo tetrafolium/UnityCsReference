@@ -12,43 +12,33 @@ using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 using Object = UnityEngine.Object;
 
-namespace UnityEngine.Analytics
-{
-[StructLayout(LayoutKind.Sequential)]
-[NativeHeader("Modules/UnityAnalytics/Public/Events/UserCustomEvent.h")]
-internal partial class CustomEventData : IDisposable
-{
+namespace UnityEngine.Analytics {
+  [StructLayout(LayoutKind.Sequential)]
+  [NativeHeader("Modules/UnityAnalytics/Public/Events/UserCustomEvent.h")]
+  internal partial class CustomEventData : IDisposable {
     [System.NonSerialized]
     internal IntPtr m_Ptr;
 
     private CustomEventData() {}
 
-    public CustomEventData(string name)
-    {
-        m_Ptr = Internal_Create(this, name);
+    public CustomEventData(string name) { m_Ptr = Internal_Create(this, name); }
+
+    ~CustomEventData() { Destroy(); }
+
+    void Destroy() {
+      if (m_Ptr != IntPtr.Zero) {
+        Internal_Destroy(m_Ptr);
+        m_Ptr = IntPtr.Zero;
+      }
     }
 
-    ~CustomEventData()
-    {
-        Destroy();
+    public void Dispose() {
+      Destroy();
+      GC.SuppressFinalize(this);
     }
 
-    void Destroy()
-    {
-        if (m_Ptr != IntPtr.Zero)
-        {
-            Internal_Destroy(m_Ptr);
-            m_Ptr = IntPtr.Zero;
-        }
-    }
-
-    public void Dispose()
-    {
-        Destroy();
-        GC.SuppressFinalize(this);
-    }
-
-    internal static extern IntPtr Internal_Create(CustomEventData ced, string name);
+    internal static extern IntPtr Internal_Create(CustomEventData ced,
+                                                  string name);
     [ThreadSafe]
     internal static extern void Internal_Destroy(IntPtr ptr);
 
@@ -59,5 +49,5 @@ internal partial class CustomEventData : IDisposable
     public extern bool AddUInt64(string key, UInt64 value);
     public extern bool AddBool(string key, bool value);
     public extern bool AddDouble(string key, double value);
-}
+  }
 }

@@ -4,11 +4,9 @@
 
 using UnityEngine.Scripting;
 
-namespace UnityEditor.RestService
-{
-[UsedByNativeCode]
-internal enum HttpStatusCode
-{
+namespace UnityEditor.RestService {
+  [UsedByNativeCode]
+  internal enum HttpStatusCode {
     Ok = 200,
     Created = 201,
     Accepted = 202,
@@ -19,5 +17,5 @@ internal enum HttpStatusCode
     MethodNotAllowed = 405,
     InternalServerError = 500,
     NotImplemented = 501
-}
+  }
 }

@@ -6,12 +6,13 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine.Bindings;
 
-namespace UnityEngine.Networking
-{
-[NativeHeader("Modules/UnityWebRequestAudio/Public/DownloadHandlerAudioClip.h")]
-internal static class WebRequestWWW
-{
+namespace UnityEngine.Networking {
+  [NativeHeader(
+      "Modules/UnityWebRequestAudio/Public/DownloadHandlerAudioClip.h")]
+  internal static class WebRequestWWW {
     [FreeFunction("UnityWebRequestCreateAudioClip")]
-    internal extern static AudioClip InternalCreateAudioClipUsingDH(DownloadHandler dh, string url, bool stream, bool compressed, AudioType audioType);
-}
+    internal extern static AudioClip
+    InternalCreateAudioClipUsingDH(DownloadHandler dh, string url, bool stream,
+                                   bool compressed, AudioType audioType);
+  }
 }

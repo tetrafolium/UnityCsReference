@@ -4,22 +4,23 @@
 
 using System;
 using UnityEngine.Bindings;
-using UsedByNativeCodeAttribute = UnityEngine.Scripting.UsedByNativeCodeAttribute;
+using UsedByNativeCodeAttribute =
+    UnityEngine.Scripting.UsedByNativeCodeAttribute;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using UnityEngine.Experimental;
 
-namespace UnityEngine.XR
-{
-[NativeHeader("Modules/XR/XRPrefix.h")]
-[NativeType(Header = "Modules/XR/Subsystems/Input/XRInputSubsystemDescriptor.h")]
-[UsedByNativeCode]
-[NativeConditional("ENABLE_XR")]
-public class XRInputSubsystemDescriptor : IntegratedSubsystemDescriptor<XRInputSubsystem>
-{
+namespace UnityEngine.XR {
+  [NativeHeader("Modules/XR/XRPrefix.h")]
+  [NativeType(Header =
+                  "Modules/XR/Subsystems/Input/XRInputSubsystemDescriptor.h")]
+  [UsedByNativeCode]
+  [NativeConditional("ENABLE_XR")]
+  public class XRInputSubsystemDescriptor
+      : IntegratedSubsystemDescriptor<XRInputSubsystem> {
     [NativeConditional("ENABLE_XR")]
     public extern bool disablesLegacyInput {
-        get;
+      get;
     }
-}
+  }
 }

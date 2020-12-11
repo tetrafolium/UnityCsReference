@@ -7,19 +7,16 @@ using UnityEngine;
 using UnityEngine.Bindings;
 using UnityEngine.Rendering;
 
-namespace UnityEngine.VFX
-{
-[Flags]
-internal enum VFXCullingFlags
-{
+namespace UnityEngine.VFX {
+  [Flags]
+  internal enum VFXCullingFlags {
     CullNone = 0,
     CullSimulation = 1 << 0,
     CullBoundsUpdate = 1 << 1,
     CullDefault = CullSimulation | CullBoundsUpdate,
-}
+  }
 
-internal enum VFXExpressionOperation
-{
+  internal enum VFXExpressionOperation {
     // no-op
     None,
 
@@ -44,7 +41,7 @@ internal enum VFXExpressionOperation
     ManagerMaxDeltaTime,
     ManagerFixedTimeStep,
 
-    //Game time manager access (built-in values)
+    // Game time manager access (built-in values)
     GameDeltaTime,
     GameUnscaledDeltaTime,
     GameSmoothDeltaTime,
@@ -200,10 +197,9 @@ internal enum VFXExpressionOperation
     SpawnerStateDelayAfterLoop,
     SpawnerStateLoopIndex,
     SpawnerStateLoopCount,
-}
+  }
 
-internal enum VFXValueType
-{
+  internal enum VFXValueType {
     None,
     Float,
     Float2,
@@ -223,77 +219,72 @@ internal enum VFXValueType
     Spline,
     Boolean,
     Buffer,
-}
+  }
 
-internal enum VFXTaskType
-{
+  internal enum VFXTaskType {
     None = 0,
 
-    Spawner     = 0x10000000,
-    Initialize  = 0x20000000,
-    Update      = 0x30000000,
-    Output      = 0x40000000,
+    Spawner = 0x10000000,
+    Initialize = 0x20000000,
+    Update = 0x30000000,
+    Output = 0x40000000,
 
     // updates
-    CameraSort                  = Update | 1,
+    CameraSort = Update | 1,
 
     // outputs
-    ParticlePointOutput         = Output | 0,
-    ParticleLineOutput          = Output | 1,
-    ParticleQuadOutput          = Output | 2,
-    ParticleHexahedronOutput    = Output | 3,
-    ParticleMeshOutput          = Output | 4,
-    ParticleTriangleOutput      = Output | 5,
-    ParticleOctagonOutput       = Output | 6,
+    ParticlePointOutput = Output | 0,
+    ParticleLineOutput = Output | 1,
+    ParticleQuadOutput = Output | 2,
+    ParticleHexahedronOutput = Output | 3,
+    ParticleMeshOutput = Output | 4,
+    ParticleTriangleOutput = Output | 5,
+    ParticleOctagonOutput = Output | 6,
 
     // spawners
-    ConstantRateSpawner         = Spawner | 0,
-    BurstSpawner                = Spawner | 1,
-    PeriodicBurstSpawner        = Spawner | 2,
-    VariableRateSpawner         = Spawner | 3,
-    CustomCallbackSpawner       = Spawner | 4,
-    SetAttributeSpawner         = Spawner | 5,
-    EvaluateExpressionsSpawner  = Spawner | 6
-}
+    ConstantRateSpawner = Spawner | 0,
+    BurstSpawner = Spawner | 1,
+    PeriodicBurstSpawner = Spawner | 2,
+    VariableRateSpawner = Spawner | 3,
+    CustomCallbackSpawner = Spawner | 4,
+    SetAttributeSpawner = Spawner | 5,
+    EvaluateExpressionsSpawner = Spawner | 6
+  }
 
-internal enum VFXSystemType
-{
-    Spawner,
-    Particle,
-    Mesh
-}
+  internal enum VFXSystemType { Spawner, Particle, Mesh }
 
-internal enum VFXSystemFlag
-{
+  internal enum VFXSystemFlag {
     SystemDefault = 0,
     SystemHasKill = 1 << 0,
     SystemHasIndirectBuffer = 1 << 1,
     SystemReceivedEventGPU = 1 << 2,
     SystemHasStrips = 1 << 3,
-}
+  }
 
-[Flags]
-internal enum VFXUpdateMode
-{
+  [Flags]
+  internal enum VFXUpdateMode {
     FixedDeltaTime = 0,
     DeltaTime = 1 << 0,
     IgnoreTimeScale = 1 << 1,
     ExactFixedTimeStep = 1 << 2,
 
-    //Following line is only for UI compatibility
-    //This entry can be removed once a new package has been released
-    //It provides a way to access to all option without changing C# package code
+    // Following line is only for UI compatibility
+    // This entry can be removed once a new package has been released
+    // It provides a way to access to all option without changing C# package
+    // code
     DeltaTimeAndIgnoreTimeScale = DeltaTime | IgnoreTimeScale,
-    FixedDeltaAndExactTime = FixedDeltaTime | ExactFixedTimeStep, //Actually equals to ExactFixedTimeStep
-    FixedDeltaAndExactTimeAndIgnoreTimeScale = FixedDeltaTime | ExactFixedTimeStep | IgnoreTimeScale
-}
+    FixedDeltaAndExactTime =
+        FixedDeltaTime |
+        ExactFixedTimeStep, // Actually equals to ExactFixedTimeStep
+    FixedDeltaAndExactTimeAndIgnoreTimeScale =
+        FixedDeltaTime | ExactFixedTimeStep | IgnoreTimeScale
+  }
 
-[Flags]
-public enum VFXCameraBufferTypes
-{
+  [Flags]
+  public enum VFXCameraBufferTypes {
     None = 0,
     Depth = 1 << 0,
     Color = 1 << 1,
     Normal = 1 << 2,
-}
+  }
 }

@@ -2,31 +2,28 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
-namespace UnityEngine.TextCore
-{
-struct Extents
-{
+namespace UnityEngine.TextCore {
+  struct Extents {
     public Vector2 min;
     public Vector2 max;
 
-    public Extents(Vector2 min, Vector2 max)
-    {
-        this.min = min;
-        this.max = max;
+    public Extents(Vector2 min, Vector2 max) {
+      this.min = min;
+      this.max = max;
     }
 
-    public override string ToString()
-    {
-        string s = "Min (" + min.x.ToString("f2") + ", " + min.y.ToString("f2") + ")   Max (" + max.x.ToString("f2") + ", " + max.y.ToString("f2") + ")";
-        return s;
+    public override string ToString() {
+      string s = "Min (" + min.x.ToString("f2") + ", " + min.y.ToString("f2") +
+                 ")   Max (" + max.x.ToString("f2") + ", " +
+                 max.y.ToString("f2") + ")";
+      return s;
     }
-}
+  }
 
-/// <summary>
-/// Structure which contains information about the individual lines of text.
-/// </summary>
-struct LineInfo
-{
+  /// <summary>
+  /// Structure which contains information about the individual lines of text.
+  /// </summary>
+  struct LineInfo {
     internal int controlCharacterCount;
 
     public int characterCount;
@@ -51,5 +48,5 @@ struct LineInfo
 
     public TextAlignment alignment;
     public Extents lineExtents;
-}
+  }
 }

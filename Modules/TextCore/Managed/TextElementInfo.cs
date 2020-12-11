@@ -4,24 +4,22 @@
 
 using UnityEngine.Bindings;
 
-namespace UnityEngine.TextCore
-{
-struct TextVertex
-{
+namespace UnityEngine.TextCore {
+  struct TextVertex {
     public Vector3 position;
     public Vector2 uv;
     public Vector2 uv2;
     public Vector2 uv4;
     public Color32 color;
-}
+  }
 
-/// <summary>
-/// Structure containing information about individual text elements (character or sprites).
-/// </summary>
-struct TextElementInfo
-{
+  /// <summary>
+  /// Structure containing information about individual text elements (character
+  /// or sprites).
+  /// </summary>
+  struct TextElementInfo {
     public char character; // Should be changed to an int to handle UTF 32
-    public int index; // Index of the character in the input string.
+    public int index;      // Index of the character in the input string.
     public TextElementType elementType;
 
     public TextElement textElement;
@@ -61,5 +59,5 @@ struct TextElementInfo
     public Color32 highlightColor;
     public FontStyles style;
     public bool isVisible;
-}
+  }
 }

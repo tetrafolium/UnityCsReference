@@ -2,50 +2,45 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
-
 using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-namespace UnityEditor.Connect
-{
-internal class UnityConnectWebRequestException : Exception
-{
+namespace UnityEditor.Connect {
+  internal class UnityConnectWebRequestException : Exception {
     public string error {
-        get;
-        set;
+      get;
+      set;
     }
     public string method {
-        get;
-        set;
+      get;
+      set;
     }
     public string url {
-        get;
-        set;
+      get;
+      set;
     }
     public long responseCode {
-        get;
-        set;
+      get;
+      set;
     }
     public bool isHttpError {
-        get;
-        set;
+      get;
+      set;
     }
     public bool isNetworkError {
-        get;
-        set;
+      get;
+      set;
     }
     public Dictionary<string, string> responseHeaders {
-        get;
-        set;
+      get;
+      set;
     }
     public int timeout {
-        get;
-        set;
+      get;
+      set;
     }
 
-    public UnityConnectWebRequestException(string message) : base(message)
-    {
-    }
-}
+    public UnityConnectWebRequestException(string message) : base(message) {}
+  }
 }

@@ -9,44 +9,40 @@ using System.Runtime.InteropServices;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace UnityEngine.Advertisements
-{
-[NativeHeader("Modules/UnityConnect/UnityAds/UnityAdsSettings.h")]
-static internal class UnityAdsSettings
-{
+namespace UnityEngine.Advertisements {
+  [NativeHeader("Modules/UnityConnect/UnityAds/UnityAdsSettings.h")]
+  static internal class UnityAdsSettings {
     [StaticAccessor("GetUnityAdsSettings()", StaticAccessorType.Dot)]
-    public extern static bool enabled
-    {
-        [ThreadSafe] get;
-        [ThreadSafe] set;
+    public extern static bool enabled {
+      [ThreadSafe] get;
+      [ThreadSafe] set;
     }
 
     [Obsolete("warning No longer supported and will always return true")]
-    public static bool IsPlatformEnabled(RuntimePlatform platform)
-    {
-        return true;
+    public static bool IsPlatformEnabled(RuntimePlatform platform) {
+      return true;
     }
 
     [Obsolete("warning No longer supported and will do nothing")]
-    public static void SetPlatformEnabled(RuntimePlatform platform, bool value)
-    {
-    }
+    public static void SetPlatformEnabled(RuntimePlatform platform,
+                                          bool value) {}
 
     [StaticAccessor("GetUnityAdsSettings()", StaticAccessorType.Dot)]
     public extern static bool initializeOnStartup {
-        get;
-        set;
+      get;
+      set;
     }
     [StaticAccessor("GetUnityAdsSettings()", StaticAccessorType.Dot)]
     public extern static bool testMode {
-        get;
-        set;
+      get;
+      set;
     }
 
     [StaticAccessor("GetUnityAdsSettings()", StaticAccessorType.Dot)]
     public extern static string GetGameId(RuntimePlatform platform);
 
     [StaticAccessor("GetUnityAdsSettings()", StaticAccessorType.Dot)]
-    public extern static void SetGameId(RuntimePlatform platform, string gameId);
-}
+    public extern static void SetGameId(RuntimePlatform platform,
+                                        string gameId);
+  }
 }

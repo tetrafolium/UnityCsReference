@@ -8,14 +8,15 @@ using System.Linq;
 using System.Text;
 using UnityEditorInternal;
 
-namespace UnityEditor.RestService
-{
-[UnityEngine.Scripting.RequiredByNativeCode]
-internal abstract class Handler
-{
+namespace UnityEditor.RestService {
+  [UnityEngine.Scripting.RequiredByNativeCode]
+  internal abstract class Handler {
     // The following methods are invoked from native code.
-    protected abstract void InvokeGet(Request request, string payload, Response writeResponse);
-    protected abstract void InvokePost(Request request, string payload, Response writeResponse);
-    protected abstract void InvokeDelete(Request request, string payload, Response writeResponse);
-}
+    protected abstract void InvokeGet(Request request, string payload,
+                                      Response writeResponse);
+    protected abstract void InvokePost(Request request, string payload,
+                                       Response writeResponse);
+    protected abstract void InvokeDelete(Request request, string payload,
+                                         Response writeResponse);
+  }
 }

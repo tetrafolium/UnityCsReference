@@ -9,40 +9,34 @@ using UnityEngine.Scripting;
 using System.Runtime.InteropServices;
 using UnityEngine.Internal;
 
-namespace UnityEngine
-{
-public enum WindZoneMode
-{
-    Directional,
-    Spherical
-}
+namespace UnityEngine {
+public enum WindZoneMode { Directional, Spherical }
 
 [NativeHeader("Modules/Wind/Public/Wind.h")]
-public class WindZone : Component
-{
-    extern public WindZoneMode mode {
-        get;
-        set;
-    }
-    extern public float radius {
-        get;
-        set;
-    }
-    extern public float windMain {
-        get;
-        set;
-    }
-    extern public float windTurbulence {
-        get;
-        set;
-    }
-    extern public float windPulseMagnitude  {
-        get;
-        set;
-    }
-    extern public float windPulseFrequency {
-        get;
-        set;
-    }
+public class WindZone : Component {
+  extern public WindZoneMode mode {
+    get;
+    set;
+  }
+  extern public float radius {
+    get;
+    set;
+  }
+  extern public float windMain {
+    get;
+    set;
+  }
+  extern public float windTurbulence {
+    get;
+    set;
+  }
+  extern public float windPulseMagnitude {
+    get;
+    set;
+  }
+  extern public float windPulseFrequency {
+    get;
+    set;
+  }
 }
 }

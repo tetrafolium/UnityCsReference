@@ -2,16 +2,12 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
-namespace UnityEngine
-{
-public interface ISubsystem
-{
-    bool running {
-        get;
-    }
+namespace UnityEngine {
+public interface ISubsystem {
+  bool running { get; }
 
-    void Start();
-    void Stop();
-    void Destroy();
+  void Start();
+  void Stop();
+  void Destroy();
 }
 }

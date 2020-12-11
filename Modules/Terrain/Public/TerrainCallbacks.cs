@@ -4,34 +4,37 @@
 
 using UnityEngine.Scripting;
 
-namespace UnityEngine.Experimental.TerrainAPI
-{
-public static class TerrainCallbacks
-{
-    public delegate void HeightmapChangedCallback(Terrain terrain, RectInt heightRegion, bool synched);
-    public delegate void TextureChangedCallback(Terrain terrain, string textureName, RectInt texelRegion, bool synched);
+namespace UnityEngine.Experimental.TerrainAPI {
+  public static class TerrainCallbacks {
+    public delegate void HeightmapChangedCallback(Terrain terrain,
+                                                  RectInt heightRegion,
+                                                  bool synched);
+    public delegate void TextureChangedCallback(Terrain terrain,
+                                                string textureName,
+                                                RectInt texelRegion,
+                                                bool synched);
 
     public static event HeightmapChangedCallback heightmapChanged;
     public static event TextureChangedCallback textureChanged;
 
     [RequiredByNativeCode]
-    internal static void InvokeHeightmapChangedCallback(TerrainData terrainData, RectInt heightRegion, bool synched)
-    {
-        if (heightmapChanged != null)
-        {
-            foreach (var user in terrainData.users)
-                heightmapChanged.Invoke(user, heightRegion, synched);
-        }
+    internal static void InvokeHeightmapChangedCallback(TerrainData terrainData,
+                                                        RectInt heightRegion,
+                                                        bool synched) {
+      if (heightmapChanged != null) {
+        foreach (var user in terrainData.users)
+          heightmapChanged.Invoke(user, heightRegion, synched);
+      }
     }
 
     [RequiredByNativeCode]
-    internal static void InvokeTextureChangedCallback(TerrainData terrainData, string textureName, RectInt texelRegion, bool synched)
-    {
-        if (textureChanged != null)
-        {
-            foreach (var user in terrainData.users)
-                textureChanged.Invoke(user, textureName, texelRegion, synched);
-        }
+    internal static void
+    InvokeTextureChangedCallback(TerrainData terrainData, string textureName,
+                                 RectInt texelRegion, bool synched) {
+      if (textureChanged != null) {
+        foreach (var user in terrainData.users)
+          textureChanged.Invoke(user, textureName, texelRegion, synched);
+      }
     }
-}
+  }
 }

@@ -4,85 +4,90 @@
 
 using System;
 
-namespace UnityEngine.SubsystemsImplementation
-{
-public abstract class SubsystemDescriptorWithProvider : ISubsystemDescriptor
-{
+namespace UnityEngine.SubsystemsImplementation {
+  public abstract class SubsystemDescriptorWithProvider : ISubsystemDescriptor {
     public string id {
-        get;
-        set;
+      get;
+      set;
     }
 
     internal protected Type providerType {
-        get;
-        set;
+      get;
+      set;
     }
     internal protected Type subsystemTypeOverride {
-        get;
-        set;
+      get;
+      set;
     }
 
     internal abstract ISubsystem CreateImpl();
     ISubsystem ISubsystemDescriptor.Create() => CreateImpl();
 
     internal abstract void ThrowIfInvalid();
-}
+  }
 
-public class SubsystemDescriptorWithProvider<TSubsystem, TProvider> : SubsystemDescriptorWithProvider
-    where TSubsystem : SubsystemWithProvider, new()
-    where TProvider : SubsystemProvider<TSubsystem>
-{
+  public class SubsystemDescriptorWithProvider<TSubsystem, TProvider>
+      : SubsystemDescriptorWithProvider where TSubsystem
+      : SubsystemWithProvider,
+        new () where TProvider : SubsystemProvider<TSubsystem> {
     internal override ISubsystem CreateImpl() => this.Create();
 
-    public TSubsystem Create()
-    {
-        var subsystem = SubsystemManager.FindStandaloneSubsystemByDescriptor(this) as TSubsystem;
-        if (subsystem != null)
-            return subsystem;
-
-        var provider = CreateProvider();
-        if (provider == null)
-            return null;
-
-        subsystem = subsystemTypeOverride != null
-                    ? (TSubsystem)Activator.CreateInstance(subsystemTypeOverride)
-                    : new TSubsystem();
-
-        subsystem.Initialize(this, provider);
-        SubsystemManager.AddStandaloneSubsystem(subsystem);
+    public TSubsystem Create() {
+      var subsystem = SubsystemManager.FindStandaloneSubsystemByDescriptor(this)
+                          as TSubsystem;
+      if (subsystem != null)
         return subsystem;
+
+      var provider = CreateProvider();
+      if (provider == null)
+        return null;
+
+      subsystem = subsystemTypeOverride !=
+                  null
+                    ?(TSubsystem)
+                      Activator.CreateInstance(subsystemTypeOverride)
+          : new TSubsystem();
+
+      subsystem.Initialize(this, provider);
+      SubsystemManager.AddStandaloneSubsystem(subsystem);
+      return subsystem;
     }
 
-    internal override sealed void ThrowIfInvalid()
-    {
-        if (providerType == null)
-            throw new InvalidOperationException("Invalid descriptor - must supply a valid providerType field!");
+    internal override sealed void ThrowIfInvalid() {
+      if (providerType == null)
+        throw new InvalidOperationException(
+            "Invalid descriptor - must supply a valid providerType field!");
 
-        if (!providerType.IsSubclassOf(typeof(TProvider)))
-            throw new InvalidOperationException(string.Format("Can't create provider - providerType '{0}' is not a subclass of '{1}'!", providerType.ToString(), typeof(TProvider).ToString()));
+      if (!providerType.IsSubclassOf(typeof(TProvider)))
+        throw new InvalidOperationException(string.Format(
+            "Can't create provider - providerType '{0}' is not a subclass of '{1}'!",
+            providerType.ToString(), typeof(TProvider).ToString()));
 
-        if (subsystemTypeOverride != null && !subsystemTypeOverride.IsSubclassOf(typeof(TSubsystem)))
-            throw new InvalidOperationException(string.Format("Can't create provider - subsystemTypeOverride '{0}' is not a subclass of '{1}'!", subsystemTypeOverride.ToString(), typeof(TSubsystem).ToString()));
+      if (subsystemTypeOverride != null &&
+          !subsystemTypeOverride.IsSubclassOf(typeof(TSubsystem)))
+        throw new InvalidOperationException(string.Format(
+            "Can't create provider - subsystemTypeOverride '{0}' is not a subclass of '{1}'!",
+            subsystemTypeOverride.ToString(), typeof(TSubsystem).ToString()));
     }
 
-    internal TProvider CreateProvider()
-    {
-        var provider = (TProvider)Activator.CreateInstance(providerType);
-        return provider.TryInitialize() ? provider : null;
+    internal TProvider CreateProvider() {
+      var provider = (TProvider) Activator.CreateInstance(providerType);
+      return provider.TryInitialize() ? provider : null;
     }
-}
+  }
 
-namespace Extensions
-{
-public static class SubsystemDescriptorExtensions
-{
-    public static SubsystemProxy<TSubsystem, TProvider> CreateProxy<TSubsystem, TProvider>(this SubsystemDescriptorWithProvider<TSubsystem, TProvider> descriptor)
-    where TSubsystem : SubsystemWithProvider, new()
-        where TProvider : SubsystemProvider<TSubsystem>
-    {
-        var provider = descriptor.CreateProvider();
-        return provider != null ? new SubsystemProxy<TSubsystem, TProvider>(provider) : null;
+  namespace Extensions {
+  public static class SubsystemDescriptorExtensions {
+    public static SubsystemProxy<TSubsystem, TProvider>
+    CreateProxy<TSubsystem, TProvider>(
+        this SubsystemDescriptorWithProvider<TSubsystem, TProvider> descriptor)
+        where TSubsystem : SubsystemWithProvider,
+                           new () where TProvider
+        : SubsystemProvider<TSubsystem> {
+      var provider = descriptor.CreateProvider();
+      return provider !=
+             null ? new SubsystemProxy<TSubsystem, TProvider>(provider) : null;
     }
-}
-}
+  }
+  }
 }

@@ -4,14 +4,13 @@
 
 using System;
 using UnityEngine.Bindings;
-using UsedByNativeCodeAttribute = UnityEngine.Scripting.UsedByNativeCodeAttribute;
+using UsedByNativeCodeAttribute =
+    UnityEngine.Scripting.UsedByNativeCodeAttribute;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace UnityEngine.XR
-{
-public struct XRMirrorViewBlitMode
-{
+namespace UnityEngine.XR {
+  public struct XRMirrorViewBlitMode {
     // *MUST* be in sync with the kUnityXRMirrorBlitDefault
     public const int Default = 0;
     // *MUST* be in sync with the kUnityXRMirrorBlitLeftEye
@@ -26,37 +25,38 @@ public struct XRMirrorViewBlitMode
     public const int Distort = -5;
     // *MUST* be in sync with the kUnityXRMirrorBlitNone
     public const int None = -6;
-}
+  }
 
-[NativeHeader("Modules/XR/XRPrefix.h")]
-[NativeType(Header = "Modules/XR/Subsystems/Display/XRDisplaySubsystemDescriptor.h")]
-[StructLayout(LayoutKind.Sequential)]
-public struct XRMirrorViewBlitModeDesc
-{
+  [NativeHeader("Modules/XR/XRPrefix.h")]
+  [NativeType(
+      Header = "Modules/XR/Subsystems/Display/XRDisplaySubsystemDescriptor.h")]
+  [StructLayout(LayoutKind.Sequential)]
+  public struct XRMirrorViewBlitModeDesc {
     public int blitMode;
     public String blitModeDesc;
-}
+  }
 
-[NativeType(Header = "Modules/XR/Subsystems/Display/XRDisplaySubsystemDescriptor.h")]
-[UsedByNativeCode]
-public class XRDisplaySubsystemDescriptor : IntegratedSubsystemDescriptor<XRDisplaySubsystem>
-{
+  [NativeType(
+      Header = "Modules/XR/Subsystems/Display/XRDisplaySubsystemDescriptor.h")]
+  [UsedByNativeCode]
+  public class XRDisplaySubsystemDescriptor
+      : IntegratedSubsystemDescriptor<XRDisplaySubsystem> {
     [NativeConditional("ENABLE_XR")]
     public extern bool disablesLegacyVr {
-        get;
+      get;
     }
 
     [NativeConditional("ENABLE_XR")]
     public extern bool enableBackBufferMSAA {
-        get;
+      get;
     }
 
     [NativeConditional("ENABLE_XR")]
-    [NativeMethod("TryGetAvailableMirrorModeCount")]
-    extern public int GetAvailableMirrorBlitModeCount();
+    [NativeMethod("TryGetAvailableMirrorModeCount")] extern public int
+    GetAvailableMirrorBlitModeCount();
 
     [NativeConditional("ENABLE_XR")]
-    [NativeMethod("TryGetMirrorModeByIndex")]
-    extern public void GetMirrorBlitModeByIndex(int index, out XRMirrorViewBlitModeDesc mode);
-}
+    [NativeMethod("TryGetMirrorModeByIndex")] extern public void
+    GetMirrorBlitModeByIndex(int index, out XRMirrorViewBlitModeDesc mode);
+  }
 }
