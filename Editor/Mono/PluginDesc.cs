@@ -7,8 +7,8 @@ using UnityEditor;
 
 namespace UnityEditorInternal {
 internal struct PluginDesc {
-  public string pluginPath;
-  public CPUArch architecture;
+	public string pluginPath;
+	public CPUArch architecture;
 }
 
 internal enum CPUArch { Any, x86, ARMv7 }

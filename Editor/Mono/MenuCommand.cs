@@ -16,20 +16,20 @@ namespace UnityEditor {
 [StructLayout(LayoutKind.Sequential)]
 [RequiredByNativeCode]
 public sealed class MenuCommand {
-  // Context is the object that is the target of a menu command.
-  public Object context;
-  // An integer for passing custom information to a menu item.
-  public int userData;
+// Context is the object that is the target of a menu command.
+public Object context;
+// An integer for passing custom information to a menu item.
+public int userData;
 
-  // Creates a new MenuCommand object.
-  public MenuCommand(Object inContext, int inUserData) {
-    context = inContext;
-    userData = inUserData;
-  }
-  // Creates a new MenuCommand object.
-  public MenuCommand(Object inContext) {
-    context = inContext;
-    userData = 0;
-  }
+// Creates a new MenuCommand object.
+public MenuCommand(Object inContext, int inUserData) {
+	context = inContext;
+	userData = inUserData;
+}
+// Creates a new MenuCommand object.
+public MenuCommand(Object inContext) {
+	context = inContext;
+	userData = 0;
+}
 }
 }

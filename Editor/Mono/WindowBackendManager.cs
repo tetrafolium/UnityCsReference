@@ -10,109 +10,125 @@ using UnityEngine.UIElements;
 
 namespace UnityEditor {
 internal interface IWindowModel {
-  Vector2 size { get; }
+Vector2 size {
+	get;
+}
 
-  EventInterests eventInterests { get; }
+EventInterests eventInterests {
+	get;
+}
 
-  Action onGUIHandler { get; }
+Action onGUIHandler {
+	get;
+}
 
-  IWindowBackend windowBackend {
-    get;
-    set;
-  }
+IWindowBackend windowBackend {
+	get;
+	set;
+}
 }
 
 internal interface IEditorWindowModel : IWindowModel {
-  EditorWindow window { get; }
+EditorWindow window {
+	get;
+}
 
-  RectOffset viewMargins { get; }
-  bool notificationVisible { get; }
+RectOffset viewMargins {
+	get;
+}
+bool notificationVisible {
+	get;
+}
 
-  Color playModeTintColor { get; }
+Color playModeTintColor {
+	get;
+}
 
-  Action onSplitterGUIHandler {
-    get;
-    set;
-  }
+Action onSplitterGUIHandler {
+	get;
+	set;
+}
 
-  IEditorWindowBackend editorWindowBackend {
-    get;
-    set;
-  }
+IEditorWindowBackend editorWindowBackend {
+	get;
+	set;
+}
 }
 
 internal interface IWindowBackend {
-  void OnCreate(IWindowModel model);
-  void OnDestroy(IWindowModel model);
+void OnCreate(IWindowModel model);
+void OnDestroy(IWindowModel model);
 
-  bool GetTooltip(Vector2 windowMouseCoordinates, out string tooltip,
-                  out Rect screenRectPosition);
+bool GetTooltip(Vector2 windowMouseCoordinates, out string tooltip,
+                out Rect screenRectPosition);
 
-  object visualTree { get; }
+object visualTree {
+	get;
+}
 
-  void SizeChanged();
-  void EventInterestsChanged();
+void SizeChanged();
+void EventInterestsChanged();
 }
 
 internal interface IEditorWindowBackend : IWindowBackend {
-  void PlayModeTintColorChanged();
-  void NotificationVisibilityChanged();
-  void Focused();
-  void Blurred();
-  void OnRegisterWindow();
-  void OnUnregisterWindow();
-  void OnDisplayWindowMenu(GenericMenu menu);
-  void ViewMarginsChanged();
+void PlayModeTintColorChanged();
+void NotificationVisibilityChanged();
+void Focused();
+void Blurred();
+void OnRegisterWindow();
+void OnUnregisterWindow();
+void OnDisplayWindowMenu(GenericMenu menu);
+void ViewMarginsChanged();
 }
 
 internal interface IEditorWindowBackendSystem {
-  IWindowBackend GetBackendForWindow(IWindowModel model);
-  bool ValidateBackendCompatibility(IWindowBackend backend, IWindowModel model,
-                                    ref bool isCompatible);
+IWindowBackend GetBackendForWindow(IWindowModel model);
+bool ValidateBackendCompatibility(IWindowBackend backend, IWindowModel model,
+                                  ref bool isCompatible);
 }
 internal static class EditorWindowBackendManager {
-  private static List<IEditorWindowBackendSystem> sRegisteredSystems =
-      new List<IEditorWindowBackendSystem>();
+private static List<IEditorWindowBackendSystem> sRegisteredSystems =
+	new List<IEditorWindowBackendSystem>();
 
-  static internal void RegisterWindowSystem(IEditorWindowBackendSystem system) {
-    sRegisteredSystems.Add(system);
-  }
+static internal void RegisterWindowSystem(IEditorWindowBackendSystem system) {
+	sRegisteredSystems.Add(system);
+}
 
-  static internal void
-  UnregisterWindowSystem(IEditorWindowBackendSystem system) {
-    sRegisteredSystems.Remove(system);
-  }
+static internal void
+UnregisterWindowSystem(IEditorWindowBackendSystem system) {
+	sRegisteredSystems.Remove(system);
+}
 
-  internal static bool IsBackendCompatible(IWindowBackend backend,
-                                           IWindowModel model) {
-    if (backend == null) {
-      return false;
-    }
+internal static bool IsBackendCompatible(IWindowBackend backend,
+                                         IWindowModel model) {
+	if (backend == null) {
+		return false;
+	}
 
-    bool isCompatible = false;
+	bool isCompatible = false;
 
-    // Last registered system has higherpriority
-    for (int i = sRegisteredSystems.Count - 1; i >= 0; --i) {
-      if (sRegisteredSystems [i]
-              .ValidateBackendCompatibility(backend, model, ref isCompatible)) {
-        return isCompatible;
-      }
-    }
+	// Last registered system has higherpriority
+	for (int i = sRegisteredSystems.Count - 1; i >= 0; --i) {
+		if (sRegisteredSystems [i]
+		    .ValidateBackendCompatibility(backend, model, ref isCompatible)) {
+			return isCompatible;
+		}
+	}
 
-    return true;
-  }
+	return true;
+}
 
-  internal static IWindowBackend GetBackend(IWindowModel model) {
-    // Last registered system has higherpriority
-    for (int i = sRegisteredSystems.Count - 1; i >= 0; --i) {
-      var backend = sRegisteredSystems [i]
-                        .GetBackendForWindow(model);
-      if (backend != null) {
-        return backend;
-      }
-    }
+internal static IWindowBackend GetBackend(IWindowModel model) {
+	// Last registered system has higherpriority
+	for (int i = sRegisteredSystems.Count - 1; i >= 0; --i) {
+		var backend = sRegisteredSystems [i]
+		              .GetBackendForWindow(model);
+		if (backend != null) {
+			return backend;
+		}
+	}
 
-    return EditorUIService.instance.GetDefaultWindowBackend(model);
-  }
+	return EditorUIService.instance.GetDefaultWindowBackend(model);
+}
 }
 }

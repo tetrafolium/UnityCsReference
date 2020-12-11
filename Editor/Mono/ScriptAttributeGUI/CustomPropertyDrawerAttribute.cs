@@ -10,18 +10,20 @@ namespace UnityEditor {
 [System.AttributeUsage(AttributeTargets.Class, Inherited = false,
                        AllowMultiple = true)]
 public sealed class CustomPropertyDrawer : Attribute {
-  internal Type m_Type;
-  internal bool m_UseForChildren;
+internal Type m_Type;
+internal bool m_UseForChildren;
 
-  // Tells a PropertyDrawer class which run-time class or attribute it's a
-  // drawer for.
-  public CustomPropertyDrawer(Type type) { m_Type = type; }
+// Tells a PropertyDrawer class which run-time class or attribute it's a
+// drawer for.
+public CustomPropertyDrawer(Type type) {
+	m_Type = type;
+}
 
-  // Tells a PropertyDrawer class which run-time class or attribute it's a
-  // drawer for.
-  public CustomPropertyDrawer(Type type, bool useForChildren) {
-    m_Type = type;
-    m_UseForChildren = useForChildren;
-  }
+// Tells a PropertyDrawer class which run-time class or attribute it's a
+// drawer for.
+public CustomPropertyDrawer(Type type, bool useForChildren) {
+	m_Type = type;
+	m_UseForChildren = useForChildren;
+}
 }
 }

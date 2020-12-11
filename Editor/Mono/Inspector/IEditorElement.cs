@@ -8,28 +8,32 @@ using UnityEngine.UIElements;
 
 namespace UnityEditor {
 internal interface IEditorElement {
-  Editor editor { get; }
-  IEnumerable<Editor> Editors { get; }
+Editor editor {
+	get;
+}
+IEnumerable<Editor> Editors {
+	get;
+}
 
-  void Reinit(int editorIndex);
+void Reinit(int editorIndex);
 
-  void AddPrefabComponent(VisualElement comp);
+void AddPrefabComponent(VisualElement comp);
 
-  // From VisualElement
-  void RemoveFromHierarchy();
-  string name {
-    get;
-    set;
-  }
+// From VisualElement
+void RemoveFromHierarchy();
+string name {
+	get;
+	set;
+}
 }
 
 internal static class EditorElementHelper {
-  internal static Func<int, IPropertyView, string, IEditorElement>
-      CreateFunctor;
+internal static Func<int, IPropertyView, string, IEditorElement>
+CreateFunctor;
 
-  internal static IEditorElement
-  CreateEditorElement(int editorIndex, IPropertyView iw, string title) {
-    return CreateFunctor.Invoke(editorIndex, iw, title);
-  }
+internal static IEditorElement
+CreateEditorElement(int editorIndex, IPropertyView iw, string title) {
+	return CreateFunctor.Invoke(editorIndex, iw, title);
+}
 }
 }

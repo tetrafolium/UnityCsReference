@@ -5,29 +5,29 @@
 using System;
 
 namespace UnityEditor.Compilation {
-  public class AssemblyDefinitionException : Exception {
-    public string[] filePaths {
-      get;
-      private set;
-    }
+public class AssemblyDefinitionException : Exception {
+public string[] filePaths {
+	get;
+	private set;
+}
 
-    public AssemblyDefinitionException(string message,
-                                       params string[] filePaths)
-        : base(message) {
-      this.filePaths = filePaths;
-    }
-  }
+public AssemblyDefinitionException(string message,
+                                   params string[] filePaths)
+	: base(message) {
+	this.filePaths = filePaths;
+}
+}
 
-  public class PrecompiledAssemblyException : Exception {
-    public string[] filePaths {
-      get;
-      private set;
-    }
+public class PrecompiledAssemblyException : Exception {
+public string[] filePaths {
+	get;
+	private set;
+}
 
-    public PrecompiledAssemblyException(string message,
-                                        params string[] filePaths)
-        : base(message) {
-      this.filePaths = filePaths;
-    }
-  }
+public PrecompiledAssemblyException(string message,
+                                    params string[] filePaths)
+	: base(message) {
+	this.filePaths = filePaths;
+}
+}
 }

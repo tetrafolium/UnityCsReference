@@ -8,27 +8,27 @@ namespace UnityEditor {
 [CustomEditor(typeof(CanvasRenderer))]
 [CanEditMultipleObjects]
 internal class CanvasRendererEditor : Editor {
-  class Styles {
-    public static readonly GUIContent cullTransparentMeshContent =
-        EditorGUIUtility.TrTextContent(
-            "Cull Transparent Mesh",
-            "Cull if the vertex color alpha is close to zero for every vertex of the mesh.");
-  }
+class Styles {
+public static readonly GUIContent cullTransparentMeshContent =
+	EditorGUIUtility.TrTextContent(
+		"Cull Transparent Mesh",
+		"Cull if the vertex color alpha is close to zero for every vertex of the mesh.");
+}
 
-  private SerializedProperty m_CullTransparentMeshProperty;
+private SerializedProperty m_CullTransparentMeshProperty;
 
-  void OnEnable() {
-    m_CullTransparentMeshProperty =
-        serializedObject.FindProperty("m_CullTransparentMesh");
-  }
+void OnEnable() {
+	m_CullTransparentMeshProperty =
+		serializedObject.FindProperty("m_CullTransparentMesh");
+}
 
-  public override void OnInspectorGUI() {
-    serializedObject.Update();
+public override void OnInspectorGUI() {
+	serializedObject.Update();
 
-    EditorGUILayout.PropertyField(m_CullTransparentMeshProperty,
-                                  Styles.cullTransparentMeshContent);
+	EditorGUILayout.PropertyField(m_CullTransparentMeshProperty,
+	                              Styles.cullTransparentMeshContent);
 
-    serializedObject.ApplyModifiedProperties();
-  }
+	serializedObject.ApplyModifiedProperties();
+}
 }
 }

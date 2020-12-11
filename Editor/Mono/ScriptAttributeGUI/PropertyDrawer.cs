@@ -11,65 +11,65 @@ namespace UnityEditor {
 // drawers for your own [[Serializable]] classes or for script variables with
 // custom [[PropertyAttribute]]s.
 public abstract class PropertyDrawer : GUIDrawer {
-  internal PropertyAttribute m_Attribute;
-  internal FieldInfo m_FieldInfo;
+internal PropertyAttribute m_Attribute;
+internal FieldInfo m_FieldInfo;
 
-  // The [[PropertyAttribute]] for the property. Not applicable for custom class
-  // drawers. (RO)
-  public PropertyAttribute attribute {
-    get { return m_Attribute; }
-  }
+// The [[PropertyAttribute]] for the property. Not applicable for custom class
+// drawers. (RO)
+public PropertyAttribute attribute {
+	get { return m_Attribute; }
+}
 
-  // The reflection FieldInfo for the member this property represents. (RO)
-  public FieldInfo fieldInfo {
-    get { return m_FieldInfo; }
-  }
+// The reflection FieldInfo for the member this property represents. (RO)
+public FieldInfo fieldInfo {
+	get { return m_FieldInfo; }
+}
 
-  internal void OnGUISafe(Rect position, SerializedProperty property,
+internal void OnGUISafe(Rect position, SerializedProperty property,
+                        GUIContent label) {
+	ScriptAttributeUtility.s_DrawerStack.Push(this);
+	OnGUI(position, property, label);
+	ScriptAttributeUtility.s_DrawerStack.Pop();
+}
+
+// Override this method to make your own GUI for the property based on IMGUI.
+public virtual void OnGUI(Rect position, SerializedProperty property,
                           GUIContent label) {
-    ScriptAttributeUtility.s_DrawerStack.Push(this);
-    OnGUI(position, property, label);
-    ScriptAttributeUtility.s_DrawerStack.Pop();
-  }
+	EditorGUI.DefaultPropertyField(position, property, label);
+	EditorGUI.LabelField(position, label,
+	                     EditorGUIUtility.TempContent("No GUI Implemented"));
+}
 
-  // Override this method to make your own GUI for the property based on IMGUI.
-  public virtual void OnGUI(Rect position, SerializedProperty property,
-                            GUIContent label) {
-    EditorGUI.DefaultPropertyField(position, property, label);
-    EditorGUI.LabelField(position, label,
-                         EditorGUIUtility.TempContent("No GUI Implemented"));
-  }
+// Override this method to make your own GUI for the property based on
+// UIElements.
+public virtual VisualElement CreatePropertyGUI(SerializedProperty property) {
+	return null;
+}
 
-  // Override this method to make your own GUI for the property based on
-  // UIElements.
-  public virtual VisualElement CreatePropertyGUI(SerializedProperty property) {
-    return null;
-  }
+internal float GetPropertyHeightSafe(SerializedProperty property,
+                                     GUIContent label) {
+	ScriptAttributeUtility.s_DrawerStack.Push(this);
+	float height = GetPropertyHeight(property, label);
+	ScriptAttributeUtility.s_DrawerStack.Pop();
+	return height;
+}
 
-  internal float GetPropertyHeightSafe(SerializedProperty property,
+// Override this method to specify how tall the GUI for this field is in
+// pixels.
+public virtual float GetPropertyHeight(SerializedProperty property,
                                        GUIContent label) {
-    ScriptAttributeUtility.s_DrawerStack.Push(this);
-    float height = GetPropertyHeight(property, label);
-    ScriptAttributeUtility.s_DrawerStack.Pop();
-    return height;
-  }
+	return EditorGUI.kSingleLineHeight;
+}
 
-  // Override this method to specify how tall the GUI for this field is in
-  // pixels.
-  public virtual float GetPropertyHeight(SerializedProperty property,
-                                         GUIContent label) {
-    return EditorGUI.kSingleLineHeight;
-  }
+internal bool CanCacheInspectorGUISafe(SerializedProperty property) {
+	ScriptAttributeUtility.s_DrawerStack.Push(this);
+	bool canCache = CanCacheInspectorGUI(property);
+	ScriptAttributeUtility.s_DrawerStack.Pop();
+	return canCache;
+}
 
-  internal bool CanCacheInspectorGUISafe(SerializedProperty property) {
-    ScriptAttributeUtility.s_DrawerStack.Push(this);
-    bool canCache = CanCacheInspectorGUI(property);
-    ScriptAttributeUtility.s_DrawerStack.Pop();
-    return canCache;
-  }
-
-  public virtual bool CanCacheInspectorGUI(SerializedProperty property) {
-    return true;
-  }
+public virtual bool CanCacheInspectorGUI(SerializedProperty property) {
+	return true;
+}
 }
 }

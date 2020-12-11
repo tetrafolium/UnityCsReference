@@ -11,20 +11,20 @@ namespace UnityEditor {
 // ScriptableObject Since SOs have the special need of being reloaded after a
 // re-import we need to check for validity of the target in a few places
 abstract internal class ScriptableObjectAssetEditor : Editor {
-  // hack to avoid null references when a scriptedImporter runs and replaces the
-  // current selection
-  internal override string targetTitle {
-    get {
-      if (!target) {
-        serializedObject.Update();
-        InternalSetTargets(serializedObject.targetObjects);
-      }
-      return base.targetTitle;
-    }
-  }
+// hack to avoid null references when a scriptedImporter runs and replaces the
+// current selection
+internal override string targetTitle {
+	get {
+		if (!target) {
+			serializedObject.Update();
+			InternalSetTargets(serializedObject.targetObjects);
+		}
+		return base.targetTitle;
+	}
+}
 
-  public override GUIContent GetPreviewTitle() {
-    return GUIContent.Temp(targetTitle);
-  }
+public override GUIContent GetPreviewTitle() {
+	return GUIContent.Temp(targetTitle);
+}
 }
 }

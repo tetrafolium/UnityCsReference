@@ -5,14 +5,18 @@
 using System.Text.RegularExpressions;
 
 namespace UnityEditor.Scripting.Compilers {
-  internal class MicrosoftCSharpCompilerOutputParser
-      : CSharpCompilerOutputParserBase {
-    private static Regex sCompilerOutput = new Regex(
-        @"\s*(?<filename>.*)\((?<line>\d+),(?<column>\d+)\):\s*(?<type>warning|error)\s*(?<id>[^:]*):\s*(?<message>.*)",
-        RegexOptions.ExplicitCapture | RegexOptions.Compiled);
+internal class MicrosoftCSharpCompilerOutputParser
+	: CSharpCompilerOutputParserBase {
+private static Regex sCompilerOutput = new Regex(
+	@"\s*(?<filename>.*)\((?<line>\d+),(?<column>\d+)\):\s*(?<type>warning|error)\s*(?<id>[^:]*):\s*(?<message>.*)",
+	RegexOptions.ExplicitCapture | RegexOptions.Compiled);
 
-    protected override Regex GetOutputRegex() { return sCompilerOutput; }
+protected override Regex GetOutputRegex() {
+	return sCompilerOutput;
+}
 
-    protected override string GetErrorIdentifier() { return "error"; }
-  }
+protected override string GetErrorIdentifier() {
+	return "error";
+}
+}
 }

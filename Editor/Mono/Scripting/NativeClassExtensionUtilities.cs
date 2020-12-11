@@ -15,15 +15,15 @@ namespace UnityEditor {
 /// </summary>
 class NativeClassExtensionUtilities // ScriptingRuntime
 {
-  public static bool ExtendsANativeType(Type type) {
-    return type.GetCustomAttributes(typeof(ExtensionOfNativeClassAttribute),
-                                    true)
-               .Length != 0;
-  }
+public static bool ExtendsANativeType(Type type) {
+	return type.GetCustomAttributes(typeof(ExtensionOfNativeClassAttribute),
+	                                true)
+	       .Length != 0;
+}
 
-  public static bool ExtendsANativeType(UnityEngine.Object obj) {
-    return !object.ReferenceEquals(null, obj) &&
-           ExtendsANativeType(obj.GetType());
-  }
+public static bool ExtendsANativeType(UnityEngine.Object obj) {
+	return !object.ReferenceEquals(null, obj) &&
+	       ExtendsANativeType(obj.GetType());
+}
 }
 }

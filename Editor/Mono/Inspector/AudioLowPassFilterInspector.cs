@@ -9,26 +9,26 @@ namespace UnityEditor {
 [CustomEditor(typeof(AudioLowPassFilter))]
 [CanEditMultipleObjects]
 internal class AudioLowPassFilterInspector : Editor {
-  SerializedProperty m_LowpassResonanceQ;
-  SerializedProperty m_LowpassLevelCustomCurve;
+SerializedProperty m_LowpassResonanceQ;
+SerializedProperty m_LowpassLevelCustomCurve;
 
-  void OnEnable() {
-    m_LowpassResonanceQ = serializedObject.FindProperty("m_LowpassResonanceQ");
-    m_LowpassLevelCustomCurve =
-        serializedObject.FindProperty("lowpassLevelCustomCurve");
-  }
+void OnEnable() {
+	m_LowpassResonanceQ = serializedObject.FindProperty("m_LowpassResonanceQ");
+	m_LowpassLevelCustomCurve =
+		serializedObject.FindProperty("lowpassLevelCustomCurve");
+}
 
-  public override void OnInspectorGUI() {
-    serializedObject.Update();
+public override void OnInspectorGUI() {
+	serializedObject.Update();
 
-    AudioSourceInspector.AnimProp(
-        EditorGUIUtility.TrTextContent("Cutoff Frequency"),
-        m_LowpassLevelCustomCurve, 10.0f,
-        AudioSourceInspector.kMaxCutoffFrequency, true);
+	AudioSourceInspector.AnimProp(
+		EditorGUIUtility.TrTextContent("Cutoff Frequency"),
+		m_LowpassLevelCustomCurve, 10.0f,
+		AudioSourceInspector.kMaxCutoffFrequency, true);
 
-    EditorGUILayout.PropertyField(m_LowpassResonanceQ);
+	EditorGUILayout.PropertyField(m_LowpassResonanceQ);
 
-    serializedObject.ApplyModifiedProperties();
-  }
+	serializedObject.ApplyModifiedProperties();
+}
 }
 }

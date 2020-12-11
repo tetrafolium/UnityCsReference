@@ -10,10 +10,12 @@ namespace UnityEditor {
 [System.AttributeUsage(AttributeTargets.Class, Inherited = false,
                        AllowMultiple = false)]
 public sealed class CustomPreviewAttribute : Attribute {
-  internal Type m_Type;
+internal Type m_Type;
 
-  // Tells a PropertyDrawer class which run-time class or attribute it's a
-  // drawer for.
-  public CustomPreviewAttribute(Type type) { m_Type = type; }
+// Tells a PropertyDrawer class which run-time class or attribute it's a
+// drawer for.
+public CustomPreviewAttribute(Type type) {
+	m_Type = type;
+}
 }
 }

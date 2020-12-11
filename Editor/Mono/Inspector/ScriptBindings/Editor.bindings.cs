@@ -17,10 +17,10 @@ namespace UnityEditor {
 [NativeHeader("Editor/Mono/Inspector/ScriptBindings/Editor.bindings.h")]
 [StaticAccessor("EditorBindings", StaticAccessorType.DoubleColon)]
 public partial class Editor {
-  // Make a custom editor for /targetObject/ or /objects/.
-  extern static Editor CreateEditorWithContextInternal(Object[] targetObjects,
-                                                       Object context,
-                                                       Type editorType);
-  internal extern static Vector2 GetCurrentMousePosition();
+// Make a custom editor for /targetObject/ or /objects/.
+extern static Editor CreateEditorWithContextInternal(Object[] targetObjects,
+                                                     Object context,
+                                                     Type editorType);
+internal extern static Vector2 GetCurrentMousePosition();
 }
 }

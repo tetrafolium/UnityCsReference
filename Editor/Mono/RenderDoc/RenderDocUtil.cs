@@ -6,8 +6,8 @@ using UnityEngine;
 
 namespace UnityEditor {
 internal class RenderDocUtil {
-  public static readonly string loadRenderDocLabel = "Load RenderDoc";
-  public static readonly string openInRenderDocLabel =
-      "Capture the current view and open in RenderDoc";
+public static readonly string loadRenderDocLabel = "Load RenderDoc";
+public static readonly string openInRenderDocLabel =
+	"Capture the current view and open in RenderDoc";
 }
 }

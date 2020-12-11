@@ -8,82 +8,82 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace UnityEditor.SceneManagement {
-  [Serializable]
-  internal class AvatarConfigurationStage : PreviewSceneStage {
-    AvatarEditor m_AvatarEditor;
+[Serializable]
+internal class AvatarConfigurationStage : PreviewSceneStage {
+AvatarEditor m_AvatarEditor;
 
-    string m_AssetPath;
-    public override string assetPath {
-      get { return m_AssetPath; }
-    }
+string m_AssetPath;
+public override string assetPath {
+	get { return m_AssetPath; }
+}
 
-    GameObject m_GameObject;
-    public GameObject gameObject {
-      get { return m_GameObject; }
-    }
+GameObject m_GameObject;
+public GameObject gameObject {
+	get { return m_GameObject; }
+}
 
-    internal static AvatarConfigurationStage
-    CreateStage(string assetPath, AvatarEditor avatarEditor) {
-      AvatarConfigurationStage stage =
-          CreateInstance<AvatarConfigurationStage>();
-      stage.Init(assetPath, avatarEditor);
-      return stage;
-    }
+internal static AvatarConfigurationStage
+CreateStage(string assetPath, AvatarEditor avatarEditor) {
+	AvatarConfigurationStage stage =
+		CreateInstance<AvatarConfigurationStage>();
+	stage.Init(assetPath, avatarEditor);
+	return stage;
+}
 
-    private void Init(string modelAssetPath, AvatarEditor avatarEditor) {
-      m_AssetPath = modelAssetPath;
-      m_AvatarEditor = avatarEditor;
-    }
+private void Init(string modelAssetPath, AvatarEditor avatarEditor) {
+	m_AssetPath = modelAssetPath;
+	m_AvatarEditor = avatarEditor;
+}
 
-    protected internal override bool OnOpenStage() {
-      base.OnOpenStage();
+protected internal override bool OnOpenStage() {
+	base.OnOpenStage();
 
-      if (!File.Exists(assetPath)) {
-        Debug.LogError(
-            "ActivateStage called on AvatarEditingStage with an invalid path: Model file not found " +
-            assetPath);
-        return false;
-      }
+	if (!File.Exists(assetPath)) {
+		Debug.LogError(
+			"ActivateStage called on AvatarEditingStage with an invalid path: Model file not found " +
+			assetPath);
+		return false;
+	}
 
-      // Get Model Prefab
-      GameObject prefab =
-          AssetDatabase.LoadMainAssetAtPath(assetPath) as GameObject;
-      if (prefab == null)
-        return false;
+	// Get Model Prefab
+	GameObject prefab =
+		AssetDatabase.LoadMainAssetAtPath(assetPath) as GameObject;
+	if (prefab == null)
+		return false;
 
-      // Instantiate character
-      m_GameObject = Instantiate(prefab) as GameObject;
-      SceneManager.MoveGameObjectToScene(m_GameObject, scene);
+	// Instantiate character
+	m_GameObject = Instantiate(prefab) as GameObject;
+	SceneManager.MoveGameObjectToScene(m_GameObject, scene);
 
-      return true;
-    }
+	return true;
+}
 
-    protected override void OnCloseStage() {
-      m_AvatarEditor.CleanupEditor();
+protected override void OnCloseStage() {
+	m_AvatarEditor.CleanupEditor();
 
-      base.OnCloseStage();
-    }
+	base.OnCloseStage();
+}
 
-    protected internal override void
-    OnFirstTimeOpenStageInSceneView(SceneView sceneView) {
-      Selection.activeObject = m_GameObject;
+protected internal override void
+OnFirstTimeOpenStageInSceneView(SceneView sceneView) {
+	Selection.activeObject = m_GameObject;
 
-      // Frame in scene view
-      sceneView.FrameSelected(false, true);
+	// Frame in scene view
+	sceneView.FrameSelected(false, true);
 
-      // Setup Scene view state
-      sceneView.sceneViewState.showFlares = false;
-      sceneView.sceneViewState.alwaysRefresh = false;
-      sceneView.sceneViewState.showFog = false;
-      sceneView.sceneViewState.showSkybox = false;
-      sceneView.sceneViewState.showImageEffects = false;
-      sceneView.sceneViewState.showParticleSystems = false;
-      sceneView.sceneLighting = false;
-    }
+	// Setup Scene view state
+	sceneView.sceneViewState.showFlares = false;
+	sceneView.sceneViewState.alwaysRefresh = false;
+	sceneView.sceneViewState.showFog = false;
+	sceneView.sceneViewState.showSkybox = false;
+	sceneView.sceneViewState.showImageEffects = false;
+	sceneView.sceneViewState.showParticleSystems = false;
+	sceneView.sceneLighting = false;
+}
 
-    protected internal override GUIContent CreateHeaderContent() {
-      return new GUIContent("Avatar Configuration",
-                            EditorGUIUtility.IconContent("Avatar Icon").image);
-    }
-  }
+protected internal override GUIContent CreateHeaderContent() {
+	return new GUIContent("Avatar Configuration",
+	                      EditorGUIUtility.IconContent("Avatar Icon").image);
+}
+}
 }

@@ -14,46 +14,46 @@ using Object = UnityEngine.Object;
 namespace UnityEditor {
 [CustomEditor(typeof(ComputeShaderImporter))]
 internal class ComputeShaderImporterInspector : AssetImporterEditor {
-  internal class Styles {
-    public static GUIContent overridePreprocessor =
-        EditorGUIUtility.TrTextContent(
-            "Override preprocessor",
-            "Select preprocessor to use for this shader.");
-  }
+internal class Styles {
+public static GUIContent overridePreprocessor =
+	EditorGUIUtility.TrTextContent(
+		"Override preprocessor",
+		"Select preprocessor to use for this shader.");
+}
 
-  SerializedProperty preprocessorOverride;
+SerializedProperty preprocessorOverride;
 
-  internal override void OnHeaderControlsGUI() {
-    GUILayout.FlexibleSpace();
-    ShowOpenButton(new[]{assetTarget});
-  }
+internal override void OnHeaderControlsGUI() {
+	GUILayout.FlexibleSpace();
+	ShowOpenButton(new[] {assetTarget});
+}
 
-  public override void OnEnable() {
-    base.OnEnable();
+public override void OnEnable() {
+	base.OnEnable();
 
-    preprocessorOverride =
-        serializedObject.FindProperty("m_PreprocessorOverride");
-  }
+	preprocessorOverride =
+		serializedObject.FindProperty("m_PreprocessorOverride");
+}
 
-  protected override void Apply() {
-    base.Apply();
+protected override void Apply() {
+	base.Apply();
 
-    var importer = target as ComputeShaderImporter;
-    if (importer == null)
-      return;
+	var importer = target as ComputeShaderImporter;
+	if (importer == null)
+		return;
 
-    AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(importer));
-  }
+	AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(importer));
+}
 
-  public override void OnInspectorGUI() {
-    serializedObject.Update();
+public override void OnInspectorGUI() {
+	serializedObject.Update();
 
-    EditorGUILayout.PropertyField(preprocessorOverride,
-                                  Styles.overridePreprocessor);
+	EditorGUILayout.PropertyField(preprocessorOverride,
+	                              Styles.overridePreprocessor);
 
-    serializedObject.ApplyModifiedProperties();
+	serializedObject.ApplyModifiedProperties();
 
-    ApplyRevertGUI();
-  }
+	ApplyRevertGUI();
+}
 }
 }

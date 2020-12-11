@@ -9,28 +9,28 @@ namespace UnityEditor {
 [CustomEditor(typeof(SpringJoint2D))]
 [CanEditMultipleObjects]
 internal class SpringJoint2DEditor : AnchoredJoint2DEditor {
-  new public void OnSceneGUI() {
-    if (!target)
-      return;
-    var springJoint2D = (SpringJoint2D) target;
+new public void OnSceneGUI() {
+	if (!target)
+		return;
+	var springJoint2D = (SpringJoint2D) target;
 
-    // Ignore disabled joint.
-    if (!springJoint2D.enabled)
-      return;
+	// Ignore disabled joint.
+	if (!springJoint2D.enabled)
+		return;
 
-    // Start and end points for distance gizmo
-    Vector3 anchor =
-        TransformPoint(springJoint2D.transform, springJoint2D.anchor);
-    Vector3 connectedAnchor = springJoint2D.connectedAnchor;
+	// Start and end points for distance gizmo
+	Vector3 anchor =
+		TransformPoint(springJoint2D.transform, springJoint2D.anchor);
+	Vector3 connectedAnchor = springJoint2D.connectedAnchor;
 
-    // If connectedBody present, convert the position to match that
-    if (springJoint2D.connectedBody)
-      connectedAnchor = TransformPoint(springJoint2D.connectedBody.transform,
-                                       connectedAnchor);
+	// If connectedBody present, convert the position to match that
+	if (springJoint2D.connectedBody)
+		connectedAnchor = TransformPoint(springJoint2D.connectedBody.transform,
+		                                 connectedAnchor);
 
-    DrawDistanceGizmo(anchor, connectedAnchor, springJoint2D.distance);
+	DrawDistanceGizmo(anchor, connectedAnchor, springJoint2D.distance);
 
-    base.OnSceneGUI();
-  }
+	base.OnSceneGUI();
+}
 }
 }

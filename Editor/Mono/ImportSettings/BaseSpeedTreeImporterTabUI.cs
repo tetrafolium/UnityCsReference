@@ -7,17 +7,18 @@ using UnityEditor.Experimental.AssetImporters;
 
 namespace UnityEditor {
 internal abstract class BaseSpeedTreeImporterTabUI : BaseAssetImporterTabUI {
-  internal BaseSpeedTreeImporterTabUI(AssetImporterEditor panelContainer)
-      : base(panelContainer) {}
+internal BaseSpeedTreeImporterTabUI(AssetImporterEditor panelContainer)
+	: base(panelContainer) {
+}
 
-  protected IEnumerable<SpeedTreeImporter> importers {
-    get { return (panelContainer as SpeedTreeImporterInspector).importers; }
-  }
+protected IEnumerable<SpeedTreeImporter> importers {
+	get { return (panelContainer as SpeedTreeImporterInspector).importers; }
+}
 
-  protected bool upgradeMaterials {
-    get {
-      return (panelContainer as SpeedTreeImporterInspector).upgradeMaterials;
-    }
-  }
+protected bool upgradeMaterials {
+	get {
+		return (panelContainer as SpeedTreeImporterInspector).upgradeMaterials;
+	}
+}
 }
 }

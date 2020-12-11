@@ -6,24 +6,30 @@ using Unity.Scripting.Compilation;
 using UnityEditor.Scripting.ScriptCompilation;
 
 namespace UnityEditor.Scripting.Compilers {
-  internal class CSharpLanguage : SupportedLanguage {
-    public override ResponseFileProvider CreateResponseFileProvider() {
-      return new MicrosoftCSharpResponseFileProvider();
-    }
+internal class CSharpLanguage : SupportedLanguage {
+public override ResponseFileProvider CreateResponseFileProvider() {
+	return new MicrosoftCSharpResponseFileProvider();
+}
 
-    public override string GetExtensionICanCompile() { return "cs"; }
+public override string GetExtensionICanCompile() {
+	return "cs";
+}
 
-    public override string GetLanguageName() { return "CSharp"; }
+public override string GetLanguageName() {
+	return "CSharp";
+}
 
-    public override bool CompilerRequiresAdditionalReferences() { return true; }
+public override bool CompilerRequiresAdditionalReferences() {
+	return true;
+}
 
-    public override string[] GetCompilerDefines() {
-      var defines = new string[]{
-          "CSHARP_7_OR_LATER", // Incremental Compiler adds this.
-          "CSHARP_7_3_OR_NEWER",
-      };
+public override string[] GetCompilerDefines() {
+	var defines = new string[] {
+		"CSHARP_7_OR_LATER", // Incremental Compiler adds this.
+		"CSHARP_7_3_OR_NEWER",
+	};
 
-      return defines;
-    }
-  }
+	return defines;
+}
+}
 }

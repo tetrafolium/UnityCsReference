@@ -12,30 +12,31 @@ namespace UnityEditor {
 [NativeClass(null)]
 [NativeHeader("Runtime/BaseClasses/TagManager.h")]
 internal sealed class TagManager : ProjectSettingsBase {
-  private TagManager() {}
+private TagManager() {
+}
 
-  [StaticAccessor("GetTagManager()", StaticAccessorType.Dot)]
-  internal static extern int GetDefinedLayerCount();
+[StaticAccessor("GetTagManager()", StaticAccessorType.Dot)]
+internal static extern int GetDefinedLayerCount();
 
-  internal static void GetDefinedLayers(ref string[] layerNames,
-                                        ref int[] layerValues) {
-    var definedLayerCount = GetDefinedLayerCount();
+internal static void GetDefinedLayers(ref string[] layerNames,
+                                      ref int[] layerValues) {
+	var definedLayerCount = GetDefinedLayerCount();
 
-    if (layerNames == null)
-      layerNames = new string[definedLayerCount];
-    else if (layerNames.Length != definedLayerCount)
-      Array.Resize(ref layerNames, definedLayerCount);
+	if (layerNames == null)
+		layerNames = new string[definedLayerCount];
+	else if (layerNames.Length != definedLayerCount)
+		Array.Resize(ref layerNames, definedLayerCount);
 
-    if (layerValues == null)
-      layerValues = new int[definedLayerCount];
-    else if (layerValues.Length != definedLayerCount)
-      Array.Resize(ref layerValues, definedLayerCount);
+	if (layerValues == null)
+		layerValues = new int[definedLayerCount];
+	else if (layerValues.Length != definedLayerCount)
+		Array.Resize(ref layerValues, definedLayerCount);
 
-    Internal_GetDefinedLayers(layerNames, layerValues);
-  }
+	Internal_GetDefinedLayers(layerNames, layerValues);
+}
 
-  [FreeFunction("GetTagManager().GetDefinedLayers")]
-  static extern void Internal_GetDefinedLayers([ Out ] string[] layerNames,
-                                               [ Out ] int[] layerValues);
+[FreeFunction("GetTagManager().GetDefinedLayers")]
+static extern void Internal_GetDefinedLayers([ Out ] string[] layerNames,
+                                             [ Out ] int[] layerValues);
 }
 }

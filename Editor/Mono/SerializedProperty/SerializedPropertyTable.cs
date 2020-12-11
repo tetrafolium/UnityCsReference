@@ -8,121 +8,123 @@ using UnityEngine.Profiling;
 
 namespace UnityEditor {
 internal class SerializedPropertyTable {
-  internal delegate SerializedPropertyTreeView.Column[] HeaderDelegate();
+internal delegate SerializedPropertyTreeView.Column[] HeaderDelegate();
 
-  SerializedPropertyDataStore.GatherDelegate m_GatherDelegate;
-  HeaderDelegate m_HeaderDelegate;
-  bool m_Initialized;
-  TreeViewState m_TreeViewState;
-  MultiColumnHeaderState m_MultiColumnHeaderState;
-  SerializedPropertyTreeView m_TreeView;
-  SerializedPropertyDataStore m_DataStore;
-  float m_ColumnHeaderHeight;
-  string m_SerializationUID;
-  readonly float m_FilterHeight = 20;
+SerializedPropertyDataStore.GatherDelegate m_GatherDelegate;
+HeaderDelegate m_HeaderDelegate;
+bool m_Initialized;
+TreeViewState m_TreeViewState;
+MultiColumnHeaderState m_MultiColumnHeaderState;
+SerializedPropertyTreeView m_TreeView;
+SerializedPropertyDataStore m_DataStore;
+float m_ColumnHeaderHeight;
+string m_SerializationUID;
+readonly float m_FilterHeight = 20;
 
-  public SerializedPropertyTable(
-      string serializationUID,
-      SerializedPropertyDataStore.GatherDelegate gatherDelegate,
-      HeaderDelegate headerDelegate) {
-    m_SerializationUID = serializationUID;
-    m_GatherDelegate = gatherDelegate;
-    m_HeaderDelegate = headerDelegate;
-  }
+public SerializedPropertyTable(
+	string serializationUID,
+	SerializedPropertyDataStore.GatherDelegate gatherDelegate,
+	HeaderDelegate headerDelegate) {
+	m_SerializationUID = serializationUID;
+	m_GatherDelegate = gatherDelegate;
+	m_HeaderDelegate = headerDelegate;
+}
 
-  void InitIfNeeded() {
-    if (m_Initialized)
-      return;
+void InitIfNeeded() {
+	if (m_Initialized)
+		return;
 
-    if (m_TreeViewState == null)
-      m_TreeViewState = new TreeViewState();
+	if (m_TreeViewState == null)
+		m_TreeViewState = new TreeViewState();
 
-    if (m_MultiColumnHeaderState == null) {
-      SerializedPropertyTreeView.Column[] columns = m_HeaderDelegate();
+	if (m_MultiColumnHeaderState == null) {
+		SerializedPropertyTreeView.Column[] columns = m_HeaderDelegate();
 
-      string[] propNames = GetPropertyNames(columns);
+		string[] propNames = GetPropertyNames(columns);
 
-      m_MultiColumnHeaderState = new MultiColumnHeaderState(columns);
-      m_DataStore =
-          new SerializedPropertyDataStore(propNames, m_GatherDelegate);
-    }
+		m_MultiColumnHeaderState = new MultiColumnHeaderState(columns);
+		m_DataStore =
+			new SerializedPropertyDataStore(propNames, m_GatherDelegate);
+	}
 
-    var header = new MultiColumnHeader(m_MultiColumnHeaderState);
-    m_ColumnHeaderHeight = header.height;
-    m_TreeView =
-        new SerializedPropertyTreeView(m_TreeViewState, header, m_DataStore);
+	var header = new MultiColumnHeader(m_MultiColumnHeaderState);
+	m_ColumnHeaderHeight = header.height;
+	m_TreeView =
+		new SerializedPropertyTreeView(m_TreeViewState, header, m_DataStore);
 
-    m_TreeView.DeserializeState(m_SerializationUID);
-    m_TreeView.Reload();
+	m_TreeView.DeserializeState(m_SerializationUID);
+	m_TreeView.Reload();
 
-    m_Initialized = true;
-  }
+	m_Initialized = true;
+}
 
-  string[] GetPropertyNames(SerializedPropertyTreeView.Column[] columns) {
-    string[] propNames = new string[columns.Length];
+string[] GetPropertyNames(SerializedPropertyTreeView.Column[] columns) {
+	string[] propNames = new string[columns.Length];
 
-    for (int i = 0; i < columns.Length; i++)
-      propNames[i] = columns[i].propertyName;
+	for (int i = 0; i < columns.Length; i++)
+		propNames[i] = columns[i].propertyName;
 
-    return propNames;
-  }
+	return propNames;
+}
 
-  public void OnInspectorUpdate() {
-    if (m_TreeView != null) {
-      m_TreeView.Update();
-    }
-  }
+public void OnInspectorUpdate() {
+	if (m_TreeView != null) {
+		m_TreeView.Update();
+	}
+}
 
-  public void OnHierarchyChange() {
-    if (m_TreeView != null) {
-      m_TreeView.Update();
-    }
-  }
+public void OnHierarchyChange() {
+	if (m_TreeView != null) {
+		m_TreeView.Update();
+	}
+}
 
-  public void OnSelectionChange() { OnSelectionChange(Selection.instanceIDs); }
+public void OnSelectionChange() {
+	OnSelectionChange(Selection.instanceIDs);
+}
 
-  public void OnSelectionChange(int[] instanceIDs) {
-    if (m_TreeView != null) {
-      m_TreeView.SetSelection(instanceIDs);
-    }
-  }
+public void OnSelectionChange(int[] instanceIDs) {
+	if (m_TreeView != null) {
+		m_TreeView.SetSelection(instanceIDs);
+	}
+}
 
-  public void OnGUI() {
-    Profiler.BeginSample("SerializedPropertyTable.OnGUI");
-    InitIfNeeded();
+public void OnGUI() {
+	Profiler.BeginSample("SerializedPropertyTable.OnGUI");
+	InitIfNeeded();
 
-    Rect r = GUILayoutUtility.GetRect(0, float.MaxValue, 0, float.MaxValue);
+	Rect r = GUILayoutUtility.GetRect(0, float.MaxValue, 0, float.MaxValue);
 
-    if (Event.current.type == EventType.Layout) {
-      Profiler.EndSample();
-      return;
-    }
+	if (Event.current.type == EventType.Layout) {
+		Profiler.EndSample();
+		return;
+	}
 
-    float tableHeight = r.height - m_FilterHeight;
-    // filter rect
-    r.height = m_FilterHeight;
-    Rect filterRect = r;
-    // table rect
-    r.height = tableHeight;
-    r.y += m_FilterHeight;
-    Rect tableRect = r;
+	float tableHeight = r.height - m_FilterHeight;
+	// filter rect
+	r.height = m_FilterHeight;
+	Rect filterRect = r;
+	// table rect
+	r.height = tableHeight;
+	r.y += m_FilterHeight;
+	Rect tableRect = r;
 
-    // table
-    Profiler.BeginSample("TreeView.OnGUI");
-    m_TreeView.OnGUI(tableRect);
-    Profiler.EndSample();
+	// table
+	Profiler.BeginSample("TreeView.OnGUI");
+	m_TreeView.OnGUI(tableRect);
+	Profiler.EndSample();
 
-    m_TreeView.OnFilterGUI(filterRect);
+	m_TreeView.OnFilterGUI(filterRect);
 
-    if (m_TreeView.IsFilteredDirty())
-      m_TreeView.Reload();
+	if (m_TreeView.IsFilteredDirty())
+		m_TreeView.Reload();
 
-    Profiler.EndSample();
-  }
+	Profiler.EndSample();
+}
 
-  public void OnDisable() {
-    if (m_TreeView != null)
-      m_TreeView.SerializeState(m_SerializationUID);
-  }
+public void OnDisable() {
+	if (m_TreeView != null)
+		m_TreeView.SerializeState(m_SerializationUID);
+}
 }
 }

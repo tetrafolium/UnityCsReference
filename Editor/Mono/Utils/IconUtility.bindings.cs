@@ -6,16 +6,16 @@ using UnityEngine;
 using UnityEngine.Bindings;
 
 namespace UnityEditor.Utils {
-  [NativeHeader("Editor/Src/Commands/IconUtility.h")]
-  static class IconUtility {
-    [FreeFunction] extern public static bool
-    AddIconToWindowsExecutable(string path);
+[NativeHeader("Editor/Src/Commands/IconUtility.h")]
+static class IconUtility {
+[FreeFunction] extern public static bool
+AddIconToWindowsExecutable(string path);
 
-    [FreeFunction] extern public static bool
-    SaveIcoForPlatform(string path, BuildTargetGroup buildTargetGroup,
-                       Vector2Int[] iconSizes);
+[FreeFunction] extern public static bool
+SaveIcoForPlatform(string path, BuildTargetGroup buildTargetGroup,
+                   Vector2Int[] iconSizes);
 
-    [FreeFunction] extern public static void
-    SaveTextureToFile(string path, Texture2D texture, uint fileType);
-  }
+[FreeFunction] extern public static void
+SaveTextureToFile(string path, Texture2D texture, uint fileType);
+}
 }

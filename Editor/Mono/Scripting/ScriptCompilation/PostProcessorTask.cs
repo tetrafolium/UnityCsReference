@@ -13,126 +13,134 @@ using UnityEditor.Utils;
 using UnityEngine;
 
 namespace UnityEditor.Scripting.ScriptCompilation {
-  class PostProcessorTask : IDisposable {
-    internal class PostProcessorOutputParser : CSharpCompilerOutputParserBase {
-      private static Regex sCompilerOutput = new Regex(
-          @"\s*(?<filename>.*)\((?<line>\d+),(?<column>\d+)\):\s*(?<type>warning|error)\s*(?<message>.*)",
-          RegexOptions.ExplicitCapture | RegexOptions.Compiled);
+class PostProcessorTask : IDisposable {
+internal class PostProcessorOutputParser : CSharpCompilerOutputParserBase {
+private static Regex sCompilerOutput = new Regex(
+	@"\s*(?<filename>.*)\((?<line>\d+),(?<column>\d+)\):\s*(?<type>warning|error)\s*(?<message>.*)",
+	RegexOptions.ExplicitCapture | RegexOptions.Compiled);
 
-      protected override Regex GetOutputRegex() { return sCompilerOutput; }
+protected override Regex GetOutputRegex() {
+	return sCompilerOutput;
+}
 
-      protected override string GetErrorIdentifier() { return "error"; }
-    }
+protected override string GetErrorIdentifier() {
+	return "error";
+}
+}
 
-    public ScriptAssembly Assembly {
-      get;
-      private set;
-    }
-    List<CompilerMessage> CompilerMessages;
-    string tempOutputDirectory;
-    IILPostProcessing ilPostProcessing;
-    Program process;
+public ScriptAssembly Assembly {
+	get;
+	private set;
+}
+List<CompilerMessage> CompilerMessages;
+string tempOutputDirectory;
+IILPostProcessing ilPostProcessing;
+Program process;
 
-    public PostProcessorTask(ScriptAssembly assembly,
-                             List<CompilerMessage> compilerMessages,
-                             string tempOutputDirectory,
-                             IILPostProcessing ilPostProcessing) {
-      Assembly = assembly;
-      CompilerMessages = compilerMessages;
-      this.tempOutputDirectory = tempOutputDirectory;
-      this.ilPostProcessing = ilPostProcessing;
-    }
+public PostProcessorTask(ScriptAssembly assembly,
+                         List<CompilerMessage> compilerMessages,
+                         string tempOutputDirectory,
+                         IILPostProcessing ilPostProcessing) {
+	Assembly = assembly;
+	CompilerMessages = compilerMessages;
+	this.tempOutputDirectory = tempOutputDirectory;
+	this.ilPostProcessing = ilPostProcessing;
+}
 
-    public void Dispose() {
-      if (process != null) {
-        process.Dispose();
-        process = null;
-      }
-    }
+public void Dispose() {
+	if (process != null) {
+		process.Dispose();
+		process = null;
+	}
+}
 
-    public ProcessStartInfo GetProcessStartInfo() {
-      return process.GetProcessStartInfo();
-    }
+public ProcessStartInfo GetProcessStartInfo() {
+	return process.GetProcessStartInfo();
+}
 
-    bool ProcessHadFailure() { return (process.ExitCode != 0); }
+bool ProcessHadFailure() {
+	return (process.ExitCode != 0);
+}
 
-    public List<CompilerMessage> GetCompilerMessages() {
-      var standardOutput = process.GetStandardOutput();
-      var errorOutput = process.GetErrorOutput();
+public List<CompilerMessage> GetCompilerMessages() {
+	var standardOutput = process.GetStandardOutput();
+	var errorOutput = process.GetErrorOutput();
 
-      var standardOutputString = string.Join("\n", standardOutput);
-      Console.WriteLine(standardOutputString);
+	var standardOutputString = string.Join("\n", standardOutput);
+	Console.WriteLine(standardOutputString);
 
-      if (errorOutput != null && errorOutput.Length > 0) {
-        var standardErrorString = string.Join("\n", errorOutput);
-        Console.WriteLine(standardErrorString);
-      }
+	if (errorOutput != null && errorOutput.Length > 0) {
+		var standardErrorString = string.Join("\n", errorOutput);
+		Console.WriteLine(standardErrorString);
+	}
 
-      var processMessages = new PostProcessorOutputParser().Parse(
-          errorOutput, ProcessHadFailure(), Assembly.Filename);
+	var processMessages = new PostProcessorOutputParser().Parse(
+		errorOutput, ProcessHadFailure(), Assembly.Filename);
 
-      return CompilerMessages.Concat(processMessages).ToList();
-    }
+	return CompilerMessages.Concat(processMessages).ToList();
+}
 
-    public bool IsFinished {
-      get {
-        if (process == null)
-          return false;
+public bool IsFinished {
+	get {
+		if (process == null)
+			return false;
 
-        return process.HasExited;
-      }
-    }
+		return process.HasExited;
+	}
+}
 
-    static string PrepareFileName(string fileName) {
-      return CommandLineFormatter.PrepareFileName(fileName);
-    }
+static string PrepareFileName(string fileName) {
+	return CommandLineFormatter.PrepareFileName(fileName);
+}
 
-    public void Start() {
-      var runner =
-          Paths.Combine(EditorApplication.applicationContentsPath, "Tools",
-                        "ILPostProcessorRunner", "ILPostProcessorRunner.exe");
+public void Start() {
+	var runner =
+		Paths.Combine(EditorApplication.applicationContentsPath, "Tools",
+		              "ILPostProcessorRunner", "ILPostProcessorRunner.exe");
 
-      if (!File.Exists(runner))
-        throw new Exception(string.Format(
-            $"'{runner}' not found. Is your Unity installation corrupted?"));
+	if (!File.Exists(runner))
+		throw new Exception(string.Format(
+					    $"'{runner}' not found. Is your Unity installation corrupted?"));
 
-      var assemblyPath = AssetPath.GetFullPath(
-          AssetPath.Combine(tempOutputDirectory, Assembly.Filename));
-      var assemblyReferencesPaths = Assembly.GetAllReferences().ToArray();
-      var assemblyFolderPaths = ilPostProcessing.AssemblySearchPaths;
+	var assemblyPath = AssetPath.GetFullPath(
+		AssetPath.Combine(tempOutputDirectory, Assembly.Filename));
+	var assemblyReferencesPaths = Assembly.GetAllReferences().ToArray();
+	var assemblyFolderPaths = ilPostProcessing.AssemblySearchPaths;
 
-      var outputDirectory = AssetPath.GetFullPath(tempOutputDirectory);
-      var postProcessorPaths = ilPostProcessing.PostProcessorAssemblyPaths;
+	var outputDirectory = AssetPath.GetFullPath(tempOutputDirectory);
+	var postProcessorPaths = ilPostProcessing.PostProcessorAssemblyPaths;
 
-      var arguments = new List<string>{
-          $"-a \"{assemblyPath}\"",        $"-f \"{string.Join(",
+	var arguments = new List<string> {
+		$"-a \"{assemblyPath}\"",        $"-f \"{string.Join(",
           ", assemblyFolderPaths)}\"",     $"-r \"{string.Join(",
           ", assemblyReferencesPaths)}\"", $"-d \"{string.Join(",
           ", Assembly.Defines)}\"",        $"-p \"{string.Join(",
           ", postProcessorPaths)}\"",      $"-o \"{outputDirectory}\"",
-      };
+	};
 
-      var responseFilePath = PrepareFileName(AssetPath.GetFullPath(
-          CommandLineFormatter.GenerateResponseFile(arguments)));
+	var responseFilePath = PrepareFileName(AssetPath.GetFullPath(
+						       CommandLineFormatter.GenerateResponseFile(arguments)));
 
-      var args = $"@{responseFilePath}";
+	var args = $"@{responseFilePath}";
 
-      // Always run on Mono until all ILPostProcessors have been fixed
-      // to run on NET Core.
-      // if (NetCoreRunProgram.IsSupported())
-      //{
-      //    process = new NetCoreRunProgram(runner, args, null);
-      //}
-      // else
-      {
-        process = new ManagedProgram(
-            MonoInstallationFinder.GetMonoInstallation("MonoBleedingEdge"),
-            null, runner, args, false, null);
-      }
+	// Always run on Mono until all ILPostProcessors have been fixed
+	// to run on NET Core.
+	// if (NetCoreRunProgram.IsSupported())
+	//{
+	//    process = new NetCoreRunProgram(runner, args, null);
+	//}
+	// else
+	{
+		process = new ManagedProgram(
+			MonoInstallationFinder.GetMonoInstallation("MonoBleedingEdge"),
+			null, runner, args, false, null);
+	}
 
-      process.Start();
-    }
+	process.Start();
+}
 
-    public bool Poll() { return process.HasExited; }
-  }
+public bool Poll() {
+	return process.HasExited;
+}
+}
 }

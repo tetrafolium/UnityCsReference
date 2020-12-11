@@ -8,44 +8,47 @@ using UnityEngine.Scripting;
 using System.Runtime.InteropServices;
 
 namespace UnityEditor.VersionControl {
-  [NativeHeader("Editor/Src/VersionControl/VCMessage.h")]
-  [NativeHeader("Editor/Src/VersionControl/VC_bindings.h")]
-  [UsedByNativeCode]
-  [StructLayout(LayoutKind.Sequential)]
-  public partial class Message {
-    [NativeType("Editor/Src/VersionControl/VCMessage.h")]
-    public enum Severity {
-      Data = 0,
-      Verbose = 1,
-      Info = 2,
-      Warning = 3,
-      Error = 4
-    }
+[NativeHeader("Editor/Src/VersionControl/VCMessage.h")]
+[NativeHeader("Editor/Src/VersionControl/VC_bindings.h")]
+[UsedByNativeCode]
+[StructLayout(LayoutKind.Sequential)]
+public partial class Message {
+[NativeType("Editor/Src/VersionControl/VCMessage.h")]
+public enum Severity {
+	Data = 0,
+	Verbose = 1,
+	Info = 2,
+	Warning = 3,
+	Error = 4
+}
 
-    // The bindings generator will set the instance pointer in this field
-    IntPtr m_Self;
+// The bindings generator will set the instance pointer in this field
+IntPtr m_Self;
 
-    internal Message() {}
+internal Message() {
+}
 
-    ~Message() { Dispose(); }
+~Message() {
+	Dispose();
+}
 
-    public void Dispose() {
-      Destroy(m_Self);
-      m_Self = IntPtr.Zero;
-    }
+public void Dispose() {
+	Destroy(m_Self);
+	m_Self = IntPtr.Zero;
+}
 
-    [FreeFunction("VersionControlBindings::Message::Destroy",
-                  IsThreadSafe = true)]
-    static extern void Destroy(IntPtr message);
+[FreeFunction("VersionControlBindings::Message::Destroy",
+              IsThreadSafe = true)]
+static extern void Destroy(IntPtr message);
 
-    [NativeMethod(IsThreadSafe = true)]
-    public extern Severity severity {
-      get;
-    }
+[NativeMethod(IsThreadSafe = true)]
+public extern Severity severity {
+	get;
+}
 
-    [NativeMethod(IsThreadSafe = true)]
-    public extern string message {
-      get;
-    }
-  }
+[NativeMethod(IsThreadSafe = true)]
+public extern string message {
+	get;
+}
+}
 }

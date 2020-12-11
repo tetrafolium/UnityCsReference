@@ -4,19 +4,19 @@
 
 namespace UnityEditor {
 class AssetEvents : AssetPostprocessor {
-  public delegate void AssetsChangedOnHDD(string[] importedAssets,
-                                          string[] deletedAssets,
-                                          string[] movedAssets,
-                                          string[] movedFromAssetPaths);
-  public static event AssetsChangedOnHDD assetsChangedOnHDD;
+public delegate void AssetsChangedOnHDD(string[] importedAssets,
+                                        string[] deletedAssets,
+                                        string[] movedAssets,
+                                        string[] movedFromAssetPaths);
+public static event AssetsChangedOnHDD assetsChangedOnHDD;
 
-  static void OnPostprocessAllAssets(string[] importedAssets,
-                                     string[] deletedAssets,
-                                     string[] movedAssets,
-                                     string[] movedFromAssetPaths) {
-    if (assetsChangedOnHDD != null)
-      assetsChangedOnHDD(importedAssets, deletedAssets, movedAssets,
-                         movedFromAssetPaths);
-  }
+static void OnPostprocessAllAssets(string[] importedAssets,
+                                   string[] deletedAssets,
+                                   string[] movedAssets,
+                                   string[] movedFromAssetPaths) {
+	if (assetsChangedOnHDD != null)
+		assetsChangedOnHDD(importedAssets, deletedAssets, movedAssets,
+		                   movedFromAssetPaths);
+}
 }
 }

@@ -5,15 +5,15 @@
 using System;
 
 namespace UnityEditor.Scripting.ScriptCompilation {
-  class SemVersionRangesFactory {
-    SemVersionRanges m_SemVersionRanges;
+class SemVersionRangesFactory {
+SemVersionRanges m_SemVersionRanges;
 
-    public SemVersionRangesFactory() {
-      m_SemVersionRanges = new SemVersionRanges(ExpressionTypeFactory.Create());
-    }
+public SemVersionRangesFactory() {
+	m_SemVersionRanges = new SemVersionRanges(ExpressionTypeFactory.Create());
+}
 
-    public VersionDefineExpression GetExpression(string expression) {
-      return m_SemVersionRanges.GetExpression(expression);
-    }
-  }
+public VersionDefineExpression GetExpression(string expression) {
+	return m_SemVersionRanges.GetExpression(expression);
+}
+}
 }

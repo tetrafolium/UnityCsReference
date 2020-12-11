@@ -6,10 +6,10 @@ using System;
 using UnityEngine.Bindings;
 
 namespace UnityEditor.Scripting.ScriptCompilation {
-  internal enum DirtySource {
-    None = 0,
-    DirtyScript = 1,
-    DirtyAssembly = 2,
-    DirtyReference = 3,
-  }
+internal enum DirtySource {
+	None = 0,
+	DirtyScript = 1,
+	DirtyAssembly = 2,
+	DirtyReference = 3,
+}
 }

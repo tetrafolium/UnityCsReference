@@ -5,9 +5,9 @@
 using scm = System.ComponentModel;
 using uei = UnityEngine.Internal;
 using RequiredByNativeCodeAttribute =
-    UnityEngine.Scripting.RequiredByNativeCodeAttribute;
+	      UnityEngine.Scripting.RequiredByNativeCodeAttribute;
 using UsedByNativeCodeAttribute =
-    UnityEngine.Scripting.UsedByNativeCodeAttribute;
+	      UnityEngine.Scripting.UsedByNativeCodeAttribute;
 
 using System;
 using UnityEngine;
@@ -19,26 +19,26 @@ using System.Linq;
 
 namespace UnityEditor {
 public class CustomEditor : System.Attribute {
-  public CustomEditor(System.Type inspectedType) {
-    if (inspectedType == null)
-      Debug.LogError("Failed to load CustomEditor inspected type");
-    m_InspectedType = inspectedType;
-    m_EditorForChildClasses = false;
-  }
+public CustomEditor(System.Type inspectedType) {
+	if (inspectedType == null)
+		Debug.LogError("Failed to load CustomEditor inspected type");
+	m_InspectedType = inspectedType;
+	m_EditorForChildClasses = false;
+}
 
-  public CustomEditor(System.Type inspectedType, bool editorForChildClasses) {
-    if (inspectedType == null)
-      Debug.LogError("Failed to load CustomEditor inspected type");
-    m_InspectedType = inspectedType;
-    m_EditorForChildClasses = editorForChildClasses;
-  }
+public CustomEditor(System.Type inspectedType, bool editorForChildClasses) {
+	if (inspectedType == null)
+		Debug.LogError("Failed to load CustomEditor inspected type");
+	m_InspectedType = inspectedType;
+	m_EditorForChildClasses = editorForChildClasses;
+}
 
-  internal Type m_InspectedType;
-  internal bool m_EditorForChildClasses;
+internal Type m_InspectedType;
+internal bool m_EditorForChildClasses;
 
-  public bool isFallback {
-    get;
-    set;
-  }
+public bool isFallback {
+	get;
+	set;
+}
 }
 }

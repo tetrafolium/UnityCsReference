@@ -9,26 +9,26 @@ using UnityEditor.Scripting.ScriptCompilation;
 using UnityEngine;
 
 namespace UnityEditor.Modules {
-  internal class DefaultCompilationExtension : ICompilationExtension {
-    public virtual string[] GetCompilerExtraAssemblyPaths(
-        bool isEditor, string assemblyPathName) {
-      return new string[]{};
-    }
+internal class DefaultCompilationExtension : ICompilationExtension {
+public virtual string[] GetCompilerExtraAssemblyPaths(
+	bool isEditor, string assemblyPathName) {
+	return new string[] {};
+}
 
-    public virtual IEnumerable<string> GetWindowsMetadataReferences() {
-      return new string[0];
-    }
+public virtual IEnumerable<string> GetWindowsMetadataReferences() {
+	return new string[0];
+}
 
-    public virtual IEnumerable<string> GetAdditionalAssemblyReferences() {
-      return new string[0];
-    }
+public virtual IEnumerable<string> GetAdditionalAssemblyReferences() {
+	return new string[0];
+}
 
-    public virtual IEnumerable<string> GetAdditionalDefines() {
-      return new string[0];
-    }
+public virtual IEnumerable<string> GetAdditionalDefines() {
+	return new string[0];
+}
 
-    public virtual IEnumerable<string> GetAdditionalSourceFiles() {
-      return new string[0];
-    }
-  }
+public virtual IEnumerable<string> GetAdditionalSourceFiles() {
+	return new string[0];
+}
+}
 }

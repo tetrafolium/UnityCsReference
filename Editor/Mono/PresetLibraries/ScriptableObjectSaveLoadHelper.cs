@@ -13,77 +13,77 @@ public enum SaveType { Binary, Text }
 // without using the AssetDatabase)
 
 class ScriptableObjectSaveLoadHelper<T> where T : ScriptableObject {
-  public string fileExtensionWithoutDot {
-    get;
-    private set;
-  }
-  private SaveType saveType {
-    get;
-    set;
-  }
+public string fileExtensionWithoutDot {
+	get;
+	private set;
+}
+private SaveType saveType {
+	get;
+	set;
+}
 
-  public ScriptableObjectSaveLoadHelper(string fileExtensionWithoutDot,
-                                        SaveType saveType) {
-    this.saveType = saveType;
-    this.fileExtensionWithoutDot =
-        fileExtensionWithoutDot.TrimStart('.'); // Ensure no dot
-  }
+public ScriptableObjectSaveLoadHelper(string fileExtensionWithoutDot,
+                                      SaveType saveType) {
+	this.saveType = saveType;
+	this.fileExtensionWithoutDot =
+		fileExtensionWithoutDot.TrimStart('.'); // Ensure no dot
+}
 
-  // If 'filePath' does not include an extension the local
-  // 'fileExtensionWithoutDot' is used.
-  public T Load(string filePath) {
-    filePath = AppendFileExtensionIfNeeded(filePath);
+// If 'filePath' does not include an extension the local
+// 'fileExtensionWithoutDot' is used.
+public T Load(string filePath) {
+	filePath = AppendFileExtensionIfNeeded(filePath);
 
-    // Try to load
-    if (!string.IsNullOrEmpty(filePath)) {
-      Object[] objects =
-          InternalEditorUtility.LoadSerializedFileAndForget(filePath);
-      if (objects != null && objects.Length > 0)
-        return objects[0] as T;
-    }
+	// Try to load
+	if (!string.IsNullOrEmpty(filePath)) {
+		Object[] objects =
+			InternalEditorUtility.LoadSerializedFileAndForget(filePath);
+		if (objects != null && objects.Length > 0)
+			return objects[0] as T;
+	}
 
-    return null;
-  }
+	return null;
+}
 
-  public T Create() {
-    T t = ScriptableObject.CreateInstance<T>();
-    return t;
-  }
+public T Create() {
+	T t = ScriptableObject.CreateInstance<T>();
+	return t;
+}
 
-  // If 'filePath' does not include an extension the local
-  // 'fileExtensionWithoutDot' is used.
-  public void Save(T t, string filePath) {
-    if (t == null) {
-      Debug.LogError("Cannot save scriptableObject: its null!");
-      return;
-    }
+// If 'filePath' does not include an extension the local
+// 'fileExtensionWithoutDot' is used.
+public void Save(T t, string filePath) {
+	if (t == null) {
+		Debug.LogError("Cannot save scriptableObject: its null!");
+		return;
+	}
 
-    if (string.IsNullOrEmpty(filePath)) {
-      Debug.LogError("Invalid path: '" + filePath + "'");
-      return;
-    }
+	if (string.IsNullOrEmpty(filePath)) {
+		Debug.LogError("Invalid path: '" + filePath + "'");
+		return;
+	}
 
-    // Ensure folder exists
-    string folderPath = Path.GetDirectoryName(filePath);
-    if (!Directory.Exists(folderPath)) {
-      Directory.CreateDirectory(folderPath);
-    }
+	// Ensure folder exists
+	string folderPath = Path.GetDirectoryName(filePath);
+	if (!Directory.Exists(folderPath)) {
+		Directory.CreateDirectory(folderPath);
+	}
 
-    filePath = AppendFileExtensionIfNeeded(filePath);
+	filePath = AppendFileExtensionIfNeeded(filePath);
 
-    InternalEditorUtility.SaveToSerializedFileAndForget(
-        new[]{t}, filePath, saveType == SaveType.Text);
-  }
+	InternalEditorUtility.SaveToSerializedFileAndForget(
+		new[] {t}, filePath, saveType == SaveType.Text);
+}
 
-  public override string ToString() {
-    return string.Format("{0}, {1}", fileExtensionWithoutDot, saveType);
-  }
+public override string ToString() {
+	return string.Format("{0}, {1}", fileExtensionWithoutDot, saveType);
+}
 
-  string AppendFileExtensionIfNeeded(string path) {
-    if (!Path.HasExtension(path) &&
-        !string.IsNullOrEmpty(fileExtensionWithoutDot))
-      return path + "." + fileExtensionWithoutDot;
-    return path;
-  }
+string AppendFileExtensionIfNeeded(string path) {
+	if (!Path.HasExtension(path) &&
+	    !string.IsNullOrEmpty(fileExtensionWithoutDot))
+		return path + "." + fileExtensionWithoutDot;
+	return path;
+}
 }
 }
