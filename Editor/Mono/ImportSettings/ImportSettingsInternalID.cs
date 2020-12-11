@@ -23,7 +23,7 @@ internal class ImportSettingInternalID
     }
 
     static public bool RemoveEntryFromInternalIDTable(SerializedObject serializedObject, UnityType type, long id,
-        string name)
+            string name)
     {
         int classID = type.persistentTypeID;
         SerializedProperty internalIDMap = serializedObject.FindProperty("m_InternalIDToNameTable");

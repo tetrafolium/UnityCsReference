@@ -14,199 +14,199 @@ using Object = UnityEngine.Object;
 
 namespace UnityEditor
 {
-    internal class AssetBundleNameGUI
+internal class AssetBundleNameGUI
+{
+    static private readonly GUIContent kAssetBundleName = EditorGUIUtility.TrTextContent("AssetBundle");
+    static private readonly int kAssetBundleNameFieldIdHash = "AssetBundleNameFieldHash".GetHashCode();
+
+    static private readonly int kAssetBundleVariantFieldIdHash = "AssetBundleVariantFieldHash".GetHashCode();
+
+    private static class Styles
     {
-        static private readonly GUIContent kAssetBundleName = EditorGUIUtility.TrTextContent("AssetBundle");
-        static private readonly int kAssetBundleNameFieldIdHash = "AssetBundleNameFieldHash".GetHashCode();
+        public static GUIStyle label = "ControlLabel";
+        public static GUIStyle popup = "MiniPopup";
+        public static GUIStyle textField = "textField";
+    }
 
-        static private readonly int kAssetBundleVariantFieldIdHash = "AssetBundleVariantFieldHash".GetHashCode();
+    private bool m_ShowAssetBundleNameTextField = false;
+    private bool m_ShowAssetBundleVariantTextField = false;
 
-        private static class Styles
+    public void OnAssetBundleNameGUI(IEnumerable<Object> assets)
+    {
+        float oldLabelWidth = EditorGUIUtility.labelWidth;
+        EditorGUIUtility.labelWidth = 90f;
+
+        Rect bundleRect  = EditorGUILayout.GetControlRect(true, EditorGUI.kSingleLineHeight);
+        Rect variantRect = bundleRect;
+
+        bundleRect.width *= 0.8f;
+        variantRect.xMin += bundleRect.width + EditorGUI.kSpacing;
+
+
+        int id = GUIUtility.GetControlID(kAssetBundleNameFieldIdHash, FocusType.Passive, bundleRect);
+
+        bundleRect = EditorGUI.PrefixLabel(bundleRect, id, kAssetBundleName, Styles.label);
+        if (m_ShowAssetBundleNameTextField)
+            AssetBundleTextField(bundleRect, id, assets, false);
+        else
+            AssetBundlePopup(bundleRect, id, assets, false);
+
+        id = GUIUtility.GetControlID(kAssetBundleVariantFieldIdHash, FocusType.Passive, variantRect);
+
+        if (m_ShowAssetBundleVariantTextField)
+            AssetBundleTextField(variantRect, id, assets, true);
+        else
+            AssetBundlePopup(variantRect, id, assets, true);
+
+        EditorGUIUtility.labelWidth = oldLabelWidth;
+    }
+
+    private void ShowNewAssetBundleField(bool isVariant)
+    {
+        m_ShowAssetBundleNameTextField = !isVariant;
+        m_ShowAssetBundleVariantTextField = isVariant;
+
+        EditorGUIUtility.editingTextField = true;
+    }
+
+    private void AssetBundleTextField(Rect rect, int id, IEnumerable<Object> assets, bool isVariant)
+    {
+        EditorGUI.BeginChangeCheck();
+        string temp = EditorGUI.DelayedTextFieldInternal(rect, id, GUIContent.none, "", null, Styles.textField);
+        if (EditorGUI.EndChangeCheck())
         {
-            public static GUIStyle label = "ControlLabel";
-            public static GUIStyle popup = "MiniPopup";
-            public static GUIStyle textField = "textField";
+            SetAssetBundleForAssets(assets, temp, isVariant);
+            ShowAssetBundlePopup();
         }
 
-        private bool m_ShowAssetBundleNameTextField = false;
-        private bool m_ShowAssetBundleVariantTextField = false;
+        // editing was cancelled
+        if (EditorGUI.IsEditingTextField() == false && Event.current.type != EventType.Layout)
+            ShowAssetBundlePopup();
+    }
 
-        public void OnAssetBundleNameGUI(IEnumerable<Object> assets)
+    private void ShowAssetBundlePopup()
+    {
+        m_ShowAssetBundleNameTextField = false;
+        m_ShowAssetBundleVariantTextField = false;
+    }
+
+    private void AssetBundlePopup(Rect rect, int id, IEnumerable<Object> assets, bool isVariant)
+    {
+        List<string> displayedOptions = new List<string>();
+        displayedOptions.Add("None");
+        displayedOptions.Add("");  // seperator
+
+        // Anyway to optimize this by caching GetAssetBundleNameFromAssets() and GetAllAssetBundleNames() when they actually change?
+        // As we can change the assetBundle name by script, the UI needs to detect this kind of change.
+        bool mixedValue;
+        IEnumerable<string> assetBundleFromAssets = GetAssetBundlesFromAssets(assets, isVariant, out mixedValue);
+
+        string[] assetBundles = isVariant ? AssetDatabase.GetAllAssetBundleVariants() : AssetDatabase.GetAllAssetBundleNamesWithoutVariant();
+        displayedOptions.AddRange(assetBundles);
+
+        displayedOptions.Add("");  // seperator
+        int newAssetBundleIndex = displayedOptions.Count;
+        displayedOptions.Add("New...");
+
+        // These two options are invalid for variant, so skip them for variant.
+        int removeUnusedIndex = -1;
+        int filterSelectedIndex = -1;
+        if (!isVariant)
         {
-            float oldLabelWidth = EditorGUIUtility.labelWidth;
-            EditorGUIUtility.labelWidth = 90f;
+            removeUnusedIndex = displayedOptions.Count;
+            displayedOptions.Add("Remove Unused Names");
+            filterSelectedIndex = displayedOptions.Count;
+            if (assetBundleFromAssets.Count() != 0)
+                displayedOptions.Add("Filter Selected Name" + (mixedValue ? "s" : ""));
+        }
 
-            Rect bundleRect  = EditorGUILayout.GetControlRect(true, EditorGUI.kSingleLineHeight);
-            Rect variantRect = bundleRect;
+        int selectedIndex = 0;
+        string firstAssetBundle = assetBundleFromAssets.FirstOrDefault();
+        if (!String.IsNullOrEmpty(firstAssetBundle))
+            selectedIndex = displayedOptions.IndexOf(firstAssetBundle);
 
-            bundleRect.width *= 0.8f;
-            variantRect.xMin += bundleRect.width + EditorGUI.kSpacing;
-
-
-            int id = GUIUtility.GetControlID(kAssetBundleNameFieldIdHash, FocusType.Passive, bundleRect);
-
-            bundleRect = EditorGUI.PrefixLabel(bundleRect, id, kAssetBundleName, Styles.label);
-            if (m_ShowAssetBundleNameTextField)
-                AssetBundleTextField(bundleRect, id, assets, false);
+        EditorGUI.BeginChangeCheck();
+        EditorGUI.showMixedValue = mixedValue;
+        selectedIndex = EditorGUI.DoPopup(rect, id, selectedIndex, EditorGUIUtility.TempContent(displayedOptions.ToArray()), Styles.popup);
+        EditorGUI.showMixedValue = false;
+        if (EditorGUI.EndChangeCheck())
+        {
+            if (selectedIndex == 0) // None
+                SetAssetBundleForAssets(assets, null, isVariant);
+            else if (selectedIndex == newAssetBundleIndex) // New...
+                ShowNewAssetBundleField(isVariant);
+            else if (selectedIndex == removeUnusedIndex) // Remove Unused Names
+                AssetDatabase.RemoveUnusedAssetBundleNames();
+            else if (selectedIndex == filterSelectedIndex) // Filter Selected Name(s)
+                FilterSelected(assetBundleFromAssets);
             else
-                AssetBundlePopup(bundleRect, id, assets, false);
-
-            id = GUIUtility.GetControlID(kAssetBundleVariantFieldIdHash, FocusType.Passive, variantRect);
-
-            if (m_ShowAssetBundleVariantTextField)
-                AssetBundleTextField(variantRect, id, assets, true);
-            else
-                AssetBundlePopup(variantRect, id, assets, true);
-
-            EditorGUIUtility.labelWidth = oldLabelWidth;
-        }
-
-        private void ShowNewAssetBundleField(bool isVariant)
-        {
-            m_ShowAssetBundleNameTextField = !isVariant;
-            m_ShowAssetBundleVariantTextField = isVariant;
-
-            EditorGUIUtility.editingTextField = true;
-        }
-
-        private void AssetBundleTextField(Rect rect, int id, IEnumerable<Object> assets, bool isVariant)
-        {
-            EditorGUI.BeginChangeCheck();
-            string temp = EditorGUI.DelayedTextFieldInternal(rect, id, GUIContent.none, "", null, Styles.textField);
-            if (EditorGUI.EndChangeCheck())
-            {
-                SetAssetBundleForAssets(assets, temp, isVariant);
-                ShowAssetBundlePopup();
-            }
-
-            // editing was cancelled
-            if (EditorGUI.IsEditingTextField() == false && Event.current.type != EventType.Layout)
-                ShowAssetBundlePopup();
-        }
-
-        private void ShowAssetBundlePopup()
-        {
-            m_ShowAssetBundleNameTextField = false;
-            m_ShowAssetBundleVariantTextField = false;
-        }
-
-        private void AssetBundlePopup(Rect rect, int id, IEnumerable<Object> assets, bool isVariant)
-        {
-            List<string> displayedOptions = new List<string>();
-            displayedOptions.Add("None");
-            displayedOptions.Add("");  // seperator
-
-            // Anyway to optimize this by caching GetAssetBundleNameFromAssets() and GetAllAssetBundleNames() when they actually change?
-            // As we can change the assetBundle name by script, the UI needs to detect this kind of change.
-            bool mixedValue;
-            IEnumerable<string> assetBundleFromAssets = GetAssetBundlesFromAssets(assets, isVariant, out mixedValue);
-
-            string[] assetBundles = isVariant ? AssetDatabase.GetAllAssetBundleVariants() : AssetDatabase.GetAllAssetBundleNamesWithoutVariant();
-            displayedOptions.AddRange(assetBundles);
-
-            displayedOptions.Add("");  // seperator
-            int newAssetBundleIndex = displayedOptions.Count;
-            displayedOptions.Add("New...");
-
-            // These two options are invalid for variant, so skip them for variant.
-            int removeUnusedIndex = -1;
-            int filterSelectedIndex = -1;
-            if (!isVariant)
-            {
-                removeUnusedIndex = displayedOptions.Count;
-                displayedOptions.Add("Remove Unused Names");
-                filterSelectedIndex = displayedOptions.Count;
-                if (assetBundleFromAssets.Count() != 0)
-                    displayedOptions.Add("Filter Selected Name" + (mixedValue ? "s" : ""));
-            }
-
-            int selectedIndex = 0;
-            string firstAssetBundle = assetBundleFromAssets.FirstOrDefault();
-            if (!String.IsNullOrEmpty(firstAssetBundle))
-                selectedIndex = displayedOptions.IndexOf(firstAssetBundle);
-
-            EditorGUI.BeginChangeCheck();
-            EditorGUI.showMixedValue = mixedValue;
-            selectedIndex = EditorGUI.DoPopup(rect, id, selectedIndex, EditorGUIUtility.TempContent(displayedOptions.ToArray()), Styles.popup);
-            EditorGUI.showMixedValue = false;
-            if (EditorGUI.EndChangeCheck())
-            {
-                if (selectedIndex == 0) // None
-                    SetAssetBundleForAssets(assets, null, isVariant);
-                else if (selectedIndex == newAssetBundleIndex) // New...
-                    ShowNewAssetBundleField(isVariant);
-                else if (selectedIndex == removeUnusedIndex) // Remove Unused Names
-                    AssetDatabase.RemoveUnusedAssetBundleNames();
-                else if (selectedIndex == filterSelectedIndex) // Filter Selected Name(s)
-                    FilterSelected(assetBundleFromAssets);
-                else
-                    SetAssetBundleForAssets(assets, displayedOptions[selectedIndex], isVariant);
-            }
-        }
-
-        private void FilterSelected(IEnumerable<string> assetBundleNames)
-        {
-            var searchFilter = new SearchFilter();
-            searchFilter.assetBundleNames = assetBundleNames.Where(name => !String.IsNullOrEmpty(name)).ToArray();
-
-            if (ProjectBrowser.s_LastInteractedProjectBrowser != null)
-                ProjectBrowser.s_LastInteractedProjectBrowser.SetSearch(searchFilter);
-            else
-                Debug.LogWarning("No Project Browser found to apply AssetBundle filter.");
-        }
-
-        private IEnumerable<string> GetAssetBundlesFromAssets(IEnumerable<Object> assets, bool isVariant, out bool isMixed)
-        {
-            var assetBundles = new HashSet<string>();
-            string lastAssetBundle = null;
-            isMixed = false;
-
-            foreach (Object obj in assets)
-            {
-                if (obj is MonoScript)
-                    continue;
-
-                AssetImporter importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(obj));
-                if (importer == null)
-                    continue;
-
-                string currentAssetBundle = isVariant ? importer.assetBundleVariant : importer.assetBundleName;
-
-                if (lastAssetBundle != null && lastAssetBundle != currentAssetBundle)
-                    isMixed = true;
-                lastAssetBundle = currentAssetBundle;
-
-                if (!String.IsNullOrEmpty(currentAssetBundle))
-                    assetBundles.Add(currentAssetBundle);
-            }
-
-            return assetBundles;
-        }
-
-        private void SetAssetBundleForAssets(IEnumerable<Object> assets, string name, bool isVariant)
-        {
-            bool assetBundleNameChanged = false;
-            foreach (Object obj in assets)
-            {
-                if (obj is MonoScript)
-                    continue;
-
-                AssetImporter importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(obj));
-                if (importer == null)
-                    continue;
-
-                if (isVariant)
-                    importer.assetBundleVariant = name;
-                else
-                    importer.assetBundleName = name;
-
-                assetBundleNameChanged = true;
-            }
-
-            if (assetBundleNameChanged)
-            {
-                EditorApplication.Internal_CallAssetBundleNameChanged();
-            }
+                SetAssetBundleForAssets(assets, displayedOptions[selectedIndex], isVariant);
         }
     }
+
+    private void FilterSelected(IEnumerable<string> assetBundleNames)
+    {
+        var searchFilter = new SearchFilter();
+        searchFilter.assetBundleNames = assetBundleNames.Where(name => !String.IsNullOrEmpty(name)).ToArray();
+
+        if (ProjectBrowser.s_LastInteractedProjectBrowser != null)
+            ProjectBrowser.s_LastInteractedProjectBrowser.SetSearch(searchFilter);
+        else
+            Debug.LogWarning("No Project Browser found to apply AssetBundle filter.");
+    }
+
+    private IEnumerable<string> GetAssetBundlesFromAssets(IEnumerable<Object> assets, bool isVariant, out bool isMixed)
+    {
+        var assetBundles = new HashSet<string>();
+        string lastAssetBundle = null;
+        isMixed = false;
+
+        foreach (Object obj in assets)
+        {
+            if (obj is MonoScript)
+                continue;
+
+            AssetImporter importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(obj));
+            if (importer == null)
+                continue;
+
+            string currentAssetBundle = isVariant ? importer.assetBundleVariant : importer.assetBundleName;
+
+            if (lastAssetBundle != null && lastAssetBundle != currentAssetBundle)
+                isMixed = true;
+            lastAssetBundle = currentAssetBundle;
+
+            if (!String.IsNullOrEmpty(currentAssetBundle))
+                assetBundles.Add(currentAssetBundle);
+        }
+
+        return assetBundles;
+    }
+
+    private void SetAssetBundleForAssets(IEnumerable<Object> assets, string name, bool isVariant)
+    {
+        bool assetBundleNameChanged = false;
+        foreach (Object obj in assets)
+        {
+            if (obj is MonoScript)
+                continue;
+
+            AssetImporter importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(obj));
+            if (importer == null)
+                continue;
+
+            if (isVariant)
+                importer.assetBundleVariant = name;
+            else
+                importer.assetBundleName = name;
+
+            assetBundleNameChanged = true;
+        }
+
+        if (assetBundleNameChanged)
+        {
+            EditorApplication.Internal_CallAssetBundleNameChanged();
+        }
+    }
+}
 }

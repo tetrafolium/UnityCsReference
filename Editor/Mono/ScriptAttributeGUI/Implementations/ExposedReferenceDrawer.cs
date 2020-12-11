@@ -61,16 +61,16 @@ abstract class BaseExposedPropertyDrawer : UnityEditor.PropertyDrawer
     }
 
     protected abstract void OnRenderProperty(Rect position,
-        PropertyName exposedPropertyNameString,
-        Object currentReferenceValue,
-        UnityEditor.SerializedProperty exposedPropertyDefault,
-        UnityEditor.SerializedProperty exposedPropertyName,
-        ExposedPropertyMode mode,
-        IExposedPropertyTable exposedProperties);
+            PropertyName exposedPropertyNameString,
+            Object currentReferenceValue,
+            UnityEditor.SerializedProperty exposedPropertyDefault,
+            UnityEditor.SerializedProperty exposedPropertyName,
+            ExposedPropertyMode mode,
+            IExposedPropertyTable exposedProperties);
 
     public override void OnGUI(Rect position,
-        UnityEditor.SerializedProperty prop,
-        GUIContent label)
+                               UnityEditor.SerializedProperty prop,
+                               GUIContent label)
     {
         SerializedProperty defaultValue = prop.FindPropertyRelative("defaultValue");
         SerializedProperty exposedName = prop.FindPropertyRelative("exposedName");
@@ -197,12 +197,12 @@ abstract class BaseExposedPropertyDrawer : UnityEditor.PropertyDrawer
 class ExposedReferencePropertyDrawer : BaseExposedPropertyDrawer
 {
     protected override void OnRenderProperty(Rect position,
-        PropertyName exposedPropertyNameString,
-        Object currentReferenceValue,
-        UnityEditor.SerializedProperty exposedPropertyDefault,
-        UnityEditor.SerializedProperty exposedPropertyName,
-        ExposedPropertyMode mode,
-        IExposedPropertyTable exposedPropertyTable)
+            PropertyName exposedPropertyNameString,
+            Object currentReferenceValue,
+            UnityEditor.SerializedProperty exposedPropertyDefault,
+            UnityEditor.SerializedProperty exposedPropertyName,
+            ExposedPropertyMode mode,
+            IExposedPropertyTable exposedPropertyTable)
     {
         var typeOfExposedReference = fieldInfo.FieldType.GetGenericArguments()[0];
 
@@ -259,7 +259,7 @@ class ExposedReferencePropertyDrawer : BaseExposedPropertyDrawer
 
                 Undo.RecordObject(exposedPropertyTable as Object, "Set Exposed Property");
                 exposedPropertyTable.SetReferenceValue(newPropertyName, currentValue);
-            } , null);
+            }, null);
         }
         else
         {

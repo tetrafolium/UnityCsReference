@@ -10,33 +10,33 @@ using UnityEngine.Bindings;
 
 namespace UnityEditor
 {
-    [NativeClass(null)]
-    [NativeHeader("Runtime/BaseClasses/TagManager.h")]
-    internal sealed class TagManager : ProjectSettingsBase
+[NativeClass(null)]
+[NativeHeader("Runtime/BaseClasses/TagManager.h")]
+internal sealed class TagManager : ProjectSettingsBase
+{
+    private TagManager() {}
+
+    [StaticAccessor("GetTagManager()", StaticAccessorType.Dot)]
+    internal static extern int GetDefinedLayerCount();
+
+    internal static void GetDefinedLayers(ref string[] layerNames, ref int[] layerValues)
     {
-        private TagManager() {}
+        var definedLayerCount = GetDefinedLayerCount();
 
-        [StaticAccessor("GetTagManager()", StaticAccessorType.Dot)]
-        internal static extern int GetDefinedLayerCount();
+        if (layerNames == null)
+            layerNames = new string[definedLayerCount];
+        else if (layerNames.Length != definedLayerCount)
+            Array.Resize(ref layerNames, definedLayerCount);
 
-        internal static void GetDefinedLayers(ref string[] layerNames, ref int[] layerValues)
-        {
-            var definedLayerCount = GetDefinedLayerCount();
+        if (layerValues == null)
+            layerValues = new int[definedLayerCount];
+        else if (layerValues.Length != definedLayerCount)
+            Array.Resize(ref layerValues, definedLayerCount);
 
-            if (layerNames == null)
-                layerNames = new string[definedLayerCount];
-            else if (layerNames.Length != definedLayerCount)
-                Array.Resize(ref layerNames, definedLayerCount);
-
-            if (layerValues == null)
-                layerValues = new int[definedLayerCount];
-            else if (layerValues.Length != definedLayerCount)
-                Array.Resize(ref layerValues, definedLayerCount);
-
-            Internal_GetDefinedLayers(layerNames, layerValues);
-        }
-
-        [FreeFunction("GetTagManager().GetDefinedLayers")]
-        static extern void Internal_GetDefinedLayers([Out] string[] layerNames, [Out] int[] layerValues);
+        Internal_GetDefinedLayers(layerNames, layerValues);
     }
+
+    [FreeFunction("GetTagManager().GetDefinedLayers")]
+    static extern void Internal_GetDefinedLayers([Out] string[] layerNames, [Out] int[] layerValues);
+}
 }

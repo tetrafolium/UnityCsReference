@@ -6,23 +6,23 @@ using System;
 
 namespace UnityEditor
 {
-    [AttributeUsage(AttributeTargets.Method)]
-    public sealed class SettingsProviderAttribute : Attribute
+[AttributeUsage(AttributeTargets.Method)]
+public sealed class SettingsProviderAttribute : Attribute
+{
+    [RequiredSignature]
+    private static SettingsProvider signature()
     {
-        [RequiredSignature]
-        private static SettingsProvider signature()
-        {
-            return null;
-        }
+        return null;
     }
+}
 
-    [AttributeUsage(AttributeTargets.Method)]
-    public sealed class SettingsProviderGroupAttribute : Attribute
+[AttributeUsage(AttributeTargets.Method)]
+public sealed class SettingsProviderGroupAttribute : Attribute
+{
+    [RequiredSignature]
+    private static SettingsProvider[] signature()
     {
-        [RequiredSignature]
-        private static SettingsProvider[] signature()
-        {
-            return null;
-        }
+        return null;
     }
+}
 }

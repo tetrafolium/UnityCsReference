@@ -7,29 +7,29 @@ using UnityEngine;
 
 namespace UnityEditorInternal
 {
-    [CustomEditor(typeof(ProjectSettingsBase), true)]
-    internal class ProjectSettingsBaseEditor : Editor
+[CustomEditor(typeof(ProjectSettingsBase), true)]
+internal class ProjectSettingsBaseEditor : Editor
+{
+    protected override bool ShouldHideOpenButton()
     {
-        protected override bool ShouldHideOpenButton()
-        {
-            return true;
-        }
-
-        private string m_LocalizedTargetName;
-
-        internal override string targetTitle
-        {
-            get
-            {
-                if (m_LocalizedTargetName == null)
-                    m_LocalizedTargetName = L10n.Tr(target.name);
-                return m_LocalizedTargetName;
-            }
-        }
+        return true;
     }
 
-    [NativeClass(null)]
-    [ExcludeFromObjectFactory]
-    internal abstract class ProjectSettingsBase : Object
-    {}
+    private string m_LocalizedTargetName;
+
+    internal override string targetTitle
+    {
+        get
+        {
+            if (m_LocalizedTargetName == null)
+                m_LocalizedTargetName = L10n.Tr(target.name);
+            return m_LocalizedTargetName;
+        }
+    }
+}
+
+[NativeClass(null)]
+[ExcludeFromObjectFactory]
+internal abstract class ProjectSettingsBase : Object
+{}
 }

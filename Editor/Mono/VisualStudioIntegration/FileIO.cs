@@ -7,29 +7,29 @@ using System.Text;
 
 namespace UnityEditor.VisualStudioIntegration
 {
-    interface IFileIO
-    {
-        bool Exists(string fileName);
+interface IFileIO
+{
+    bool Exists(string fileName);
 
-        string ReadAllText(string fileName);
-        void WriteAllText(string fileName, string content);
+    string ReadAllText(string fileName);
+    void WriteAllText(string fileName, string content);
+}
+
+class FileIOProvider : IFileIO
+{
+    public bool Exists(string fileName)
+    {
+        return File.Exists(fileName);
     }
 
-    class FileIOProvider : IFileIO
+    public string ReadAllText(string fileName)
     {
-        public bool Exists(string fileName)
-        {
-            return File.Exists(fileName);
-        }
-
-        public string ReadAllText(string fileName)
-        {
-            return File.ReadAllText(fileName);
-        }
-
-        public void WriteAllText(string fileName, string content)
-        {
-            File.WriteAllText(fileName, content, Encoding.UTF8);
-        }
+        return File.ReadAllText(fileName);
     }
+
+    public void WriteAllText(string fileName, string content)
+    {
+        File.WriteAllText(fileName, content, Encoding.UTF8);
+    }
+}
 }

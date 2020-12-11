@@ -7,16 +7,16 @@ using UnityEditor;
 
 namespace UnityEditor
 {
-    public static class TransformUtils
+public static class TransformUtils
+{
+    public static Vector3 GetInspectorRotation(Transform t)
     {
-        public static Vector3 GetInspectorRotation(Transform t)
-        {
-            return t.GetLocalEulerAngles(t.rotationOrder);
-        }
-
-        public static void SetInspectorRotation(Transform t, Vector3 r)
-        {
-            t.SetLocalEulerAngles(r, t.rotationOrder);
-        }
+        return t.GetLocalEulerAngles(t.rotationOrder);
     }
+
+    public static void SetInspectorRotation(Transform t, Vector3 r)
+    {
+        t.SetLocalEulerAngles(r, t.rotationOrder);
+    }
+}
 }

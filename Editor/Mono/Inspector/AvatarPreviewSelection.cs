@@ -10,36 +10,36 @@ using Object = UnityEngine.Object;
 
 namespace UnityEditor
 {
-    internal class AvatarPreviewSelection : ScriptableSingleton<AvatarPreviewSelection>
+internal class AvatarPreviewSelection : ScriptableSingleton<AvatarPreviewSelection>
+{
+    [SerializeField]
+    GameObject[] m_PreviewModels;
+
+    void Awake()
     {
-        [SerializeField]
-        GameObject[] m_PreviewModels;
+        int length = (int)ModelImporterAnimationType.Human + 1;
+        if (m_PreviewModels == null || m_PreviewModels.Length != length)
+            m_PreviewModels = new GameObject[length];
+    }
 
-        void Awake()
+    static public void SetPreview(ModelImporterAnimationType type, GameObject go)
+    {
+        if (!System.Enum.IsDefined(typeof(ModelImporterAnimationType), type))
+            return;
+
+        if (instance.m_PreviewModels[(int)type] != go)
         {
-            int length = (int)ModelImporterAnimationType.Human + 1;
-            if (m_PreviewModels == null || m_PreviewModels.Length != length)
-                m_PreviewModels = new GameObject[length];
+            instance.m_PreviewModels[(int)type] = go;
+            instance.Save(false);
         }
+    }
 
-        static public void SetPreview(ModelImporterAnimationType type, GameObject go)
-        {
-            if (!System.Enum.IsDefined(typeof(ModelImporterAnimationType), type))
-                return;
+    static public GameObject GetPreview(ModelImporterAnimationType type)
+    {
+        if (!System.Enum.IsDefined(typeof(ModelImporterAnimationType), type))
+            return null;
 
-            if (instance.m_PreviewModels[(int)type] != go)
-            {
-                instance.m_PreviewModels[(int)type] = go;
-                instance.Save(false);
-            }
-        }
-
-        static public GameObject GetPreview(ModelImporterAnimationType type)
-        {
-            if (!System.Enum.IsDefined(typeof(ModelImporterAnimationType), type))
-                return null;
-
-            return instance.m_PreviewModels[(int)type];
-        }
-    } // class AvatarPreviewSelection
+        return instance.m_PreviewModels[(int)type];
+    }
+} // class AvatarPreviewSelection
 } // namespace UnityEditor

@@ -6,24 +6,24 @@ using System;
 
 namespace UnityEditor.Scripting.ScriptCompilation
 {
-    static class GUIDReference
+static class GUIDReference
+{
+    private static readonly string GUIDReferencePrefix = "GUID:";
+    private static readonly string GUIDReferencePrefixLowerCase = "guid:";
+
+    public static bool IsGUIDReference(string reference)
     {
-        private static readonly string GUIDReferencePrefix = "GUID:";
-        private static readonly string GUIDReferencePrefixLowerCase = "guid:";
-
-        public static bool IsGUIDReference(string reference)
-        {
-            return Utility.FastStartsWith(reference, GUIDReferencePrefix, GUIDReferencePrefixLowerCase);
-        }
-
-        public static string GUIDReferenceToGUID(string reference)
-        {
-            return reference.Substring(GUIDReferencePrefix.Length);
-        }
-
-        public static string GUIDToGUIDReference(string guid)
-        {
-            return $"{GUIDReferencePrefix}{guid}";
-        }
+        return Utility.FastStartsWith(reference, GUIDReferencePrefix, GUIDReferencePrefixLowerCase);
     }
+
+    public static string GUIDReferenceToGUID(string reference)
+    {
+        return reference.Substring(GUIDReferencePrefix.Length);
+    }
+
+    public static string GUIDToGUIDReference(string guid)
+    {
+        return $"{GUIDReferencePrefix}{guid}";
+    }
+}
 }

@@ -7,16 +7,16 @@ using UnityEditor;
 
 namespace UnityEditorInternal
 {
-    internal struct PluginDesc
-    {
-        public string pluginPath;
-        public CPUArch architecture;
-    }
+internal struct PluginDesc
+{
+    public string pluginPath;
+    public CPUArch architecture;
+}
 
-    internal enum CPUArch
-    {
-        Any,
-        x86,
-        ARMv7
-    }
+internal enum CPUArch
+{
+    Any,
+    x86,
+    ARMv7
+}
 }

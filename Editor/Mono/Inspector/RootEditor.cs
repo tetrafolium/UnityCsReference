@@ -10,76 +10,78 @@ using UnityEngine.Internal;
 
 namespace UnityEditor
 {
-    [ExcludeFromDocs]
-    public class RootEditorAttribute : System.Attribute
-    {
-        public delegate System.Type RootEditorHandler(UnityEngine.Object[] objects);
+[ExcludeFromDocs]
+public class RootEditorAttribute : System.Attribute
+{
+    public delegate System.Type RootEditorHandler(UnityEngine.Object[] objects);
 
+    public bool supportsAddComponent;
+    public RootEditorAttribute(bool supportsAddComponent = false)
+    {
+        this.supportsAddComponent = supportsAddComponent;
+    }
+
+    [RequiredSignature]
+    private static System.Type signature(UnityEngine.Object[] objects)
+    {
+        return null;
+    }
+}
+
+internal static class RootEditorUtils
+{
+    internal class RootEditorDesc
+    {
+        public RootEditorAttribute.RootEditorHandler needsRootEditor;
+        public System.Type rootEditorType;
         public bool supportsAddComponent;
-        public RootEditorAttribute(bool supportsAddComponent = false)
-        {
-            this.supportsAddComponent = supportsAddComponent;
-        }
-
-        [RequiredSignature]
-        private static System.Type signature(UnityEngine.Object[] objects)
-        {
-            return null;
-        }
     }
 
-    internal static class RootEditorUtils
+    private static readonly List<RootEditorDesc> kSRootEditor = new List<RootEditorDesc>();
+
+    static RootEditorUtils()
     {
-        internal class RootEditorDesc
+        Rebuild();
+    }
+
+    internal static bool SupportsAddComponent(Editor[] editors)
+    {
+        if (editors.Length != 1)
+            return true;
+
+        return kSRootEditor.All(desc => desc.rootEditorType != editors[0].GetType());
+    }
+
+    internal static Type FindRootEditor(UnityEngine.Object[] objects)
+    {
+        foreach (var desc in kSRootEditor)
         {
-            public RootEditorAttribute.RootEditorHandler needsRootEditor;
-            public System.Type rootEditorType;
-            public bool supportsAddComponent;
-        }
-
-        private static readonly List<RootEditorDesc> kSRootEditor = new List<RootEditorDesc>();
-
-        static RootEditorUtils()
-        {
-            Rebuild();
-        }
-
-        internal static bool SupportsAddComponent(Editor[] editors)
-        {
-            if (editors.Length != 1)
-                return true;
-
-            return kSRootEditor.All(desc => desc.rootEditorType != editors[0].GetType());
-        }
-
-        internal static Type FindRootEditor(UnityEngine.Object[] objects)
-        {
-            foreach (var desc in kSRootEditor)
+            var rootEditorType = desc.needsRootEditor(objects);
+            if (rootEditorType != null)
             {
-                var rootEditorType = desc.needsRootEditor(objects);
-                if (rootEditorType != null)
-                {
-                    desc.rootEditorType = rootEditorType;
-                    return rootEditorType;
-                }
+                desc.rootEditorType = rootEditorType;
+                return rootEditorType;
             }
-
-            return null;
         }
 
-        internal static void Rebuild()
+        return null;
+    }
+
+    internal static void Rebuild()
+    {
+        kSRootEditor.Clear();
+        var rootEditorMethods = AttributeHelper.GetMethodsWithAttribute<RootEditorAttribute>(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly);
+        foreach (var method in rootEditorMethods.methodsWithAttributes)
         {
-            kSRootEditor.Clear();
-            var rootEditorMethods = AttributeHelper.GetMethodsWithAttribute<RootEditorAttribute>(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly);
-            foreach (var method in rootEditorMethods.methodsWithAttributes)
+            var callback = Delegate.CreateDelegate(typeof(RootEditorAttribute.RootEditorHandler), method.info) as RootEditorAttribute.RootEditorHandler;
+            if (callback != null)
             {
-                var callback = Delegate.CreateDelegate(typeof(RootEditorAttribute.RootEditorHandler), method.info) as RootEditorAttribute.RootEditorHandler;
-                if (callback != null)
-                {
-                    var attr = method.attribute as RootEditorAttribute;
-                    kSRootEditor.Add(new RootEditorDesc() { needsRootEditor = callback, supportsAddComponent = attr.supportsAddComponent });
-                }
+                var attr = method.attribute as RootEditorAttribute;
+                kSRootEditor.Add(new RootEditorDesc() {
+                    needsRootEditor = callback, supportsAddComponent = attr.supportsAddComponent
+                });
             }
         }
     }
+}
 }

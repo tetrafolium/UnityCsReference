@@ -9,34 +9,34 @@ using UnityEditor.Modules;
 
 namespace UnityEditor
 {
-    internal static class IDeviceUtils
+internal static class IDeviceUtils
+{
+    // API for native calls
+    internal static RemoteAddress StartRemoteSupport(string deviceId)
     {
-        // API for native calls
-        internal static RemoteAddress StartRemoteSupport(string deviceId)
-        {
-            IDevice device = ModuleManager.GetDevice(deviceId);
-            return device.StartRemoteSupport();
-        }
-
-        // API for native calls
-        internal static void StopRemoteSupport(string deviceId)
-        {
-            IDevice device = ModuleManager.GetDevice(deviceId);
-            device.StopRemoteSupport();
-        }
-
-        // API for native calls
-        internal static RemoteAddress StartPlayerConnectionSupport(string deviceId)
-        {
-            IDevice device = ModuleManager.GetDevice(deviceId);
-            return device.StartPlayerConnectionSupport();
-        }
-
-        // API for native calls
-        internal static void StopPlayerConnectionSupport(string deviceId)
-        {
-            IDevice device = ModuleManager.GetDevice(deviceId);
-            device.StopPlayerConnectionSupport();
-        }
+        IDevice device = ModuleManager.GetDevice(deviceId);
+        return device.StartRemoteSupport();
     }
+
+    // API for native calls
+    internal static void StopRemoteSupport(string deviceId)
+    {
+        IDevice device = ModuleManager.GetDevice(deviceId);
+        device.StopRemoteSupport();
+    }
+
+    // API for native calls
+    internal static RemoteAddress StartPlayerConnectionSupport(string deviceId)
+    {
+        IDevice device = ModuleManager.GetDevice(deviceId);
+        return device.StartPlayerConnectionSupport();
+    }
+
+    // API for native calls
+    internal static void StopPlayerConnectionSupport(string deviceId)
+    {
+        IDevice device = ModuleManager.GetDevice(deviceId);
+        device.StopPlayerConnectionSupport();
+    }
+}
 }

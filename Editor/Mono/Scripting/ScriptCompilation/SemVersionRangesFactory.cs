@@ -6,18 +6,18 @@ using System;
 
 namespace UnityEditor.Scripting.ScriptCompilation
 {
-    class SemVersionRangesFactory
+class SemVersionRangesFactory
+{
+    SemVersionRanges m_SemVersionRanges;
+
+    public SemVersionRangesFactory()
     {
-        SemVersionRanges m_SemVersionRanges;
-
-        public SemVersionRangesFactory()
-        {
-            m_SemVersionRanges = new SemVersionRanges(ExpressionTypeFactory.Create());
-        }
-
-        public VersionDefineExpression GetExpression(string expression)
-        {
-            return m_SemVersionRanges.GetExpression(expression);
-        }
+        m_SemVersionRanges = new SemVersionRanges(ExpressionTypeFactory.Create());
     }
+
+    public VersionDefineExpression GetExpression(string expression)
+    {
+        return m_SemVersionRanges.GetExpression(expression);
+    }
+}
 }

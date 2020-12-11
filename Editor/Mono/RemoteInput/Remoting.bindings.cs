@@ -11,12 +11,14 @@ using Unity.Collections.LowLevel.Unsafe;
 
 namespace UnityEditor.Remoting
 {
-    [NativeHeader("Editor/Mono/RemoteInput/Remoting.bindings.h")]
-    internal partial class RemotingInternal
-    {
-        extern static private void ReceiveData(IntPtr buffer, int bufferSize);
+[NativeHeader("Editor/Mono/RemoteInput/Remoting.bindings.h")]
+internal partial class RemotingInternal
+{
+    extern static private void ReceiveData(IntPtr buffer, int bufferSize);
 
-        extern static public void SetConnectedExternally(bool connected);
-        static public unsafe void ReceiveData(NativeArray<byte> buffer, int bufferSize) { ReceiveData((IntPtr)buffer.GetUnsafeReadOnlyPtr(), bufferSize); }
+    extern static public void SetConnectedExternally(bool connected);
+    static public unsafe void ReceiveData(NativeArray<byte> buffer, int bufferSize) {
+        ReceiveData((IntPtr)buffer.GetUnsafeReadOnlyPtr(), bufferSize);
     }
+}
 }

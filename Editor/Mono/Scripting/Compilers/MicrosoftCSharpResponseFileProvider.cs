@@ -6,10 +6,18 @@ using System;
 
 namespace UnityEditor.Scripting.Compilers
 {
-    internal class MicrosoftCSharpResponseFileProvider : ResponseFileProvider
-    {
-        public override string ResponseFileName { get { return CompilerSpecificResponseFiles.MicrosoftCSharpCompiler; } }
-
-        public override string[] ObsoleteResponseFileNames { get { return CompilerSpecificResponseFiles.MicrosoftCSharpCompilerObsolete; } }
+internal class MicrosoftCSharpResponseFileProvider : ResponseFileProvider
+{
+    public override string ResponseFileName {
+        get {
+            return CompilerSpecificResponseFiles.MicrosoftCSharpCompiler;
+        }
     }
+
+    public override string[] ObsoleteResponseFileNames {
+        get {
+            return CompilerSpecificResponseFiles.MicrosoftCSharpCompilerObsolete;
+        }
+    }
+}
 }

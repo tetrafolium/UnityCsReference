@@ -6,18 +6,18 @@ using System.Text.RegularExpressions;
 
 namespace UnityEditor.Scripting.Compilers
 {
-    internal class MicrosoftCSharpCompilerOutputParser : CSharpCompilerOutputParserBase
+internal class MicrosoftCSharpCompilerOutputParser : CSharpCompilerOutputParserBase
+{
+    private static Regex sCompilerOutput = new Regex(@"\s*(?<filename>.*)\((?<line>\d+),(?<column>\d+)\):\s*(?<type>warning|error)\s*(?<id>[^:]*):\s*(?<message>.*)", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
+
+    protected override Regex GetOutputRegex()
     {
-        private static Regex sCompilerOutput = new Regex(@"\s*(?<filename>.*)\((?<line>\d+),(?<column>\d+)\):\s*(?<type>warning|error)\s*(?<id>[^:]*):\s*(?<message>.*)", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
-
-        protected override Regex GetOutputRegex()
-        {
-            return sCompilerOutput;
-        }
-
-        protected override string GetErrorIdentifier()
-        {
-            return "error";
-        }
+        return sCompilerOutput;
     }
+
+    protected override string GetErrorIdentifier()
+    {
+        return "error";
+    }
+}
 }

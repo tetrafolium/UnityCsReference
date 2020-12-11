@@ -8,33 +8,33 @@ using UnityEngine;
 
 namespace UnityEditor
 {
-    [CustomEditor(typeof(DoubleCurvePresetLibrary))]
-    internal class DoubleCurvePresetLibraryEditor : Editor
+[CustomEditor(typeof(DoubleCurvePresetLibrary))]
+internal class DoubleCurvePresetLibraryEditor : Editor
+{
+    private GenericPresetLibraryInspector<DoubleCurvePresetLibrary> m_GenericPresetLibraryInspector;
+
+    public void OnEnable()
     {
-        private GenericPresetLibraryInspector<DoubleCurvePresetLibrary> m_GenericPresetLibraryInspector;
-
-        public void OnEnable()
-        {
-            m_GenericPresetLibraryInspector = new GenericPresetLibraryInspector<DoubleCurvePresetLibrary>(target, GetHeader(),  null);
-            m_GenericPresetLibraryInspector.presetSize = new Vector2(72, 20);
-            m_GenericPresetLibraryInspector.lineSpacing = 5f;
-        }
-
-        private string GetHeader()
-        {
-            return "Particle Curve Preset Library";
-        }
-
-        public void OnDestroy()
-        {
-            if (m_GenericPresetLibraryInspector != null)
-                m_GenericPresetLibraryInspector.OnDestroy();
-        }
-
-        public override void OnInspectorGUI()
-        {
-            if (m_GenericPresetLibraryInspector != null)
-                m_GenericPresetLibraryInspector.OnInspectorGUI();
-        }
+        m_GenericPresetLibraryInspector = new GenericPresetLibraryInspector<DoubleCurvePresetLibrary>(target, GetHeader(),  null);
+        m_GenericPresetLibraryInspector.presetSize = new Vector2(72, 20);
+        m_GenericPresetLibraryInspector.lineSpacing = 5f;
     }
+
+    private string GetHeader()
+    {
+        return "Particle Curve Preset Library";
+    }
+
+    public void OnDestroy()
+    {
+        if (m_GenericPresetLibraryInspector != null)
+            m_GenericPresetLibraryInspector.OnDestroy();
+    }
+
+    public override void OnInspectorGUI()
+    {
+        if (m_GenericPresetLibraryInspector != null)
+            m_GenericPresetLibraryInspector.OnInspectorGUI();
+    }
+}
 } // namespace

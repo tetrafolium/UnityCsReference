@@ -13,136 +13,136 @@ using UnityEngine;
 
 namespace Unity.Scripting.Compilation
 {
-    internal interface ICompilerFactoryHelper
+internal interface ICompilerFactoryHelper
+{
+    string ReadCachedCompilerName();
+    void UpdateCachedCompilerName(string name);
+    string GetCurrentCompilerName();
+    bool HasExternalCompiler();
+}
+
+internal class CompilerFactoryHelper : ICompilerFactoryHelper
+{
+    private const string SessionStateKey = "CompilerFactory.Compiler";
+    private const string CompilerUsedPath = "Library/UnityCSharpCompiler.json";
+
+    public bool HasExternalCompiler()
     {
-        string ReadCachedCompilerName();
-        void UpdateCachedCompilerName(string name);
-        string GetCurrentCompilerName();
-        bool HasExternalCompiler();
+        return ExternalCSharpCompiler.HasExternalCompiler();
     }
 
-    internal class CompilerFactoryHelper : ICompilerFactoryHelper
+    public string ReadCachedCompilerName()
     {
-        private const string SessionStateKey = "CompilerFactory.Compiler";
-        private const string CompilerUsedPath = "Library/UnityCSharpCompiler.json";
-
-        public bool HasExternalCompiler()
+        var compilerLastUsed = SessionState.GetString(SessionStateKey, null);
+        if (compilerLastUsed != null)
         {
-            return ExternalCSharpCompiler.HasExternalCompiler();
+            return compilerLastUsed;
+        }
+        if (!File.Exists(CompilerUsedPath))
+        {
+            return null;
         }
 
-        public string ReadCachedCompilerName()
-        {
-            var compilerLastUsed = SessionState.GetString(SessionStateKey, null);
-            if (compilerLastUsed != null)
-            {
-                return compilerLastUsed;
-            }
-            if (!File.Exists(CompilerUsedPath))
-            {
-                return null;
-            }
-
-            var configData = File.ReadAllText(CompilerUsedPath);
-            var compilerUsedData = JsonUtility.FromJson<CompilerUsedData>(configData);
-            return compilerUsedData.Name;
-        }
-
-        public void UpdateCachedCompilerName(string name)
-        {
-            SessionState.SetString(SessionStateKey, name);
-            Console.WriteLine($"Updating compiler used: {name}");
-
-            var compilerUsedData = new CompilerUsedData
-            {
-                Name = name,
-            };
-            var json = JsonUtility.ToJson(compilerUsedData);
-            File.WriteAllText(CompilerUsedPath, json);
-        }
-
-        public string GetCurrentCompilerName()
-        {
-            if (HasExternalCompiler())
-            {
-                return ExternalCSharpCompiler.ExternalCompilerName();
-            }
-            return MicrosoftCSharpCompiler.Name;
-        }
-
-        [Serializable]
-        private class CompilerUsedData
-        {
-            public string Name;
-        }
+        var configData = File.ReadAllText(CompilerUsedPath);
+        var compilerUsedData = JsonUtility.FromJson<CompilerUsedData>(configData);
+        return compilerUsedData.Name;
     }
 
-    internal class CompilerFactory
+    public void UpdateCachedCompilerName(string name)
     {
-        private ICompilerFactoryHelper m_FactoryHelper;
+        SessionState.SetString(SessionStateKey, name);
+        Console.WriteLine($"Updating compiler used: {name}");
 
-        public CompilerFactory(ICompilerFactoryHelper factoryHelper)
+        var compilerUsedData = new CompilerUsedData
         {
-            m_FactoryHelper = factoryHelper;
+            Name = name,
+        };
+        var json = JsonUtility.ToJson(compilerUsedData);
+        File.WriteAllText(CompilerUsedPath, json);
+    }
+
+    public string GetCurrentCompilerName()
+    {
+        if (HasExternalCompiler())
+        {
+            return ExternalCSharpCompiler.ExternalCompilerName();
+        }
+        return MicrosoftCSharpCompiler.Name;
+    }
+
+    [Serializable]
+    private class CompilerUsedData
+    {
+        public string Name;
+    }
+}
+
+internal class CompilerFactory
+{
+    private ICompilerFactoryHelper m_FactoryHelper;
+
+    public CompilerFactory(ICompilerFactoryHelper factoryHelper)
+    {
+        m_FactoryHelper = factoryHelper;
+    }
+
+    public ScriptCompilerBase Create(ScriptAssembly scriptAssembly, string tempOutputDirectory)
+    {
+        if (scriptAssembly.Files.Length == 0)
+        {
+            throw new ArgumentException($"Cannot compile ScriptAssembly {scriptAssembly.Filename} with no files");
         }
 
-        public ScriptCompilerBase Create(ScriptAssembly scriptAssembly, string tempOutputDirectory)
+        ScriptCompilerBase scriptCompilerBase;
+        if (m_FactoryHelper.HasExternalCompiler())
         {
-            if (scriptAssembly.Files.Length == 0)
-            {
-                throw new ArgumentException($"Cannot compile ScriptAssembly {scriptAssembly.Filename} with no files");
-            }
-
-            ScriptCompilerBase scriptCompilerBase;
-            if (m_FactoryHelper.HasExternalCompiler())
-            {
-                scriptCompilerBase  = new ExternalCSharpCompiler(scriptAssembly, tempOutputDirectory);
-            }
-            else
-            {
-                scriptCompilerBase =  new MicrosoftCSharpCompiler(scriptAssembly, tempOutputDirectory);
-            }
-
-            if (CompilerChanged())
-            {
-                UpdateCompilerUsed();
-            }
-
-            return scriptCompilerBase;
+            scriptCompilerBase  = new ExternalCSharpCompiler(scriptAssembly, tempOutputDirectory);
+        }
+        else
+        {
+            scriptCompilerBase =  new MicrosoftCSharpCompiler(scriptAssembly, tempOutputDirectory);
         }
 
-        public bool CompilerChanged()
+        if (CompilerChanged())
         {
-            string cachedCompilerName;
-            try
-            {
-                cachedCompilerName = m_FactoryHelper.ReadCachedCompilerName();
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine($"Exception getting compiler name: {exception.Message} {Environment.NewLine} {exception.StackTrace}");
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(cachedCompilerName))
-            {
-                return false;
-            }
-
-            return cachedCompilerName != m_FactoryHelper.GetCurrentCompilerName();
+            UpdateCompilerUsed();
         }
 
-        public void UpdateCompilerUsed()
+        return scriptCompilerBase;
+    }
+
+    public bool CompilerChanged()
+    {
+        string cachedCompilerName;
+        try
         {
-            try
-            {
-                var compilerName = m_FactoryHelper.GetCurrentCompilerName();
-                m_FactoryHelper.UpdateCachedCompilerName(compilerName);
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine($"Exception for updating last used compiler: {exception.Message} {Environment.NewLine} {exception.StackTrace}");
-            }
+            cachedCompilerName = m_FactoryHelper.ReadCachedCompilerName();
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine($"Exception getting compiler name: {exception.Message} {Environment.NewLine} {exception.StackTrace}");
+            return false;
+        }
+
+        if (string.IsNullOrEmpty(cachedCompilerName))
+        {
+            return false;
+        }
+
+        return cachedCompilerName != m_FactoryHelper.GetCurrentCompilerName();
+    }
+
+    public void UpdateCompilerUsed()
+    {
+        try
+        {
+            var compilerName = m_FactoryHelper.GetCurrentCompilerName();
+            m_FactoryHelper.UpdateCachedCompilerName(compilerName);
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine($"Exception for updating last used compiler: {exception.Message} {Environment.NewLine} {exception.StackTrace}");
         }
     }
+}
 }

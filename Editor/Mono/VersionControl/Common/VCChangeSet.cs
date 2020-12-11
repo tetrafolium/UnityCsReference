@@ -4,33 +4,33 @@
 
 namespace UnityEditor.VersionControl
 {
-    public partial class ChangeSet
+public partial class ChangeSet
+{
+    public static string defaultID = "-1";
+
+    public ChangeSet()
     {
-        public static string defaultID = "-1";
-
-        public ChangeSet()
-        {
-            InternalCreate();
-        }
-
-        public ChangeSet(string description)
-        {
-            InternalCreateFromString(description);
-        }
-
-        public ChangeSet(string description, string revision)
-        {
-            InternalCreateFromStringString(description, revision);
-        }
-
-        public ChangeSet(ChangeSet other)
-        {
-            InternalCopyConstruct(other);
-        }
-
-        ~ChangeSet()
-        {
-            Dispose();
-        }
+        InternalCreate();
     }
+
+    public ChangeSet(string description)
+    {
+        InternalCreateFromString(description);
+    }
+
+    public ChangeSet(string description, string revision)
+    {
+        InternalCreateFromStringString(description, revision);
+    }
+
+    public ChangeSet(ChangeSet other)
+    {
+        InternalCopyConstruct(other);
+    }
+
+    ~ChangeSet()
+    {
+        Dispose();
+    }
+}
 }

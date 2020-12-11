@@ -7,20 +7,20 @@ using UnityEngine.Bindings;
 
 namespace UnityEditor
 {
-    [NativeHeader("Editor/Platform/Interface/AppInfo.h")]
-    [NativeHeader("Runtime/Utilities/FileUtilities.h")]
-    internal static class OSUtil
-    {
-        [StaticAccessor("AppInfo", StaticAccessorType.DoubleColon)]
-        public static extern string[] GetDefaultApps(string fileType);
+[NativeHeader("Editor/Platform/Interface/AppInfo.h")]
+[NativeHeader("Runtime/Utilities/FileUtilities.h")]
+internal static class OSUtil
+{
+    [StaticAccessor("AppInfo", StaticAccessorType.DoubleColon)]
+    public static extern string[] GetDefaultApps(string fileType);
 
-        [StaticAccessor("AppInfo", StaticAccessorType.DoubleColon)]
-        public static extern string GetAppFriendlyName(string app);
+    [StaticAccessor("AppInfo", StaticAccessorType.DoubleColon)]
+    public static extern string GetAppFriendlyName(string app);
 
-        [StaticAccessor("AppInfo", StaticAccessorType.DoubleColon)]
-        public static extern string GetDefaultAppPath(string fileType);
+    [StaticAccessor("AppInfo", StaticAccessorType.DoubleColon)]
+    public static extern string GetDefaultAppPath(string fileType);
 
-        [FreeFunction("GetUserAppCacheFolder")]
-        public static extern string GetDefaultCachePath();
-    }
+    [FreeFunction("GetUserAppCacheFolder")]
+    public static extern string GetDefaultCachePath();
+}
 }

@@ -7,8 +7,8 @@ using System.Reflection;
 
 namespace UnityEditor
 {
-    internal interface IMonoCecilHelper
-    {
-        IFileOpenInfo TryGetCecilFileOpenInfo(Type type, MethodInfo methodInfo);
-    }
+internal interface IMonoCecilHelper
+{
+    IFileOpenInfo TryGetCecilFileOpenInfo(Type type, MethodInfo methodInfo);
+}
 }

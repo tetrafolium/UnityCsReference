@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace UnityEditor.VersionControl
 {
-    public class ChangeSets : List<ChangeSet>
-    {
-    }
+public class ChangeSets : List<ChangeSet>
+{
+}
 }

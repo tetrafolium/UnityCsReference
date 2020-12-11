@@ -7,8 +7,8 @@ using UnityEngine;
 
 namespace UnityEditor
 {
-    [CustomEditor(typeof(AudioChorusFilter))]
-    class AudioChorusFilterEditor : Editor
-    {
-    }
+[CustomEditor(typeof(AudioChorusFilter))]
+class AudioChorusFilterEditor : Editor
+{
+}
 }

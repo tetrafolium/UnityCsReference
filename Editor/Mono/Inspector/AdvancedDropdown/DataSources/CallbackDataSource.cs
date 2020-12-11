@@ -7,18 +7,18 @@ using UnityEngine;
 
 namespace UnityEditor.IMGUI.Controls
 {
-    internal class CallbackDataSource : AdvancedDropdownDataSource
+internal class CallbackDataSource : AdvancedDropdownDataSource
+{
+    Func<AdvancedDropdownItem> m_BuildCallback;
+
+    internal CallbackDataSource(Func<AdvancedDropdownItem> buildCallback)
     {
-        Func<AdvancedDropdownItem> m_BuildCallback;
-
-        internal CallbackDataSource(Func<AdvancedDropdownItem> buildCallback)
-        {
-            m_BuildCallback = buildCallback;
-        }
-
-        protected override AdvancedDropdownItem FetchData()
-        {
-            return m_BuildCallback();
-        }
+        m_BuildCallback = buildCallback;
     }
+
+    protected override AdvancedDropdownItem FetchData()
+    {
+        return m_BuildCallback();
+    }
+}
 }

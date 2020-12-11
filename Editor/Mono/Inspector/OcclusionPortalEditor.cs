@@ -9,90 +9,90 @@ using UnityEngine;
 
 namespace UnityEditor
 {
-    [CustomEditor(typeof(OcclusionPortal)), CanEditMultipleObjects]
-    internal class OcclusionPortalEditor : Editor
+[CustomEditor(typeof(OcclusionPortal)), CanEditMultipleObjects]
+internal class OcclusionPortalEditor : Editor
+{
+    private const string k_CenterPath = "m_Center";
+    private const string k_SizePath = "m_Size";
+
+    private readonly BoxBoundsHandle m_BoundsHandle = new BoxBoundsHandle();
+
+    protected virtual void OnEnable()
     {
-        private const string k_CenterPath = "m_Center";
-        private const string k_SizePath = "m_Size";
+        m_BoundsHandle.SetColor(Handles.s_ColliderHandleColor);
+    }
 
-        private readonly BoxBoundsHandle m_BoundsHandle = new BoxBoundsHandle();
+    public override void OnInspectorGUI()
+    {
+        EditMode.DoEditModeInspectorModeButton(
+            EditMode.SceneViewEditMode.Collider,
+            "Edit Bounds",
+            PrimitiveBoundsHandle.editModeButton,
+            this
+        );
 
-        protected virtual void OnEnable()
+        base.OnInspectorGUI();
+    }
+
+    public static bool IsSceneGUIEnabled()
+    {
+        return (EditMode.editMode == EditMode.SceneViewEditMode.Collider);
+    }
+
+    protected virtual void OnSceneGUI()
+    {
+        if (!EditMode.IsOwner(this) || !target)
+            return;
+
+        OcclusionPortal portal = target as OcclusionPortal;
+
+        // this.serializedObject will not work within OnSceneGUI if multiple targets are selected
+        using (var so = new SerializedObject(portal))
         {
-            m_BoundsHandle.SetColor(Handles.s_ColliderHandleColor);
-        }
+            so.Update();
 
-        public override void OnInspectorGUI()
-        {
-            EditMode.DoEditModeInspectorModeButton(
-                EditMode.SceneViewEditMode.Collider,
-                "Edit Bounds",
-                PrimitiveBoundsHandle.editModeButton,
-                this
-            );
-
-            base.OnInspectorGUI();
-        }
-
-        public static bool IsSceneGUIEnabled()
-        {
-            return (EditMode.editMode == EditMode.SceneViewEditMode.Collider);
-        }
-
-        protected virtual void OnSceneGUI()
-        {
-            if (!EditMode.IsOwner(this) || !target)
-                return;
-
-            OcclusionPortal portal = target as OcclusionPortal;
-
-            // this.serializedObject will not work within OnSceneGUI if multiple targets are selected
-            using (var so = new SerializedObject(portal))
+            using (new Handles.DrawingScope(portal.transform.localToWorldMatrix))
             {
-                so.Update();
+                SerializedProperty centerProperty = so.FindProperty(k_CenterPath);
+                SerializedProperty sizeProperty = so.FindProperty(k_SizePath);
+                m_BoundsHandle.center = centerProperty.vector3Value;
+                m_BoundsHandle.size = sizeProperty.vector3Value;
 
-                using (new Handles.DrawingScope(portal.transform.localToWorldMatrix))
+                EditorGUI.BeginChangeCheck();
+                m_BoundsHandle.DrawHandle();
+                if (EditorGUI.EndChangeCheck())
                 {
-                    SerializedProperty centerProperty = so.FindProperty(k_CenterPath);
-                    SerializedProperty sizeProperty = so.FindProperty(k_SizePath);
-                    m_BoundsHandle.center = centerProperty.vector3Value;
-                    m_BoundsHandle.size = sizeProperty.vector3Value;
-
-                    EditorGUI.BeginChangeCheck();
-                    m_BoundsHandle.DrawHandle();
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        centerProperty.vector3Value = m_BoundsHandle.center;
-                        sizeProperty.vector3Value = m_BoundsHandle.size;
-                        so.ApplyModifiedProperties();
-                    }
+                    centerProperty.vector3Value = m_BoundsHandle.center;
+                    sizeProperty.vector3Value = m_BoundsHandle.size;
+                    so.ApplyModifiedProperties();
                 }
             }
         }
+    }
 
-        internal override Bounds GetWorldBoundsOfTarget(Object targetObject)
+    internal override Bounds GetWorldBoundsOfTarget(Object targetObject)
+    {
+        using (var so = new SerializedObject(targetObject))
         {
-            using (var so = new SerializedObject(targetObject))
-            {
-                Vector3 center = so.FindProperty(k_CenterPath).vector3Value;
-                Vector3 size = so.FindProperty(k_SizePath).vector3Value;
+            Vector3 center = so.FindProperty(k_CenterPath).vector3Value;
+            Vector3 size = so.FindProperty(k_SizePath).vector3Value;
 
-                var localBounds = new Bounds(center, size);
-                Vector3 max = localBounds.max;
-                Vector3 min = localBounds.min;
-                Matrix4x4 portalTransformMatrix = ((OcclusionPortal)targetObject).transform.localToWorldMatrix;
-                var worldBounds = new Bounds(portalTransformMatrix.MultiplyPoint3x4(new Vector3(max.x, max.y, max.z)), Vector3.zero);
-                worldBounds.Encapsulate(portalTransformMatrix.MultiplyPoint3x4(new Vector3(max.x, max.y, max.z)));
-                worldBounds.Encapsulate(portalTransformMatrix.MultiplyPoint3x4(new Vector3(max.x, max.y, min.z)));
-                worldBounds.Encapsulate(portalTransformMatrix.MultiplyPoint3x4(new Vector3(max.x, min.y, max.z)));
-                worldBounds.Encapsulate(portalTransformMatrix.MultiplyPoint3x4(new Vector3(min.x, max.y, max.z)));
-                worldBounds.Encapsulate(portalTransformMatrix.MultiplyPoint3x4(new Vector3(max.x, min.y, min.z)));
-                worldBounds.Encapsulate(portalTransformMatrix.MultiplyPoint3x4(new Vector3(min.x, max.y, min.z)));
-                worldBounds.Encapsulate(portalTransformMatrix.MultiplyPoint3x4(new Vector3(min.x, min.y, max.z)));
-                worldBounds.Encapsulate(portalTransformMatrix.MultiplyPoint3x4(new Vector3(min.x, min.y, min.z)));
+            var localBounds = new Bounds(center, size);
+            Vector3 max = localBounds.max;
+            Vector3 min = localBounds.min;
+            Matrix4x4 portalTransformMatrix = ((OcclusionPortal)targetObject).transform.localToWorldMatrix;
+            var worldBounds = new Bounds(portalTransformMatrix.MultiplyPoint3x4(new Vector3(max.x, max.y, max.z)), Vector3.zero);
+            worldBounds.Encapsulate(portalTransformMatrix.MultiplyPoint3x4(new Vector3(max.x, max.y, max.z)));
+            worldBounds.Encapsulate(portalTransformMatrix.MultiplyPoint3x4(new Vector3(max.x, max.y, min.z)));
+            worldBounds.Encapsulate(portalTransformMatrix.MultiplyPoint3x4(new Vector3(max.x, min.y, max.z)));
+            worldBounds.Encapsulate(portalTransformMatrix.MultiplyPoint3x4(new Vector3(min.x, max.y, max.z)));
+            worldBounds.Encapsulate(portalTransformMatrix.MultiplyPoint3x4(new Vector3(max.x, min.y, min.z)));
+            worldBounds.Encapsulate(portalTransformMatrix.MultiplyPoint3x4(new Vector3(min.x, max.y, min.z)));
+            worldBounds.Encapsulate(portalTransformMatrix.MultiplyPoint3x4(new Vector3(min.x, min.y, max.z)));
+            worldBounds.Encapsulate(portalTransformMatrix.MultiplyPoint3x4(new Vector3(min.x, min.y, min.z)));
 
-                return worldBounds;
-            }
+            return worldBounds;
         }
     }
+}
 }

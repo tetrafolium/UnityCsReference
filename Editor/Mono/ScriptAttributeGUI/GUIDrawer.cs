@@ -4,6 +4,6 @@
 
 namespace UnityEditor
 {
-    // Base class for both PropertyDrawer and DecoratorDrawer.
-    public abstract class GUIDrawer {}
+// Base class for both PropertyDrawer and DecoratorDrawer.
+public abstract class GUIDrawer {}
 }

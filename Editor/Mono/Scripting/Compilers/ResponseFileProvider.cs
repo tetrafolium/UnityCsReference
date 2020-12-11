@@ -10,88 +10,93 @@ using UnityEngine;
 
 namespace UnityEditor.Scripting.Compilers
 {
-    internal abstract class ResponseFileProvider
+internal abstract class ResponseFileProvider
+{
+    private const string k_AssetsFolder = "Assets";
+    public abstract string ResponseFileName {
+        get;
+    }
+
+    public abstract string[] ObsoleteResponseFileNames {
+        get;
+    }
+
+    public string ProjectPath
     {
-        private const string k_AssetsFolder = "Assets";
-        public abstract string ResponseFileName { get; }
+        get;
+        set;
+    }
 
-        public abstract string[] ObsoleteResponseFileNames { get; }
+    protected ResponseFileProvider()
+    {
+        var dataPath = Application.dataPath;
+        ProjectPath = Path.GetDirectoryName(dataPath);
+    }
 
-        public string ProjectPath
+    public List<string> Get(string folderToLookForResponseFilesIn)
+    {
+        if (!string.IsNullOrEmpty(folderToLookForResponseFilesIn) && !Path.IsPathRooted(folderToLookForResponseFilesIn))
         {
-            get; set;
+            folderToLookForResponseFilesIn = AssetPath.Combine(ProjectPath, folderToLookForResponseFilesIn);
         }
 
-        protected ResponseFileProvider()
+        var result = new List<string>();
+
+        var folderResponseFile = GetCompilerSpecific(folderToLookForResponseFilesIn);
+        if (!string.IsNullOrEmpty(folderResponseFile))
         {
-            var dataPath = Application.dataPath;
-            ProjectPath = Path.GetDirectoryName(dataPath);
+            AddIfNotNull(result, folderResponseFile);
+        }
+        else
+        {
+            AddIfNotNull(result, GetDefaultResponseFiles());
         }
 
-        public List<string> Get(string folderToLookForResponseFilesIn)
+        return result;
+    }
+
+    protected string GetCompilerSpecific(string path)
+    {
+        if (string.IsNullOrEmpty(path))
         {
-            if (!string.IsNullOrEmpty(folderToLookForResponseFilesIn) && !Path.IsPathRooted(folderToLookForResponseFilesIn))
-            {
-                folderToLookForResponseFilesIn = AssetPath.Combine(ProjectPath, folderToLookForResponseFilesIn);
-            }
-
-            var result = new List<string>();
-
-            var folderResponseFile = GetCompilerSpecific(folderToLookForResponseFilesIn);
-            if (!string.IsNullOrEmpty(folderResponseFile))
-            {
-                AddIfNotNull(result, folderResponseFile);
-            }
-            else
-            {
-                AddIfNotNull(result, GetDefaultResponseFiles());
-            }
-
-            return result;
-        }
-
-        protected string GetCompilerSpecific(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-            {
-                return null;
-            }
-
-            //We only look for the specific response file in the folder.
-            var responseFilePath = AssetPath.Combine(path, ResponseFileName);
-
-            if (File.Exists(responseFilePath))
-            {
-                return responseFilePath;
-            }
             return null;
         }
 
-        protected string GetDefaultResponseFiles()
-        {
-            var rootResponseFilePath = AssetPath.Combine(ProjectPath, k_AssetsFolder, ResponseFileName);
-            if (File.Exists(rootResponseFilePath))
-            {
-                return rootResponseFilePath;
-            }
+        //We only look for the specific response file in the folder.
+        var responseFilePath = AssetPath.Combine(path, ResponseFileName);
 
-            foreach (var obsoleteResponseFileName in ObsoleteResponseFileNames)
-            {
-                var obsoleteResponseFilePath = AssetPath.Combine(ProjectPath, k_AssetsFolder, obsoleteResponseFileName);
-                if (File.Exists(obsoleteResponseFilePath))
-                {
-                    return obsoleteResponseFilePath;
-                }
-            }
-            return null;
+        if (File.Exists(responseFilePath))
+        {
+            return responseFilePath;
+        }
+        return null;
+    }
+
+    protected string GetDefaultResponseFiles()
+    {
+        var rootResponseFilePath = AssetPath.Combine(ProjectPath, k_AssetsFolder, ResponseFileName);
+        if (File.Exists(rootResponseFilePath))
+        {
+            return rootResponseFilePath;
         }
 
-        private static void AddIfNotNull<T>(List<T> list, T element)
+        foreach (var obsoleteResponseFileName in ObsoleteResponseFileNames)
         {
-            if (element != null)
+            var obsoleteResponseFilePath = AssetPath.Combine(ProjectPath, k_AssetsFolder, obsoleteResponseFileName);
+            if (File.Exists(obsoleteResponseFilePath))
             {
-                list.Add(element);
+                return obsoleteResponseFilePath;
             }
+        }
+        return null;
+    }
+
+    private static void AddIfNotNull<T>(List<T> list, T element)
+    {
+        if (element != null)
+        {
+            list.Add(element);
         }
     }
+}
 }

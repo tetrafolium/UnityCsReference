@@ -7,16 +7,16 @@ using UnityEngine.Bindings;
 
 namespace UnityEditor.Web
 {
-    [NativeHeader("Editor/Src/UnityConnect/Services/EditorProjectAccess.h")]
-    internal partial class EditorProjectAccess : Object
+[NativeHeader("Editor/Src/UnityConnect/Services/EditorProjectAccess.h")]
+internal partial class EditorProjectAccess : Object
+{
+    public EditorProjectAccess()
     {
-        public EditorProjectAccess()
-        {
-            Internal_Create(this);
-        }
-
-        extern private static void Internal_Create([Writable] EditorProjectAccess self);
-        extern public string GetProjectEditorVersion();
-        extern public string GetRESTServiceURI();
+        Internal_Create(this);
     }
+
+    extern private static void Internal_Create([Writable] EditorProjectAccess self);
+    extern public string GetProjectEditorVersion();
+    extern public string GetRESTServiceURI();
+}
 }

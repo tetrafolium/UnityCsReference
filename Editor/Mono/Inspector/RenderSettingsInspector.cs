@@ -8,40 +8,46 @@ using UnityEngine.Rendering;
 
 namespace UnityEditor
 {
-    [CustomEditor(typeof(RenderSettings))]
-    internal class RenderSettingsInspector : Editor
+[CustomEditor(typeof(RenderSettings))]
+internal class RenderSettingsInspector : Editor
+{
+    Editor m_LightingEditor;
+    Editor lightingEditor
     {
-        Editor m_LightingEditor;
-        Editor lightingEditor
-        {
-            get { return m_LightingEditor ?? (m_LightingEditor = Editor.CreateEditor(target, typeof(LightingEditor))); }
-        }
-
-
-        Editor m_FogEditor;
-        Editor fogEditor
-        {
-            get { return m_FogEditor ?? (m_FogEditor = Editor.CreateEditor(target, typeof(FogEditor))); }
-        }
-
-        Editor m_OtherRenderingEditor;
-        Editor otherRenderingEditor
-        {
-            get { return m_OtherRenderingEditor ?? (m_OtherRenderingEditor = Editor.CreateEditor(target, typeof(OtherRenderingEditor))); }
-        }
-
-        public virtual void OnEnable()
-        {
-            m_LightingEditor = null;
-            m_FogEditor = null;
-            m_OtherRenderingEditor = null;
-        }
-
-        public override void OnInspectorGUI()
-        {
-            lightingEditor.OnInspectorGUI();
-            fogEditor.OnInspectorGUI();
-            otherRenderingEditor.OnInspectorGUI();
+        get {
+            return m_LightingEditor ?? (m_LightingEditor = Editor.CreateEditor(target, typeof(LightingEditor)));
         }
     }
+
+
+    Editor m_FogEditor;
+    Editor fogEditor
+    {
+        get {
+            return m_FogEditor ?? (m_FogEditor = Editor.CreateEditor(target, typeof(FogEditor)));
+        }
+    }
+
+    Editor m_OtherRenderingEditor;
+    Editor otherRenderingEditor
+    {
+        get {
+            return m_OtherRenderingEditor ?? (m_OtherRenderingEditor = Editor.CreateEditor(target, typeof(OtherRenderingEditor)));
+        }
+    }
+
+    public virtual void OnEnable()
+    {
+        m_LightingEditor = null;
+        m_FogEditor = null;
+        m_OtherRenderingEditor = null;
+    }
+
+    public override void OnInspectorGUI()
+    {
+        lightingEditor.OnInspectorGUI();
+        fogEditor.OnInspectorGUI();
+        otherRenderingEditor.OnInspectorGUI();
+    }
+}
 }

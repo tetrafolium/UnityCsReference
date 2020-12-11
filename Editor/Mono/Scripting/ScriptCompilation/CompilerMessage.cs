@@ -4,18 +4,18 @@
 
 namespace UnityEditor.Compilation
 {
-    public enum CompilerMessageType
-    {
-        Error = 0,
-        Warning = 1
-    }
+public enum CompilerMessageType
+{
+    Error = 0,
+    Warning = 1
+}
 
-    public struct CompilerMessage
-    {
-        public string message;
-        public string file;
-        public int line;
-        public int column;
-        public CompilerMessageType type;
-    }
+public struct CompilerMessage
+{
+    public string message;
+    public string file;
+    public int line;
+    public int column;
+    public CompilerMessageType type;
+}
 }

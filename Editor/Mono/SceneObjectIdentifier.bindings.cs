@@ -6,10 +6,10 @@ using UnityEngine.Bindings;
 
 namespace UnityEditor
 {
-    [NativeHeader("Editor/Src/SceneObjectIdentifier.h")]
-    struct SceneObjectIdentifier
-    {
-        internal ulong TargetObject;
-        internal ulong TargetPrefab;
-    }
+[NativeHeader("Editor/Src/SceneObjectIdentifier.h")]
+struct SceneObjectIdentifier
+{
+    internal ulong TargetObject;
+    internal ulong TargetPrefab;
+}
 }

@@ -9,104 +9,107 @@ using UnityEngine.UIElements;
 
 namespace UnityEditor.UIElements
 {
-    public sealed class SerializedPropertyChangeEvent : EventBase<SerializedPropertyChangeEvent>
+public sealed class SerializedPropertyChangeEvent : EventBase<SerializedPropertyChangeEvent>
+{
+    public SerializedProperty changedProperty {
+        get;
+        set;
+    }
+
+    protected override void Init()
     {
-        public SerializedProperty changedProperty { get; set; }
+        base.Init();
+        LocalInit();
+    }
 
-        protected override void Init()
-        {
-            base.Init();
-            LocalInit();
-        }
-
-        void LocalInit()
-        {
-            propagation = EventPropagation.Bubbles | EventPropagation.TricklesDown;
-            changedProperty = null;
-        }
-
-        public static SerializedPropertyChangeEvent GetPooled(SerializedProperty value)
-        {
-            SerializedPropertyChangeEvent e = GetPooled();
-            e.changedProperty = value;
-            return e;
-        }
-
-        public SerializedPropertyChangeEvent()
-        {
-            LocalInit();
-        }
-    };
-
-    internal class SerializedObjectBindEvent : EventBase<SerializedObjectBindEvent>
+    void LocalInit()
     {
-        private SerializedObject m_BindObject;
-        public SerializedObject bindObject
-        {
-            get
-            {
-                return m_BindObject;
-            }
-        }
+        propagation = EventPropagation.Bubbles | EventPropagation.TricklesDown;
+        changedProperty = null;
+    }
 
-        protected override void Init()
-        {
-            base.Init();
-            LocalInit();
-        }
+    public static SerializedPropertyChangeEvent GetPooled(SerializedProperty value)
+    {
+        SerializedPropertyChangeEvent e = GetPooled();
+        e.changedProperty = value;
+        return e;
+    }
 
-        void LocalInit()
-        {
-            this.propagation = EventPropagation.Cancellable; // Also makes it not propagatable.
-            m_BindObject = null;
-        }
+    public SerializedPropertyChangeEvent()
+    {
+        LocalInit();
+    }
+};
 
-        public static SerializedObjectBindEvent GetPooled(SerializedObject obj)
+internal class SerializedObjectBindEvent : EventBase<SerializedObjectBindEvent>
+{
+    private SerializedObject m_BindObject;
+    public SerializedObject bindObject
+    {
+        get
         {
-            SerializedObjectBindEvent e = GetPooled();
-            e.m_BindObject = obj;
-            return e;
-        }
-
-        public SerializedObjectBindEvent()
-        {
-            LocalInit();
+            return m_BindObject;
         }
     }
 
-    internal class SerializedPropertyBindEvent : EventBase<SerializedPropertyBindEvent>
+    protected override void Init()
     {
-        private SerializedProperty m_BindProperty;
-        public SerializedProperty bindProperty
-        {
-            get
-            {
-                return m_BindProperty;
-            }
-        }
+        base.Init();
+        LocalInit();
+    }
 
-        protected override void Init()
-        {
-            base.Init();
-            LocalInit();
-        }
+    void LocalInit()
+    {
+        this.propagation = EventPropagation.Cancellable; // Also makes it not propagatable.
+        m_BindObject = null;
+    }
 
-        void LocalInit()
-        {
-            this.propagation = EventPropagation.Cancellable; // Also makes it not propagatable.
-            m_BindProperty = null;
-        }
+    public static SerializedObjectBindEvent GetPooled(SerializedObject obj)
+    {
+        SerializedObjectBindEvent e = GetPooled();
+        e.m_BindObject = obj;
+        return e;
+    }
 
-        public static SerializedPropertyBindEvent GetPooled(SerializedProperty obj)
-        {
-            SerializedPropertyBindEvent e = GetPooled();
-            e.m_BindProperty = obj;
-            return e;
-        }
+    public SerializedObjectBindEvent()
+    {
+        LocalInit();
+    }
+}
 
-        public SerializedPropertyBindEvent()
+internal class SerializedPropertyBindEvent : EventBase<SerializedPropertyBindEvent>
+{
+    private SerializedProperty m_BindProperty;
+    public SerializedProperty bindProperty
+    {
+        get
         {
-            LocalInit();
+            return m_BindProperty;
         }
     }
+
+    protected override void Init()
+    {
+        base.Init();
+        LocalInit();
+    }
+
+    void LocalInit()
+    {
+        this.propagation = EventPropagation.Cancellable; // Also makes it not propagatable.
+        m_BindProperty = null;
+    }
+
+    public static SerializedPropertyBindEvent GetPooled(SerializedProperty obj)
+    {
+        SerializedPropertyBindEvent e = GetPooled();
+        e.m_BindProperty = obj;
+        return e;
+    }
+
+    public SerializedPropertyBindEvent()
+    {
+        LocalInit();
+    }
+}
 }

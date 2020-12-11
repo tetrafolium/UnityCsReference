@@ -9,114 +9,149 @@ using UnityEngine.Assertions;
 
 namespace UnityEditor
 {
-    public class ShaderData
+public class ShaderData
+{
+    public class Subshader
     {
-        public class Subshader
+        internal ShaderData m_Data;
+        internal int m_SubshaderIndex;
+
+        internal Subshader(ShaderData data, int subshaderIndex)
         {
-            internal ShaderData m_Data;
-            internal int m_SubshaderIndex;
+            m_Data = data;
+            m_SubshaderIndex = subshaderIndex;
+        }
 
-            internal Subshader(ShaderData data, int subshaderIndex)
-            {
-                m_Data = data;
-                m_SubshaderIndex = subshaderIndex;
-            }
-
-            internal Shader SourceShader { get { return m_Data.SourceShader; } }
-
-            public int PassCount { get { return ShaderUtil.GetShaderTotalPassCount(m_Data.SourceShader, m_SubshaderIndex); } }
-
-            public Pass GetPass(int passIndex)
-            {
-                if (passIndex < 0 || passIndex >= PassCount)
-                {
-                    Debug.LogErrorFormat("Pass index is incorrect: {0}, shader {1} has {2} passes.", passIndex, SourceShader, PassCount);
-                    return null;
-                }
-
-                return new Pass(this, passIndex);
+        internal Shader SourceShader {
+            get {
+                return m_Data.SourceShader;
             }
         }
 
-        public class Pass
-        {
-            Subshader m_Subshader;
-            int m_PassIndex;
-
-            internal Pass(Subshader subshader, int passIndex)
-            {
-                m_Subshader = subshader;
-                m_PassIndex = passIndex;
-            }
-
-            internal Shader SourceShader { get { return m_Subshader.m_Data.SourceShader; } }
-            internal int SubshaderIndex { get { return m_Subshader.m_SubshaderIndex; } }
-
-            public string SourceCode { get { return ShaderUtil.GetShaderPassSourceCode(SourceShader, SubshaderIndex, m_PassIndex); } }
-            public string Name { get { return ShaderUtil.GetShaderPassName(SourceShader, SubshaderIndex, m_PassIndex); } }
-        }
-
-        public int ActiveSubshaderIndex { get { return ShaderUtil.GetShaderActiveSubshaderIndex(SourceShader); } }
-        public int SubshaderCount { get { return ShaderUtil.GetShaderSubshaderCount(SourceShader); } }
-
-        public Shader SourceShader { get; private set; }
-
-        public Subshader ActiveSubshader
-        {
-            get
-            {
-                var index = ActiveSubshaderIndex;
-                if (index < 0 || index >= SubshaderCount)
-                    return null;
-
-                return new Subshader(this, index);
+        public int PassCount {
+            get {
+                return ShaderUtil.GetShaderTotalPassCount(m_Data.SourceShader, m_SubshaderIndex);
             }
         }
 
-        internal ShaderData(Shader sourceShader)
+        public Pass GetPass(int passIndex)
         {
-            Assert.IsNotNull(sourceShader);
-            this.SourceShader = sourceShader;
-        }
-
-        public Subshader GetSubshader(int index)
-        {
-            if (index < 0 || index >= SubshaderCount)
+            if (passIndex < 0 || passIndex >= PassCount)
             {
-                Debug.LogErrorFormat("Subshader index is incorrect: {0}, shader {1} has {2} passes.", index, SourceShader, SubshaderCount);
+                Debug.LogErrorFormat("Pass index is incorrect: {0}, shader {1} has {2} passes.", passIndex, SourceShader, PassCount);
                 return null;
             }
+
+            return new Pass(this, passIndex);
+        }
+    }
+
+    public class Pass
+    {
+        Subshader m_Subshader;
+        int m_PassIndex;
+
+        internal Pass(Subshader subshader, int passIndex)
+        {
+            m_Subshader = subshader;
+            m_PassIndex = passIndex;
+        }
+
+        internal Shader SourceShader {
+            get {
+                return m_Subshader.m_Data.SourceShader;
+            }
+        }
+        internal int SubshaderIndex {
+            get {
+                return m_Subshader.m_SubshaderIndex;
+            }
+        }
+
+        public string SourceCode {
+            get {
+                return ShaderUtil.GetShaderPassSourceCode(SourceShader, SubshaderIndex, m_PassIndex);
+            }
+        }
+        public string Name {
+            get {
+                return ShaderUtil.GetShaderPassName(SourceShader, SubshaderIndex, m_PassIndex);
+            }
+        }
+    }
+
+    public int ActiveSubshaderIndex {
+        get {
+            return ShaderUtil.GetShaderActiveSubshaderIndex(SourceShader);
+        }
+    }
+    public int SubshaderCount {
+        get {
+            return ShaderUtil.GetShaderSubshaderCount(SourceShader);
+        }
+    }
+
+    public Shader SourceShader {
+        get;
+        private set;
+    }
+
+    public Subshader ActiveSubshader
+    {
+        get
+        {
+            var index = ActiveSubshaderIndex;
+            if (index < 0 || index >= SubshaderCount)
+                return null;
 
             return new Subshader(this, index);
         }
     }
 
-    public partial class ShaderUtil
+    internal ShaderData(Shader sourceShader)
     {
-        public static ShaderData GetShaderData(Shader shader)
-        {
-            return new ShaderData(shader);
-        }
-
-        // GetShaderMessageCount includes warnings, this function filters them out
-        public static bool ShaderHasError(Shader shader)
-        {
-            FetchCachedMessages(shader);
-            var errors = GetShaderMessages(shader);
-            return errors.Any(x => x.severity == ShaderCompilerMessageSeverity.Error);
-        }
-
-        internal static bool MaterialsUseInstancingShader(SerializedProperty materialsArray)
-        {
-            if (materialsArray.hasMultipleDifferentValues)
-                return false;
-            for (int i = 0; i < materialsArray.arraySize; ++i)
-            {
-                var material = materialsArray.GetArrayElementAtIndex(i).objectReferenceValue as Material;
-                if (material != null && material.enableInstancing && material.shader != null && HasInstancing(material.shader))
-                    return true;
-            }
-            return false;
-        }
+        Assert.IsNotNull(sourceShader);
+        this.SourceShader = sourceShader;
     }
+
+    public Subshader GetSubshader(int index)
+    {
+        if (index < 0 || index >= SubshaderCount)
+        {
+            Debug.LogErrorFormat("Subshader index is incorrect: {0}, shader {1} has {2} passes.", index, SourceShader, SubshaderCount);
+            return null;
+        }
+
+        return new Subshader(this, index);
+    }
+}
+
+public partial class ShaderUtil
+{
+    public static ShaderData GetShaderData(Shader shader)
+    {
+        return new ShaderData(shader);
+    }
+
+    // GetShaderMessageCount includes warnings, this function filters them out
+    public static bool ShaderHasError(Shader shader)
+    {
+        FetchCachedMessages(shader);
+        var errors = GetShaderMessages(shader);
+        return errors.Any(x => x.severity == ShaderCompilerMessageSeverity.Error);
+    }
+
+    internal static bool MaterialsUseInstancingShader(SerializedProperty materialsArray)
+    {
+        if (materialsArray.hasMultipleDifferentValues)
+            return false;
+        for (int i = 0; i < materialsArray.arraySize; ++i)
+        {
+            var material = materialsArray.GetArrayElementAtIndex(i).objectReferenceValue as Material;
+            if (material != null && material.enableInstancing && material.shader != null && HasInstancing(material.shader))
+                return true;
+        }
+        return false;
+    }
+}
 }

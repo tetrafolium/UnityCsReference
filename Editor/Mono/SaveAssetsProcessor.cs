@@ -6,6 +6,6 @@ using System;
 
 namespace UnityEditor
 {
-    [Obsolete("Use UnityEditor.AssetModificationProcessor")]
-    public class SaveAssetsProcessor : UnityEditor.AssetModificationProcessor {}
+[Obsolete("Use UnityEditor.AssetModificationProcessor")]
+public class SaveAssetsProcessor : UnityEditor.AssetModificationProcessor {}
 }

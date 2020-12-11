@@ -10,24 +10,24 @@ using System.Security.Cryptography;
 
 namespace UnityEditorInternal.APIUpdaterExtensions
 {
-    static class APIUpdaterUtils
+static class APIUpdaterUtils
+{
+    public static string CalculateSHA256(this string data)
     {
-        public static string CalculateSHA256(this string data)
+        using (var hasher = SHA256.Create())
         {
-            using (var hasher = SHA256.Create())
-            {
-                return BitConverter.ToString(hasher.ComputeHash(ASCIIEncoding.ASCII.GetBytes(data))).Replace("-", "");
-            }
-        }
-
-        public static bool IsInPackage(this string filePath)
-        {
-            return EditorCompilationInterface.Instance.IsPathInPackageDirectory(filePath);
-        }
-
-        public static bool IsInAssetsFolder(this string filePath)
-        {
-            return filePath.StartsWith("Assets/", StringComparison.InvariantCultureIgnoreCase);
+            return BitConverter.ToString(hasher.ComputeHash(ASCIIEncoding.ASCII.GetBytes(data))).Replace("-", "");
         }
     }
+
+    public static bool IsInPackage(this string filePath)
+    {
+        return EditorCompilationInterface.Instance.IsPathInPackageDirectory(filePath);
+    }
+
+    public static bool IsInAssetsFolder(this string filePath)
+    {
+        return filePath.StartsWith("Assets/", StringComparison.InvariantCultureIgnoreCase);
+    }
+}
 }

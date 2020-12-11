@@ -4,28 +4,28 @@
 
 namespace UnityEditor
 {
-    public partial class PlayerSettings : UnityEngine.Object
+public partial class PlayerSettings : UnityEngine.Object
+{
+    public partial class SplashScreen
     {
-        public partial class SplashScreen
+        public enum AnimationMode
         {
-            public enum AnimationMode
-            {
-                Static = 0,
-                Dolly = 1,
-                Custom = 2
-            }
+            Static = 0,
+            Dolly = 1,
+            Custom = 2
+        }
 
-            public enum DrawMode
-            {
-                UnityLogoBelow = 0,
-                AllSequential = 1
-            }
+        public enum DrawMode
+        {
+            UnityLogoBelow = 0,
+            AllSequential = 1
+        }
 
-            public enum UnityLogoStyle
-            {
-                DarkOnLight = 0,
-                LightOnDark = 1
-            }
+        public enum UnityLogoStyle
+        {
+            DarkOnLight = 0,
+            LightOnDark = 1
         }
     }
+}
 }

@@ -4,15 +4,15 @@
 
 namespace UnityEditor.UIElements
 {
-    [LibraryFolderPath("UIElements/EditorWindows")]
-    internal class EditorWindowViewData : ScriptableSingletonDictionary<
-        EditorWindowViewData,
-        UnityEditor.UIElements.SerializableJsonDictionary>
+[LibraryFolderPath("UIElements/EditorWindows")]
+internal class EditorWindowViewData : ScriptableSingletonDictionary<
+    EditorWindowViewData,
+    UnityEditor.UIElements.SerializableJsonDictionary>
+{
+    public static UnityEditor.UIElements.SerializableJsonDictionary GetEditorData(EditorWindow window)
     {
-        public static UnityEditor.UIElements.SerializableJsonDictionary GetEditorData(EditorWindow window)
-        {
-            string editorPrefFileName = window.GetType().ToString();
-            return instance[editorPrefFileName];
-        }
+        string editorPrefFileName = window.GetType().ToString();
+        return instance[editorPrefFileName];
     }
+}
 }

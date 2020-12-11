@@ -7,17 +7,17 @@ using UnityEditor;
 
 namespace UnityEditor
 {
-    internal class PlayerPrefsSettings
+internal class PlayerPrefsSettings
+{
+    [MenuItem("Edit/Clear All PlayerPrefs", false, 270, false)]
+    static void ClearPlayerPrefs()
     {
-        [MenuItem("Edit/Clear All PlayerPrefs", false, 270, false)]
-        static void ClearPlayerPrefs()
+        if (EditorUtility.DisplayDialog("Clear All PlayerPrefs",
+                                        "Are you sure you want to clear all PlayerPrefs? " +
+                                        "This action cannot be undone.", "Yes", "No"))
         {
-            if (EditorUtility.DisplayDialog("Clear All PlayerPrefs",
-                "Are you sure you want to clear all PlayerPrefs? " +
-                "This action cannot be undone.", "Yes", "No"))
-            {
-                PlayerPrefs.DeleteAll();
-            }
+            PlayerPrefs.DeleteAll();
         }
     }
+}
 }

@@ -8,28 +8,28 @@ using UnityEngine;
 
 namespace UnityEditor
 {
-    // This base class can be used when the type of an imported object derives from ScriptableObject
-    // Since SOs have the special need of being reloaded after a re-import
-    // we need to check for validity of the target in a few places
-    abstract internal class ScriptableObjectAssetEditor : Editor
+// This base class can be used when the type of an imported object derives from ScriptableObject
+// Since SOs have the special need of being reloaded after a re-import
+// we need to check for validity of the target in a few places
+abstract internal class ScriptableObjectAssetEditor : Editor
+{
+    // hack to avoid null references when a scriptedImporter runs and replaces the current selection
+    internal override string targetTitle
     {
-        // hack to avoid null references when a scriptedImporter runs and replaces the current selection
-        internal override string targetTitle
+        get
         {
-            get
+            if (!target)
             {
-                if (!target)
-                {
-                    serializedObject.Update();
-                    InternalSetTargets(serializedObject.targetObjects);
-                }
-                return base.targetTitle;
+                serializedObject.Update();
+                InternalSetTargets(serializedObject.targetObjects);
             }
-        }
-
-        public override GUIContent GetPreviewTitle()
-        {
-            return GUIContent.Temp(targetTitle);
+            return base.targetTitle;
         }
     }
+
+    public override GUIContent GetPreviewTitle()
+    {
+        return GUIContent.Temp(targetTitle);
+    }
+}
 }

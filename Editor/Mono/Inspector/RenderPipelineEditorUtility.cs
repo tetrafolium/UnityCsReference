@@ -7,35 +7,35 @@ using UnityEngine.Rendering;
 
 namespace UnityEditor.Rendering
 {
-    [AttributeUsage(AttributeTargets.Class)]
-    public class ScriptableRenderPipelineExtensionAttribute : Attribute
+[AttributeUsage(AttributeTargets.Class)]
+public class ScriptableRenderPipelineExtensionAttribute : Attribute
+{
+    internal Type renderPipelineType;
+
+    public ScriptableRenderPipelineExtensionAttribute(Type renderPipelineAsset)
     {
-        internal Type renderPipelineType;
-
-        public ScriptableRenderPipelineExtensionAttribute(Type renderPipelineAsset)
-        {
-            if (!(renderPipelineAsset?.IsSubclassOf(typeof(RenderPipelineAsset)) ?? false))
-                throw new ArgumentException("Given renderPipelineAsset must derive from RenderPipelineAsset");
-            renderPipelineType = renderPipelineAsset;
-        }
-
-        public bool inUse
-            => GraphicsSettings.currentRenderPipeline?.GetType() == renderPipelineType;
+        if (!(renderPipelineAsset?.IsSubclassOf(typeof(RenderPipelineAsset)) ?? false))
+            throw new ArgumentException("Given renderPipelineAsset must derive from RenderPipelineAsset");
+        renderPipelineType = renderPipelineAsset;
     }
 
-    public static class RenderPipelineEditorUtility
-    {
-        public static Type FetchFirstCompatibleTypeUsingScriptableRenderPipelineExtension<TBaseClass>()
-        {
-            var extensionTypes = TypeCache.GetTypesDerivedFrom<TBaseClass>();
+    public bool inUse
+    => GraphicsSettings.currentRenderPipeline?.GetType() == renderPipelineType;
+}
 
-            foreach (Type extensionType in extensionTypes)
-            {
-                ScriptableRenderPipelineExtensionAttribute attribute = Attribute.GetCustomAttribute(extensionType, typeof(ScriptableRenderPipelineExtensionAttribute)) as ScriptableRenderPipelineExtensionAttribute;
-                if (attribute != null && attribute.inUse)
-                    return extensionType;
-            }
-            return null;
+public static class RenderPipelineEditorUtility
+{
+    public static Type FetchFirstCompatibleTypeUsingScriptableRenderPipelineExtension<TBaseClass>()
+    {
+        var extensionTypes = TypeCache.GetTypesDerivedFrom<TBaseClass>();
+
+        foreach (Type extensionType in extensionTypes)
+        {
+            ScriptableRenderPipelineExtensionAttribute attribute = Attribute.GetCustomAttribute(extensionType, typeof(ScriptableRenderPipelineExtensionAttribute)) as ScriptableRenderPipelineExtensionAttribute;
+            if (attribute != null && attribute.inUse)
+                return extensionType;
         }
+        return null;
     }
+}
 }

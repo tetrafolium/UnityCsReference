@@ -4,9 +4,15 @@
 
 namespace UnityEditor
 {
-    internal interface IFileOpenInfo
-    {
-        string FilePath { get; set; }
-        int LineNumber { get; set; }
+internal interface IFileOpenInfo
+{
+    string FilePath {
+        get;
+        set;
     }
+    int LineNumber {
+        get;
+        set;
+    }
+}
 }

@@ -4,12 +4,12 @@
 
 namespace UnityEditor.Macros
 {
-    public static class MacroEvaluator
+public static class MacroEvaluator
+{
+    public static string Eval(string macro)
     {
-        public static string Eval(string macro)
-        {
-            var ret = MethodEvaluator.ExecuteExternalCode(macro);
-            return ret == null ? "Null" : ret.ToString();
-        }
+        var ret = MethodEvaluator.ExecuteExternalCode(macro);
+        return ret == null ? "Null" : ret.ToString();
     }
+}
 }

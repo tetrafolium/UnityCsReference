@@ -8,17 +8,17 @@ using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCode
 
 namespace UnityEditor
 {
-    public partial class Undo
+public partial class Undo
+{
+    internal enum UndoRedoType { Undo, Redo }
+
+    [RequiredByNativeCode]
+    static void OnSelectionUndo(bool redo)
     {
-        internal enum UndoRedoType { Undo, Redo }
-
-        [RequiredByNativeCode]
-        static void OnSelectionUndo(bool redo)
-        {
-            if (selectionUndoRedoPerformed != null)
-                selectionUndoRedoPerformed(redo ? UndoRedoType.Redo : UndoRedoType.Undo);
-        }
-
-        internal static event Action<UndoRedoType> selectionUndoRedoPerformed;
+        if (selectionUndoRedoPerformed != null)
+            selectionUndoRedoPerformed(redo ? UndoRedoType.Redo : UndoRedoType.Undo);
     }
+
+    internal static event Action<UndoRedoType> selectionUndoRedoPerformed;
+}
 }

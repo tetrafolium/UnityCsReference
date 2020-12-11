@@ -7,8 +7,8 @@ using UnityEngine;
 
 namespace UnityEditor
 {
-    [CustomEditor(typeof(AudioDistortionFilter))]
-    class AudioDistortionFilterEditor : Editor
-    {
-    }
+[CustomEditor(typeof(AudioDistortionFilter))]
+class AudioDistortionFilterEditor : Editor
+{
+}
 }

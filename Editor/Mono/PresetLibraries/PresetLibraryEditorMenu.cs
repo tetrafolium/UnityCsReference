@@ -9,122 +9,122 @@ using System.Collections.Generic;
 
 namespace UnityEditor
 {
-    internal partial class PresetLibraryEditor<T> where T : PresetLibrary
+internal partial class PresetLibraryEditor<T> where T : PresetLibrary
+{
+    class SettingsMenu
     {
-        class SettingsMenu
+        static PresetLibraryEditor<T> s_Owner;
+
+        class ViewModeData
         {
-            static PresetLibraryEditor<T> s_Owner;
+            public GUIContent text;
+            public int itemHeight;
+            public PresetLibraryEditorState.ItemViewMode viewmode;
+        }
 
-            class ViewModeData
+        public static void Show(Rect activatorRect, PresetLibraryEditor<T> owner)
+        {
+            s_Owner = owner;
+
+            GenericMenu menu = new GenericMenu();
+
+            // View modes
+            int minItemHeight = (int)s_Owner.minMaxPreviewHeight.x;
+            int maxItemHeight = (int)s_Owner.minMaxPreviewHeight.y;
+            List<ViewModeData> viewModeData;
+            if (minItemHeight == maxItemHeight)
             {
-                public GUIContent text;
-                public int itemHeight;
-                public PresetLibraryEditorState.ItemViewMode viewmode;
+                viewModeData = new List<ViewModeData>
+                {
+                    new ViewModeData {text = EditorGUIUtility.TrTextContent("Grid"), itemHeight = minItemHeight, viewmode = PresetLibraryEditorState.ItemViewMode.Grid},
+                    new ViewModeData {text = EditorGUIUtility.TrTextContent("List"), itemHeight = minItemHeight, viewmode = PresetLibraryEditorState.ItemViewMode.List},
+                };
+            }
+            else
+            {
+                viewModeData = new List<ViewModeData>
+                {
+                    new ViewModeData {text = EditorGUIUtility.TrTextContent("Small Grid"), itemHeight = minItemHeight, viewmode = PresetLibraryEditorState.ItemViewMode.Grid},
+                    new ViewModeData {text = EditorGUIUtility.TrTextContent("Large Grid"), itemHeight = maxItemHeight, viewmode = PresetLibraryEditorState.ItemViewMode.Grid},
+                    new ViewModeData {text = EditorGUIUtility.TrTextContent("Small List"), itemHeight = minItemHeight, viewmode = PresetLibraryEditorState.ItemViewMode.List},
+                    new ViewModeData {text = EditorGUIUtility.TrTextContent("Large List"), itemHeight = maxItemHeight, viewmode = PresetLibraryEditorState.ItemViewMode.List}
+                };
             }
 
-            public static void Show(Rect activatorRect, PresetLibraryEditor<T> owner)
+            for (int i = 0; i < viewModeData.Count; ++i)
             {
-                s_Owner = owner;
+                bool currentSelected = s_Owner.itemViewMode == viewModeData[i].viewmode && (int)s_Owner.previewHeight == viewModeData[i].itemHeight;
+                menu.AddItem(viewModeData[i].text, currentSelected, ViewModeChange, viewModeData[i]);
+            }
+            menu.AddSeparator("");
 
-                GenericMenu menu = new GenericMenu();
+            // Available libraries (show user libraries first then project libraries)
+            List<string> preferencesLibs;
+            List<string> projectLibs;
+            PresetLibraryManager.instance.GetAvailableLibraries(s_Owner.m_SaveLoadHelper, out preferencesLibs, out projectLibs);
+            preferencesLibs.Sort();
+            projectLibs.Sort();
 
-                // View modes
-                int minItemHeight = (int)s_Owner.minMaxPreviewHeight.x;
-                int maxItemHeight = (int)s_Owner.minMaxPreviewHeight.y;
-                List<ViewModeData> viewModeData;
-                if (minItemHeight == maxItemHeight)
-                {
-                    viewModeData = new List<ViewModeData>
-                    {
-                        new ViewModeData {text = EditorGUIUtility.TrTextContent("Grid"), itemHeight = minItemHeight, viewmode = PresetLibraryEditorState.ItemViewMode.Grid},
-                        new ViewModeData {text = EditorGUIUtility.TrTextContent("List"), itemHeight = minItemHeight, viewmode = PresetLibraryEditorState.ItemViewMode.List},
-                    };
-                }
-                else
-                {
-                    viewModeData = new List<ViewModeData>
-                    {
-                        new ViewModeData {text = EditorGUIUtility.TrTextContent("Small Grid"), itemHeight = minItemHeight, viewmode = PresetLibraryEditorState.ItemViewMode.Grid},
-                        new ViewModeData {text = EditorGUIUtility.TrTextContent("Large Grid"), itemHeight = maxItemHeight, viewmode = PresetLibraryEditorState.ItemViewMode.Grid},
-                        new ViewModeData {text = EditorGUIUtility.TrTextContent("Small List"), itemHeight = minItemHeight, viewmode = PresetLibraryEditorState.ItemViewMode.List},
-                        new ViewModeData {text = EditorGUIUtility.TrTextContent("Large List"), itemHeight = maxItemHeight, viewmode = PresetLibraryEditorState.ItemViewMode.List}
-                    };
-                }
+            string currentLibWithExtension = s_Owner.currentLibraryWithoutExtension + "." + s_Owner.m_SaveLoadHelper.fileExtensionWithoutDot;
 
-                for (int i = 0; i < viewModeData.Count; ++i)
-                {
-                    bool currentSelected = s_Owner.itemViewMode == viewModeData[i].viewmode && (int)s_Owner.previewHeight == viewModeData[i].itemHeight;
-                    menu.AddItem(viewModeData[i].text, currentSelected, ViewModeChange, viewModeData[i]);
-                }
+            string projectFolderTag = " (Project)";
+            foreach (string libPath in preferencesLibs)
+            {
+                string libName = Path.GetFileNameWithoutExtension(libPath);
+                menu.AddItem(new GUIContent(libName), currentLibWithExtension == libPath, LibraryModeChange, libPath);
+            }
+            foreach (string libPath in projectLibs)
+            {
+                string libName = Path.GetFileNameWithoutExtension(libPath);
+                menu.AddItem(new GUIContent(libName + projectFolderTag), currentLibWithExtension == libPath, LibraryModeChange, libPath);
+            }
+            menu.AddSeparator("");
+            menu.AddItem(EditorGUIUtility.TrTextContent("Create New Library..."), false, CreateLibrary, 0);
+            if (HasDefaultPresets())
+            {
                 menu.AddSeparator("");
-
-                // Available libraries (show user libraries first then project libraries)
-                List<string> preferencesLibs;
-                List<string> projectLibs;
-                PresetLibraryManager.instance.GetAvailableLibraries(s_Owner.m_SaveLoadHelper, out preferencesLibs, out projectLibs);
-                preferencesLibs.Sort();
-                projectLibs.Sort();
-
-                string currentLibWithExtension = s_Owner.currentLibraryWithoutExtension + "." + s_Owner.m_SaveLoadHelper.fileExtensionWithoutDot;
-
-                string projectFolderTag = " (Project)";
-                foreach (string libPath in preferencesLibs)
-                {
-                    string libName = Path.GetFileNameWithoutExtension(libPath);
-                    menu.AddItem(new GUIContent(libName), currentLibWithExtension == libPath, LibraryModeChange, libPath);
-                }
-                foreach (string libPath in projectLibs)
-                {
-                    string libName = Path.GetFileNameWithoutExtension(libPath);
-                    menu.AddItem(new GUIContent(libName + projectFolderTag), currentLibWithExtension == libPath, LibraryModeChange, libPath);
-                }
-                menu.AddSeparator("");
-                menu.AddItem(EditorGUIUtility.TrTextContent("Create New Library..."), false, CreateLibrary, 0);
-                if (HasDefaultPresets())
-                {
-                    menu.AddSeparator("");
-                    menu.AddItem(EditorGUIUtility.TrTextContent("Add Factory Presets To Current Library"), false, AddDefaultPresetsToCurrentLibrary, 0);
-                }
-                menu.AddSeparator("");
-                menu.AddItem(EditorGUIUtility.TrTextContent("Reveal Current Library Location"), false, RevealCurrentLibrary, 0);
-                menu.DropDown(activatorRect);
+                menu.AddItem(EditorGUIUtility.TrTextContent("Add Factory Presets To Current Library"), false, AddDefaultPresetsToCurrentLibrary, 0);
             }
+            menu.AddSeparator("");
+            menu.AddItem(EditorGUIUtility.TrTextContent("Reveal Current Library Location"), false, RevealCurrentLibrary, 0);
+            menu.DropDown(activatorRect);
+        }
 
-            static void ViewModeChange(object userData)
-            {
-                ViewModeData viewModeData = (ViewModeData)userData;
-                s_Owner.itemViewMode = viewModeData.viewmode;
-                s_Owner.previewHeight = viewModeData.itemHeight;
-            }
+        static void ViewModeChange(object userData)
+        {
+            ViewModeData viewModeData = (ViewModeData)userData;
+            s_Owner.itemViewMode = viewModeData.viewmode;
+            s_Owner.previewHeight = viewModeData.itemHeight;
+        }
 
-            static void LibraryModeChange(object userData)
-            {
-                string libPath = (string)userData;
-                s_Owner.currentLibraryWithoutExtension = libPath;
-            }
+        static void LibraryModeChange(object userData)
+        {
+            string libPath = (string)userData;
+            s_Owner.currentLibraryWithoutExtension = libPath;
+        }
 
-            static void CreateLibrary(object userData)
-            {
-                s_Owner.wantsToCreateLibrary = true;
-            }
+        static void CreateLibrary(object userData)
+        {
+            s_Owner.wantsToCreateLibrary = true;
+        }
 
-            static void RevealCurrentLibrary(object userData)
-            {
-                s_Owner.RevealCurrentLibrary();
-            }
+        static void RevealCurrentLibrary(object userData)
+        {
+            s_Owner.RevealCurrentLibrary();
+        }
 
-            static bool HasDefaultPresets()
-            {
-                return s_Owner.addDefaultPresets != null;
-            }
+        static bool HasDefaultPresets()
+        {
+            return s_Owner.addDefaultPresets != null;
+        }
 
-            static void AddDefaultPresetsToCurrentLibrary(object userData)
-            {
-                if (s_Owner.addDefaultPresets != null)
-                    s_Owner.addDefaultPresets(s_Owner.GetCurrentLib());
+        static void AddDefaultPresetsToCurrentLibrary(object userData)
+        {
+            if (s_Owner.addDefaultPresets != null)
+                s_Owner.addDefaultPresets(s_Owner.GetCurrentLib());
 
-                s_Owner.SaveCurrentLib();
-            }
+            s_Owner.SaveCurrentLib();
         }
     }
+}
 } // UnityEditor

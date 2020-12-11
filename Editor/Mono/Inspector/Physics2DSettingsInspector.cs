@@ -9,94 +9,98 @@ using UnityEditor.AnimatedValues;
 
 namespace UnityEditor
 {
-    [CustomEditor(typeof(Physics2DSettings))]
-    internal class Physics2DSettingsInspector : ProjectSettingsBaseEditor
+[CustomEditor(typeof(Physics2DSettings))]
+internal class Physics2DSettingsInspector : ProjectSettingsBaseEditor
+{
+    private static class Styles
     {
-        private static class Styles
-        {
-            public static readonly GUIContent kJobOptionsLabel = EditorGUIUtility.TrTextContent("Job Options (Experimental)", "Allows the configuration of multi-threaded physics using the job system.");
-        }
-
-        SerializedProperty m_JobOptions;
-
-        bool m_ShowLayerCollisionMatrix = true;
-        readonly AnimBool m_GizmoSettingsFade = new AnimBool();
-        SerializedProperty m_AlwaysShowColliders;
-        SerializedProperty m_ShowColliderSleep;
-        SerializedProperty m_ShowColliderContacts;
-        SerializedProperty m_ShowColliderAABB;
-        SerializedProperty m_ContactArrowScale;
-        SerializedProperty m_ColliderAwakeColor;
-        SerializedProperty m_ColliderAsleepColor;
-        SerializedProperty m_ColliderContactColor;
-        SerializedProperty m_ColliderAABBColor;
-
-        public void OnEnable()
-        {
-            m_JobOptions = serializedObject.FindProperty("m_JobOptions");
-            m_AlwaysShowColliders = serializedObject.FindProperty("m_AlwaysShowColliders");
-            m_ShowColliderSleep = serializedObject.FindProperty("m_ShowColliderSleep");
-            m_ShowColliderContacts = serializedObject.FindProperty("m_ShowColliderContacts");
-            m_ShowColliderAABB = serializedObject.FindProperty("m_ShowColliderAABB");
-            m_ContactArrowScale = serializedObject.FindProperty("m_ContactArrowScale");
-            m_ColliderAwakeColor = serializedObject.FindProperty("m_ColliderAwakeColor");
-            m_ColliderAsleepColor = serializedObject.FindProperty("m_ColliderAsleepColor");
-            m_ColliderContactColor = serializedObject.FindProperty("m_ColliderContactColor");
-            m_ColliderAABBColor = serializedObject.FindProperty("m_ColliderAABBColor");
-
-            m_GizmoSettingsFade.valueChanged.AddListener(Repaint);
-        }
-
-        public void OnDisable()
-        {
-            m_GizmoSettingsFade.valueChanged.RemoveListener(Repaint);
-        }
-
-        public override void OnInspectorGUI()
-        {
-            serializedObject.Update();
-            DrawPropertiesExcluding(serializedObject, "m_JobOptions");
-
-            GUILayout.BeginHorizontal();
-            GUILayout.Space(0);
-            EditorGUILayout.PropertyField(m_JobOptions, Styles.kJobOptionsLabel, true);
-            GUILayout.EndHorizontal();
-
-            m_GizmoSettingsFade.value = m_GizmoSettingsFade.target = EditorGUILayout.Foldout(m_GizmoSettingsFade.target, "Gizmos", true);
-
-            if (m_GizmoSettingsFade.value)
-            {
-                if (EditorGUILayout.BeginFadeGroup(m_GizmoSettingsFade.faded))
-                {
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.PropertyField(m_AlwaysShowColliders);
-                    EditorGUILayout.PropertyField(m_ShowColliderSleep);
-                    EditorGUILayout.PropertyField(m_ColliderAwakeColor);
-                    EditorGUILayout.PropertyField(m_ColliderAsleepColor);
-                    EditorGUILayout.PropertyField(m_ShowColliderContacts);
-                    EditorGUILayout.Slider(m_ContactArrowScale, 0.1f, 1.0f, m_ContactArrowScale.displayName);
-                    EditorGUILayout.PropertyField(m_ColliderContactColor);
-                    EditorGUILayout.PropertyField(m_ShowColliderAABB);
-                    EditorGUILayout.PropertyField(m_ColliderAABBColor);
-                    EditorGUI.indentLevel--;
-                }
-                EditorGUILayout.EndFadeGroup();
-            }
-            serializedObject.ApplyModifiedProperties();
-
-            LayerMatrixGUI.DoGUI("Layer Collision Matrix", ref m_ShowLayerCollisionMatrix, GetValue, SetValue);
-        }
-
-        [SettingsProvider]
-        internal static SettingsProvider CreateProjectSettingsProvider()
-        {
-            var provider = AssetSettingsProvider.CreateProviderFromAssetPath(
-                "Project/Physics 2D", "ProjectSettings/Physics2DSettings.asset",
-                SettingsProvider.GetSearchKeywordsFromPath("ProjectSettings/Physics2DSettings.asset"));
-            return provider;
-        }
-
-        static bool GetValue(int layerA, int layerB) { return !Physics2D.GetIgnoreLayerCollision(layerA, layerB); }
-        static void SetValue(int layerA, int layerB, bool val) { Physics2D.IgnoreLayerCollision(layerA, layerB, !val); }
+        public static readonly GUIContent kJobOptionsLabel = EditorGUIUtility.TrTextContent("Job Options (Experimental)", "Allows the configuration of multi-threaded physics using the job system.");
     }
+
+    SerializedProperty m_JobOptions;
+
+    bool m_ShowLayerCollisionMatrix = true;
+    readonly AnimBool m_GizmoSettingsFade = new AnimBool();
+    SerializedProperty m_AlwaysShowColliders;
+    SerializedProperty m_ShowColliderSleep;
+    SerializedProperty m_ShowColliderContacts;
+    SerializedProperty m_ShowColliderAABB;
+    SerializedProperty m_ContactArrowScale;
+    SerializedProperty m_ColliderAwakeColor;
+    SerializedProperty m_ColliderAsleepColor;
+    SerializedProperty m_ColliderContactColor;
+    SerializedProperty m_ColliderAABBColor;
+
+    public void OnEnable()
+    {
+        m_JobOptions = serializedObject.FindProperty("m_JobOptions");
+        m_AlwaysShowColliders = serializedObject.FindProperty("m_AlwaysShowColliders");
+        m_ShowColliderSleep = serializedObject.FindProperty("m_ShowColliderSleep");
+        m_ShowColliderContacts = serializedObject.FindProperty("m_ShowColliderContacts");
+        m_ShowColliderAABB = serializedObject.FindProperty("m_ShowColliderAABB");
+        m_ContactArrowScale = serializedObject.FindProperty("m_ContactArrowScale");
+        m_ColliderAwakeColor = serializedObject.FindProperty("m_ColliderAwakeColor");
+        m_ColliderAsleepColor = serializedObject.FindProperty("m_ColliderAsleepColor");
+        m_ColliderContactColor = serializedObject.FindProperty("m_ColliderContactColor");
+        m_ColliderAABBColor = serializedObject.FindProperty("m_ColliderAABBColor");
+
+        m_GizmoSettingsFade.valueChanged.AddListener(Repaint);
+    }
+
+    public void OnDisable()
+    {
+        m_GizmoSettingsFade.valueChanged.RemoveListener(Repaint);
+    }
+
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
+        DrawPropertiesExcluding(serializedObject, "m_JobOptions");
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Space(0);
+        EditorGUILayout.PropertyField(m_JobOptions, Styles.kJobOptionsLabel, true);
+        GUILayout.EndHorizontal();
+
+        m_GizmoSettingsFade.value = m_GizmoSettingsFade.target = EditorGUILayout.Foldout(m_GizmoSettingsFade.target, "Gizmos", true);
+
+        if (m_GizmoSettingsFade.value)
+        {
+            if (EditorGUILayout.BeginFadeGroup(m_GizmoSettingsFade.faded))
+            {
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(m_AlwaysShowColliders);
+                EditorGUILayout.PropertyField(m_ShowColliderSleep);
+                EditorGUILayout.PropertyField(m_ColliderAwakeColor);
+                EditorGUILayout.PropertyField(m_ColliderAsleepColor);
+                EditorGUILayout.PropertyField(m_ShowColliderContacts);
+                EditorGUILayout.Slider(m_ContactArrowScale, 0.1f, 1.0f, m_ContactArrowScale.displayName);
+                EditorGUILayout.PropertyField(m_ColliderContactColor);
+                EditorGUILayout.PropertyField(m_ShowColliderAABB);
+                EditorGUILayout.PropertyField(m_ColliderAABBColor);
+                EditorGUI.indentLevel--;
+            }
+            EditorGUILayout.EndFadeGroup();
+        }
+        serializedObject.ApplyModifiedProperties();
+
+        LayerMatrixGUI.DoGUI("Layer Collision Matrix", ref m_ShowLayerCollisionMatrix, GetValue, SetValue);
+    }
+
+    [SettingsProvider]
+    internal static SettingsProvider CreateProjectSettingsProvider()
+    {
+        var provider = AssetSettingsProvider.CreateProviderFromAssetPath(
+                           "Project/Physics 2D", "ProjectSettings/Physics2DSettings.asset",
+                           SettingsProvider.GetSearchKeywordsFromPath("ProjectSettings/Physics2DSettings.asset"));
+        return provider;
+    }
+
+    static bool GetValue(int layerA, int layerB) {
+        return !Physics2D.GetIgnoreLayerCollision(layerA, layerB);
+    }
+    static void SetValue(int layerA, int layerB, bool val) {
+        Physics2D.IgnoreLayerCollision(layerA, layerB, !val);
+    }
+}
 }

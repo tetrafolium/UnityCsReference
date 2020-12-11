@@ -9,72 +9,72 @@ using System.Runtime.InteropServices;
 namespace UnityEditor
 {
 #pragma warning disable 649
-    [StructLayout(LayoutKind.Sequential)]
-    [Serializable]
-    [NativeType(CodegenOptions.Custom, "MonoImportPackageItem", Header = "Editor/Mono/PackageUtility.bindings.h")]
-    [NativeAsStruct]
-    internal class ImportPackageItem
-    {
-        public string exportedAssetPath;
-        public string destinationAssetPath;
-        public string sourceFolder;
-        public string previewPath;
-        public string guid;
-        public int    enabledStatus;
-        public bool   isFolder;
-        public bool   exists;
-        public bool   assetChanged;
-        public bool   pathConflict;
-        public bool   projectAsset;
-    }
+[StructLayout(LayoutKind.Sequential)]
+[Serializable]
+[NativeType(CodegenOptions.Custom, "MonoImportPackageItem", Header = "Editor/Mono/PackageUtility.bindings.h")]
+[NativeAsStruct]
+internal class ImportPackageItem
+{
+    public string exportedAssetPath;
+    public string destinationAssetPath;
+    public string sourceFolder;
+    public string previewPath;
+    public string guid;
+    public int    enabledStatus;
+    public bool   isFolder;
+    public bool   exists;
+    public bool   assetChanged;
+    public bool   pathConflict;
+    public bool   projectAsset;
+}
 
-    [StructLayout(LayoutKind.Sequential)]
-    [Serializable]
-    [NativeAsStruct]
-    [NativeType(CodegenOptions.Custom, "MonoExportPackageItem", Header = "Editor/Mono/PackageUtility.bindings.h")]
-    internal class ExportPackageItem
-    {
-        public string assetPath;
-        public string guid;
-        public bool   isFolder;
-        public int    enabledStatus;
-    }
+[StructLayout(LayoutKind.Sequential)]
+[Serializable]
+[NativeAsStruct]
+[NativeType(CodegenOptions.Custom, "MonoExportPackageItem", Header = "Editor/Mono/PackageUtility.bindings.h")]
+internal class ExportPackageItem
+{
+    public string assetPath;
+    public string guid;
+    public bool   isFolder;
+    public int    enabledStatus;
+}
 
-    //*undocumented*
-    [StructLayout(LayoutKind.Sequential)]
-    [NativeType(CodegenOptions.Custom, "MonoPackageInfo", Header = "Editor/Src/PackageUtility.h")]
-    public struct PackageInfo
-    {
-        public string packagePath;
-        public string jsonInfo;
-        public string iconURL;
+//*undocumented*
+[StructLayout(LayoutKind.Sequential)]
+[NativeType(CodegenOptions.Custom, "MonoPackageInfo", Header = "Editor/Src/PackageUtility.h")]
+public struct PackageInfo
+{
+    public string packagePath;
+    public string jsonInfo;
+    public string iconURL;
 
-        [FreeFunction]
-        internal static extern PackageInfo[] GetPackageList();
-    }
+    [FreeFunction]
+    internal static extern PackageInfo[] GetPackageList();
+}
 
-    [NativeHeader("Editor/Mono/PackageUtility.bindings.h")]
-    internal class PackageUtility
-    {
-        [NativeThrows]
-        public static extern ExportPackageItem[] BuildExportPackageItemsList(string[] guids, bool dependencies);
-        [NativeThrows]
-        public static extern ExportPackageItem[] BuildExportPackageItemsListWithPackageManagerWarning(string[] guids, bool dependencies, bool warnPackageManagerDependencies);
-        [NativeThrows]
-        public static extern void ExportPackage(string[] guids, string fileName);
-        [NativeThrows]
-        public static extern void ExportPackageAndPackageManagerManifest(string[] guids, string fileName);
-        public static extern ImportPackageItem[] ExtractAndPrepareAssetList(string packagePath, out string packageIconPath, out string packageManagerDependenciesPath);
+[NativeHeader("Editor/Mono/PackageUtility.bindings.h")]
+internal class PackageUtility
+{
+    [NativeThrows]
+    public static extern ExportPackageItem[] BuildExportPackageItemsList(string[] guids, bool dependencies);
+    [NativeThrows]
+    public static extern ExportPackageItem[] BuildExportPackageItemsListWithPackageManagerWarning(string[] guids, bool dependencies, bool warnPackageManagerDependencies);
+    [NativeThrows]
+    public static extern void ExportPackage(string[] guids, string fileName);
+    [NativeThrows]
+    public static extern void ExportPackageAndPackageManagerManifest(string[] guids, string fileName);
+    public static extern ImportPackageItem[] ExtractAndPrepareAssetList(string packagePath, out string packageIconPath, out string packageManagerDependenciesPath);
 
-        [FreeFunction("DelayedImportPackageAssets")]
-        public static extern void ImportPackageAssets(string packageName, ImportPackageItem[] items);
-        [FreeFunction("ImportPackageAssets")]
-        public static extern void ImportPackageAssetsImmediately(string packageName, ImportPackageItem[] items);
+    [FreeFunction("DelayedImportPackageAssets")]
+    public static extern void ImportPackageAssets(string packageName, ImportPackageItem[] items);
+    [FreeFunction("ImportPackageAssets")]
+    public static extern void ImportPackageAssetsImmediately(string packageName, ImportPackageItem[] items);
 
-        [FreeFunction("ImportPackageCancelledGUI")]
-        public static extern void ImportPackageAssetsCancelledFromGUI(string packageName, ImportPackageItem[] items);
+    [FreeFunction("ImportPackageCancelledGUI")]
+    public static extern void ImportPackageAssetsCancelledFromGUI(string packageName, ImportPackageItem[] items);
 
-        [FreeFunction("TickPackageImport")]
-        public static extern void TickPackageImport();
-    }
+    [FreeFunction("TickPackageImport")]
+    public static extern void TickPackageImport();
+}
 }

@@ -11,360 +11,376 @@ using System.Linq;
 
 namespace UnityEditor
 {
-    internal interface IPrefType
+internal interface IPrefType
+{
+    string ToUniqueString();
+    void FromUniqueString(string sstr);
+    void Load();
+}
+
+internal class PrefColor : IPrefType
+{
+    string m_Name;
+    Color m_Color;
+    Color m_DefaultColor;
+
+    bool m_SeparateColors;
+    Color m_OptionalDarkColor;
+    Color m_OptionalDarkDefaultColor;
+
+    bool m_Loaded;
+
+    public PrefColor()
     {
-        string ToUniqueString();
-        void FromUniqueString(string sstr);
-        void Load();
+        m_Loaded = true;
     }
 
-    internal class PrefColor : IPrefType
+    public PrefColor(string name, float defaultRed, float defaultGreen, float defaultBlue, float defaultAlpha)
     {
-        string m_Name;
-        Color m_Color;
-        Color m_DefaultColor;
+        this.m_Name = name;
+        this.m_Color = this.m_DefaultColor = new Color(defaultRed, defaultGreen, defaultBlue, defaultAlpha);
+        this.m_SeparateColors = false;
+        this.m_OptionalDarkColor = this.m_OptionalDarkDefaultColor = Color.clear;
+        PrefSettings.Add(this);
+        m_Loaded = false;
+    }
 
-        bool m_SeparateColors;
-        Color m_OptionalDarkColor;
-        Color m_OptionalDarkDefaultColor;
+    public PrefColor(string name, float defaultRed, float defaultGreen, float defaultBlue, float defaultAlpha, float defaultRed2, float defaultGreen2, float defaultBlue2, float defaultAlpha2)
+    {
+        this.m_Name = name;
+        this.m_Color = this.m_DefaultColor = new Color(defaultRed, defaultGreen, defaultBlue, defaultAlpha);
+        this.m_SeparateColors = true;
+        this.m_OptionalDarkColor = this.m_OptionalDarkDefaultColor = new Color(defaultRed2, defaultGreen2, defaultBlue2, defaultAlpha2);
+        PrefSettings.Add(this);
+        m_Loaded = false;
+    }
 
-        bool m_Loaded;
+    public void Load()
+    {
+        if (m_Loaded)
+            return;
 
-        public PrefColor()
-        {
-            m_Loaded = true;
-        }
+        m_Loaded = true;
 
-        public PrefColor(string name, float defaultRed, float defaultGreen, float defaultBlue, float defaultAlpha)
-        {
-            this.m_Name = name;
-            this.m_Color = this.m_DefaultColor = new Color(defaultRed, defaultGreen, defaultBlue, defaultAlpha);
-            this.m_SeparateColors = false;
-            this.m_OptionalDarkColor = this.m_OptionalDarkDefaultColor = Color.clear;
-            PrefSettings.Add(this);
-            m_Loaded = false;
-        }
+        PrefColor pk = PrefSettings.Get(m_Name, this);
+        this.m_Name = pk.m_Name;
+        this.m_Color = pk.m_Color;
+        this.m_SeparateColors = pk.m_SeparateColors;
+        this.m_OptionalDarkColor = pk.m_OptionalDarkColor;
+    }
 
-        public PrefColor(string name, float defaultRed, float defaultGreen, float defaultBlue, float defaultAlpha, float defaultRed2, float defaultGreen2, float defaultBlue2, float defaultAlpha2)
-        {
-            this.m_Name = name;
-            this.m_Color = this.m_DefaultColor = new Color(defaultRed, defaultGreen, defaultBlue, defaultAlpha);
-            this.m_SeparateColors = true;
-            this.m_OptionalDarkColor = this.m_OptionalDarkDefaultColor = new Color(defaultRed2, defaultGreen2, defaultBlue2, defaultAlpha2);
-            PrefSettings.Add(this);
-            m_Loaded = false;
-        }
-
-        public void Load()
-        {
-            if (m_Loaded)
-                return;
-
-            m_Loaded = true;
-
-            PrefColor pk = PrefSettings.Get(m_Name, this);
-            this.m_Name = pk.m_Name;
-            this.m_Color = pk.m_Color;
-            this.m_SeparateColors = pk.m_SeparateColors;
-            this.m_OptionalDarkColor = pk.m_OptionalDarkColor;
-        }
-
-        public Color Color
-        {
-            get
-            {
-                Load();
-
-                if (m_SeparateColors && EditorGUIUtility.isProSkin)
-                    return m_OptionalDarkColor;
-
-                return m_Color;
-            }
-            set
-            {
-                Load();
-
-                if (m_SeparateColors && EditorGUIUtility.isProSkin)
-                    m_OptionalDarkColor = value;
-                else
-                    m_Color = value;
-            }
-        }
-        public string Name { get { Load(); return m_Name; } }
-
-        public static implicit operator Color(PrefColor pcolor) { return pcolor.Color; }
-
-        public string ToUniqueString()
+    public Color Color
+    {
+        get
         {
             Load();
 
-            if (m_SeparateColors)
-                return UnityString.Format("{0};{1};{2};{3};{4};{5};{6};{7};{8}", m_Name, m_Color.r, m_Color.g, m_Color.b, m_Color.a, m_OptionalDarkColor.r, m_OptionalDarkColor.g, m_OptionalDarkColor.b, m_OptionalDarkColor.a);
+            if (m_SeparateColors && EditorGUIUtility.isProSkin)
+                return m_OptionalDarkColor;
 
-            return UnityString.Format("{0};{1};{2};{3};{4}", m_Name, m_Color.r, m_Color.g, m_Color.b, m_Color.a);
+            return m_Color;
         }
-
-        public void FromUniqueString(string s)
+        set
         {
             Load();
 
-            string[] split = s.Split(';');
+            if (m_SeparateColors && EditorGUIUtility.isProSkin)
+                m_OptionalDarkColor = value;
+            else
+                m_Color = value;
+        }
+    }
+    public string Name {
+        get {
+            Load();
+            return m_Name;
+        }
+    }
 
-            // PrefColor with a single color should have 5 substrings.
-            // PrefColor with separate colors should have 9 substrings.
-            if (split.Length != 5 && split.Length != 9)
-            {
-                Debug.LogError("Parsing PrefColor failed");
-                return;
-            }
+    public static implicit operator Color(PrefColor pcolor) {
+        return pcolor.Color;
+    }
 
-            m_Name = split[0];
-            split[1] = split[1].Replace(',', '.');
-            split[2] = split[2].Replace(',', '.');
-            split[3] = split[3].Replace(',', '.');
-            split[4] = split[4].Replace(',', '.');
-            float r, g, b, a;
-            bool success = float.TryParse(split[1], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out r);
-            success &= float.TryParse(split[2], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out g);
-            success &= float.TryParse(split[3], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out b);
-            success &= float.TryParse(split[4], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out a);
+    public string ToUniqueString()
+    {
+        Load();
+
+        if (m_SeparateColors)
+            return UnityString.Format("{0};{1};{2};{3};{4};{5};{6};{7};{8}", m_Name, m_Color.r, m_Color.g, m_Color.b, m_Color.a, m_OptionalDarkColor.r, m_OptionalDarkColor.g, m_OptionalDarkColor.b, m_OptionalDarkColor.a);
+
+        return UnityString.Format("{0};{1};{2};{3};{4}", m_Name, m_Color.r, m_Color.g, m_Color.b, m_Color.a);
+    }
+
+    public void FromUniqueString(string s)
+    {
+        Load();
+
+        string[] split = s.Split(';');
+
+        // PrefColor with a single color should have 5 substrings.
+        // PrefColor with separate colors should have 9 substrings.
+        if (split.Length != 5 && split.Length != 9)
+        {
+            Debug.LogError("Parsing PrefColor failed");
+            return;
+        }
+
+        m_Name = split[0];
+        split[1] = split[1].Replace(',', '.');
+        split[2] = split[2].Replace(',', '.');
+        split[3] = split[3].Replace(',', '.');
+        split[4] = split[4].Replace(',', '.');
+        float r, g, b, a;
+        bool success = float.TryParse(split[1], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out r);
+        success &= float.TryParse(split[2], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out g);
+        success &= float.TryParse(split[3], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out b);
+        success &= float.TryParse(split[4], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out a);
+
+        if (success)
+        {
+            m_Color = new Color(r, g, b, a);
+        }
+        else
+        {
+            Debug.LogError("Parsing PrefColor failed");
+        }
+
+        if (split.Length == 9)
+        {
+            m_SeparateColors = true;
+
+            split[5] = split[5].Replace(',', '.');
+            split[6] = split[6].Replace(',', '.');
+            split[7] = split[7].Replace(',', '.');
+            split[8] = split[8].Replace(',', '.');
+            success = float.TryParse(split[5], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out r);
+            success &= float.TryParse(split[6], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out g);
+            success &= float.TryParse(split[7], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out b);
+            success &= float.TryParse(split[8], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out a);
 
             if (success)
             {
-                m_Color = new Color(r, g, b, a);
+                m_OptionalDarkColor = new Color(r, g, b, a);
             }
             else
             {
                 Debug.LogError("Parsing PrefColor failed");
             }
+        }
+        else
+        {
+            m_SeparateColors = false;
+            m_OptionalDarkColor = Color.clear;
+        }
+    }
 
-            if (split.Length == 9)
+    internal void ResetToDefault()
+    {
+        Load();
+        m_Color = m_DefaultColor;
+        m_OptionalDarkColor = m_OptionalDarkDefaultColor;
+    }
+}
+
+internal class PrefSettings
+{
+    static List<IPrefType> m_AddedPrefs = new List<IPrefType>();
+    static SortedList<string, object> m_Prefs = new SortedList<string, object>();
+
+    static internal void Add(IPrefType value)
+    {
+        m_AddedPrefs.Add(value);
+    }
+
+    static internal T Get<T>(string name, T defaultValue)
+    where T : IPrefType, new()
+    {
+        Load();
+
+        if (defaultValue == null)
+            throw new System.ArgumentException("default can not be null", "defaultValue");
+        if (m_Prefs.ContainsKey(name))
+            return (T)m_Prefs[name];
+        else
+        {
+            string sstr = EditorPrefs.GetString(name, "");
+            if (sstr == "")
             {
-                m_SeparateColors = true;
-
-                split[5] = split[5].Replace(',', '.');
-                split[6] = split[6].Replace(',', '.');
-                split[7] = split[7].Replace(',', '.');
-                split[8] = split[8].Replace(',', '.');
-                success = float.TryParse(split[5], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out r);
-                success &= float.TryParse(split[6], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out g);
-                success &= float.TryParse(split[7], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out b);
-                success &= float.TryParse(split[8], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out a);
-
-                if (success)
-                {
-                    m_OptionalDarkColor = new Color(r, g, b, a);
-                }
-                else
-                {
-                    Debug.LogError("Parsing PrefColor failed");
-                }
+                Set(name, defaultValue);
+                return defaultValue;
             }
             else
             {
-                m_SeparateColors = false;
-                m_OptionalDarkColor = Color.clear;
+                defaultValue.FromUniqueString(sstr);
+                Set(name, defaultValue);
+                return defaultValue;
             }
-        }
-
-        internal void ResetToDefault()
-        {
-            Load();
-            m_Color = m_DefaultColor;
-            m_OptionalDarkColor = m_OptionalDarkDefaultColor;
         }
     }
 
-    internal class PrefSettings
+    static internal void Set<T>(string name, T value)
+    where T : IPrefType
     {
-        static List<IPrefType> m_AddedPrefs = new List<IPrefType>();
-        static SortedList<string, object> m_Prefs = new SortedList<string, object>();
+        Load();
 
-        static internal void Add(IPrefType value)
+        EditorPrefs.SetString(name, value.ToUniqueString());
+        m_Prefs[name] = value;
+    }
+
+    static internal IEnumerable<KeyValuePair<string, T>> Prefs<T>()
+    where T : IPrefType
+    {
+        Load();
+
+        foreach (KeyValuePair<string, object> kvp in m_Prefs)
         {
-            m_AddedPrefs.Add(value);
+            if (kvp.Value is T)
+                yield return new KeyValuePair<string, T>(kvp.Key, (T)kvp.Value);
         }
+    }
 
-        static internal T Get<T>(string name, T defaultValue)
-            where T : IPrefType, new()
+    static void Load()
+    {
+        if (!m_AddedPrefs.Any())
+            return;
+
+        List<IPrefType> loadPrefs = new List<IPrefType>(m_AddedPrefs);
+        m_AddedPrefs.Clear();
+
+        foreach (IPrefType pref in loadPrefs)
+            pref.Load();
+    }
+}
+
+internal class SavedInt
+{
+    int m_Value;
+    string m_Name;
+    bool m_Loaded;
+
+    public SavedInt(string name, int value)
+    {
+        m_Name = name;
+        m_Loaded = false;
+        m_Value = value;
+    }
+
+    private void Load()
+    {
+        if (m_Loaded)
+            return;
+
+        m_Loaded = true;
+        m_Value = EditorPrefs.GetInt(m_Name, m_Value);
+    }
+
+    public int value
+    {
+        get {
+            Load();
+            return m_Value;
+        }
+        set
         {
             Load();
-
-            if (defaultValue == null)
-                throw new System.ArgumentException("default can not be null", "defaultValue");
-            if (m_Prefs.ContainsKey(name))
-                return (T)m_Prefs[name];
-            else
-            {
-                string sstr = EditorPrefs.GetString(name, "");
-                if (sstr == "")
-                {
-                    Set(name, defaultValue);
-                    return defaultValue;
-                }
-                else
-                {
-                    defaultValue.FromUniqueString(sstr);
-                    Set(name, defaultValue);
-                    return defaultValue;
-                }
-            }
-        }
-
-        static internal void Set<T>(string name, T value)
-            where T : IPrefType
-        {
-            Load();
-
-            EditorPrefs.SetString(name, value.ToUniqueString());
-            m_Prefs[name] = value;
-        }
-
-        static internal IEnumerable<KeyValuePair<string, T>> Prefs<T>()
-            where T : IPrefType
-        {
-            Load();
-
-            foreach (KeyValuePair<string, object> kvp in m_Prefs)
-            {
-                if (kvp.Value is T)
-                    yield return new KeyValuePair<string, T>(kvp.Key, (T)kvp.Value);
-            }
-        }
-
-        static void Load()
-        {
-            if (!m_AddedPrefs.Any())
+            if (m_Value == value)
                 return;
-
-            List<IPrefType> loadPrefs = new List<IPrefType>(m_AddedPrefs);
-            m_AddedPrefs.Clear();
-
-            foreach (IPrefType pref in loadPrefs)
-                pref.Load();
-        }
-    }
-
-    internal class SavedInt
-    {
-        int m_Value;
-        string m_Name;
-        bool m_Loaded;
-
-        public SavedInt(string name, int value)
-        {
-            m_Name = name;
-            m_Loaded = false;
             m_Value = value;
-        }
-
-        private void Load()
-        {
-            if (m_Loaded)
-                return;
-
-            m_Loaded = true;
-            m_Value = EditorPrefs.GetInt(m_Name, m_Value);
-        }
-
-        public int value
-        {
-            get { Load(); return m_Value; }
-            set
-            {
-                Load();
-                if (m_Value == value)
-                    return;
-                m_Value = value;
-                EditorPrefs.SetInt(m_Name, value);
-            }
-        }
-
-        public static implicit operator int(SavedInt s)
-        {
-            return s.value;
+            EditorPrefs.SetInt(m_Name, value);
         }
     }
 
-    internal class SavedFloat
+    public static implicit operator int(SavedInt s)
     {
-        float m_Value;
-        string m_Name;
-        bool m_Loaded;
-
-        public SavedFloat(string name, float value)
-        {
-            m_Name = name;
-            m_Loaded = false;
-            m_Value = value;
-        }
-
-        private void Load()
-        {
-            if (m_Loaded)
-                return;
-
-            m_Loaded = true;
-            m_Value = EditorPrefs.GetFloat(m_Name, m_Value);
-        }
-
-        public float value
-        {
-            get { Load(); return m_Value; }
-            set
-            {
-                Load();
-                if (m_Value == value)
-                    return;
-                m_Value = value;
-                EditorPrefs.SetFloat(m_Name, value);
-            }
-        }
-
-        public static implicit operator float(SavedFloat s)
-        {
-            return s.value;
-        }
+        return s.value;
     }
+}
 
-    internal class SavedBool
+internal class SavedFloat
+{
+    float m_Value;
+    string m_Name;
+    bool m_Loaded;
+
+    public SavedFloat(string name, float value)
     {
-        bool m_Value;
-        string m_Name;
-        bool m_Loaded;
+        m_Name = name;
+        m_Loaded = false;
+        m_Value = value;
+    }
 
-        public SavedBool(string name, bool value)
-        {
-            m_Name = name;
-            m_Loaded = false;
-            m_Value = value;
+    private void Load()
+    {
+        if (m_Loaded)
+            return;
+
+        m_Loaded = true;
+        m_Value = EditorPrefs.GetFloat(m_Name, m_Value);
+    }
+
+    public float value
+    {
+        get {
+            Load();
+            return m_Value;
         }
-
-        private void Load()
+        set
         {
-            if (m_Loaded)
+            Load();
+            if (m_Value == value)
                 return;
-
-            m_Loaded = true;
-            m_Value = EditorPrefs.GetBool(m_Name, m_Value);
-        }
-
-        public bool value
-        {
-            get { Load(); return m_Value; }
-            set
-            {
-                Load();
-                if (m_Value == value)
-                    return;
-                m_Value = value;
-                EditorPrefs.SetBool(m_Name, value);
-            }
-        }
-
-        public static implicit operator bool(SavedBool s)
-        {
-            return s.value;
+            m_Value = value;
+            EditorPrefs.SetFloat(m_Name, value);
         }
     }
+
+    public static implicit operator float(SavedFloat s)
+    {
+        return s.value;
+    }
+}
+
+internal class SavedBool
+{
+    bool m_Value;
+    string m_Name;
+    bool m_Loaded;
+
+    public SavedBool(string name, bool value)
+    {
+        m_Name = name;
+        m_Loaded = false;
+        m_Value = value;
+    }
+
+    private void Load()
+    {
+        if (m_Loaded)
+            return;
+
+        m_Loaded = true;
+        m_Value = EditorPrefs.GetBool(m_Name, m_Value);
+    }
+
+    public bool value
+    {
+        get {
+            Load();
+            return m_Value;
+        }
+        set
+        {
+            Load();
+            if (m_Value == value)
+                return;
+            m_Value = value;
+            EditorPrefs.SetBool(m_Name, value);
+        }
+    }
+
+    public static implicit operator bool(SavedBool s)
+    {
+        return s.value;
+    }
+}
 }

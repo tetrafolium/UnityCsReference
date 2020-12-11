@@ -8,126 +8,129 @@ using UnityEngine;
 
 namespace UnityEditor
 {
-    class PopupWindowContentForNewLibrary : PopupWindowContent
+class PopupWindowContentForNewLibrary : PopupWindowContent
+{
+    string m_NewLibraryName = "";
+    int m_SelectedIndexInPopup = 0;
+    string m_ErrorString = null;
+    Rect m_WantedSize;
+
+    Func<string, PresetFileLocation, string> m_CreateLibraryCallback;
+
+    class Texts
     {
-        string m_NewLibraryName = "";
-        int m_SelectedIndexInPopup = 0;
-        string m_ErrorString = null;
-        Rect m_WantedSize;
+        public GUIContent header = EditorGUIUtility.TrTextContent("Create New Library");
+        public GUIContent name = EditorGUIUtility.TrTextContent("Name");
+        public GUIContent location = EditorGUIUtility.TrTextContent("Location");
+        public GUIContent[] fileLocations = new[] {EditorGUIUtility.TrTextContent("Preferences Folder"), EditorGUIUtility.TrTextContent("Project Folder")};
+        public PresetFileLocation[] fileLocationOrder = new[] { PresetFileLocation.PreferencesFolder, PresetFileLocation.ProjectFolder }; // must match order of fileLocations above
+    }
+    static Texts s_Texts;
 
-        Func<string, PresetFileLocation, string> m_CreateLibraryCallback;
+    public PopupWindowContentForNewLibrary(Func<string, PresetFileLocation, string> createLibraryCallback)
+    {
+        m_CreateLibraryCallback = createLibraryCallback;
+    }
 
-        class Texts
+    public override void OnGUI(Rect rect)
+    {
+        if (s_Texts == null)
+            s_Texts = new Texts();
+
+        KeyboardHandling(editorWindow);
+
+        float labelWidth = 80f;
+
+        Rect size = EditorGUILayout.BeginVertical();
+        if (Event.current.type != EventType.Layout)
+            m_WantedSize = size;
+
+        // Header
+        GUILayout.BeginHorizontal();
         {
-            public GUIContent header = EditorGUIUtility.TrTextContent("Create New Library");
-            public GUIContent name = EditorGUIUtility.TrTextContent("Name");
-            public GUIContent location = EditorGUIUtility.TrTextContent("Location");
-            public GUIContent[] fileLocations = new[] {EditorGUIUtility.TrTextContent("Preferences Folder"), EditorGUIUtility.TrTextContent("Project Folder")};
-            public PresetFileLocation[] fileLocationOrder = new[] { PresetFileLocation.PreferencesFolder, PresetFileLocation.ProjectFolder }; // must match order of fileLocations above
+            GUILayout.Label(s_Texts.header, EditorStyles.boldLabel);
         }
-        static Texts s_Texts;
+        GUILayout.EndHorizontal();
 
-        public PopupWindowContentForNewLibrary(Func<string, PresetFileLocation, string> createLibraryCallback)
+        EditorGUI.BeginChangeCheck();
         {
-            m_CreateLibraryCallback = createLibraryCallback;
-        }
-
-        public override void OnGUI(Rect rect)
-        {
-            if (s_Texts == null)
-                s_Texts = new Texts();
-
-            KeyboardHandling(editorWindow);
-
-            float labelWidth = 80f;
-
-            Rect size = EditorGUILayout.BeginVertical();
-            if (Event.current.type != EventType.Layout)
-                m_WantedSize = size;
-
-            // Header
+            // Name
             GUILayout.BeginHorizontal();
             {
-                GUILayout.Label(s_Texts.header, EditorStyles.boldLabel);
-            } GUILayout.EndHorizontal();
+                GUILayout.Label(s_Texts.name, GUILayout.Width(labelWidth));
 
-            EditorGUI.BeginChangeCheck();
-            {
-                // Name
-                GUILayout.BeginHorizontal();
-                {
-                    GUILayout.Label(s_Texts.name, GUILayout.Width(labelWidth));
-
-                    EditorGUI.FocusTextInControl("NewLibraryName");
-                    GUI.SetNextControlName("NewLibraryName");
-                    m_NewLibraryName = GUILayout.TextField(m_NewLibraryName);
-                } GUILayout.EndHorizontal();
-
-                // Location
-                GUILayout.BeginHorizontal();
-                {
-                    GUILayout.Label(s_Texts.location, GUILayout.Width(labelWidth));
-                    m_SelectedIndexInPopup = EditorGUILayout.Popup(m_SelectedIndexInPopup, s_Texts.fileLocations);
-                }
-                GUILayout.EndHorizontal();
+                EditorGUI.FocusTextInControl("NewLibraryName");
+                GUI.SetNextControlName("NewLibraryName");
+                m_NewLibraryName = GUILayout.TextField(m_NewLibraryName);
             }
-            if (EditorGUI.EndChangeCheck())
-                m_ErrorString = null;
+            GUILayout.EndHorizontal();
 
-            // Create
+            // Location
             GUILayout.BeginHorizontal();
             {
-                if (!string.IsNullOrEmpty(m_ErrorString))
-                {
-                    Color orgColor = GUI.color;
-                    GUI.color = new Color(1, 0.8f, 0.8f);
-                    GUILayout.Label(GUIContent.Temp(m_ErrorString), EditorStyles.helpBox);
-                    GUI.color = orgColor;
-                }
-
-                GUILayout.FlexibleSpace();
-                if (GUILayout.Button(GUIContent.Temp("Create")))
-                {
-                    CreateLibraryAndCloseWindow(editorWindow);
-                }
-            } GUILayout.EndHorizontal();
-
-            GUILayout.Space(15);
-
-            EditorGUILayout.EndVertical();
+                GUILayout.Label(s_Texts.location, GUILayout.Width(labelWidth));
+                m_SelectedIndexInPopup = EditorGUILayout.Popup(m_SelectedIndexInPopup, s_Texts.fileLocations);
+            }
+            GUILayout.EndHorizontal();
         }
+        if (EditorGUI.EndChangeCheck())
+            m_ErrorString = null;
 
-        public override Vector2 GetWindowSize()
+        // Create
+        GUILayout.BeginHorizontal();
         {
-            return new Vector2(350, m_WantedSize.height > 0 ? m_WantedSize.height : 90);
-        }
-
-        void KeyboardHandling(EditorWindow editorWindow)
-        {
-            Event evt = Event.current;
-            switch (evt.type)
+            if (!string.IsNullOrEmpty(m_ErrorString))
             {
-                case EventType.KeyDown:
-                    switch (evt.keyCode)
-                    {
-                        case KeyCode.KeypadEnter:
-                        case KeyCode.Return:
-                            CreateLibraryAndCloseWindow(editorWindow);
-                            break;
-                        case KeyCode.Escape:
-                            editorWindow.Close();
-                            break;
-                    }
-                    break;
+                Color orgColor = GUI.color;
+                GUI.color = new Color(1, 0.8f, 0.8f);
+                GUILayout.Label(GUIContent.Temp(m_ErrorString), EditorStyles.helpBox);
+                GUI.color = orgColor;
+            }
+
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button(GUIContent.Temp("Create")))
+            {
+                CreateLibraryAndCloseWindow(editorWindow);
             }
         }
+        GUILayout.EndHorizontal();
 
-        void CreateLibraryAndCloseWindow(EditorWindow editorWindow)
+        GUILayout.Space(15);
+
+        EditorGUILayout.EndVertical();
+    }
+
+    public override Vector2 GetWindowSize()
+    {
+        return new Vector2(350, m_WantedSize.height > 0 ? m_WantedSize.height : 90);
+    }
+
+    void KeyboardHandling(EditorWindow editorWindow)
+    {
+        Event evt = Event.current;
+        switch (evt.type)
         {
-            PresetFileLocation fileLocation = s_Texts.fileLocationOrder[m_SelectedIndexInPopup];
-            m_ErrorString = m_CreateLibraryCallback(m_NewLibraryName, fileLocation);
-            if (string.IsNullOrEmpty(m_ErrorString))
+        case EventType.KeyDown:
+            switch (evt.keyCode)
+            {
+            case KeyCode.KeypadEnter:
+            case KeyCode.Return:
+                CreateLibraryAndCloseWindow(editorWindow);
+                break;
+            case KeyCode.Escape:
                 editorWindow.Close();
+                break;
+            }
+            break;
         }
     }
+
+    void CreateLibraryAndCloseWindow(EditorWindow editorWindow)
+    {
+        PresetFileLocation fileLocation = s_Texts.fileLocationOrder[m_SelectedIndexInPopup];
+        m_ErrorString = m_CreateLibraryCallback(m_NewLibraryName, fileLocation);
+        if (string.IsNullOrEmpty(m_ErrorString))
+            editorWindow.Close();
+    }
+}
 }

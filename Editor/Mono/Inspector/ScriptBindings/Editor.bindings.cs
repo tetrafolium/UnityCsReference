@@ -13,14 +13,14 @@ using Object = UnityEngine.Object;
 
 namespace UnityEditor
 {
-    [StructLayout(LayoutKind.Sequential)]
-    [RequiredByNativeCode]
-    [NativeHeader("Editor/Mono/Inspector/ScriptBindings/Editor.bindings.h")]
-    [StaticAccessor("EditorBindings", StaticAccessorType.DoubleColon)]
-    public partial class Editor
-    {
-        // Make a custom editor for /targetObject/ or /objects/.
-        extern static Editor CreateEditorWithContextInternal(Object[] targetObjects, Object context, Type editorType);
-        internal extern static Vector2 GetCurrentMousePosition();
-    }
+[StructLayout(LayoutKind.Sequential)]
+[RequiredByNativeCode]
+[NativeHeader("Editor/Mono/Inspector/ScriptBindings/Editor.bindings.h")]
+[StaticAccessor("EditorBindings", StaticAccessorType.DoubleColon)]
+public partial class Editor
+{
+    // Make a custom editor for /targetObject/ or /objects/.
+    extern static Editor CreateEditorWithContextInternal(Object[] targetObjects, Object context, Type editorType);
+    internal extern static Vector2 GetCurrentMousePosition();
+}
 }

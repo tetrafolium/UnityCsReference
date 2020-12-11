@@ -8,31 +8,31 @@ using UnityEditor;
 
 namespace UnityEditor
 {
-    [CustomEditor(typeof(TextMesh))]
-    [CanEditMultipleObjects]
-    internal class TextMeshInspector : Editor
+[CustomEditor(typeof(TextMesh))]
+[CanEditMultipleObjects]
+internal class TextMeshInspector : Editor
+{
+    SerializedProperty m_Font;
+
+    void OnEnable()
     {
-        SerializedProperty m_Font;
+        m_Font = serializedObject.FindProperty("m_Font");
+    }
 
-        void OnEnable()
+    public override void OnInspectorGUI()
+    {
+        Font oldFont = m_Font.hasMultipleDifferentValues ? null : (m_Font.objectReferenceValue as Font);
+        DrawDefaultInspector();
+        Font newFont = m_Font.hasMultipleDifferentValues ? null : (m_Font.objectReferenceValue as Font);
+        if (newFont != null && newFont != oldFont)
         {
-            m_Font = serializedObject.FindProperty("m_Font");
-        }
-
-        public override void OnInspectorGUI()
-        {
-            Font oldFont = m_Font.hasMultipleDifferentValues ? null : (m_Font.objectReferenceValue as Font);
-            DrawDefaultInspector();
-            Font newFont = m_Font.hasMultipleDifferentValues ? null : (m_Font.objectReferenceValue as Font);
-            if (newFont != null && newFont != oldFont)
+            foreach (TextMesh textMesh in targets)
             {
-                foreach (TextMesh textMesh in targets)
-                {
-                    var renderer = textMesh.GetComponent<MeshRenderer>();
-                    if (renderer)
-                        renderer.sharedMaterial = newFont.material;
-                }
+                var renderer = textMesh.GetComponent<MeshRenderer>();
+                if (renderer)
+                    renderer.sharedMaterial = newFont.material;
             }
         }
     }
+}
 }

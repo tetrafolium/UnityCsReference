@@ -9,9 +9,9 @@ using UnityEngine.Bindings;
 
 namespace UnityEditor
 {
-    [NativeHeader("Editor/Src/AssetPipeline/PrefabImporter.h")]
-    [ExcludeFromPreset]
-    internal class PrefabImporter : AssetImporter
-    {
-    }
+[NativeHeader("Editor/Src/AssetPipeline/PrefabImporter.h")]
+[ExcludeFromPreset]
+internal class PrefabImporter : AssetImporter
+{
+}
 }

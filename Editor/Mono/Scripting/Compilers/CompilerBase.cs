@@ -8,14 +8,16 @@ using UnityEngine;
 
 namespace UnityEditor.Scripting.Compilers
 {
-    internal abstract class CompilerBase : IDisposable
-    {
-        public abstract string Version { get; }
-
-        public abstract void Dispose();
-        public abstract void WaitForCompilationToFinish();
-        public abstract void BeginCompiling(AssemblyInfo assemblyInfo, string[] responseFiles, OperatingSystemFamily operatingSystemFamily, string[] systemReferenceDirectories);
-        public abstract bool Poll();
-        public abstract UnityEditor.Compilation.CompilerMessage[] GetCompilerMessages();
+internal abstract class CompilerBase : IDisposable
+{
+    public abstract string Version {
+        get;
     }
+
+    public abstract void Dispose();
+    public abstract void WaitForCompilationToFinish();
+    public abstract void BeginCompiling(AssemblyInfo assemblyInfo, string[] responseFiles, OperatingSystemFamily operatingSystemFamily, string[] systemReferenceDirectories);
+    public abstract bool Poll();
+    public abstract UnityEditor.Compilation.CompilerMessage[] GetCompilerMessages();
+}
 }

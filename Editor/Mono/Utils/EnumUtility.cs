@@ -7,12 +7,12 @@ using UnityEngine.Scripting;
 
 namespace UnityEditor
 {
-    static class EnumUtility
+static class EnumUtility
+{
+    [RequiredByNativeCode]
+    private static string ConvertEnumToString(Type enumType, int enumValue)
     {
-        [RequiredByNativeCode]
-        private static string ConvertEnumToString(Type enumType, int enumValue)
-        {
-            return Enum.GetName(enumType, enumValue);
-        }
+        return Enum.GetName(enumType, enumValue);
     }
+}
 }

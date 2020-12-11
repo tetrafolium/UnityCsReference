@@ -4,8 +4,8 @@
 
 namespace UnityEditor
 {
-    internal interface ICleanuppable
-    {
-        void Cleanup();
-    }
+internal interface ICleanuppable
+{
+    void Cleanup();
+}
 }
