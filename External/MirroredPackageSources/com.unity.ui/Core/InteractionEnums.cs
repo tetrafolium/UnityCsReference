@@ -1,10 +1,8 @@
-namespace UnityEngine.UIElements
-{
-/// <summary>
-/// Controls how many items can be selected at once.
-/// </summary>
-public enum SelectionType
-{
+namespace UnityEngine.UIElements {
+  /// <summary>
+  /// Controls how many items can be selected at once.
+  /// </summary>
+  public enum SelectionType {
     /// <summary>
     /// Selections are disabled.
     /// </summary>
@@ -17,5 +15,5 @@ public enum SelectionType
     /// Multiple items are selectable at once.
     /// </summary>
     Multiple
-}
+  }
 }

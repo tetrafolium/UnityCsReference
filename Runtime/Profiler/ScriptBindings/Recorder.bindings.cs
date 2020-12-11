@@ -9,59 +9,50 @@ using System.Threading;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace UnityEngine.Profiling
-{
-[UsedByNativeCode]
-[NativeHeader("Runtime/Profiler/ScriptBindings/Recorder.bindings.h")]
-[NativeHeader("Runtime/Profiler/Recorder.h")]
-[StructLayout(LayoutKind.Sequential)]
-public sealed class Recorder
-{
+namespace UnityEngine.Profiling {
+  [UsedByNativeCode]
+  [NativeHeader("Runtime/Profiler/ScriptBindings/Recorder.bindings.h")]
+  [NativeHeader("Runtime/Profiler/Recorder.h")]
+  [StructLayout(LayoutKind.Sequential)]
+  public sealed class Recorder {
     internal IntPtr m_Ptr;
     static internal Recorder s_InvalidRecorder = new Recorder();
 
     // This class can't be explicitly created
     internal Recorder() {}
-    internal Recorder(IntPtr ptr) {
-        m_Ptr = ptr;
+    internal Recorder(IntPtr ptr) { m_Ptr = ptr; }
+
+    ~Recorder() {
+      if (m_Ptr != IntPtr.Zero)
+        DisposeNative(m_Ptr);
     }
 
-    ~Recorder()
-    {
-        if (m_Ptr != IntPtr.Zero)
-            DisposeNative(m_Ptr);
+    public static Recorder Get(string samplerName) {
+      IntPtr nativeRecorder = GetInternal(samplerName);
+      if (nativeRecorder == IntPtr.Zero)
+        return s_InvalidRecorder;
+
+      return new Recorder(nativeRecorder);
     }
 
-    public static Recorder Get(string samplerName)
-    {
-        IntPtr nativeRecorder = GetInternal(samplerName);
-        if (nativeRecorder == IntPtr.Zero)
-            return s_InvalidRecorder;
-
-        return new Recorder(nativeRecorder);
-    }
-
-    [NativeMethod(Name = "ProfilerBindings::GetRecorderInternal", IsFreeFunction = true)]
+    [NativeMethod(Name = "ProfilerBindings::GetRecorderInternal",
+                  IsFreeFunction = true)]
     private extern static IntPtr GetInternal(string samplerName);
 
-    public bool isValid
-    {
-        get {
-            return m_Ptr != IntPtr.Zero;
-        }
+    public bool isValid {
+      get { return m_Ptr != IntPtr.Zero; }
     }
 
-    [NativeMethod(Name = "ProfilerBindings::DisposeNativeRecorder", IsFreeFunction = true, IsThreadSafe = true)]
+    [NativeMethod(Name = "ProfilerBindings::DisposeNativeRecorder",
+                  IsFreeFunction = true, IsThreadSafe = true)]
     private extern static void DisposeNative(IntPtr ptr);
 
-    public bool enabled
-    {
-        get {
-            return isValid ? IsEnabled() : false;
-        }
-        set {
-            if (isValid) SetEnabled(value);
-        }
+    public bool enabled {
+      get { return isValid ? IsEnabled() : false; }
+      set {
+        if (isValid)
+          SetEnabled(value);
+      }
     }
 
     [NativeMethod(IsThreadSafe = true)]
@@ -70,17 +61,11 @@ public sealed class Recorder
     [NativeMethod(IsThreadSafe = true)]
     private extern void SetEnabled(bool enabled);
 
-    public long elapsedNanoseconds
-    {
-        get {
-            return isValid ? GetElapsedNanoseconds() : 0;
-        }
+    public long elapsedNanoseconds {
+      get { return isValid ? GetElapsedNanoseconds() : 0; }
     }
-    public long gpuElapsedNanoseconds
-    {
-        get {
-            return isValid ? GetGpuElapsedNanoseconds() : 0;
-        }
+    public long gpuElapsedNanoseconds {
+      get { return isValid ? GetGpuElapsedNanoseconds() : 0; }
     }
 
     [NativeMethod(IsThreadSafe = true)]
@@ -89,17 +74,11 @@ public sealed class Recorder
     [NativeMethod(IsThreadSafe = true)]
     private extern long GetGpuElapsedNanoseconds();
 
-    public int sampleBlockCount
-    {
-        get {
-            return isValid ? GetSampleBlockCount() : 0;
-        }
+    public int sampleBlockCount {
+      get { return isValid ? GetSampleBlockCount() : 0; }
     }
-    public int gpuSampleBlockCount
-    {
-        get {
-            return isValid ? GetGpuSampleBlockCount() : 0;
-        }
+    public int gpuSampleBlockCount {
+      get { return isValid ? GetGpuSampleBlockCount() : 0; }
     }
 
     [NativeMethod(IsThreadSafe = true)]
@@ -113,5 +92,5 @@ public sealed class Recorder
 
     [ThreadSafe]
     public extern void CollectFromAllThreads();
-}
+  }
 }

@@ -4,20 +4,22 @@
 
 using UnityEngine.Bindings;
 
-namespace UnityEngine.Windows
-{
-public static class File
-{
-    [NativeHeader("PlatformDependent/MetroPlayer/Bindings/WindowsFileBindings.h")]
+namespace UnityEngine.Windows {
+  public static class File {
+    [NativeHeader(
+        "PlatformDependent/MetroPlayer/Bindings/WindowsFileBindings.h")]
     public extern static byte[] ReadAllBytes(string path);
 
-    [NativeHeader("PlatformDependent/MetroPlayer/Bindings/WindowsFileBindings.h")]
+    [NativeHeader(
+        "PlatformDependent/MetroPlayer/Bindings/WindowsFileBindings.h")]
     public extern static void WriteAllBytes(string path, byte[] bytes);
 
-    [NativeHeader("PlatformDependent/MetroPlayer/Bindings/WindowsFileBindings.h")]
+    [NativeHeader(
+        "PlatformDependent/MetroPlayer/Bindings/WindowsFileBindings.h")]
     public extern static bool Exists(string path);
 
-    [NativeHeader("PlatformDependent/MetroPlayer/Bindings/WindowsFileBindings.h")]
+    [NativeHeader(
+        "PlatformDependent/MetroPlayer/Bindings/WindowsFileBindings.h")]
     public extern static void Delete(string path);
-}
+  }
 }

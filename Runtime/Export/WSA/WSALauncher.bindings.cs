@@ -4,11 +4,9 @@
 
 using UnityEngine.Bindings;
 
-namespace UnityEngine.WSA
-{
-// Must be in sync with MetroLauncher.cpp
-public enum Folder
-{
+namespace UnityEngine.WSA {
+  // Must be in sync with MetroLauncher.cpp
+  public enum Folder {
     Installation,
     Temporary,
     Local,
@@ -23,30 +21,29 @@ public enum Folder
     RemovableDevices,
     SavedPictures,
     VideosLibrary
-}
+  }
 
-[NativeConditional("PLATFORM_METRO")]
-[NativeHeader("PlatformDependent/MetroPlayer/MetroLauncher.h")]
-[NativeHeader("Runtime/Export/WSA/WSALauncher.bindings.h")]
-[StaticAccessor("metro::Launcher", StaticAccessorType.DoubleColon)]
-public sealed class Launcher
-{
-    public static extern void LaunchFile(Folder folder, string relativeFilePath, bool showWarning);
+  [NativeConditional("PLATFORM_METRO")]
+  [NativeHeader("PlatformDependent/MetroPlayer/MetroLauncher.h")]
+  [NativeHeader("Runtime/Export/WSA/WSALauncher.bindings.h")]
+  [StaticAccessor("metro::Launcher", StaticAccessorType.DoubleColon)]
+  public sealed class Launcher {
+    public static extern void LaunchFile(Folder folder, string relativeFilePath,
+                                         bool showWarning);
 
-    public static void LaunchFileWithPicker(string fileExtension)
-    {
-        System.Diagnostics.Process.Start("explorer.exe");
+    public static void LaunchFileWithPicker(string fileExtension) {
+      System.Diagnostics.Process.Start("explorer.exe");
     }
 
-    public static void LaunchUri(string uri, bool showWarning)
-    {
-        System.Diagnostics.Process.Start(uri);
+    public static void LaunchUri(string uri, bool showWarning) {
+      System.Diagnostics.Process.Start(uri);
     }
 
     [NativeMethod("LaunchFileWithPicker")]
-    private static extern void InternalLaunchFileWithPicker(string fileExtension);
+    private static extern void
+    InternalLaunchFileWithPicker(string fileExtension);
 
     [NativeMethod("LaunchUri")]
     private static extern void InternalLaunchUri(string uri, bool showWarning);
-}
+  }
 }

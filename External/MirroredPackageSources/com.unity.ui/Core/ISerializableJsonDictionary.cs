@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace UnityEngine.UIElements
-{
-internal interface ISerializableJsonDictionary
-{
+namespace UnityEngine.UIElements {
+  internal interface ISerializableJsonDictionary {
     void Set<T>(string key, T value) where T : class;
 
     T Get<T>(string key) where T : class;
@@ -21,5 +19,5 @@ internal interface ISerializableJsonDictionary
     void OnBeforeSerialize();
 
     void OnAfterDeserialize();
-}
+  }
 }

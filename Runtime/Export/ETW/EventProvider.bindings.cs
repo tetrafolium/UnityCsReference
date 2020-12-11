@@ -4,12 +4,11 @@
 
 using UnityEngine.Bindings;
 
-namespace UnityEngine
-{
+namespace UnityEngine {
 [NativeHeader("Runtime/Export/ETW/EventProvider.bindings.h")]
-public sealed class EventProvider
-{
-    [FreeFunction("EventProvider_Bindings::WriteCustomEvent")]
-    extern public static void WriteCustomEvent(int value, string text);
+public sealed class EventProvider {
+  [FreeFunction(
+      "EventProvider_Bindings::WriteCustomEvent")] extern public static void
+  WriteCustomEvent(int value, string text);
 }
 }

@@ -5,11 +5,9 @@
 using UnityEngine;
 using UnityEngine.Bindings;
 
-namespace UnityEngine.WSA
-{
-// Must be in sync with Windows::UI::Notifications::TileTemplateType
-public enum TileTemplate
-{
+namespace UnityEngine.WSA {
+  // Must be in sync with Windows::UI::Notifications::TileTemplateType
+  public enum TileTemplate {
     TileSquare150x150Image = 0,
     TileSquare150x150Block = 1,
     TileSquare150x150Text01 = 2,
@@ -95,10 +93,9 @@ public enum TileTemplate
     TileSquare99x99IconWithBadge = 1000,
     TileSquare210x210IconWithBadge = 1001,
     TileWide432x210IconWithBadgeAndText = 1002,
-}
+  }
 
-public enum ToastTemplate
-{
+  public enum ToastTemplate {
     ToastImageAndText01 = 0,
     ToastImageAndText02 = 1,
     ToastImageAndText03 = 2,
@@ -107,30 +104,19 @@ public enum ToastTemplate
     ToastText02 = 5,
     ToastText03 = 6,
     ToastText04 = 7,
-}
+  }
 
-public enum TileForegroundText
-{
-    Default = -1,
-    Dark = 0,
-    Light = 1
-}
+  public enum TileForegroundText { Default = -1, Dark = 0, Light = 1 }
 
-public struct SecondaryTileData
-{
+  public struct SecondaryTileData {
     public string arguments;
     private Color32 background;
-    public Color32 backgroundColor
-    {
-        get
-        {
-            return background;
-        }
-        set
-        {
-            background = value;
-            backgroundColorSet = true;
-        }
+    public Color32 backgroundColor {
+      get { return background; }
+      set {
+        background = value;
+        backgroundColorSet = true;
+      }
     }
     public bool backgroundColorSet;
     public string displayName;
@@ -149,398 +135,310 @@ public struct SecondaryTileData
     public string tileId;
     public string wide310x150Logo;
 
-    public SecondaryTileData(string id, string displayName)
-    {
-        arguments = "";
-        background = new UnityEngine.Color32(0, 0, 0, 0);
-        backgroundColorSet = false;
-        this.displayName = displayName;
-        foregroundText = TileForegroundText.Default;
-        lockScreenBadgeLogo = "";
-        lockScreenDisplayBadgeAndTileText = false;
-        phoneticName = "";
-        roamingEnabled = true; // this is default in Win 8.1
-        showNameOnSquare150x150Logo = true;
-        showNameOnSquare310x310Logo = false;
-        showNameOnWide310x150Logo = false;
-        square150x150Logo = "";
-        square30x30Logo = "";
-        square310x310Logo = "";
-        square70x70Logo = "";
-        tileId = id;
-        wide310x150Logo = "";
+    public SecondaryTileData(string id, string displayName) {
+      arguments = "";
+      background = new UnityEngine.Color32(0, 0, 0, 0);
+      backgroundColorSet = false;
+      this.displayName = displayName;
+      foregroundText = TileForegroundText.Default;
+      lockScreenBadgeLogo = "";
+      lockScreenDisplayBadgeAndTileText = false;
+      phoneticName = "";
+      roamingEnabled = true; // this is default in Win 8.1
+      showNameOnSquare150x150Logo = true;
+      showNameOnSquare310x310Logo = false;
+      showNameOnWide310x150Logo = false;
+      square150x150Logo = "";
+      square30x30Logo = "";
+      square310x310Logo = "";
+      square70x70Logo = "";
+      tileId = id;
+      wide310x150Logo = "";
     }
-}
+  }
 
-[NativeConditional("PLATFORM_WINRT")]
-[NativeHeader("Runtime/Export/WSA/WSATiles.bindings.h")]
-[StaticAccessor("WSATilesBindings::Tile", StaticAccessorType.DoubleColon)]
-public sealed class Tile
-{
+  [NativeConditional("PLATFORM_WINRT")]
+  [NativeHeader("Runtime/Export/WSA/WSATiles.bindings.h")]
+  [StaticAccessor("WSATilesBindings::Tile", StaticAccessorType.DoubleColon)]
+  public sealed class Tile {
     private string m_TileId;
     private static Tile s_MainTile;
 
-    private Tile(string tileId)
-    {
-        m_TileId = tileId;
-    }
+    private Tile(string tileId) { m_TileId = tileId; }
 
-    public static Tile main
-    {
-        get
-        {
-            if (s_MainTile == null)
-                s_MainTile = new Tile("");
-            return s_MainTile;
-        }
+    public static Tile main {
+      get {
+        if (s_MainTile == null)
+          s_MainTile = new Tile("");
+        return s_MainTile;
+      }
     }
 
     [ThreadAndSerializationSafe]
     public static extern string GetTemplate(TileTemplate templ);
 
-    public void Update(string xml)
-    {
-        Update(m_TileId, xml);
-    }
+    public void Update(string xml) { Update(m_TileId, xml); }
 
     [ThreadAndSerializationSafe]
     private static extern void Update(string tileId, string xml);
 
-    public void Update(string medium, string wide, string large, string text)
-    {
-        UpdateImageAndText(m_TileId, medium, wide, large, text);
+    public void Update(string medium, string wide, string large, string text) {
+      UpdateImageAndText(m_TileId, medium, wide, large, text);
     }
 
     [ThreadAndSerializationSafe]
-    private static extern void UpdateImageAndText(string tileId, string medium, string wide, string large, string text);
+    private static extern void UpdateImageAndText(string tileId, string medium,
+                                                  string wide, string large,
+                                                  string text);
 
-    public void PeriodicUpdate(string uri, float interval)
-    {
-        PeriodicUpdate(m_TileId, uri, interval);
+    public void PeriodicUpdate(string uri, float interval) {
+      PeriodicUpdate(m_TileId, uri, interval);
     }
 
     [ThreadAndSerializationSafe]
-    private static extern void PeriodicUpdate(string tileId, string uri, float interval);
+    private static extern void PeriodicUpdate(string tileId, string uri,
+                                              float interval);
 
-    public void StopPeriodicUpdate()
-    {
-        StopPeriodicUpdate(m_TileId);
-    }
+    public void StopPeriodicUpdate() { StopPeriodicUpdate(m_TileId); }
 
     [ThreadAndSerializationSafe]
     private static extern void StopPeriodicUpdate(string tileId);
 
-    public void UpdateBadgeImage(string image)
-    {
-        UpdateBadgeImage(m_TileId, image);
+    public void UpdateBadgeImage(string image) {
+      UpdateBadgeImage(m_TileId, image);
     }
 
     [ThreadAndSerializationSafe]
     private static extern void UpdateBadgeImage(string tileId, string image);
 
-    public void UpdateBadgeNumber(float number)
-    {
-        UpdateBadgeNumber(m_TileId, number);
+    public void UpdateBadgeNumber(float number) {
+      UpdateBadgeNumber(m_TileId, number);
     }
 
     [ThreadAndSerializationSafe]
     private static extern void UpdateBadgeNumber(string tileId, float number);
 
-    public void RemoveBadge()
-    {
-        RemoveBadge(m_TileId);
-    }
+    public void RemoveBadge() { RemoveBadge(m_TileId); }
 
     [ThreadAndSerializationSafe]
     private static extern void RemoveBadge(string tileId);
 
-    public void PeriodicBadgeUpdate(string uri, float interval)
-    {
-        PeriodicBadgeUpdate(m_TileId, uri, interval);
+    public void PeriodicBadgeUpdate(string uri, float interval) {
+      PeriodicBadgeUpdate(m_TileId, uri, interval);
     }
 
     [ThreadAndSerializationSafe]
-    private static extern void PeriodicBadgeUpdate(string tileId, string uri, float interval);
+    private static extern void PeriodicBadgeUpdate(string tileId, string uri,
+                                                   float interval);
 
-    public void StopPeriodicBadgeUpdate()
-    {
-        StopPeriodicBadgeUpdate(m_TileId);
-    }
+    public void StopPeriodicBadgeUpdate() { StopPeriodicBadgeUpdate(m_TileId); }
 
     [ThreadAndSerializationSafe]
     private static extern void StopPeriodicBadgeUpdate(string tileId);
 
-    public string id
-    {
-        get
-        {
-            return m_TileId;
-        }
+    public string id {
+      get { return m_TileId; }
     }
 
-    public bool hasUserConsent
-    {
-        get
-        {
-            return HasUserConsent(m_TileId);
-        }
+    public bool hasUserConsent {
+      get { return HasUserConsent(m_TileId); }
     }
 
     [ThreadAndSerializationSafe]
     private static extern bool HasUserConsent(string tileId);
 
-    public bool exists
-    {
-        get
-        {
-            return Exists(m_TileId);
-        }
+    public bool exists {
+      get { return Exists(m_TileId); }
     }
 
     [ThreadAndSerializationSafe]
     public static extern bool Exists(string tileId);
 
-    private static string[] MakeSecondaryTileSargs(SecondaryTileData data)
-    {
-        string[] sargs = new string[10];
-        sargs[0] = data.arguments;
-        sargs[1] = data.displayName;
-        sargs[2] = data.lockScreenBadgeLogo;
-        sargs[3] = data.phoneticName;
-        sargs[4] = data.square150x150Logo;
-        sargs[5] = data.square30x30Logo;
-        sargs[6] = data.square310x310Logo;
-        sargs[7] = data.square70x70Logo;
-        sargs[8] = data.tileId;
-        sargs[9] = data.wide310x150Logo;
-        return sargs;
+    private static string[] MakeSecondaryTileSargs(SecondaryTileData data) {
+      string[] sargs = new string[10];
+      sargs[0] = data.arguments;
+      sargs[1] = data.displayName;
+      sargs[2] = data.lockScreenBadgeLogo;
+      sargs[3] = data.phoneticName;
+      sargs[4] = data.square150x150Logo;
+      sargs[5] = data.square30x30Logo;
+      sargs[6] = data.square310x310Logo;
+      sargs[7] = data.square70x70Logo;
+      sargs[8] = data.tileId;
+      sargs[9] = data.wide310x150Logo;
+      return sargs;
     }
 
-    private static bool[] MakeSecondaryTileBargs(SecondaryTileData data)
-    {
-        bool[] bargs = new bool[6];
-        bargs[0] = data.backgroundColorSet;
-        bargs[1] = data.lockScreenDisplayBadgeAndTileText;
-        bargs[2] = data.roamingEnabled;
-        bargs[3] = data.showNameOnSquare150x150Logo;
-        bargs[4] = data.showNameOnSquare310x310Logo;
-        bargs[5] = data.showNameOnWide310x150Logo;
-        return bargs;
+    private static bool[] MakeSecondaryTileBargs(SecondaryTileData data) {
+      bool[] bargs = new bool[6];
+      bargs[0] = data.backgroundColorSet;
+      bargs[1] = data.lockScreenDisplayBadgeAndTileText;
+      bargs[2] = data.roamingEnabled;
+      bargs[3] = data.showNameOnSquare150x150Logo;
+      bargs[4] = data.showNameOnSquare310x310Logo;
+      bargs[5] = data.showNameOnWide310x150Logo;
+      return bargs;
     }
 
-    public static Tile CreateOrUpdateSecondary(SecondaryTileData data)
-    {
-        string[] sargs = MakeSecondaryTileSargs(data);
-        bool[] bargs = MakeSecondaryTileBargs(data);
-        Color32 backgroundColor = data.backgroundColor;
+    public static Tile CreateOrUpdateSecondary(SecondaryTileData data) {
+      string[] sargs = MakeSecondaryTileSargs(data);
+      bool[] bargs = MakeSecondaryTileBargs(data);
+      Color32 backgroundColor = data.backgroundColor;
 
-        string tileId = CreateOrUpdateSecondaryTile(sargs, bargs, ref backgroundColor, (int)data.foregroundText);
-        if (string.IsNullOrEmpty(tileId))
-            return null;
-        return new Tile(tileId);
-    }
-
-    // On Win 8.0 there is limitation on argument count, so we pass them as arrays
-    [ThreadAndSerializationSafe]
-    private static extern string CreateOrUpdateSecondaryTile(string[] sargs, bool[] bargs, ref Color32 backgroundColor, int foregroundText);
-
-    public static Tile CreateOrUpdateSecondary(SecondaryTileData data, Vector2 pos)
-    {
-        string[] sargs = MakeSecondaryTileSargs(data);
-        bool[] bargs = MakeSecondaryTileBargs(data);
-        Color32 backgroundColor = data.backgroundColor;
-
-        string tileId = CreateOrUpdateSecondaryTilePoint(
-                            sargs,
-                            bargs,
-                            ref backgroundColor,
-                            (int)data.foregroundText,
-                            pos
-                        );
-        if (string.IsNullOrEmpty(tileId))
-            return null;
-        return new Tile(tileId);
-    }
-
-    [ThreadAndSerializationSafe]
-    private static extern string CreateOrUpdateSecondaryTilePoint(
-        string[] sargs,
-        bool[] bargs,
-        ref Color32 backgroundColor,
-        int foregroundText,
-        Vector2 pos);
-
-    public static Tile CreateOrUpdateSecondary(SecondaryTileData data, Rect area)
-    {
-        string[] sargs = MakeSecondaryTileSargs(data);
-        bool[] bargs = MakeSecondaryTileBargs(data);
-        Color32 backgroundColor = data.backgroundColor;
-
-        string tileId = CreateOrUpdateSecondaryTileArea(
-                            sargs,
-                            bargs,
-                            ref backgroundColor,
-                            (int)data.foregroundText,
-                            area
-                        );
-        if (string.IsNullOrEmpty(tileId))
-            return null;
-        return new Tile(tileId);
-    }
-
-    [ThreadAndSerializationSafe]
-    private static extern string CreateOrUpdateSecondaryTileArea(
-        string[] sargs,
-        bool[] bargs,
-        ref Color32 backgroundColor,
-        int foregroundText,
-        Rect area);
-
-    public static Tile GetSecondary(string tileId)
-    {
-        if (Exists(tileId))
-            return new Tile(tileId);
+      string tileId = CreateOrUpdateSecondaryTile(
+          sargs, bargs, ref backgroundColor, (int) data.foregroundText);
+      if (string.IsNullOrEmpty(tileId))
         return null;
+      return new Tile(tileId);
     }
 
-    public static Tile[] GetSecondaries()
-    {
-        string[] ids = GetAllSecondaryTiles();
-        Tile[] tiles = new Tile[ids.Length];
-        for (int i = 0; i < ids.Length; ++i)
-            tiles[i] = new Tile(ids[i]);
-        return tiles;
+    // On Win 8.0 there is limitation on argument count, so we pass them as
+    // arrays
+    [ThreadAndSerializationSafe]
+    private static extern string
+    CreateOrUpdateSecondaryTile(string[] sargs, bool[] bargs,
+                                ref Color32 backgroundColor,
+                                int foregroundText);
+
+    public static Tile CreateOrUpdateSecondary(SecondaryTileData data,
+                                               Vector2 pos) {
+      string[] sargs = MakeSecondaryTileSargs(data);
+      bool[] bargs = MakeSecondaryTileBargs(data);
+      Color32 backgroundColor = data.backgroundColor;
+
+      string tileId = CreateOrUpdateSecondaryTilePoint(
+          sargs, bargs, ref backgroundColor, (int) data.foregroundText, pos);
+      if (string.IsNullOrEmpty(tileId))
+        return null;
+      return new Tile(tileId);
+    }
+
+    [ThreadAndSerializationSafe]
+    private static extern string
+    CreateOrUpdateSecondaryTilePoint(string[] sargs, bool[] bargs,
+                                     ref Color32 backgroundColor,
+                                     int foregroundText, Vector2 pos);
+
+    public static Tile CreateOrUpdateSecondary(SecondaryTileData data,
+                                               Rect area) {
+      string[] sargs = MakeSecondaryTileSargs(data);
+      bool[] bargs = MakeSecondaryTileBargs(data);
+      Color32 backgroundColor = data.backgroundColor;
+
+      string tileId = CreateOrUpdateSecondaryTileArea(
+          sargs, bargs, ref backgroundColor, (int) data.foregroundText, area);
+      if (string.IsNullOrEmpty(tileId))
+        return null;
+      return new Tile(tileId);
+    }
+
+    [ThreadAndSerializationSafe]
+    private static extern string
+    CreateOrUpdateSecondaryTileArea(string[] sargs, bool[] bargs,
+                                    ref Color32 backgroundColor,
+                                    int foregroundText, Rect area);
+
+    public static Tile GetSecondary(string tileId) {
+      if (Exists(tileId))
+        return new Tile(tileId);
+      return null;
+    }
+
+    public static Tile[] GetSecondaries() {
+      string[] ids = GetAllSecondaryTiles();
+      Tile[] tiles = new Tile[ids.Length];
+      for (int i = 0; i < ids.Length; ++i)
+        tiles[i] = new Tile(ids[i]);
+      return tiles;
     }
 
     [ThreadAndSerializationSafe]
     private static extern string[] GetAllSecondaryTiles();
 
-    public void Delete()
-    {
-        DeleteSecondary(m_TileId);
-    }
+    public void Delete() { DeleteSecondary(m_TileId); }
 
     [ThreadAndSerializationSafe]
     public static extern void DeleteSecondary(string tileId);
 
-    public void Delete(Vector2 pos)
-    {
-        DeleteSecondaryPos(m_TileId, pos);
-    }
+    public void Delete(Vector2 pos) { DeleteSecondaryPos(m_TileId, pos); }
 
-    public static void DeleteSecondary(string tileId, Vector2 pos)
-    {
-        DeleteSecondaryPos(tileId, pos);
+    public static void DeleteSecondary(string tileId, Vector2 pos) {
+      DeleteSecondaryPos(tileId, pos);
     }
 
     [ThreadAndSerializationSafe]
     private static extern void DeleteSecondaryPos(string tileId, Vector2 pos);
 
-    public void Delete(Rect area)
-    {
-        DeleteSecondaryArea(m_TileId, area);
-    }
+    public void Delete(Rect area) { DeleteSecondaryArea(m_TileId, area); }
 
-    public static void DeleteSecondary(string tileId, Rect area)
-    {
-        DeleteSecondary(tileId, area);
+    public static void DeleteSecondary(string tileId, Rect area) {
+      DeleteSecondary(tileId, area);
     }
 
     [ThreadAndSerializationSafe]
     private static extern void DeleteSecondaryArea(string tileId, Rect area);
-}
+  }
 
-[NativeConditional("PLATFORM_WINRT")]
-[NativeHeader("Runtime/Export/WSA/WSATiles.bindings.h")]
-[StaticAccessor("WSATilesBindings::Toast", StaticAccessorType.DoubleColon)]
-public sealed class Toast
-{
+  [NativeConditional("PLATFORM_WINRT")]
+  [NativeHeader("Runtime/Export/WSA/WSATiles.bindings.h")]
+  [StaticAccessor("WSATilesBindings::Toast", StaticAccessorType.DoubleColon)]
+  public sealed class Toast {
     private int m_ToastId;
 
-    private Toast(int id)
-    {
-        m_ToastId = id;
-    }
+    private Toast(int id) { m_ToastId = id; }
 
     public static extern string GetTemplate(ToastTemplate templ);
 
-    public static Toast Create(string xml)
-    {
-        int id = CreateToastXml(xml);
-        if (id < 0)
-            return null;
-        return new Toast(id);
+    public static Toast Create(string xml) {
+      int id = CreateToastXml(xml);
+      if (id < 0)
+        return null;
+      return new Toast(id);
     }
 
     private static extern int CreateToastXml(string xml);
 
-    public static Toast Create(string image, string text)
-    {
-        int id = CreateToastImageAndText(image, text);
-        if (id < 0)
-            return null;
-        return new Toast(id);
+    public static Toast Create(string image, string text) {
+      int id = CreateToastImageAndText(image, text);
+      if (id < 0)
+        return null;
+      return new Toast(id);
     }
 
-    private static extern int CreateToastImageAndText(string image, string text);
+    private static extern int CreateToastImageAndText(string image,
+                                                      string text);
 
-    public string arguments
-    {
-        get
-        {
-            return GetArguments(m_ToastId);
-        }
-        set
-        {
-            SetArguments(m_ToastId, value);
-        }
+    public string arguments {
+      get { return GetArguments(m_ToastId); }
+      set { SetArguments(m_ToastId, value); }
     }
 
     private static extern string GetArguments(int id);
 
     private static extern void SetArguments(int id, string args);
 
-    public void Show()
-    {
-        Show(m_ToastId);
-    }
+    public void Show() { Show(m_ToastId); }
 
     private static extern void Show(int id);
 
-    public void Hide()
-    {
-        Hide(m_ToastId);
-    }
+    public void Hide() { Hide(m_ToastId); }
 
     private static extern void Hide(int id);
 
-    public bool activated
-    {
-        get
-        {
-            return GetActivated(m_ToastId);
-        }
+    public bool activated {
+      get { return GetActivated(m_ToastId); }
     }
 
     private static extern bool GetActivated(int id);
 
-    public bool dismissed
-    {
-        get
-        {
-            return GetDismissed(m_ToastId, false);
-        }
+    public bool dismissed {
+      get { return GetDismissed(m_ToastId, false); }
     }
 
-    public bool dismissedByUser
-    {
-        get
-        {
-            return GetDismissed(m_ToastId, true);
-        }
+    public bool dismissedByUser {
+      get { return GetDismissed(m_ToastId, true); }
     }
 
     private static extern bool GetDismissed(int id, bool byUser);
+  }
 }
-}
-

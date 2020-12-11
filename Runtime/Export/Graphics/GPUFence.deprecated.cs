@@ -10,25 +10,19 @@ using uei = UnityEngine.Internal;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-
-namespace UnityEngine.Rendering
-{
-// Old SynchronisationStage enum, stored here for backwards compatibility
-public enum SynchronisationStage
-{
+namespace UnityEngine.Rendering {
+  // Old SynchronisationStage enum, stored here for backwards compatibility
+  public enum SynchronisationStage {
     VertexProcessing = 0,
     PixelProcessing = 1,
-}
+  }
 
-[Obsolete("GPUFence has been deprecated. Use GraphicsFence instead (UnityUpgradable) -> GraphicsFence", false)]
-public struct GPUFence
-{
-    public bool passed
-    {
-        get
-        {
-            return true;
-        }
+  [Obsolete(
+      "GPUFence has been deprecated. Use GraphicsFence instead (UnityUpgradable) -> GraphicsFence",
+      false)]
+  public struct GPUFence {
+    public bool passed {
+      get { return true; }
     }
-}
+  }
 }

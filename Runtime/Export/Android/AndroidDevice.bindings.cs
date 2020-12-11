@@ -4,10 +4,8 @@
 
 using UnityEngine.Bindings;
 
-namespace UnityEngine.Android
-{
-public class AndroidDevice
-{
+namespace UnityEngine.Android {
+  public class AndroidDevice {
     static public void SetSustainedPerformanceMode(bool enabled) {}
-}
+  }
 }

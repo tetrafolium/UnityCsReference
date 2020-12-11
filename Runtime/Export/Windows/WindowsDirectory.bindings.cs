@@ -4,23 +4,21 @@
 
 using UnityEngine.Bindings;
 
-namespace UnityEngine.Windows
-{
-public static class Directory
-{
+namespace UnityEngine.Windows {
+  public static class Directory {
     [NativeHeader("Runtime/Export/Windows/WindowsDirectoryBindings.h")]
     public extern static string temporaryFolder {
-        get;
+      get;
     }
 
     [NativeHeader("Runtime/Export/Windows/WindowsDirectoryBindings.h")]
     public extern static string localFolder {
-        get;
+      get;
     }
 
     [NativeHeader("Runtime/Export/Windows/WindowsDirectoryBindings.h")]
     public extern static string roamingFolder {
-        get;
+      get;
     }
 
     [NativeHeader("Runtime/Export/Windows/WindowsDirectoryBindings.h")]
@@ -31,5 +29,5 @@ public static class Directory
 
     [NativeHeader("Runtime/Export/Windows/WindowsDirectoryBindings.h")]
     public extern static void Delete(string path);
-}
+  }
 }

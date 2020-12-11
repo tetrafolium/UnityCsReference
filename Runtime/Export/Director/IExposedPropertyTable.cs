@@ -6,12 +6,10 @@ using System.Runtime.InteropServices;
 using UnityEngine.Scripting;
 using UnityEngine;
 
-namespace UnityEngine
-{
-public interface IExposedPropertyTable
-{
-    void SetReferenceValue(PropertyName id, UnityEngine.Object value);
-    UnityEngine.Object GetReferenceValue(PropertyName id, out bool idValid);
-    void ClearReferenceValue(PropertyName id);
+namespace UnityEngine {
+public interface IExposedPropertyTable {
+  void SetReferenceValue(PropertyName id, UnityEngine.Object value);
+  UnityEngine.Object GetReferenceValue(PropertyName id, out bool idValid);
+  void ClearReferenceValue(PropertyName id);
 }
 }

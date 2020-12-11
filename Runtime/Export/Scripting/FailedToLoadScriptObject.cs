@@ -10,15 +10,14 @@ using System.Collections.Generic;
 using UnityEngine.Scripting;
 using UnityEngineInternal;
 
-namespace UnityEngine
-{
-// A class used as a stand-in when a script, used by a ObjectStoredSerializableManagedRef, is missing.
+namespace UnityEngine {
+// A class used as a stand-in when a script, used by a
+// ObjectStoredSerializableManagedRef, is missing.
 [StructLayout(LayoutKind.Sequential)]
 [RequiredByNativeCode]
 [NativeClass(null)]
 [ExcludeFromObjectFactory]
-class FailedToLoadScriptObject : Object
-{
-    private FailedToLoadScriptObject() {}
+class FailedToLoadScriptObject : Object {
+  private FailedToLoadScriptObject() {}
 }
 }

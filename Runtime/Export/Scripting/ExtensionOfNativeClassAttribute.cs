@@ -6,11 +6,9 @@ using System;
 using UnityEngine.Scripting;
 using System.Reflection;
 
-namespace UnityEngine
-{
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, Inherited = true)]
-[RequiredByNativeCode]
-sealed class ExtensionOfNativeClassAttribute : Attribute
-{
-}
+namespace UnityEngine {
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface,
+                Inherited = true)]
+[RequiredByNativeCode] sealed class ExtensionOfNativeClassAttribute
+    : Attribute {}
 }

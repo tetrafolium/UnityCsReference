@@ -4,16 +4,13 @@
 
 using System;
 
-namespace UnityEngine
-{
-public sealed partial class SystemInfo
-{
-    [Obsolete("SystemInfo.supportsGPUFence has been deprecated, use SystemInfo.supportsGraphicsFence instead (UnityUpgradable) ->  supportsGraphicsFence", true)]
-    public static bool supportsGPUFence
-    {
-        get {
-            return false;
-        }
-    }
+namespace UnityEngine {
+public sealed partial class SystemInfo {
+  [Obsolete(
+      "SystemInfo.supportsGPUFence has been deprecated, use SystemInfo.supportsGraphicsFence instead (UnityUpgradable) ->  supportsGraphicsFence",
+      true)]
+  public static bool supportsGPUFence {
+    get { return false; }
+  }
 }
 }

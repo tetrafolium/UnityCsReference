@@ -4,13 +4,11 @@
 
 using System;
 
-namespace Unity.Profiling.LowLevel
-{
-// Profiler marker usage flags.
-// Must be in sync with UnityProfilerMarkerFlags!
-[Flags]
-public enum MarkerFlags : ushort
-{
+namespace Unity.Profiling.LowLevel {
+  // Profiler marker usage flags.
+  // Must be in sync with UnityProfilerMarkerFlags!
+  [Flags]
+  public enum MarkerFlags : ushort {
     Default = 0,
 
     Script = 1 << 1,
@@ -22,12 +20,11 @@ public enum MarkerFlags : ushort
     Warning = 1 << 4,
 
     Counter = 1 << 7,
-}
+  }
 
-// Supported profiler metadata types.
-// Must be in sync with UnityProfilerMarkerDataType!
-public enum ProfilerMarkerDataType : byte
-{
+  // Supported profiler metadata types.
+  // Must be in sync with UnityProfilerMarkerDataType!
+  public enum ProfilerMarkerDataType : byte {
     Int32 = 2,
     UInt32 = 3,
     Int64 = 4,
@@ -36,5 +33,5 @@ public enum ProfilerMarkerDataType : byte
     Double = 7,
     String16 = 9,
     Blob8 = 11,
-}
+  }
 }

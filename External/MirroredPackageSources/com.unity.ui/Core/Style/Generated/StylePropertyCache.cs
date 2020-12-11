@@ -8,12 +8,11 @@
 using System;
 using System.Collections.Generic;
 
-namespace UnityEngine.UIElements.StyleSheets
-{
-internal static partial class StylePropertyCache
-{
-    internal static readonly Dictionary<string, string> s_PropertySyntaxCache = new Dictionary<string, string>()
-    {
+namespace UnityEngine.UIElements.StyleSheets {
+  internal static partial class StylePropertyCache {
+    internal static readonly Dictionary<
+        string, string> s_PropertySyntaxCache = new Dictionary<string,
+                                                               string>(){
         {"align-content", "flex-start | flex-end | center | stretch | auto"},
         {"align-items", "flex-start | flex-end | center | stretch | auto"},
         {"align-self", "flex-start | flex-end | center | stretch | auto"},
@@ -36,7 +35,8 @@ internal static partial class StylePropertyCache
         {"border-width", "<length>{1,4}"},
         {"bottom", "<length> | <percentage> | auto"},
         {"color", "<color>"},
-        {"cursor", "[ [ <resource> | <url> ] [ <integer> <integer> ]? ] | [ arrow | text | resize-vertical | resize-horizontal | link | slide-arrow | resize-up-right | resize-up-left | move-arrow | rotate-arrow | scale-arrow | arrow-plus | arrow-minus | pan | orbit | zoom | fps | split-resize-up-down | split-resize-left-right ]"},
+        {"cursor",
+         "[ [ <resource> | <url> ] [ <integer> <integer> ]? ] | [ arrow | text | resize-vertical | resize-horizontal | link | slide-arrow | resize-up-right | resize-up-left | move-arrow | rotate-arrow | scale-arrow | arrow-plus | arrow-minus | pan | orbit | zoom | fps | split-resize-up-down | split-resize-left-right ]"},
         {"display", "flex | none"},
         {"flex", "none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]"},
         {"flex-basis", "<'width'>"},
@@ -46,7 +46,8 @@ internal static partial class StylePropertyCache
         {"flex-wrap", "nowrap | wrap | wrap-reverse"},
         {"font-size", "<length> | <percentage>"},
         {"height", "<length> | <percentage> | auto"},
-        {"justify-content", "flex-start | flex-end | center | space-between | space-around"},
+        {"justify-content",
+         "flex-start | flex-end | center | space-between | space-around"},
         {"left", "<length> | <percentage> | auto"},
         {"margin", "[ <length> | <percentage> | auto ]{1,4}"},
         {"margin-bottom", "<length> | <percentage> | auto"},
@@ -69,7 +70,8 @@ internal static partial class StylePropertyCache
         {"text-overflow", "clip | ellipsis"},
         {"top", "<length> | <percentage> | auto"},
         {"-unity-background-image-tint-color", "<color>"},
-        {"-unity-background-scale-mode", "stretch-to-fill | scale-and-crop | scale-to-fit"},
+        {"-unity-background-scale-mode",
+         "stretch-to-fill | scale-and-crop | scale-to-fit"},
         {"-unity-font", "<resource> | <url>"},
         {"-unity-font-style", "normal | italic | bold | bold-and-italic"},
         {"-unity-overflow-clip-box", "padding-box | content-box"},
@@ -77,11 +79,11 @@ internal static partial class StylePropertyCache
         {"-unity-slice-left", "<integer>"},
         {"-unity-slice-right", "<integer>"},
         {"-unity-slice-top", "<integer>"},
-        {"-unity-text-align", "upper-left | middle-left | lower-left | upper-center | middle-center | lower-center | upper-right | middle-right | lower-right"},
+        {"-unity-text-align",
+         "upper-left | middle-left | lower-left | upper-center | middle-center | lower-center | upper-right | middle-right | lower-right"},
         {"-unity-text-overflow-position", "start | middle | end"},
         {"visibility", "visible | hidden"},
         {"white-space", "normal | nowrap"},
-        {"width", "<length> | <percentage> | auto"}
-    };
-}
+        {"width", "<length> | <percentage> | auto"}};
+  }
 }

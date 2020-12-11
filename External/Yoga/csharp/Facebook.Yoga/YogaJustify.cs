@@ -7,14 +7,12 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-namespace UnityEngine.Yoga
-{
-internal enum YogaJustify
-{
+namespace UnityEngine.Yoga {
+  internal enum YogaJustify {
     FlexStart,
     Center,
     FlexEnd,
     SpaceBetween,
     SpaceAround,
-}
+  }
 }

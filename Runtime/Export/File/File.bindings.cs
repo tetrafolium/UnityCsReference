@@ -4,102 +4,60 @@
 
 using UnityEngine.Bindings;
 
-namespace UnityEngine.IO
-{
-[NativeHeader("Runtime/VirtualFileSystem/VirtualFileSystem.h")]
-internal enum ThreadIORestrictionMode
-{
+namespace UnityEngine.IO {
+  [NativeHeader("Runtime/VirtualFileSystem/VirtualFileSystem.h")]
+  internal enum ThreadIORestrictionMode {
     Allowed = 0,
     TreatAsError = 1,
-}
+  }
 
-[NativeHeader("Runtime/VirtualFileSystem/VirtualFileSystem.h")]
-[NativeConditional("ENABLE_PROFILER")]
-[StaticAccessor("FileAccessor", StaticAccessorType.DoubleColon)]
-internal static class File
-{
-    internal static ulong totalOpenCalls
-    {
-        get {
-            return GetTotalOpenCalls();
-        }
+  [NativeHeader("Runtime/VirtualFileSystem/VirtualFileSystem.h")]
+  [NativeConditional("ENABLE_PROFILER")]
+  [StaticAccessor("FileAccessor", StaticAccessorType.DoubleColon)]
+  internal static class File {
+    internal static ulong totalOpenCalls {
+      get { return GetTotalOpenCalls(); }
     }
-    internal static ulong totalCloseCalls
-    {
-        get {
-            return GetTotalCloseCalls();
-        }
+    internal static ulong totalCloseCalls {
+      get { return GetTotalCloseCalls(); }
     }
-    internal static ulong totalReadCalls
-    {
-        get {
-            return GetTotalReadCalls();
-        }
+    internal static ulong totalReadCalls {
+      get { return GetTotalReadCalls(); }
     }
-    internal static ulong totalWriteCalls
-    {
-        get {
-            return GetTotalWriteCalls();
-        }
+    internal static ulong totalWriteCalls {
+      get { return GetTotalWriteCalls(); }
     }
-    internal static ulong totalSeekCalls
-    {
-        get {
-            return GetTotalSeekCalls();
-        }
+    internal static ulong totalSeekCalls {
+      get { return GetTotalSeekCalls(); }
     }
-    internal static ulong totalZeroSeekCalls
-    {
-        get {
-            return GetTotalZeroSeekCalls();
-        }
+    internal static ulong totalZeroSeekCalls {
+      get { return GetTotalZeroSeekCalls(); }
     }
 
-    internal static ulong totalFilesOpened
-    {
-        get {
-            return GetTotalFilesOpened();
-        }
+    internal static ulong totalFilesOpened {
+      get { return GetTotalFilesOpened(); }
     }
-    internal static ulong totalFilesClosed
-    {
-        get {
-            return GetTotalFilesClosed();
-        }
+    internal static ulong totalFilesClosed {
+      get { return GetTotalFilesClosed(); }
     }
-    internal static ulong totalBytesRead
-    {
-        get {
-            return GetTotalBytesRead();
-        }
+    internal static ulong totalBytesRead {
+      get { return GetTotalBytesRead(); }
     }
-    internal static ulong totalBytesWritten
-    {
-        get {
-            return GetTotalBytesWritten();
-        }
+    internal static ulong totalBytesWritten {
+      get { return GetTotalBytesWritten(); }
     }
 
-    internal static bool recordZeroSeeks
-    {
-        set {
-            SetRecordZeroSeeks(value);
-        }
-        get {
-            return GetRecordZeroSeeks();
-        }
+    internal static bool recordZeroSeeks {
+      set { SetRecordZeroSeeks(value); }
+      get { return GetRecordZeroSeeks(); }
     }
 
-    // This can be used to print errors when when I/O is performed on the main thread. This is useful for testing async operations
-    // to ensure they don't block the main thread with file I/O.
-    internal static ThreadIORestrictionMode MainThreadIORestrictionMode
-    {
-        get {
-            return GetMainThreadFileIORestriction();
-        }
-        set {
-            SetMainThreadFileIORestriction(value);
-        }
+    // This can be used to print errors when when I/O is performed on the main
+    // thread. This is useful for testing async operations to ensure they don't
+    // block the main thread with file I/O.
+    internal static ThreadIORestrictionMode MainThreadIORestrictionMode {
+      get { return GetMainThreadFileIORestriction(); }
+      set { SetMainThreadFileIORestriction(value); }
     }
 
     internal extern static void SetRecordZeroSeeks(bool enable);
@@ -117,7 +75,9 @@ internal static class File
     internal extern static ulong GetTotalBytesRead();
     internal extern static ulong GetTotalBytesWritten();
 
-    private extern unsafe static void SetMainThreadFileIORestriction(ThreadIORestrictionMode mode);
-    private extern unsafe static ThreadIORestrictionMode GetMainThreadFileIORestriction();
-}
+    private extern unsafe static void
+    SetMainThreadFileIORestriction(ThreadIORestrictionMode mode);
+    private extern unsafe static ThreadIORestrictionMode
+    GetMainThreadFileIORestriction();
+  }
 }

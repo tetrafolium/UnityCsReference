@@ -1,10 +1,8 @@
-namespace UnityEngine.UIElements
-{
-/// <summary>
-/// Describes a MouseButton.
-/// </summary>
-public enum MouseButton
-{
+namespace UnityEngine.UIElements {
+  /// <summary>
+  /// Describes a MouseButton.
+  /// </summary>
+  public enum MouseButton {
     /// <summary>
     /// The Left Mouse Button.
     /// </summary>
@@ -17,5 +15,5 @@ public enum MouseButton
     /// The Middle Mouse Button.
     /// </summary>
     MiddleMouse = 2
-}
+  }
 }

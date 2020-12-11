@@ -4,21 +4,16 @@
 
 using System;
 
-namespace UnityEngine.Experimental.Rendering
-{
-public abstract class ScriptableRuntimeReflectionSystem : IScriptableRuntimeReflectionSystem
-{
-    public virtual bool TickRealtimeProbes()
-    {
-        return false;
-    }
+namespace UnityEngine.Experimental.Rendering {
+  public abstract class ScriptableRuntimeReflectionSystem
+      : IScriptableRuntimeReflectionSystem {
+    public virtual bool TickRealtimeProbes() { return false; }
 
     protected virtual void Dispose(bool disposing) {}
 
-    void IDisposable.Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+    void IDisposable.Dispose() {
+      Dispose(true);
+      GC.SuppressFinalize(this);
     }
-}
+  }
 }

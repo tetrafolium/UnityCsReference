@@ -6,19 +6,15 @@ using System;
 using UnityEngine.Scripting;
 using UnityEngine.Bindings;
 
-namespace UnityEngine
-{
+namespace UnityEngine {
 [NativeHeader("PlatformDependent/iPhonePlayer/IOSScriptBindings.h")]
-internal sealed partial class UnhandledExceptionHandler
-{
-    [RequiredByNativeCode]
-    static void RegisterUECatcher()
-    {
-        AppDomain.CurrentDomain.UnhandledException += (object sender, UnhandledExceptionEventArgs e) =>
-        {
-            Debug.LogException(e.ExceptionObject as Exception);
+internal sealed partial class UnhandledExceptionHandler {
+  [RequiredByNativeCode]
+  static void RegisterUECatcher() {
+    AppDomain.CurrentDomain.UnhandledException +=
+        (object sender, UnhandledExceptionEventArgs e) => {
+          Debug.LogException(e.ExceptionObject as Exception);
         };
-    }
-
+  }
 }
 }

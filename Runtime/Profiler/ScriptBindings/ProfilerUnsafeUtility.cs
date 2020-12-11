@@ -7,24 +7,24 @@ using System.Runtime.InteropServices;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace Unity.Profiling.LowLevel.Unsafe
-{
-// Metadata parameter.
-// Must be in sync with UnityProfilerMarkerData!
-[StructLayout(LayoutKind.Explicit, Size = 16)]
-public unsafe struct ProfilerMarkerData
-{
-    [FieldOffset(0)] public byte Type;
+namespace Unity.Profiling.LowLevel.Unsafe {
+  // Metadata parameter.
+  // Must be in sync with UnityProfilerMarkerData!
+  [StructLayout(LayoutKind.Explicit, Size = 16)]
+  public unsafe struct ProfilerMarkerData {
+    [FieldOffset(0)]
+    public byte Type;
     [FieldOffset(1)] readonly byte reserved0;
     [FieldOffset(2)] readonly ushort reserved1;
-    [FieldOffset(4)] public uint Size;
-    [FieldOffset(8)] public void* Ptr;
-};
+    [FieldOffset(4)]
+    public uint Size;
+    [FieldOffset(8)]
+    public void *Ptr;
+  };
 
-[NativeHeader("Runtime/Profiler/ScriptBindings/ProfilerMarker.bindings.h")]
-[UsedByNativeCode]
-public static class ProfilerUnsafeUtility
-{
+  [NativeHeader("Runtime/Profiler/ScriptBindings/ProfilerMarker.bindings.h")]
+  [UsedByNativeCode]
+  public static class ProfilerUnsafeUtility {
     // Built-in profiler categories.
     // Must be in sync with profiling::BuiltinCategory!
     public const ushort CategoryRender = 0;
@@ -45,33 +45,45 @@ public static class ProfilerUnsafeUtility
     public const ushort CategoryInput = 30;
 
     [ThreadSafe]
-    public static extern IntPtr CreateMarker(string name, ushort categoryId, MarkerFlags flags, int metadataCount);
+    public static extern IntPtr CreateMarker(string name, ushort categoryId,
+                                             MarkerFlags flags,
+                                             int metadataCount);
 
     [ThreadSafe]
-    public static extern void SetMarkerMetadata(IntPtr markerPtr, int index, string name, byte type, byte unit);
+    public static extern void SetMarkerMetadata(IntPtr markerPtr, int index,
+                                                string name, byte type,
+                                                byte unit);
 
     [ThreadSafe]
     public static extern void BeginSample(IntPtr markerPtr);
 
     [ThreadSafe]
-    public static extern unsafe void BeginSampleWithMetadata(IntPtr markerPtr, int metadataCount, void* metadata);
+    public static extern unsafe void BeginSampleWithMetadata(IntPtr markerPtr,
+                                                             int metadataCount,
+                                                             void *metadata);
 
     [ThreadSafe]
     public static extern void EndSample(IntPtr markerPtr);
 
+    [ThreadSafe]
+    public static extern unsafe void SingleSampleWithMetadata(IntPtr markerPtr,
+                                                              int metadataCount,
+                                                              void *metadata);
 
     [ThreadSafe]
-    public static extern unsafe void SingleSampleWithMetadata(IntPtr markerPtr, int metadataCount, void* metadata);
+    public static extern unsafe void *
+    CreateCounterValue(out IntPtr counterPtr, string name, ushort categoryId,
+                       MarkerFlags flags, byte dataType, byte dataUnit,
+                       int dataSize, ProfilerCounterOptions counterOptions);
 
     [ThreadSafe]
-    public static extern unsafe void* CreateCounterValue(out IntPtr counterPtr, string name, ushort categoryId, MarkerFlags flags, byte dataType, byte dataUnit, int dataSize, ProfilerCounterOptions counterOptions);
+    public static extern unsafe void FlushCounterValue(void *counterValuePtr);
 
     [ThreadSafe]
-    public static extern unsafe void FlushCounterValue(void* counterValuePtr);
-
-    [ThreadSafe]
-    internal static extern void Internal_BeginWithObject(IntPtr markerPtr, UnityEngine.Object contextUnityObject);
+    internal static extern void
+    Internal_BeginWithObject(IntPtr markerPtr,
+                             UnityEngine.Object contextUnityObject);
     [NativeConditional("ENABLE_PROFILER")]
     internal static extern string Internal_GetName(IntPtr markerPtr);
-}
+  }
 }

@@ -4,15 +4,13 @@
 
 using System;
 
-namespace UnityEngine
-{
+namespace UnityEngine {
 
-public partial class Caching
-{
-    [System.Obsolete("This function is obsolete. Please use ClearCache.  (UnityUpgradable) -> ClearCache()")]
-    public static bool CleanCache()
-    {
-        return ClearCache();
-    }
+public partial class Caching {
+  [System.Obsolete(
+      "This function is obsolete. Please use ClearCache.  (UnityUpgradable) -> ClearCache()")]
+  public static bool CleanCache() {
+    return ClearCache();
+  }
 }
 }

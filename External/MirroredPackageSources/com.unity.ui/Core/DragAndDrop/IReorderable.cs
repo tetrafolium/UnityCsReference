@@ -1,23 +1,20 @@
 using System;
 
-namespace UnityEngine.UIElements
-{
-internal interface IReorderable<T>
-{
+namespace UnityEngine.UIElements {
+  internal interface IReorderable<T> {
     bool enableReordering {
-        get;
-        set;
+      get;
+      set;
     }
     Action<ItemMoveArgs<T>> onItemMoved {
-        get;
-        set;
+      get;
+      set;
     }
-}
+  }
 
-internal struct ItemMoveArgs<T>
-{
+  internal struct ItemMoveArgs<T> {
     public T item;
     public int newIndex;
     public int previousIndex;
-}
+  }
 }

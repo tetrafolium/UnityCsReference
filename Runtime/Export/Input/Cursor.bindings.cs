@@ -4,52 +4,48 @@
 
 using UnityEngine.Bindings;
 
-namespace UnityEngine
-{
+namespace UnityEngine {
 // How should the custom cursor be rendered
-public enum CursorMode
-{
-    // Use hardware cursors on supported platforms.
-    Auto = 0,
+public enum CursorMode {
+  // Use hardware cursors on supported platforms.
+  Auto = 0,
 
-    // Force the use of software cursors.
-    ForceSoftware = 1,
+  // Force the use of software cursors.
+  ForceSoftware = 1,
 }
 
 // How should the cursor behave?
-public enum CursorLockMode
-{
-    // Normal
-    None = 0,
+public enum CursorLockMode {
+  // Normal
+  None = 0,
 
-    // Locked to the center of the game window
-    Locked = 1,
+  // Locked to the center of the game window
+  Locked = 1,
 
-    // Confined to the game window
-    Confined = 2
+  // Confined to the game window
+  Confined = 2
 }
 
 // Cursor API for setting the cursor that is used for rendering.
 [NativeHeader("Runtime/Export/Input/Cursor.bindings.h")]
-public class Cursor
-{
-    private static void SetCursor(Texture2D texture, CursorMode cursorMode)
-    {
-        SetCursor(texture, Vector2.zero, cursorMode);
-    }
+public class Cursor {
+  private static void SetCursor(Texture2D texture, CursorMode cursorMode) {
+    SetCursor(texture, Vector2.zero, cursorMode);
+  }
 
-    public static extern void SetCursor(Texture2D texture, Vector2 hotspot, CursorMode cursorMode);
+  public static extern void SetCursor(Texture2D texture, Vector2 hotspot,
+                                      CursorMode cursorMode);
 
-    // Should the cursor be visible?
-    public static extern bool visible {
-        get;
-        set;
-    }
+  // Should the cursor be visible?
+  public static extern bool visible {
+    get;
+    set;
+  }
 
-    // Is the cursor normal/locked/confined?
-    public static extern CursorLockMode lockState {
-        get;
-        set;
-    }
+  // Is the cursor normal/locked/confined?
+  public static extern CursorLockMode lockState {
+    get;
+    set;
+  }
 }
 }

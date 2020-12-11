@@ -5,21 +5,15 @@
 using System;
 using UnityEngine.Bindings;
 
-namespace UnityEngine.Windows.Speech
-{
-public static partial class PhraseRecognitionSystem
-{
-    public extern static bool isSupported
-    {
-        [ThreadSafe]
-        [NativeHeader("PlatformDependent/Win/Bindings/SpeechBindings.h")]
-        get;
+namespace UnityEngine.Windows.Speech {
+  public static partial class PhraseRecognitionSystem {
+    public extern static bool isSupported {
+      [ThreadSafe]
+      [NativeHeader("PlatformDependent/Win/Bindings/SpeechBindings.h")] get;
     }
 
-    public extern static SpeechSystemStatus Status
-    {
-        [NativeHeader("PlatformDependent/Win/Bindings/SpeechBindings.h")]
-        get;
+    public extern static SpeechSystemStatus Status {
+      [NativeHeader("PlatformDependent/Win/Bindings/SpeechBindings.h")] get;
     }
 
     [NativeThrows]
@@ -28,17 +22,20 @@ public static partial class PhraseRecognitionSystem
 
     [NativeHeader("PlatformDependent/Win/Bindings/SpeechBindings.h")]
     public extern static void Shutdown();
-}
+  }
 
-public abstract partial class PhraseRecognizer : IDisposable
-{
+  public abstract partial class PhraseRecognizer : IDisposable {
     [NativeThrows]
     [NativeHeader("PlatformDependent/Win/Bindings/SpeechBindings.h")]
-    protected static extern IntPtr CreateFromKeywords(object self, string[] keywords, ConfidenceLevel minimumConfidence);
+    protected static extern IntPtr
+    CreateFromKeywords(object self, string[] keywords,
+                       ConfidenceLevel minimumConfidence);
 
     [NativeThrows]
     [NativeHeader("PlatformDependent/Win/Bindings/SpeechBindings.h")]
-    protected static extern IntPtr CreateFromGrammarFile(object self, string grammarFilePath, ConfidenceLevel minimumConfidence);
+    protected static extern IntPtr
+    CreateFromGrammarFile(object self, string grammarFilePath,
+                          ConfidenceLevel minimumConfidence);
 
     [NativeThrows]
     [NativeHeader("PlatformDependent/Win/Bindings/SpeechBindings.h")]
@@ -56,13 +53,14 @@ public abstract partial class PhraseRecognizer : IDisposable
     [ThreadSafe]
     [NativeHeader("PlatformDependent/Win/Bindings/SpeechBindings.h")]
     private extern static void DestroyThreaded(IntPtr recognizer);
-}
+  }
 
-public partial class DictationRecognizer
-{
+  public partial class DictationRecognizer {
     [NativeThrows]
     [NativeHeader("PlatformDependent/Win/Bindings/SpeechBindings.h")]
-    private static extern IntPtr Create(object self, ConfidenceLevel minimumConfidence, DictationTopicConstraint topicConstraint);
+    private static extern IntPtr
+    Create(object self, ConfidenceLevel minimumConfidence,
+           DictationTopicConstraint topicConstraint);
 
     [NativeThrows]
     [NativeHeader("PlatformDependent/Win/Bindings/SpeechBindings.h")]
@@ -85,12 +83,14 @@ public partial class DictationRecognizer
     private extern static float GetAutoSilenceTimeoutSeconds(IntPtr self);
 
     [NativeHeader("PlatformDependent/Win/Bindings/SpeechBindings.h")]
-    private extern static void SetAutoSilenceTimeoutSeconds(IntPtr self, float value);
+    private extern static void SetAutoSilenceTimeoutSeconds(IntPtr self,
+                                                            float value);
 
     [NativeHeader("PlatformDependent/Win/Bindings/SpeechBindings.h")]
     private extern static float GetInitialSilenceTimeoutSeconds(IntPtr self);
 
     [NativeHeader("PlatformDependent/Win/Bindings/SpeechBindings.h")]
-    private extern static void SetInitialSilenceTimeoutSeconds(IntPtr self, float value);
-}
+    private extern static void SetInitialSilenceTimeoutSeconds(IntPtr self,
+                                                               float value);
+  }
 }

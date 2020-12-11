@@ -5,8 +5,7 @@
 using System;
 using UnityEngine.Scripting;
 
-namespace UnityEngine
-{
+namespace UnityEngine {
 [AttributeUsage(AttributeTargets.Class)]
 [UsedByNativeCode]
 public class ExcludeFromObjectFactoryAttribute : Attribute {}

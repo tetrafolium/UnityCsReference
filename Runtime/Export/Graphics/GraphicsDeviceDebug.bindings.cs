@@ -12,22 +12,19 @@ using UnityEngine.Internal;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace UnityEngineInternal
-{
+namespace UnityEngineInternal {
 [StructLayout(LayoutKind.Sequential)]
-internal struct GraphicsDeviceDebugSettings
-{
-    public float sleepAtStartOfGraphicsJobs;
-    public float sleepBeforeTextureUpload;
+internal struct GraphicsDeviceDebugSettings {
+  public float sleepAtStartOfGraphicsJobs;
+  public float sleepBeforeTextureUpload;
 }
 
 [NativeHeader("Runtime/Export/Graphics/GraphicsDeviceDebug.bindings.h")]
 [StaticAccessor("GraphicsDeviceDebug", StaticAccessorType.DoubleColon)]
-internal static class GraphicsDeviceDebug
-{
-    extern internal static GraphicsDeviceDebugSettings settings {
-        get;
-        set;
-    }
+internal static class GraphicsDeviceDebug {
+  extern internal static GraphicsDeviceDebugSettings settings {
+    get;
+    set;
+  }
 }
 }

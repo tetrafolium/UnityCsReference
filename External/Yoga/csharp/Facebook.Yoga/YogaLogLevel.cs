@@ -7,15 +7,13 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-namespace UnityEngine.Yoga
-{
-internal enum YogaLogLevel
-{
+namespace UnityEngine.Yoga {
+  internal enum YogaLogLevel {
     Error,
     Warn,
     Info,
     Debug,
     Verbose,
     Fatal,
-}
+  }
 }

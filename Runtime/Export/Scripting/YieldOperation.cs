@@ -5,12 +5,9 @@
 using System.Runtime.InteropServices;
 using UnityEngine.Scripting;
 
-namespace UnityEngine
-{
+namespace UnityEngine {
 // Base class for all /yield/ instructions.
 [StructLayout(LayoutKind.Sequential)]
 [UsedByNativeCode]
-public class YieldInstruction
-{
-}
+public class YieldInstruction {}
 }

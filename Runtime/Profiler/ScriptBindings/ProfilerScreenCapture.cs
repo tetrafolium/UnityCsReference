@@ -4,25 +4,23 @@
 
 using Unity.Collections;
 
-namespace UnityEngine.Profiling.Experimental
-{
-public struct DebugScreenCapture
-{
+namespace UnityEngine.Profiling.Experimental {
+  public struct DebugScreenCapture {
     public NativeArray<byte> rawImageDataReference {
-        get;
-        set;
+      get;
+      set;
     }
     public TextureFormat imageFormat {
-        get;
-        set;
+      get;
+      set;
     }
     public int width {
-        get;
-        set;
+      get;
+      set;
     }
     public int height {
-        get;
-        set;
+      get;
+      set;
     }
-}
+  }
 }

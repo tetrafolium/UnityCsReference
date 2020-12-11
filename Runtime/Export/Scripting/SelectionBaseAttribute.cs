@@ -4,10 +4,8 @@
 
 using System;
 
-namespace UnityEngine
-{
-[System.AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
-public class SelectionBaseAttribute : Attribute
-{
-}
+namespace UnityEngine {
+[System.AttributeUsage(AttributeTargets.Class, Inherited = true,
+                       AllowMultiple = false)]
+public class SelectionBaseAttribute : Attribute {}
 }

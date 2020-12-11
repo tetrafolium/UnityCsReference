@@ -6,30 +6,26 @@ using System.Runtime.InteropServices;
 using UnityEngine.Scripting;
 using UnityEngine;
 
-namespace UnityEngine
-{
+namespace UnityEngine {
 [System.Serializable]
 [UsedByNativeCode(Name = "ExposedReference")]
 [StructLayout(LayoutKind.Sequential)]
-public struct ExposedReference<T> where T : UnityEngine.Object
-{
-    [SerializeField]
-    public PropertyName exposedName;
+public struct ExposedReference<T> where T : UnityEngine.Object {
+  [SerializeField]
+  public PropertyName exposedName;
 
-    [SerializeField]
-    public UnityEngine.Object defaultValue;
+  [SerializeField]
+  public UnityEngine.Object defaultValue;
 
-    public T Resolve(IExposedPropertyTable resolver)
-    {
-        if (resolver != null)
-        {
-            bool isValid;
-            Object result = resolver.GetReferenceValue(exposedName, out isValid);
-            if (isValid)
-                return result as T;
-        }
-
-        return defaultValue as T;
+  public T Resolve(IExposedPropertyTable resolver) {
+    if (resolver != null) {
+      bool isValid;
+      Object result = resolver.GetReferenceValue(exposedName, out isValid);
+      if (isValid)
+        return result as T;
     }
+
+    return defaultValue as T;
+  }
 }
 }

@@ -5,18 +5,14 @@
 using System.Runtime.InteropServices;
 using UnityEngine.Scripting;
 
-namespace UnityEngine
-{
+namespace UnityEngine {
 // Suspends the coroutine execution for the given amount of seconds.
 [StructLayout(LayoutKind.Sequential)]
 [RequiredByNativeCode]
-public sealed class WaitForSeconds : YieldInstruction
-{
-    internal float m_Seconds;
+public sealed class WaitForSeconds : YieldInstruction {
+  internal float m_Seconds;
 
-    // Creates a yield instruction to wait for a given number of seconds
-    public WaitForSeconds(float seconds) {
-        m_Seconds = seconds;
-    }
+  // Creates a yield instruction to wait for a given number of seconds
+  public WaitForSeconds(float seconds) { m_Seconds = seconds; }
 }
 }

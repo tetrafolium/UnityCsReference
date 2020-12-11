@@ -7,12 +7,8 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-namespace UnityEngine.Yoga
-{
-internal delegate YogaSize MeasureFunction(
-    YogaNode node,
-    float width,
-    YogaMeasureMode widthMode,
-    float height,
-    YogaMeasureMode heightMode);
+namespace UnityEngine.Yoga {
+  internal delegate YogaSize MeasureFunction(
+      YogaNode node, float width, YogaMeasureMode widthMode, float height,
+      YogaMeasureMode heightMode);
 }

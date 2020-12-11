@@ -1,26 +1,23 @@
 using System.Collections.Generic;
 
-namespace UnityEngine.UIElements
-{
-/// <summary>
-/// Interface for Manipulator objects.
-/// </summary>
-public interface IManipulator
-{
+namespace UnityEngine.UIElements {
+  /// <summary>
+  /// Interface for Manipulator objects.
+  /// </summary>
+  public interface IManipulator {
     /// <summary>
     /// VisualElement being manipulated.
     /// </summary>
     VisualElement target {
-        get;
-        set;
+      get;
+      set;
     }
-}
+  }
 
-/// <summary>
-/// Base class for all Manipulator implementations.
-/// </summary>
-public abstract class Manipulator : IManipulator
-{
+  /// <summary>
+  /// Base class for all Manipulator implementations.
+  /// </summary>
+  public abstract class Manipulator : IManipulator {
     /// <summary>
     /// Called to register event callbacks on the target element.
     /// </summary>
@@ -34,23 +31,17 @@ public abstract class Manipulator : IManipulator
     /// <summary>
     /// VisualElement being manipulated.
     /// </summary>
-    public VisualElement target
-    {
-        get {
-            return m_Target;
+    public VisualElement target {
+      get { return m_Target; }
+      set {
+        if (target != null) {
+          UnregisterCallbacksFromTarget();
         }
-        set
-        {
-            if (target != null)
-            {
-                UnregisterCallbacksFromTarget();
-            }
-            m_Target = value;
-            if (target != null)
-            {
-                RegisterCallbacksOnTarget();
-            }
+        m_Target = value;
+        if (target != null) {
+          RegisterCallbacksOnTarget();
         }
+      }
     }
-}
+  }
 }

@@ -7,11 +7,7 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-namespace UnityEngine.Yoga
-{
-internal delegate void Logger(
-    YogaConfig config,
-    YogaNode node,
-    YogaLogLevel level,
-    string message);
+namespace UnityEngine.Yoga {
+  internal delegate void Logger(YogaConfig config, YogaNode node,
+                                YogaLogLevel level, string message);
 }

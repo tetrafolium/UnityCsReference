@@ -10,110 +10,105 @@ using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.Bindings;
 
-namespace UnityEngine.Rendering
-{
-[NativeHeader("Runtime/Camera/GraphicsSettings.h")]
-[StaticAccessor("GetGraphicsSettings()", StaticAccessorType.Dot)]
-public sealed partial class GraphicsSettings : Object
-{
+namespace UnityEngine.Rendering {
+  [NativeHeader("Runtime/Camera/GraphicsSettings.h")]
+  [StaticAccessor("GetGraphicsSettings()", StaticAccessorType.Dot)]
+  public sealed partial class GraphicsSettings : Object {
     private GraphicsSettings() {}
 
-    extern public static TransparencySortMode   transparencySortMode {
-        get;
-        set;
+    extern public static TransparencySortMode transparencySortMode {
+      get;
+      set;
     }
-    extern public static Vector3                transparencySortAxis {
-        get;
-        set;
+    extern public static Vector3 transparencySortAxis {
+      get;
+      set;
     }
     extern public static bool realtimeDirectRectangularAreaLights {
-        get;
-        set;
+      get;
+      set;
     }
-    extern public static bool lightsUseLinearIntensity   {
-        get;
-        set;
+    extern public static bool lightsUseLinearIntensity {
+      get;
+      set;
     }
-    extern public static bool lightsUseColorTemperature  {
-        get;
-        set;
+    extern public static bool lightsUseColorTemperature {
+      get;
+      set;
     }
     extern public static bool useScriptableRenderPipelineBatching {
-        get;
-        set;
+      get;
+      set;
     }
     extern public static bool logWhenShaderIsCompiled {
-        get;
-        set;
+      get;
+      set;
     }
     extern public static bool disableBuiltinCustomRenderTextureUpdate {
-        get;
-        set;
+      get;
+      set;
     }
-    extern public static VideoShadersIncludeMode videoShadersIncludeMode
-    {
-        get;
-        set;
-    }
-
-    extern public static bool HasShaderDefine(GraphicsTier tier, BuiltinShaderDefine defineHash);
-    public static bool HasShaderDefine(BuiltinShaderDefine defineHash)
-    {
-        return HasShaderDefine(Graphics.activeTier, defineHash);
+    extern public static VideoShadersIncludeMode videoShadersIncludeMode {
+      get;
+      set;
     }
 
-    [NativeName("CurrentRenderPipeline")] extern private static ScriptableObject INTERNAL_currentRenderPipeline {
-        get;
-    }
-    public static RenderPipelineAsset currentRenderPipeline
-    {
-        get {
-            return INTERNAL_currentRenderPipeline as RenderPipelineAsset;
-        }
+    extern public static bool HasShaderDefine(GraphicsTier tier,
+                                              BuiltinShaderDefine defineHash);
+    public static bool HasShaderDefine(BuiltinShaderDefine defineHash) {
+      return HasShaderDefine(Graphics.activeTier, defineHash);
     }
 
-    //[Obsolete("renderPipelineAsset has been deprecated. Use defaultRenderPipeline instead (UnityUpgradable) -> defaultRenderPipeline", true)]
-    // TODO: SRP package needs updating (not break ABV) once that is done we can remove this
-    public static RenderPipelineAsset renderPipelineAsset
-    {
-        get {
-            return defaultRenderPipeline;
-        }
-        set {
-            defaultRenderPipeline = value;
-        }
+    [NativeName("CurrentRenderPipeline")] extern private static ScriptableObject
+        INTERNAL_currentRenderPipeline {
+      get;
+    }
+    public static RenderPipelineAsset currentRenderPipeline {
+      get { return INTERNAL_currentRenderPipeline as RenderPipelineAsset; }
     }
 
-    [NativeName("DefaultRenderPipeline")] extern private static ScriptableObject INTERNAL_defaultRenderPipeline {
-        get;
-        set;
-    }
-    public static RenderPipelineAsset defaultRenderPipeline
-    {
-        get {
-            return INTERNAL_defaultRenderPipeline as RenderPipelineAsset;
-        }
-        set {
-            INTERNAL_defaultRenderPipeline = value;
-        }
+    //[Obsolete("renderPipelineAsset has been deprecated. Use
+    //defaultRenderPipeline instead (UnityUpgradable) -> defaultRenderPipeline",
+    //true)]
+    // TODO: SRP package needs updating (not break ABV) once that is done we can
+    // remove this
+    public static RenderPipelineAsset renderPipelineAsset {
+      get { return defaultRenderPipeline; }
+      set { defaultRenderPipeline = value; }
     }
 
-    [NativeName("GetAllConfiguredRenderPipelinesForScript")] extern static private ScriptableObject[] GetAllConfiguredRenderPipelines();
+    [NativeName("DefaultRenderPipeline")] extern private static ScriptableObject
+        INTERNAL_defaultRenderPipeline {
+      get;
+      set;
+    }
+    public static RenderPipelineAsset defaultRenderPipeline {
+      get { return INTERNAL_defaultRenderPipeline as RenderPipelineAsset; }
+      set { INTERNAL_defaultRenderPipeline = value; }
+    }
 
-    public static RenderPipelineAsset[] allConfiguredRenderPipelines
-    {
-        get
-        {
-            return GetAllConfiguredRenderPipelines().Cast<RenderPipelineAsset>().ToArray();
-        }
+    [NativeName(
+        "GetAllConfiguredRenderPipelinesForScript")] extern static private ScriptableObject
+        [] GetAllConfiguredRenderPipelines();
+
+    public static RenderPipelineAsset[] allConfiguredRenderPipelines {
+      get {
+        return GetAllConfiguredRenderPipelines()
+            .Cast<RenderPipelineAsset>()
+            .ToArray();
+      }
     }
 
     [FreeFunction] extern internal static Object GetGraphicsSettings();
 
-    [NativeName("SetShaderModeScript")]   extern static public void                 SetShaderMode(BuiltinShaderType type, BuiltinShaderMode mode);
-    [NativeName("GetShaderModeScript")]   extern static public BuiltinShaderMode    GetShaderMode(BuiltinShaderType type);
+    [NativeName("SetShaderModeScript")] extern static public void
+    SetShaderMode(BuiltinShaderType type, BuiltinShaderMode mode);
+    [NativeName("GetShaderModeScript")] extern static public BuiltinShaderMode
+    GetShaderMode(BuiltinShaderType type);
 
-    [NativeName("SetCustomShaderScript")] extern static public void     SetCustomShader(BuiltinShaderType type, Shader shader);
-    [NativeName("GetCustomShaderScript")] extern static public Shader   GetCustomShader(BuiltinShaderType type);
-}
+    [NativeName("SetCustomShaderScript")] extern static public void
+    SetCustomShader(BuiltinShaderType type, Shader shader);
+    [NativeName("GetCustomShaderScript")] extern static public Shader
+    GetCustomShader(BuiltinShaderType type);
+  }
 }

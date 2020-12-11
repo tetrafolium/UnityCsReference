@@ -7,11 +7,9 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-namespace UnityEngine.Yoga
-{
-internal enum YogaNodeType
-{
+namespace UnityEngine.Yoga {
+  internal enum YogaNodeType {
     Default,
     Text,
-}
+  }
 }

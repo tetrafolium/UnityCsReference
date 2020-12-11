@@ -5,10 +5,6 @@
 using System;
 using UnityEngine;
 
-namespace UnityEngine.Playables
-{
-public interface IPlayableOutput
-{
-    PlayableOutputHandle GetHandle();
-}
+namespace UnityEngine.Playables {
+  public interface IPlayableOutput { PlayableOutputHandle GetHandle(); }
 }

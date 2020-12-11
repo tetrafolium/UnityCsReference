@@ -7,12 +7,10 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-namespace UnityEngine.Yoga
-{
-internal enum YogaOverflow
-{
+namespace UnityEngine.Yoga {
+  internal enum YogaOverflow {
     Visible,
     Hidden,
     Scroll,
-}
+  }
 }

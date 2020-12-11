@@ -5,378 +5,285 @@
 //              See IResolvedStyleGenerator class for details
 //
 /******************************************************************************/
-namespace UnityEngine.UIElements
-{
-/// <summary>
-/// Style values after layout pass.
-/// </summary>
-public interface IResolvedStyle
-{
+namespace UnityEngine.UIElements {
+  /// <summary>
+  /// Style values after layout pass.
+  /// </summary>
+  public interface IResolvedStyle {
     /// <summary>
-    /// Alignment of the whole area of children on the cross axis if they span over multiple lines in this container.
+    /// Alignment of the whole area of children on the cross axis if they span
+    /// over multiple lines in this container.
     /// </summary>
-    Align alignContent {
-        get;
-    }
+    Align alignContent { get; }
     /// <summary>
     /// Alignment of children on the cross axis of this container.
     /// </summary>
-    Align alignItems {
-        get;
-    }
+    Align alignItems { get; }
     /// <summary>
     /// Similar to align-items, but only for this specific element.
     /// </summary>
-    Align alignSelf {
-        get;
-    }
+    Align alignSelf { get; }
     /// <summary>
     /// Background color to paint in the element's box.
     /// </summary>
-    Color backgroundColor {
-        get;
-    }
+    Color backgroundColor { get; }
     /// <summary>
     /// Color of the element's bottom border.
     /// </summary>
-    Color borderBottomColor {
-        get;
-    }
+    Color borderBottomColor { get; }
     /// <summary>
-    /// The radius of the bottom-left corner when a rounded rectangle is drawn in the element's box.
+    /// The radius of the bottom-left corner when a rounded rectangle is drawn
+    /// in the element's box.
     /// </summary>
-    float borderBottomLeftRadius {
-        get;
-    }
+    float borderBottomLeftRadius { get; }
     /// <summary>
-    /// The radius of the bottom-right corner when a rounded rectangle is drawn in the element's box.
+    /// The radius of the bottom-right corner when a rounded rectangle is drawn
+    /// in the element's box.
     /// </summary>
-    float borderBottomRightRadius {
-        get;
-    }
+    float borderBottomRightRadius { get; }
     /// <summary>
-    /// Space reserved for the bottom edge of the border during the layout phase.
+    /// Space reserved for the bottom edge of the border during the layout
+    /// phase.
     /// </summary>
-    float borderBottomWidth {
-        get;
-    }
+    float borderBottomWidth { get; }
     /// <summary>
     /// Color of the element's left border.
     /// </summary>
-    Color borderLeftColor {
-        get;
-    }
+    Color borderLeftColor { get; }
     /// <summary>
     /// Space reserved for the left edge of the border during the layout phase.
     /// </summary>
-    float borderLeftWidth {
-        get;
-    }
+    float borderLeftWidth { get; }
     /// <summary>
     /// Color of the element's right border.
     /// </summary>
-    Color borderRightColor {
-        get;
-    }
+    Color borderRightColor { get; }
     /// <summary>
     /// Space reserved for the right edge of the border during the layout phase.
     /// </summary>
-    float borderRightWidth {
-        get;
-    }
+    float borderRightWidth { get; }
     /// <summary>
     /// Color of the element's top border.
     /// </summary>
-    Color borderTopColor {
-        get;
-    }
+    Color borderTopColor { get; }
     /// <summary>
-    /// The radius of the top-left corner when a rounded rectangle is drawn in the element's box.
+    /// The radius of the top-left corner when a rounded rectangle is drawn in
+    /// the element's box.
     /// </summary>
-    float borderTopLeftRadius {
-        get;
-    }
+    float borderTopLeftRadius { get; }
     /// <summary>
-    /// The radius of the top-right corner when a rounded rectangle is drawn in the element's box.
+    /// The radius of the top-right corner when a rounded rectangle is drawn in
+    /// the element's box.
     /// </summary>
-    float borderTopRightRadius {
-        get;
-    }
+    float borderTopRightRadius { get; }
     /// <summary>
     /// Space reserved for the top edge of the border during the layout phase.
     /// </summary>
-    float borderTopWidth {
-        get;
-    }
+    float borderTopWidth { get; }
     /// <summary>
     /// Bottom distance from the element's box during layout.
     /// </summary>
-    float bottom {
-        get;
-    }
+    float bottom { get; }
     /// <summary>
     /// Color to use when drawing the text of an element.
     /// </summary>
-    Color color {
-        get;
-    }
+    Color color { get; }
     /// <summary>
     /// Defines how an element is displayed in the layout.
     /// </summary>
-    DisplayStyle display {
-        get;
-    }
+    DisplayStyle display { get; }
     /// <summary>
-    /// Initial main size of a flex item, on the main flex axis. The final layout mught be smaller or larger, according to the flex shrinking and growing determined by the other flex properties.
+    /// Initial main size of a flex item, on the main flex axis. The final
+    /// layout mught be smaller or larger, according to the flex shrinking and
+    /// growing determined by the other flex properties.
     /// </summary>
-    StyleFloat flexBasis {
-        get;
-    }
+    StyleFloat flexBasis { get; }
     /// <summary>
     /// Direction of the main axis to layout children in a container.
     /// </summary>
-    FlexDirection flexDirection {
-        get;
-    }
+    FlexDirection flexDirection { get; }
     /// <summary>
-    /// Specifies how much the item will grow relative to the rest of the flexible items inside the same container.
+    /// Specifies how much the item will grow relative to the rest of the
+    /// flexible items inside the same container.
     /// </summary>
-    float flexGrow {
-        get;
-    }
+    float flexGrow { get; }
     /// <summary>
-    /// Specifies how the item will shrink relative to the rest of the flexible items inside the same container.
+    /// Specifies how the item will shrink relative to the rest of the flexible
+    /// items inside the same container.
     /// </summary>
-    float flexShrink {
-        get;
-    }
+    float flexShrink { get; }
     /// <summary>
-    /// Placement of children over multiple lines if not enough space is available in this container.
+    /// Placement of children over multiple lines if not enough space is
+    /// available in this container.
     /// </summary>
-    Wrap flexWrap {
-        get;
-    }
+    Wrap flexWrap { get; }
     /// <summary>
     /// Font size to draw the element's text.
     /// </summary>
-    float fontSize {
-        get;
-    }
+    float fontSize { get; }
     /// <summary>
     /// Fixed height of an element for the layout.
     /// </summary>
-    float height {
-        get;
-    }
+    float height { get; }
     /// <summary>
     /// Justification of children on the main axis of this container.
     /// </summary>
-    Justify justifyContent {
-        get;
-    }
+    Justify justifyContent { get; }
     /// <summary>
     /// Left distance from the element's box during layout.
     /// </summary>
-    float left {
-        get;
-    }
+    float left { get; }
     /// <summary>
-    /// Space reserved for the bottom edge of the margin during the layout phase.
+    /// Space reserved for the bottom edge of the margin during the layout
+    /// phase.
     /// </summary>
-    float marginBottom {
-        get;
-    }
+    float marginBottom { get; }
     /// <summary>
     /// Space reserved for the left edge of the margin during the layout phase.
     /// </summary>
-    float marginLeft {
-        get;
-    }
+    float marginLeft { get; }
     /// <summary>
     /// Space reserved for the right edge of the margin during the layout phase.
     /// </summary>
-    float marginRight {
-        get;
-    }
+    float marginRight { get; }
     /// <summary>
     /// Space reserved for the top edge of the margin during the layout phase.
     /// </summary>
-    float marginTop {
-        get;
-    }
+    float marginTop { get; }
     /// <summary>
-    /// Maximum height for an element, when it is flexible or measures its own size.
+    /// Maximum height for an element, when it is flexible or measures its own
+    /// size.
     /// </summary>
     /// <remarks>
     /// Default value is <see cref="StyleKeyword.None"/>.
     /// </remarks>
-    StyleFloat maxHeight {
-        get;
-    }
+    StyleFloat maxHeight { get; }
     /// <summary>
-    /// Maximum width for an element, when it is flexible or measures its own size.
+    /// Maximum width for an element, when it is flexible or measures its own
+    /// size.
     /// </summary>
     /// <remarks>
     /// Default value is <see cref="StyleKeyword.Auto"/>.
     /// </remarks>
-    StyleFloat maxWidth {
-        get;
-    }
+    StyleFloat maxWidth { get; }
     /// <summary>
-    /// Minimum height for an element, when it is flexible or measures its own size.
+    /// Minimum height for an element, when it is flexible or measures its own
+    /// size.
     /// </summary>
     /// <remarks>
     /// Default value is <see cref="StyleKeyword.None"/>.
     /// </remarks>
-    StyleFloat minHeight {
-        get;
-    }
+    StyleFloat minHeight { get; }
     /// <summary>
-    /// Minimum width for an element, when it is flexible or measures its own size.
+    /// Minimum width for an element, when it is flexible or measures its own
+    /// size.
     /// </summary>
     /// <remarks>
     /// Default value is <see cref="StyleKeyword.Auto"/>.
     /// </remarks>
-    StyleFloat minWidth {
-        get;
-    }
+    StyleFloat minWidth { get; }
     /// <summary>
     /// Specifies the transparency of an element.
     /// </summary>
     /// <remarks>
-    /// The opacity can be between 0.0 and 1.0. The lower value, the more transparent.
+    /// The opacity can be between 0.0 and 1.0. The lower value, the more
+    /// transparent.
     /// </remarks>
-    float opacity {
-        get;
-    }
+    float opacity { get; }
     /// <summary>
-    /// Space reserved for the bottom edge of the padding during the layout phase.
+    /// Space reserved for the bottom edge of the padding during the layout
+    /// phase.
     /// </summary>
-    float paddingBottom {
-        get;
-    }
+    float paddingBottom { get; }
     /// <summary>
     /// Space reserved for the left edge of the padding during the layout phase.
     /// </summary>
-    float paddingLeft {
-        get;
-    }
+    float paddingLeft { get; }
     /// <summary>
-    /// Space reserved for the right edge of the padding during the layout phase.
+    /// Space reserved for the right edge of the padding during the layout
+    /// phase.
     /// </summary>
-    float paddingRight {
-        get;
-    }
+    float paddingRight { get; }
     /// <summary>
     /// Space reserved for the top edge of the padding during the layout phase.
     /// </summary>
-    float paddingTop {
-        get;
-    }
+    float paddingTop { get; }
     /// <summary>
     /// Element's positioning in its parent container.
     /// </summary>
     /// <remarks>
-    /// This property is used in conjunction with position left, top, right and bottom properties.
+    /// This property is used in conjunction with position left, top, right and
+    /// bottom properties.
     /// </remarks>
-    Position position {
-        get;
-    }
+    Position position { get; }
     /// <summary>
     /// Right distance from the element's box during layout.
     /// </summary>
-    float right {
-        get;
-    }
+    float right { get; }
     /// <summary>
     /// The element's text overflow mode.
     /// </summary>
-    TextOverflow textOverflow {
-        get;
-    }
+    TextOverflow textOverflow { get; }
     /// <summary>
     /// Top distance from the element's box during layout.
     /// </summary>
-    float top {
-        get;
-    }
+    float top { get; }
     /// <summary>
     /// Tinting color for the element's backgroundImage
     /// </summary>
-    Color unityBackgroundImageTintColor {
-        get;
-    }
+    Color unityBackgroundImageTintColor { get; }
     /// <summary>
     /// Background image scaling in the element's box.
     /// </summary>
-    ScaleMode unityBackgroundScaleMode {
-        get;
-    }
+    ScaleMode unityBackgroundScaleMode { get; }
     /// <summary>
     /// Font to draw the element's text.
     /// </summary>
-    Font unityFont {
-        get;
-    }
+    Font unityFont { get; }
     /// <summary>
     /// Font style and weight (normal, bold, italic) to draw the element's text.
     /// </summary>
-    FontStyle unityFontStyleAndWeight {
-        get;
-    }
+    FontStyle unityFontStyleAndWeight { get; }
     /// <summary>
-    /// Size of the 9-slice's bottom edge when painting an element's background image.
+    /// Size of the 9-slice's bottom edge when painting an element's background
+    /// image.
     /// </summary>
-    int unitySliceBottom {
-        get;
-    }
+    int unitySliceBottom { get; }
     /// <summary>
-    /// Size of the 9-slice's left edge when painting an element's background image.
+    /// Size of the 9-slice's left edge when painting an element's background
+    /// image.
     /// </summary>
-    int unitySliceLeft {
-        get;
-    }
+    int unitySliceLeft { get; }
     /// <summary>
-    /// Size of the 9-slice's right edge when painting an element's background image.
+    /// Size of the 9-slice's right edge when painting an element's background
+    /// image.
     /// </summary>
-    int unitySliceRight {
-        get;
-    }
+    int unitySliceRight { get; }
     /// <summary>
-    /// Size of the 9-slice's top edge when painting an element's background image.
+    /// Size of the 9-slice's top edge when painting an element's background
+    /// image.
     /// </summary>
-    int unitySliceTop {
-        get;
-    }
+    int unitySliceTop { get; }
     /// <summary>
     /// Horizontal and vertical text alignment in the element's box.
     /// </summary>
-    TextAnchor unityTextAlign {
-        get;
-    }
+    TextAnchor unityTextAlign { get; }
     /// <summary>
     /// The element's text overflow position.
     /// </summary>
-    TextOverflowPosition unityTextOverflowPosition {
-        get;
-    }
+    TextOverflowPosition unityTextOverflowPosition { get; }
     /// <summary>
     /// Specifies whether or not an element is visible.
     /// </summary>
-    Visibility visibility {
-        get;
-    }
+    Visibility visibility { get; }
     /// <summary>
-    /// Word wrapping over multiple lines if not enough space is available to draw the text of an element.
+    /// Word wrapping over multiple lines if not enough space is available to
+    /// draw the text of an element.
     /// </summary>
-    WhiteSpace whiteSpace {
-        get;
-    }
+    WhiteSpace whiteSpace { get; }
     /// <summary>
     /// Fixed width of an element for the layout.
     /// </summary>
-    float width {
-        get;
-    }
-}
+    float width { get; }
+  }
 }

@@ -10,8 +10,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace UnityEngine.Yoga
-{
-// BEGIN_UNITY @jonathanma Remove usage of YGConfigHandle (less allocation)
-//END_UNITY
+namespace UnityEngine.Yoga {
+  // BEGIN_UNITY @jonathanma Remove usage of YGConfigHandle (less allocation)
+  // END_UNITY
 }

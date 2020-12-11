@@ -1,12 +1,10 @@
 using System;
 
-namespace UnityEngine.UIElements
-{
-/// <summary>
-/// Provides an Element displaying text.
-/// </summary>
-public class Label : TextElement
-{
+namespace UnityEngine.UIElements {
+  /// <summary>
+  /// Provides an Element displaying text.
+  /// </summary>
+  public class Label : TextElement {
     /// <summary>
     /// Instantiates a <see cref="Label"/> using the data read from a UXML file.
     /// </summary>
@@ -22,7 +20,6 @@ public class Label : TextElement
     /// </summary>
     public new static readonly string ussClassName = "unity-label";
 
-
     /// <summary>
     /// Constructs a label.
     /// </summary>
@@ -31,11 +28,10 @@ public class Label : TextElement
     /// Constructs a label.
     /// </summary>
     /// <param name="text">The text to be displayed.</param>
-    public Label(string text)
-    {
-        AddToClassList(ussClassName);
+    public Label(string text) {
+      AddToClassList(ussClassName);
 
-        this.text = text;
+      this.text = text;
     }
-}
+  }
 }

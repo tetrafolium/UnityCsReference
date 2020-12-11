@@ -5,11 +5,9 @@
 using System;
 using System.ComponentModel;
 
-namespace UnityEngine.Rendering
-{
-[Flags]
-public enum PerObjectData
-{
+namespace UnityEngine.Rendering {
+  [Flags]
+  public enum PerObjectData {
     None = 0,
     LightProbe = (1 << 0),
     ReflectionProbes = (1 << 1),
@@ -22,5 +20,5 @@ public enum PerObjectData
     OcclusionProbe = (1 << 8),
     OcclusionProbeProxyVolume = (1 << 9),
     ShadowMask = (1 << 10),
-}
+  }
 }

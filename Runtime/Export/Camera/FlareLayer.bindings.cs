@@ -4,11 +4,9 @@
 
 using System;
 
-namespace UnityEngine
-{
+namespace UnityEngine {
 [RequireComponent(typeof(Camera))]
-public class FlareLayer : Behaviour
-{
-    internal FlareLayer() {}
+public class FlareLayer : Behaviour {
+  internal FlareLayer() {}
 }
 }

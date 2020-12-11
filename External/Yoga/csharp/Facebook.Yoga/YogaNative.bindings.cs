@@ -7,22 +7,22 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-// BEGIN_UNITY @jonathanma This file is heavily modified to use Unity bindings system
+// BEGIN_UNITY @jonathanma This file is heavily modified to use Unity bindings
+// system
 
 using System;
 using UnityEngine.Scripting;
 using UnityEngine.Bindings;
 
-namespace UnityEngine.Yoga
-{
-using YogaValueType = YogaValue;
+namespace UnityEngine.Yoga {
+  using YogaValueType = YogaValue;
 
-[NativeHeader("Modules/UIElementsNative/YogaNative.bindings.h")]
-internal static partial class Native
-{
-    // We don't support setting custom C# logger (only use a default one in native code).
+  [NativeHeader("Modules/UIElementsNative/YogaNative.bindings.h")]
+  internal static partial class Native {
+    // We don't support setting custom C# logger (only use a default one in
+    // native code).
     //[FreeFunction]
-    //public static extern void YGInteropSetLogger(YogaLogger logger);
+    // public static extern void YGInteropSetLogger(YogaLogger logger);
 
     [FreeFunction]
     static extern IntPtr YGNodeNew();
@@ -30,12 +30,11 @@ internal static partial class Native
     [FreeFunction]
     public static extern IntPtr YGNodeNewWithConfig(IntPtr config);
 
-    public static void YGNodeFree(IntPtr ygNode)
-    {
-        if (ygNode == IntPtr.Zero)
-            return;
+    public static void YGNodeFree(IntPtr ygNode) {
+      if (ygNode == IntPtr.Zero)
+        return;
 
-        YGNodeFreeInternal(ygNode);
+      YGNodeFreeInternal(ygNode);
     }
 
     [FreeFunction(Name = "YGNodeFree", IsThreadSafe = true)]
@@ -44,8 +43,8 @@ internal static partial class Native
     [FreeFunction]
     public static extern void YGNodeReset(IntPtr node);
 
-    // BEGIN_UNITY @jonathanma Added this function to store a reference in native code to the managed object
-    // This is used by callback functions.
+    // BEGIN_UNITY @jonathanma Added this function to store a reference in
+    // native code to the managed object This is used by callback functions.
     [FreeFunction]
     public static extern void YGSetManagedObject(IntPtr ygNode, YogaNode node);
     // END_UNITY
@@ -59,12 +58,11 @@ internal static partial class Native
     [FreeFunction]
     public static extern IntPtr YGConfigNew();
 
-    public static void YGConfigFree(IntPtr config)
-    {
-        if (config == IntPtr.Zero)
-            return;
+    public static void YGConfigFree(IntPtr config) {
+      if (config == IntPtr.Zero)
+        return;
 
-        YGConfigFreeInternal(config);
+      YGConfigFreeInternal(config);
     }
 
     [FreeFunction(Name = "YGConfigFree", IsThreadSafe = true)]
@@ -78,47 +76,38 @@ internal static partial class Native
 
     [FreeFunction]
     public static extern void YGConfigSetExperimentalFeatureEnabled(
-        IntPtr config,
-        YogaExperimentalFeature feature,
-        bool enabled);
+        IntPtr config, YogaExperimentalFeature feature, bool enabled);
 
     [FreeFunction]
-    public static extern bool YGConfigIsExperimentalFeatureEnabled(
-        IntPtr config,
-        YogaExperimentalFeature feature);
+    public static extern bool
+    YGConfigIsExperimentalFeatureEnabled(IntPtr config,
+                                         YogaExperimentalFeature feature);
 
     [FreeFunction]
-    public static extern void YGConfigSetUseWebDefaults(
-        IntPtr config,
-        bool useWebDefaults);
+    public static extern void YGConfigSetUseWebDefaults(IntPtr config,
+                                                        bool useWebDefaults);
 
     [FreeFunction]
     public static extern bool YGConfigGetUseWebDefaults(IntPtr config);
 
     [FreeFunction]
-    public static extern void YGConfigSetPointScaleFactor(
-        IntPtr config,
-        float pixelsInPoint);
+    public static extern void YGConfigSetPointScaleFactor(IntPtr config,
+                                                          float pixelsInPoint);
 
     [FreeFunction]
-    public static extern float YGConfigGetPointScaleFactor(
-        IntPtr config);
+    public static extern float YGConfigGetPointScaleFactor(IntPtr config);
 
     [FreeFunction]
-    public static extern void YGNodeInsertChild(
-        IntPtr node,
-        IntPtr child,
-        uint index);
+    public static extern void YGNodeInsertChild(IntPtr node, IntPtr child,
+                                                uint index);
 
     [FreeFunction]
     public static extern void YGNodeRemoveChild(IntPtr node, IntPtr child);
 
     [FreeFunction]
-    public static extern void YGNodeCalculateLayout(
-        IntPtr node,
-        float availableWidth,
-        float availableHeight,
-        YogaDirection parentDirection);
+    public static extern void
+    YGNodeCalculateLayout(IntPtr node, float availableWidth,
+                          float availableHeight, YogaDirection parentDirection);
 
     [FreeFunction]
     public static extern void YGNodeMarkDirty(IntPtr node);
@@ -127,12 +116,13 @@ internal static partial class Native
     public static extern bool YGNodeIsDirty(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodePrint(IntPtr node, YogaPrintOptions options);
+    public static extern void YGNodePrint(IntPtr node,
+                                          YogaPrintOptions options);
 
     [FreeFunction]
     public static extern void YGNodeCopyStyle(IntPtr dstNode, IntPtr srcNode);
 
-    #region YG_NODE_PROPERTY
+#region YG_NODE_PROPERTY
 
     [FreeFunction(Name = "YogaCallback::SetMeasureFunc")]
     public static extern void YGNodeSetMeasureFunc(IntPtr node);
@@ -140,10 +130,12 @@ internal static partial class Native
     [FreeFunction(Name = "YogaCallback::RemoveMeasureFunc")]
     public static extern void YGNodeRemoveMeasureFunc(IntPtr node);
 
-    [RequiredByNativeCode]
-    unsafe public static void YGNodeMeasureInvoke(YogaNode node, float width, YogaMeasureMode widthMode, float height, YogaMeasureMode heightMode, IntPtr returnValueAddress)
-    {
-        (*(YogaSize*)returnValueAddress) = YogaNode.MeasureInternal(node, width, widthMode, height, heightMode);
+    [RequiredByNativeCode] unsafe public static void
+    YGNodeMeasureInvoke(YogaNode node, float width, YogaMeasureMode widthMode,
+                        float height, YogaMeasureMode heightMode,
+                        IntPtr returnValueAddress) {
+      (*(YogaSize *) returnValueAddress) =
+          YogaNode.MeasureInternal(node, width, widthMode, height, heightMode);
     }
 
     [FreeFunction(Name = "YogaCallback::SetBaselineFunc")]
@@ -152,78 +144,92 @@ internal static partial class Native
     [FreeFunction(Name = "YogaCallback::RemoveBaselineFunc")]
     public static extern void YGNodeRemoveBaselineFunc(IntPtr node);
 
-    [RequiredByNativeCode]
-    unsafe public static void YGNodeBaselineInvoke(YogaNode node, float width, float height, IntPtr returnValueAddress)
-    {
-        (*(float*)returnValueAddress) = YogaNode.BaselineInternal(node, width, height);
+    [RequiredByNativeCode] unsafe public static void
+    YGNodeBaselineInvoke(YogaNode node, float width, float height,
+                         IntPtr returnValueAddress) {
+      (*(float *) returnValueAddress) =
+          YogaNode.BaselineInternal(node, width, height);
     }
 
     [FreeFunction]
-    public static extern void YGNodeSetHasNewLayout(IntPtr node, bool hasNewLayout);
+    public static extern void YGNodeSetHasNewLayout(IntPtr node,
+                                                    bool hasNewLayout);
 
     [FreeFunction]
     public static extern bool YGNodeGetHasNewLayout(IntPtr node);
 
-    #endregion
+#endregion
 
-    #region YG_NODE_STYLE_PROPERTY
+#region YG_NODE_STYLE_PROPERTY
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetDirection(IntPtr node, YogaDirection direction);
+    public static extern void YGNodeStyleSetDirection(IntPtr node,
+                                                      YogaDirection direction);
 
     [FreeFunction]
     public static extern YogaDirection YGNodeStyleGetDirection(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetFlexDirection(IntPtr node, YogaFlexDirection flexDirection);
+    public static extern void
+    YGNodeStyleSetFlexDirection(IntPtr node, YogaFlexDirection flexDirection);
 
     [FreeFunction]
-    public static extern YogaFlexDirection YGNodeStyleGetFlexDirection(IntPtr node);
+    public static extern YogaFlexDirection
+    YGNodeStyleGetFlexDirection(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetJustifyContent(IntPtr node, YogaJustify justifyContent);
+    public static extern void
+    YGNodeStyleSetJustifyContent(IntPtr node, YogaJustify justifyContent);
 
     [FreeFunction]
     public static extern YogaJustify YGNodeStyleGetJustifyContent(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetAlignContent(IntPtr node, YogaAlign alignContent);
+    public static extern void
+    YGNodeStyleSetAlignContent(IntPtr node, YogaAlign alignContent);
 
     [FreeFunction]
     public static extern YogaAlign YGNodeStyleGetAlignContent(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetAlignItems(IntPtr node, YogaAlign alignItems);
+    public static extern void YGNodeStyleSetAlignItems(IntPtr node,
+                                                       YogaAlign alignItems);
 
     [FreeFunction]
     public static extern YogaAlign YGNodeStyleGetAlignItems(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetAlignSelf(IntPtr node, YogaAlign alignSelf);
+    public static extern void YGNodeStyleSetAlignSelf(IntPtr node,
+                                                      YogaAlign alignSelf);
 
     [FreeFunction]
     public static extern YogaAlign YGNodeStyleGetAlignSelf(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetPositionType(IntPtr node, YogaPositionType positionType);
+    public static extern void
+    YGNodeStyleSetPositionType(IntPtr node, YogaPositionType positionType);
 
     [FreeFunction]
-    public static extern YogaPositionType YGNodeStyleGetPositionType(IntPtr node);
+    public static extern YogaPositionType
+    YGNodeStyleGetPositionType(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetFlexWrap(IntPtr node, YogaWrap flexWrap);
+    public static extern void YGNodeStyleSetFlexWrap(IntPtr node,
+                                                     YogaWrap flexWrap);
 
     [FreeFunction]
     public static extern YogaWrap YGNodeStyleGetFlexWrap(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetOverflow(IntPtr node, YogaOverflow flexWrap);
+    public static extern void YGNodeStyleSetOverflow(IntPtr node,
+                                                     YogaOverflow flexWrap);
 
     [FreeFunction]
     public static extern YogaOverflow YGNodeStyleGetOverflow(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetDisplay(IntPtr node, YogaDisplay display);
+    public static extern void YGNodeStyleSetDisplay(IntPtr node,
+                                                    YogaDisplay display);
 
     [FreeFunction]
     public static extern YogaDisplay YGNodeStyleGetDisplay(IntPtr node);
@@ -232,22 +238,26 @@ internal static partial class Native
     public static extern void YGNodeStyleSetFlex(IntPtr node, float flex);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetFlexGrow(IntPtr node, float flexGrow);
+    public static extern void YGNodeStyleSetFlexGrow(IntPtr node,
+                                                     float flexGrow);
 
     [FreeFunction]
     public static extern float YGNodeStyleGetFlexGrow(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetFlexShrink(IntPtr node, float flexShrink);
+    public static extern void YGNodeStyleSetFlexShrink(IntPtr node,
+                                                       float flexShrink);
 
     [FreeFunction]
     public static extern float YGNodeStyleGetFlexShrink(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetFlexBasis(IntPtr node, float flexBasis);
+    public static extern void YGNodeStyleSetFlexBasis(IntPtr node,
+                                                      float flexBasis);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetFlexBasisPercent(IntPtr node, float flexBasis);
+    public static extern void YGNodeStyleSetFlexBasisPercent(IntPtr node,
+                                                             float flexBasis);
 
     [FreeFunction]
     public static extern void YGNodeStyleSetFlexBasisAuto(IntPtr node);
@@ -262,7 +272,8 @@ internal static partial class Native
     public static extern void YGNodeStyleSetWidth(IntPtr node, float width);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetWidthPercent(IntPtr node, float width);
+    public static extern void YGNodeStyleSetWidthPercent(IntPtr node,
+                                                         float width);
 
     [FreeFunction]
     public static extern void YGNodeStyleSetWidthAuto(IntPtr node);
@@ -274,7 +285,8 @@ internal static partial class Native
     public static extern void YGNodeStyleSetHeight(IntPtr node, float height);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetHeightPercent(IntPtr node, float height);
+    public static extern void YGNodeStyleSetHeightPercent(IntPtr node,
+                                                          float height);
 
     [FreeFunction]
     public static extern void YGNodeStyleSetHeightAuto(IntPtr node);
@@ -283,90 +295,110 @@ internal static partial class Native
     public static extern YogaValueType YGNodeStyleGetHeight(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetMinWidth(IntPtr node, float minWidth);
+    public static extern void YGNodeStyleSetMinWidth(IntPtr node,
+                                                     float minWidth);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetMinWidthPercent(IntPtr node, float minWidth);
+    public static extern void YGNodeStyleSetMinWidthPercent(IntPtr node,
+                                                            float minWidth);
 
     [FreeFunction]
     public static extern YogaValueType YGNodeStyleGetMinWidth(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetMinHeight(IntPtr node, float minHeight);
+    public static extern void YGNodeStyleSetMinHeight(IntPtr node,
+                                                      float minHeight);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetMinHeightPercent(IntPtr node, float minHeight);
+    public static extern void YGNodeStyleSetMinHeightPercent(IntPtr node,
+                                                             float minHeight);
 
     [FreeFunction]
     public static extern YogaValueType YGNodeStyleGetMinHeight(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetMaxWidth(IntPtr node, float maxWidth);
+    public static extern void YGNodeStyleSetMaxWidth(IntPtr node,
+                                                     float maxWidth);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetMaxWidthPercent(IntPtr node, float maxWidth);
+    public static extern void YGNodeStyleSetMaxWidthPercent(IntPtr node,
+                                                            float maxWidth);
 
     [FreeFunction]
     public static extern YogaValueType YGNodeStyleGetMaxWidth(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetMaxHeight(IntPtr node, float maxHeight);
+    public static extern void YGNodeStyleSetMaxHeight(IntPtr node,
+                                                      float maxHeight);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetMaxHeightPercent(IntPtr node, float maxHeight);
+    public static extern void YGNodeStyleSetMaxHeightPercent(IntPtr node,
+                                                             float maxHeight);
 
     [FreeFunction]
     public static extern YogaValueType YGNodeStyleGetMaxHeight(IntPtr node);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetAspectRatio(IntPtr node, float aspectRatio);
+    public static extern void YGNodeStyleSetAspectRatio(IntPtr node,
+                                                        float aspectRatio);
 
     [FreeFunction]
     public static extern float YGNodeStyleGetAspectRatio(IntPtr node);
 
-    #endregion
+#endregion
 
-    #region YG_NODE_STYLE_EDGE_PROPERTY
-
-    [FreeFunction]
-    public static extern void YGNodeStyleSetPosition(IntPtr node, YogaEdge edge, float position);
+#region YG_NODE_STYLE_EDGE_PROPERTY
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetPositionPercent(IntPtr node, YogaEdge edge, float position);
+    public static extern void YGNodeStyleSetPosition(IntPtr node, YogaEdge edge,
+                                                     float position);
 
     [FreeFunction]
-    public static extern YogaValueType YGNodeStyleGetPosition(IntPtr node, YogaEdge edge);
+    public static extern void
+    YGNodeStyleSetPositionPercent(IntPtr node, YogaEdge edge, float position);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetMargin(IntPtr node, YogaEdge edge, float margin);
+    public static extern YogaValueType YGNodeStyleGetPosition(IntPtr node,
+                                                              YogaEdge edge);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetMarginPercent(IntPtr node, YogaEdge edge, float margin);
+    public static extern void YGNodeStyleSetMargin(IntPtr node, YogaEdge edge,
+                                                   float margin);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetMarginAuto(IntPtr node, YogaEdge edge);
+    public static extern void
+    YGNodeStyleSetMarginPercent(IntPtr node, YogaEdge edge, float margin);
 
     [FreeFunction]
-    public static extern YogaValueType YGNodeStyleGetMargin(IntPtr node, YogaEdge edge);
+    public static extern void YGNodeStyleSetMarginAuto(IntPtr node,
+                                                       YogaEdge edge);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetPadding(IntPtr node, YogaEdge edge, float padding);
+    public static extern YogaValueType YGNodeStyleGetMargin(IntPtr node,
+                                                            YogaEdge edge);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetPaddingPercent(IntPtr node, YogaEdge edge, float padding);
+    public static extern void YGNodeStyleSetPadding(IntPtr node, YogaEdge edge,
+                                                    float padding);
 
     [FreeFunction]
-    public static extern YogaValueType YGNodeStyleGetPadding(IntPtr node, YogaEdge edge);
+    public static extern void
+    YGNodeStyleSetPaddingPercent(IntPtr node, YogaEdge edge, float padding);
 
     [FreeFunction]
-    public static extern void YGNodeStyleSetBorder(IntPtr node, YogaEdge edge, float border);
+    public static extern YogaValueType YGNodeStyleGetPadding(IntPtr node,
+                                                             YogaEdge edge);
+
+    [FreeFunction]
+    public static extern void YGNodeStyleSetBorder(IntPtr node, YogaEdge edge,
+                                                   float border);
 
     [FreeFunction]
     public static extern float YGNodeStyleGetBorder(IntPtr node, YogaEdge edge);
 
-    #endregion
+#endregion
 
-    #region YG_NODE_LAYOUT_PROPERTY
+#region YG_NODE_LAYOUT_PROPERTY
 
     [FreeFunction]
     public static extern float YGNodeLayoutGetLeft(IntPtr node);
@@ -387,22 +419,24 @@ internal static partial class Native
     public static extern float YGNodeLayoutGetHeight(IntPtr node);
 
     [FreeFunction]
-    public static extern float YGNodeLayoutGetMargin(IntPtr node, YogaEdge edge);
+    public static extern float YGNodeLayoutGetMargin(IntPtr node,
+                                                     YogaEdge edge);
 
     [FreeFunction]
-    public static extern float YGNodeLayoutGetPadding(IntPtr node, YogaEdge edge);
+    public static extern float YGNodeLayoutGetPadding(IntPtr node,
+                                                      YogaEdge edge);
 
     [FreeFunction]
     public static extern YogaDirection YGNodeLayoutGetDirection(IntPtr node);
 
-    #endregion
+#endregion
 
-    #region Context
+#region Context
 
-// BEGIN_UNITY @jonathanma Remove YGNode and YGConfig context to avoid pinning GC objects
-// END_UNITY
+    // BEGIN_UNITY @jonathanma Remove YGNode and YGConfig context to avoid
+    // pinning GC objects END_UNITY
 
-    #endregion
-}
+#endregion
+  }
 }
 // END_UNITY

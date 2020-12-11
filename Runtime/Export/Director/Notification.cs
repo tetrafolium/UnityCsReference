@@ -2,17 +2,10 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
-namespace UnityEngine.Playables
-{
-public class Notification : INotification
-{
-    public Notification(string name)
-    {
-        id = new PropertyName(name);
-    }
+namespace UnityEngine.Playables {
+  public class Notification : INotification {
+    public Notification(string name) { id = new PropertyName(name); }
 
-    public PropertyName id {
-        get;
-    }
-}
+    public PropertyName id { get; }
+  }
 }

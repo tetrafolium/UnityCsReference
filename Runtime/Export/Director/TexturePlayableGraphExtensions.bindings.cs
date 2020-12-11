@@ -7,16 +7,17 @@ using UnityEngine;
 using UnityEngine.Bindings;
 using UnityEngine.Playables;
 
-namespace UnityEngine.Experimental.Playables
-{
+namespace UnityEngine.Experimental.Playables {
 
-[NativeHeader("Runtime/Export/Director/TexturePlayableGraphExtensions.bindings.h")]
-[NativeHeader("Runtime/Director/Core/HPlayableOutput.h")]
-[StaticAccessor("TexturePlayableGraphExtensionsBindings", StaticAccessorType.DoubleColon)]
-internal static class TexturePlayableGraphExtensions
-{
-    [NativeThrows]
-    extern internal static bool InternalCreateTextureOutput(ref PlayableGraph graph, string name, out PlayableOutputHandle handle);
-}
+  [NativeHeader(
+      "Runtime/Export/Director/TexturePlayableGraphExtensions.bindings.h")]
+  [NativeHeader("Runtime/Director/Core/HPlayableOutput.h")]
+  [StaticAccessor("TexturePlayableGraphExtensionsBindings",
+                  StaticAccessorType.DoubleColon)]
+  internal static class TexturePlayableGraphExtensions {
+    [NativeThrows] extern internal static bool
+    InternalCreateTextureOutput(ref PlayableGraph graph, string name,
+                                out PlayableOutputHandle handle);
+  }
 
 }

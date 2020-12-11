@@ -1,10 +1,8 @@
-namespace UnityEngine.UIElements
-{
-/// <summary>
-/// Styled visual element to match the IMGUI Box Style.
-/// </summary>
-public class Box : VisualElement
-{
+namespace UnityEngine.UIElements {
+  /// <summary>
+  /// Styled visual element to match the IMGUI Box Style.
+  /// </summary>
+  public class Box : VisualElement {
     /// <summary>
     /// Instantiates a <see cref="Box"/> using the data read from a UXML file.
     /// </summary>
@@ -15,9 +13,6 @@ public class Box : VisualElement
     /// </summary>
     public static readonly string ussClassName = "unity-box";
 
-    public Box()
-    {
-        AddToClassList(ussClassName);
-    }
-}
+    public Box() { AddToClassList(ussClassName); }
+  }
 }

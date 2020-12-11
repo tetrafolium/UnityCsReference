@@ -5,20 +5,21 @@
 //              See ResolvedStyleAccessGenerator class for details
 //
 /******************************************************************************/
-namespace UnityEngine.UIElements
-{
-/// <summary>
-/// Base class for objects that are part of the UIElements visual tree.
-/// </summary>
-/// <remarks>
-/// VisualElement contains several features that are common to all controls in UIElements, such as layout, styling and event handling.
-/// Several other classes derive from it to implement custom rendering and define behaviour for controls.
-/// </remarks>
-public partial class VisualElement : IResolvedStyle
-{
-    // this allows us to not expose all styles accessors directly on VisualElement class
-    // but still let the VisualElement be in control of proxying inline styles modifications
-    // we avoid an extra allocation when returning that property and it's nice from an API perspective
+namespace UnityEngine.UIElements {
+  /// <summary>
+  /// Base class for objects that are part of the UIElements visual tree.
+  /// </summary>
+  /// <remarks>
+  /// VisualElement contains several features that are common to all controls in
+  /// UIElements, such as layout, styling and event handling. Several other
+  /// classes derive from it to implement custom rendering and define behaviour
+  /// for controls.
+  /// </remarks>
+  public partial class VisualElement : IResolvedStyle {
+    // this allows us to not expose all styles accessors directly on
+    // VisualElement class but still let the VisualElement be in control of
+    // proxying inline styles modifications we avoid an extra allocation when
+    // returning that property and it's nice from an API perspective
     /// <summary>
     /// Returns the <see cref="VisualElement"/> resolved style values.
     /// </summary>
@@ -28,23 +29,33 @@ public partial class VisualElement : IResolvedStyle
     Align IResolvedStyle.alignItems => computedStyle.alignItems.value;
     Align IResolvedStyle.alignSelf => computedStyle.alignSelf.value;
     Color IResolvedStyle.backgroundColor => computedStyle.backgroundColor.value;
-    Color IResolvedStyle.borderBottomColor => computedStyle.borderBottomColor.value;
-    float IResolvedStyle.borderBottomLeftRadius => computedStyle.borderBottomLeftRadius.value.value;
-    float IResolvedStyle.borderBottomRightRadius => computedStyle.borderBottomRightRadius.value.value;
-    float IResolvedStyle.borderBottomWidth => computedStyle.borderBottomWidth.value;
+    Color IResolvedStyle.borderBottomColor =>
+        computedStyle.borderBottomColor.value;
+    float IResolvedStyle.borderBottomLeftRadius =>
+        computedStyle.borderBottomLeftRadius.value.value;
+    float IResolvedStyle.borderBottomRightRadius =>
+        computedStyle.borderBottomRightRadius.value.value;
+    float IResolvedStyle.borderBottomWidth =>
+        computedStyle.borderBottomWidth.value;
     Color IResolvedStyle.borderLeftColor => computedStyle.borderLeftColor.value;
     float IResolvedStyle.borderLeftWidth => computedStyle.borderLeftWidth.value;
-    Color IResolvedStyle.borderRightColor => computedStyle.borderRightColor.value;
-    float IResolvedStyle.borderRightWidth => computedStyle.borderRightWidth.value;
+    Color IResolvedStyle.borderRightColor =>
+        computedStyle.borderRightColor.value;
+    float IResolvedStyle.borderRightWidth =>
+        computedStyle.borderRightWidth.value;
     Color IResolvedStyle.borderTopColor => computedStyle.borderTopColor.value;
-    float IResolvedStyle.borderTopLeftRadius => computedStyle.borderTopLeftRadius.value.value;
-    float IResolvedStyle.borderTopRightRadius => computedStyle.borderTopRightRadius.value.value;
+    float IResolvedStyle.borderTopLeftRadius =>
+        computedStyle.borderTopLeftRadius.value.value;
+    float IResolvedStyle.borderTopRightRadius =>
+        computedStyle.borderTopRightRadius.value.value;
     float IResolvedStyle.borderTopWidth => computedStyle.borderTopWidth.value;
     float IResolvedStyle.bottom => yogaNode.LayoutBottom;
     Color IResolvedStyle.color => computedStyle.color.value;
     DisplayStyle IResolvedStyle.display => computedStyle.display.value;
-    StyleFloat IResolvedStyle.flexBasis => new StyleFloat(yogaNode.ComputedFlexBasis);
-    FlexDirection IResolvedStyle.flexDirection => computedStyle.flexDirection.value;
+    StyleFloat IResolvedStyle.flexBasis =>
+        new StyleFloat(yogaNode.ComputedFlexBasis);
+    FlexDirection IResolvedStyle.flexDirection =>
+        computedStyle.flexDirection.value;
     float IResolvedStyle.flexGrow => computedStyle.flexGrow.value;
     float IResolvedStyle.flexShrink => computedStyle.flexShrink.value;
     Wrap IResolvedStyle.flexWrap => computedStyle.flexWrap.value;
@@ -56,10 +67,14 @@ public partial class VisualElement : IResolvedStyle
     float IResolvedStyle.marginLeft => yogaNode.LayoutMarginLeft;
     float IResolvedStyle.marginRight => yogaNode.LayoutMarginRight;
     float IResolvedStyle.marginTop => yogaNode.LayoutMarginTop;
-    StyleFloat IResolvedStyle.maxHeight => ResolveLengthValue(computedStyle.maxHeight, false);
-    StyleFloat IResolvedStyle.maxWidth => ResolveLengthValue(computedStyle.maxWidth, true);
-    StyleFloat IResolvedStyle.minHeight => ResolveLengthValue(computedStyle.minHeight, false);
-    StyleFloat IResolvedStyle.minWidth => ResolveLengthValue(computedStyle.minWidth, true);
+    StyleFloat IResolvedStyle.maxHeight =>
+        ResolveLengthValue(computedStyle.maxHeight, false);
+    StyleFloat IResolvedStyle.maxWidth =>
+        ResolveLengthValue(computedStyle.maxWidth, true);
+    StyleFloat IResolvedStyle.minHeight =>
+        ResolveLengthValue(computedStyle.minHeight, false);
+    StyleFloat IResolvedStyle.minWidth =>
+        ResolveLengthValue(computedStyle.minWidth, true);
     float IResolvedStyle.opacity => computedStyle.opacity.value;
     float IResolvedStyle.paddingBottom => yogaNode.LayoutPaddingBottom;
     float IResolvedStyle.paddingLeft => yogaNode.LayoutPaddingLeft;
@@ -67,20 +82,26 @@ public partial class VisualElement : IResolvedStyle
     float IResolvedStyle.paddingTop => yogaNode.LayoutPaddingTop;
     Position IResolvedStyle.position => computedStyle.position.value;
     float IResolvedStyle.right => yogaNode.LayoutRight;
-    TextOverflow IResolvedStyle.textOverflow => computedStyle.textOverflow.value;
+    TextOverflow IResolvedStyle.textOverflow =>
+        computedStyle.textOverflow.value;
     float IResolvedStyle.top => yogaNode.LayoutY;
-    Color IResolvedStyle.unityBackgroundImageTintColor => computedStyle.unityBackgroundImageTintColor.value;
-    ScaleMode IResolvedStyle.unityBackgroundScaleMode => computedStyle.unityBackgroundScaleMode.value;
+    Color IResolvedStyle.unityBackgroundImageTintColor =>
+        computedStyle.unityBackgroundImageTintColor.value;
+    ScaleMode IResolvedStyle.unityBackgroundScaleMode =>
+        computedStyle.unityBackgroundScaleMode.value;
     Font IResolvedStyle.unityFont => computedStyle.unityFont.value;
-    FontStyle IResolvedStyle.unityFontStyleAndWeight => computedStyle.unityFontStyleAndWeight.value;
+    FontStyle IResolvedStyle.unityFontStyleAndWeight =>
+        computedStyle.unityFontStyleAndWeight.value;
     int IResolvedStyle.unitySliceBottom => computedStyle.unitySliceBottom.value;
     int IResolvedStyle.unitySliceLeft => computedStyle.unitySliceLeft.value;
     int IResolvedStyle.unitySliceRight => computedStyle.unitySliceRight.value;
     int IResolvedStyle.unitySliceTop => computedStyle.unitySliceTop.value;
-    TextAnchor IResolvedStyle.unityTextAlign => computedStyle.unityTextAlign.value;
-    TextOverflowPosition IResolvedStyle.unityTextOverflowPosition => computedStyle.unityTextOverflowPosition.value;
+    TextAnchor IResolvedStyle.unityTextAlign =>
+        computedStyle.unityTextAlign.value;
+    TextOverflowPosition IResolvedStyle.unityTextOverflowPosition =>
+        computedStyle.unityTextOverflowPosition.value;
     Visibility IResolvedStyle.visibility => computedStyle.visibility.value;
     WhiteSpace IResolvedStyle.whiteSpace => computedStyle.whiteSpace.value;
     float IResolvedStyle.width => yogaNode.LayoutWidth;
-}
+  }
 }

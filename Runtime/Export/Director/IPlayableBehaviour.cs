@@ -6,10 +6,8 @@ using System;
 using UnityEngine;
 using UnityEngine.Scripting;
 
-namespace UnityEngine.Playables
-{
-public interface IPlayableBehaviour
-{
+namespace UnityEngine.Playables {
+  public interface IPlayableBehaviour {
     [RequiredByNativeCode]
     void OnGraphStart(Playable playable);
     [RequiredByNativeCode]
@@ -29,5 +27,5 @@ public interface IPlayableBehaviour
     void PrepareFrame(Playable playable, FrameData info);
     [RequiredByNativeCode]
     void ProcessFrame(Playable playable, FrameData info, object playerData);
-}
+  }
 }

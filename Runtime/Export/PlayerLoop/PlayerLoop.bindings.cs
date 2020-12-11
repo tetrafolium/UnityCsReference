@@ -8,12 +8,10 @@ using UnityEngine.Scripting;
 using UnityEngine.Scripting.APIUpdating;
 using UnityEngine.Bindings;
 
-namespace UnityEngine.PlayerLoop
-{
-[RequiredByNativeCode]
-[MovedFrom("UnityEngine.Experimental.PlayerLoop")]
-public struct Initialization
-{
+namespace UnityEngine.PlayerLoop {
+  [RequiredByNativeCode]
+  [MovedFrom("UnityEngine.Experimental.PlayerLoop")]
+  public struct Initialization {
     [RequiredByNativeCode]
     public struct PlayerUpdateTime {}
     [RequiredByNativeCode]
@@ -28,12 +26,11 @@ public struct Initialization
     public struct SynchronizeInputs {}
     [RequiredByNativeCode]
     public struct XREarlyUpdate {}
-}
+  }
 
-[RequiredByNativeCode]
-[MovedFrom("UnityEngine.Experimental.PlayerLoop")]
-public struct EarlyUpdate
-{
+  [RequiredByNativeCode]
+  [MovedFrom("UnityEngine.Experimental.PlayerLoop")]
+  public struct EarlyUpdate {
     [RequiredByNativeCode]
     public struct PollPlayerConnection {}
     [RequiredByNativeCode]
@@ -93,17 +90,18 @@ public struct EarlyUpdate
     [RequiredByNativeCode]
     public struct SpriteAtlasManagerUpdate {}
     [RequiredByNativeCode]
-    [Obsolete("TangoUpdate has been deprecated. Use ARCoreUpdate instead (UnityUpgradable) -> UnityEngine.PlayerLoop.EarlyUpdate/ARCoreUpdate", false)]
+    [Obsolete(
+        "TangoUpdate has been deprecated. Use ARCoreUpdate instead (UnityUpgradable) -> UnityEngine.PlayerLoop.EarlyUpdate/ARCoreUpdate",
+        false)]
     public struct TangoUpdate {}
     [RequiredByNativeCode]
     public struct ARCoreUpdate {}
     [RequiredByNativeCode]
     public struct PerformanceAnalyticsUpdate {}
-}
-[RequiredByNativeCode]
-[MovedFrom("UnityEngine.Experimental.PlayerLoop")]
-public struct FixedUpdate
-{
+  }
+  [RequiredByNativeCode]
+  [MovedFrom("UnityEngine.Experimental.PlayerLoop")]
+  public struct FixedUpdate {
     [RequiredByNativeCode]
     public struct ClearLines {}
     [RequiredByNativeCode]
@@ -128,11 +126,10 @@ public struct FixedUpdate
     public struct ScriptRunDelayedFixedFrameRate {}
     [RequiredByNativeCode]
     public struct NewInputFixedUpdate {}
-}
-[RequiredByNativeCode]
-[MovedFrom("UnityEngine.Experimental.PlayerLoop")]
-public struct PreUpdate
-{
+  }
+  [RequiredByNativeCode]
+  [MovedFrom("UnityEngine.Experimental.PlayerLoop")]
+  public struct PreUpdate {
     [RequiredByNativeCode]
     public struct PhysicsUpdate {}
     [RequiredByNativeCode]
@@ -151,11 +148,10 @@ public struct PreUpdate
     public struct UpdateVideo {}
     [RequiredByNativeCode]
     public struct NewInputUpdate {}
-}
-[RequiredByNativeCode]
-[MovedFrom("UnityEngine.Experimental.PlayerLoop")]
-public struct Update
-{
+  }
+  [RequiredByNativeCode]
+  [MovedFrom("UnityEngine.Experimental.PlayerLoop")]
+  public struct Update {
     [RequiredByNativeCode]
     public struct ScriptRunBehaviourUpdate {}
     [RequiredByNativeCode]
@@ -164,11 +160,10 @@ public struct Update
     public struct ScriptRunDelayedDynamicFrameRate {}
     [RequiredByNativeCode]
     public struct ScriptRunDelayedTasks {}
-}
-[RequiredByNativeCode]
-[MovedFrom("UnityEngine.Experimental.PlayerLoop")]
-public struct PreLateUpdate
-{
+  }
+  [RequiredByNativeCode]
+  [MovedFrom("UnityEngine.Experimental.PlayerLoop")]
+  public struct PreLateUpdate {
     [RequiredByNativeCode]
     public struct AIUpdatePostScript {}
     [RequiredByNativeCode]
@@ -193,11 +188,10 @@ public struct PreLateUpdate
     public struct ScriptRunBehaviourLateUpdate {}
     [RequiredByNativeCode]
     public struct ConstraintManagerUpdate {}
-}
-[RequiredByNativeCode]
-[MovedFrom("UnityEngine.Experimental.PlayerLoop")]
-public struct PostLateUpdate
-{
+  }
+  [RequiredByNativeCode]
+  [MovedFrom("UnityEngine.Experimental.PlayerLoop")]
+  public struct PostLateUpdate {
     [RequiredByNativeCode]
     public struct PlayerSendFrameStarted {}
     [RequiredByNativeCode]
@@ -284,26 +278,23 @@ public struct PostLateUpdate
     public struct PhysicsSkinnedClothFinishUpdate {}
     [RequiredByNativeCode]
     public struct TriggerEndOfFrameCallbacks {}
-}
+  }
 }
 
-namespace UnityEngine.LowLevel
-{
-[NativeType(Header = "Runtime/Misc/PlayerLoop.h")]
-[RequiredByNativeCode]
-[MovedFrom("UnityEngine.Experimental.LowLevel")]
-struct PlayerLoopSystemInternal
-{
+namespace UnityEngine.LowLevel {
+  [NativeType(Header = "Runtime/Misc/PlayerLoop.h")]
+  [RequiredByNativeCode]
+  [MovedFrom(
+      "UnityEngine.Experimental.LowLevel")] struct PlayerLoopSystemInternal {
     public Type type;
     public PlayerLoopSystem.UpdateFunction updateDelegate;
     public IntPtr updateFunction;
     public IntPtr loopConditionFunction;
     public int numSubSystems;
-}
+  }
 
-[MovedFrom("UnityEngine.Experimental.LowLevel")]
-public struct PlayerLoopSystem
-{
+  [MovedFrom("UnityEngine.Experimental.LowLevel")]
+  public struct PlayerLoopSystem {
     public Type type;
     public PlayerLoopSystem[] subSystemList;
     public UpdateFunction updateDelegate;
@@ -311,83 +302,76 @@ public struct PlayerLoopSystem
     public IntPtr loopConditionFunction;
 
     public delegate void UpdateFunction();
-}
+  }
 
-[MovedFrom("UnityEngine.Experimental.LowLevel")]
-public class PlayerLoop
-{
-    public static PlayerLoopSystem GetDefaultPlayerLoop()
-    {
-        var intSys = GetDefaultPlayerLoopInternal();
-        var offset = 0;
-        return InternalToPlayerLoopSystem(intSys, ref offset);
+  [MovedFrom("UnityEngine.Experimental.LowLevel")]
+  public class PlayerLoop {
+    public static PlayerLoopSystem GetDefaultPlayerLoop() {
+      var intSys = GetDefaultPlayerLoopInternal();
+      var offset = 0;
+      return InternalToPlayerLoopSystem(intSys, ref offset);
     }
 
-    public static PlayerLoopSystem GetCurrentPlayerLoop()
-    {
-        var intSys = GetCurrentPlayerLoopInternal();
-        var offset = 0;
-        return InternalToPlayerLoopSystem(intSys, ref offset);
+    public static PlayerLoopSystem GetCurrentPlayerLoop() {
+      var intSys = GetCurrentPlayerLoopInternal();
+      var offset = 0;
+      return InternalToPlayerLoopSystem(intSys, ref offset);
     }
 
-    public static void SetPlayerLoop(PlayerLoopSystem loop)
-    {
-        var intSys = new List<PlayerLoopSystemInternal>();
-        PlayerLoopSystemToInternal(loop, ref intSys);
-        SetPlayerLoopInternal(intSys.ToArray());
+    public static void SetPlayerLoop(PlayerLoopSystem loop) {
+      var intSys = new List<PlayerLoopSystemInternal>();
+      PlayerLoopSystemToInternal(loop, ref intSys);
+      SetPlayerLoopInternal(intSys.ToArray());
     }
 
-    static int PlayerLoopSystemToInternal(PlayerLoopSystem sys, ref List<PlayerLoopSystemInternal> internalSys)
-    {
-        var idx = internalSys.Count;
-        var newSys = new PlayerLoopSystemInternal
-        {
-            type = sys.type,
-            updateDelegate = sys.updateDelegate,
-            updateFunction = sys.updateFunction,
-            loopConditionFunction = sys.loopConditionFunction,
-            numSubSystems = 0
-        };
-        internalSys.Add(newSys);
-        if (sys.subSystemList != null)
-        {
-            for (int i = 0; i < sys.subSystemList.Length; ++i)
-            {
-                newSys.numSubSystems += PlayerLoopSystemToInternal(sys.subSystemList[i], ref internalSys);
-            }
+    static int
+    PlayerLoopSystemToInternal(PlayerLoopSystem sys,
+                               ref List<PlayerLoopSystemInternal> internalSys) {
+      var idx = internalSys.Count;
+      var newSys = new PlayerLoopSystemInternal{
+          type = sys.type, updateDelegate = sys.updateDelegate,
+          updateFunction = sys.updateFunction,
+          loopConditionFunction = sys.loopConditionFunction, numSubSystems = 0};
+      internalSys.Add(newSys);
+      if (sys.subSystemList != null) {
+        for (int i = 0; i < sys.subSystemList.Length; ++i) {
+          newSys.numSubSystems +=
+              PlayerLoopSystemToInternal(sys.subSystemList[i], ref internalSys);
         }
-        internalSys[idx] = newSys;
-        return newSys.numSubSystems + 1;
+      }
+      internalSys[idx] = newSys;
+      return newSys.numSubSystems + 1;
     }
 
-    static PlayerLoopSystem InternalToPlayerLoopSystem(PlayerLoopSystemInternal[] internalSys, ref int offset)
-    {
-        var sys = new PlayerLoopSystem
-        {
-            type = internalSys[offset].type,
-            updateDelegate = internalSys[offset].updateDelegate,
-            updateFunction = internalSys[offset].updateFunction,
-            loopConditionFunction = internalSys[offset].loopConditionFunction,
-            subSystemList = null
-        };
+    static PlayerLoopSystem
+    InternalToPlayerLoopSystem(PlayerLoopSystemInternal[] internalSys,
+                               ref int offset) {
+      var sys = new PlayerLoopSystem{
+          type = internalSys[offset].type,
+          updateDelegate = internalSys[offset].updateDelegate,
+          updateFunction = internalSys[offset].updateFunction,
+          loopConditionFunction = internalSys[offset].loopConditionFunction,
+          subSystemList = null};
 
-        var idx = offset++;
-        if (internalSys[idx].numSubSystems > 0)
-        {
-            var subsys = new List<PlayerLoopSystem>();
-            while (offset <= idx + internalSys[idx].numSubSystems)
-                subsys.Add(InternalToPlayerLoopSystem(internalSys, ref offset));
-            sys.subSystemList = subsys.ToArray();
-        }
+      var idx = offset++;
+      if (internalSys[idx].numSubSystems > 0) {
+        var subsys = new List<PlayerLoopSystem>();
+        while (offset <= idx + internalSys[idx].numSubSystems)
+          subsys.Add(InternalToPlayerLoopSystem(internalSys, ref offset));
+        sys.subSystemList = subsys.ToArray();
+      }
 
-        return sys;
+      return sys;
     }
 
     [NativeMethod(IsFreeFunction = true)]
-    private static extern PlayerLoopSystemInternal[] GetDefaultPlayerLoopInternal();
+    private static extern PlayerLoopSystemInternal
+        [] GetDefaultPlayerLoopInternal();
     [NativeMethod(IsFreeFunction = true)]
-    private static extern PlayerLoopSystemInternal[] GetCurrentPlayerLoopInternal();
+    private static extern PlayerLoopSystemInternal
+        [] GetCurrentPlayerLoopInternal();
     [NativeMethod(IsFreeFunction = true)]
-    private static extern void SetPlayerLoopInternal(PlayerLoopSystemInternal[] loop);
-}
+    private static extern void
+        SetPlayerLoopInternal(PlayerLoopSystemInternal[] loop);
+  }
 }

@@ -1,9 +1,7 @@
 using UnityEngine.Bindings;
 
-namespace UnityEngine.UIElements
-{
-internal enum StyleSelectorType
-{
+namespace UnityEngine.UIElements {
+  internal enum StyleSelectorType {
     Unknown,
     Wildcard,
     Type,
@@ -12,5 +10,5 @@ internal enum StyleSelectorType
     RecursivePseudoClass,
     ID,
     Predicate
-}
+  }
 }

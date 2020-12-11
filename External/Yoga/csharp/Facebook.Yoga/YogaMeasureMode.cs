@@ -7,12 +7,10 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-namespace UnityEngine.Yoga
-{
-internal enum YogaMeasureMode
-{
+namespace UnityEngine.Yoga {
+  internal enum YogaMeasureMode {
     Undefined,
     Exactly,
     AtMost,
-}
+  }
 }

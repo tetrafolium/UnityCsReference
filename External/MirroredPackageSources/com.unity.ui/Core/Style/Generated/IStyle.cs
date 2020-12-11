@@ -5,136 +5,142 @@
 //              See IStyleGenerator class for details
 //
 /******************************************************************************/
-namespace UnityEngine.UIElements
-{
-/// <summary>
-/// This interface provides access to a VisualElement inline style data.
-/// </summary>
-/// <remarks>
-/// Reading properties from this object will read from the inline style data for this element.
-/// To read the style data computed for the element use <see cref="IComputedStyle"/> interface.
-/// Writing to a property will mask the value coming from USS with the provided value however other properties will still match the values from USS.
-/// </remarks>
-public interface IStyle
-{
+namespace UnityEngine.UIElements {
+  /// <summary>
+  /// This interface provides access to a VisualElement inline style data.
+  /// </summary>
+  /// <remarks>
+  /// Reading properties from this object will read from the inline style data
+  /// for this element. To read the style data computed for the element use <see
+  /// cref="IComputedStyle"/> interface. Writing to a property will mask the
+  /// value coming from USS with the provided value however other properties
+  /// will still match the values from USS.
+  /// </remarks>
+  public interface IStyle {
     /// <summary>
-    /// Alignment of the whole area of children on the cross axis if they span over multiple lines in this container.
+    /// Alignment of the whole area of children on the cross axis if they span
+    /// over multiple lines in this container.
     /// </summary>
     StyleEnum<Align> alignContent {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Alignment of children on the cross axis of this container.
     /// </summary>
     StyleEnum<Align> alignItems {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Similar to align-items, but only for this specific element.
     /// </summary>
     StyleEnum<Align> alignSelf {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Background color to paint in the element's box.
     /// </summary>
     StyleColor backgroundColor {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Background image to paint in the element's box.
     /// </summary>
     StyleBackground backgroundImage {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Color of the element's bottom border.
     /// </summary>
     StyleColor borderBottomColor {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// The radius of the bottom-left corner when a rounded rectangle is drawn in the element's box.
+    /// The radius of the bottom-left corner when a rounded rectangle is drawn
+    /// in the element's box.
     /// </summary>
     StyleLength borderBottomLeftRadius {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// The radius of the bottom-right corner when a rounded rectangle is drawn in the element's box.
+    /// The radius of the bottom-right corner when a rounded rectangle is drawn
+    /// in the element's box.
     /// </summary>
     StyleLength borderBottomRightRadius {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Space reserved for the bottom edge of the border during the layout phase.
+    /// Space reserved for the bottom edge of the border during the layout
+    /// phase.
     /// </summary>
     StyleFloat borderBottomWidth {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Color of the element's left border.
     /// </summary>
     StyleColor borderLeftColor {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Space reserved for the left edge of the border during the layout phase.
     /// </summary>
     StyleFloat borderLeftWidth {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Color of the element's right border.
     /// </summary>
     StyleColor borderRightColor {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Space reserved for the right edge of the border during the layout phase.
     /// </summary>
     StyleFloat borderRightWidth {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Color of the element's top border.
     /// </summary>
     StyleColor borderTopColor {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// The radius of the top-left corner when a rounded rectangle is drawn in the element's box.
+    /// The radius of the top-left corner when a rounded rectangle is drawn in
+    /// the element's box.
     /// </summary>
     StyleLength borderTopLeftRadius {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// The radius of the top-right corner when a rounded rectangle is drawn in the element's box.
+    /// The radius of the top-right corner when a rounded rectangle is drawn in
+    /// the element's box.
     /// </summary>
     StyleLength borderTopRightRadius {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Space reserved for the top edge of the border during the layout phase.
     /// </summary>
     StyleFloat borderTopWidth {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Bottom distance from the element's box during layout.
@@ -143,90 +149,99 @@ public interface IStyle
     /// Also see positionType property.
     /// </remarks>
     StyleLength bottom {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Color to use when drawing the text of an element.
     /// </summary>
     StyleColor color {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Mouse cursor to display when the mouse pointer is over an element.
     /// </summary>
     StyleCursor cursor {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Defines how an element is displayed in the layout.
     /// </summary>
     /// <remarks>
-    /// Unlike the <see cref="IStyle.visibility"/> property, this property affects the layout of the element.
-    ///                              This is a convenient way to hide an element without removing it from the hierarchy (when using the <see cref="DisplayStyle.None"/>).
+    /// Unlike the <see cref="IStyle.visibility"/> property, this property
+    /// affects the layout of the element.
+    ///                              This is a convenient way to hide an element
+    ///                              without removing it from the hierarchy
+    ///                              (when using the <see
+    ///                              cref="DisplayStyle.None"/>).
     ///
     /// </remarks>
     StyleEnum<DisplayStyle> display {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Initial main size of a flex item, on the main flex axis. The final layout mught be smaller or larger, according to the flex shrinking and growing determined by the flex property.
+    /// Initial main size of a flex item, on the main flex axis. The final
+    /// layout mught be smaller or larger, according to the flex shrinking and
+    /// growing determined by the flex property.
     /// </summary>
     StyleLength flexBasis {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Direction of the main axis to layout children in a container.
     /// </summary>
     StyleEnum<FlexDirection> flexDirection {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Specifies how much the item will grow relative to the rest of the flexible items inside the same container.
+    /// Specifies how much the item will grow relative to the rest of the
+    /// flexible items inside the same container.
     /// </summary>
     StyleFloat flexGrow {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Specifies how the item will shrink relative to the rest of the flexible items inside the same container.
+    /// Specifies how the item will shrink relative to the rest of the flexible
+    /// items inside the same container.
     /// </summary>
     StyleFloat flexShrink {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Placement of children over multiple lines if not enough space is available in this container.
+    /// Placement of children over multiple lines if not enough space is
+    /// available in this container.
     /// </summary>
     StyleEnum<Wrap> flexWrap {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Font size to draw the element's text.
     /// </summary>
     StyleLength fontSize {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Fixed height of an element for the layout.
     /// </summary>
     StyleLength height {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Justification of children on the main axis of this container.
     /// </summary>
     StyleEnum<Justify> justifyContent {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Left distance from the element's box during layout.
@@ -235,119 +250,128 @@ public interface IStyle
     /// Also see positionType property.
     /// </remarks>
     StyleLength left {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Space reserved for the bottom edge of the margin during the layout phase.
+    /// Space reserved for the bottom edge of the margin during the layout
+    /// phase.
     /// </summary>
     StyleLength marginBottom {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Space reserved for the left edge of the margin during the layout phase.
     /// </summary>
     StyleLength marginLeft {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Space reserved for the right edge of the margin during the layout phase.
     /// </summary>
     StyleLength marginRight {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Space reserved for the top edge of the margin during the layout phase.
     /// </summary>
     StyleLength marginTop {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Maximum height for an element, when it is flexible or measures its own size.
+    /// Maximum height for an element, when it is flexible or measures its own
+    /// size.
     /// </summary>
     StyleLength maxHeight {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Maximum width for an element, when it is flexible or measures its own size.
+    /// Maximum width for an element, when it is flexible or measures its own
+    /// size.
     /// </summary>
     StyleLength maxWidth {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Minimum height for an element, when it is flexible or measures its own size.
+    /// Minimum height for an element, when it is flexible or measures its own
+    /// size.
     /// </summary>
     StyleLength minHeight {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Minimum width for an element, when it is flexible or measures its own size.
+    /// Minimum width for an element, when it is flexible or measures its own
+    /// size.
     /// </summary>
     StyleLength minWidth {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Specifies the transparency of an element.
     /// </summary>
     /// <remarks>
-    /// The opacity can be between 0.0 and 1.0. The lower value, the more transparent.
+    /// The opacity can be between 0.0 and 1.0. The lower value, the more
+    /// transparent.
     /// </remarks>
     StyleFloat opacity {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// How a container behaves if its content overflows its own box.
     /// </summary>
     StyleEnum<Overflow> overflow {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Space reserved for the bottom edge of the padding during the layout phase.
+    /// Space reserved for the bottom edge of the padding during the layout
+    /// phase.
     /// </summary>
     StyleLength paddingBottom {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Space reserved for the left edge of the padding during the layout phase.
     /// </summary>
     StyleLength paddingLeft {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Space reserved for the right edge of the padding during the layout phase.
+    /// Space reserved for the right edge of the padding during the layout
+    /// phase.
     /// </summary>
     StyleLength paddingRight {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Space reserved for the top edge of the padding during the layout phase.
     /// </summary>
     StyleLength paddingTop {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Element's positioning in its parent container.
     /// </summary>
     /// <remarks>
-    /// This property is used in conjunction with position left, top, right and bottom properties.
+    /// This property is used in conjunction with position left, top, right and
+    /// bottom properties.
     /// </remarks>
     StyleEnum<Position> position {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Right distance from the element's box during layout.
@@ -356,15 +380,15 @@ public interface IStyle
     /// Also see positionType property.
     /// </remarks>
     StyleLength right {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// The element's text overflow mode.
     /// </summary>
     StyleEnum<TextOverflow> textOverflow {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Top distance from the element's box during layout.
@@ -373,106 +397,112 @@ public interface IStyle
     /// Also see positionType property.
     /// </remarks>
     StyleLength top {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Tinting color for the element's backgroundImage
     /// </summary>
     StyleColor unityBackgroundImageTintColor {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Background image scaling in the element's box.
     /// </summary>
     StyleEnum<ScaleMode> unityBackgroundScaleMode {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Font to draw the element's text.
     /// </summary>
     StyleFont unityFont {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Size of the 9-slice's bottom edge when painting an element's background image.
+    /// Size of the 9-slice's bottom edge when painting an element's background
+    /// image.
     /// </summary>
     StyleEnum<FontStyle> unityFontStyleAndWeight {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Specifies which box the element content is clipped against.
     /// </summary>
     StyleEnum<OverflowClipBox> unityOverflowClipBox {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Size of the 9-slice's bottom edge when painting an element's background image.
+    /// Size of the 9-slice's bottom edge when painting an element's background
+    /// image.
     /// </summary>
     StyleInt unitySliceBottom {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Size of the 9-slice's left edge when painting an element's background image.
+    /// Size of the 9-slice's left edge when painting an element's background
+    /// image.
     /// </summary>
     StyleInt unitySliceLeft {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Size of the 9-slice's right edge when painting an element's background image.
+    /// Size of the 9-slice's right edge when painting an element's background
+    /// image.
     /// </summary>
     StyleInt unitySliceRight {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Size of the 9-slice's top edge when painting an element's background image.
+    /// Size of the 9-slice's top edge when painting an element's background
+    /// image.
     /// </summary>
     StyleInt unitySliceTop {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Horizontal and vertical text alignment in the element's box.
     /// </summary>
     StyleEnum<TextAnchor> unityTextAlign {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// The element's text overflow position.
     /// </summary>
     StyleEnum<TextOverflowPosition> unityTextOverflowPosition {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Specifies whether or not an element is visible.
     /// </summary>
     StyleEnum<Visibility> visibility {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Word wrapping over multiple lines if not enough space is available to draw the text of an element.
+    /// Word wrapping over multiple lines if not enough space is available to
+    /// draw the text of an element.
     /// </summary>
     StyleEnum<WhiteSpace> whiteSpace {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Fixed width of an element for the layout.
     /// </summary>
     StyleLength width {
-        get;
-        set;
+      get;
+      set;
     }
-}
+  }
 }

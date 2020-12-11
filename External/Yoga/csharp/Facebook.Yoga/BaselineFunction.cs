@@ -7,7 +7,7 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-namespace UnityEngine.Yoga
-{
-internal delegate float BaselineFunction(YogaNode node, float width, float height);
+namespace UnityEngine.Yoga {
+  internal delegate float BaselineFunction(YogaNode node, float width,
+                                           float height);
 }

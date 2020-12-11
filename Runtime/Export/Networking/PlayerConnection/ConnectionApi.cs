@@ -6,37 +6,29 @@ using System;
 using UnityEngine.Events;
 using UnityEngine.Scripting.APIUpdating;
 
-namespace UnityEngine.Networking.PlayerConnection
-{
-[MovedFrom("UnityEngine.Experimental.Networking.PlayerConnection")]
-public enum ConnectionTarget
-{
-    None, // Only to be used from player side. The editor is always connected to itself, unless connected to a player.
+namespace UnityEngine.Networking.PlayerConnection {
+  [MovedFrom("UnityEngine.Experimental.Networking.PlayerConnection")]
+  public enum ConnectionTarget {
+    None, // Only to be used from player side. The editor is always connected to
+          // itself, unless connected to a player.
     Player,
     Editor,
-}
+  }
 
-[MovedFrom("UnityEngine.Experimental.Networking.PlayerConnection")]
-public interface IConnectionState : IDisposable
-{
-    ConnectionTarget connectedToTarget {
-        get;
-    }
-    string connectionName {
-        get;
-    }
-}
+  [MovedFrom("UnityEngine.Experimental.Networking.PlayerConnection")]
+  public interface IConnectionState : IDisposable {
+    ConnectionTarget connectedToTarget { get; }
+    string connectionName { get; }
+  }
 
-[Serializable]
-public class MessageEventArgs
-{
+  [Serializable]
+  public class MessageEventArgs {
     public int playerId;
 
     public byte[] data;
-}
+  }
 
-public interface IEditorPlayerConnection
-{
+  public interface IEditorPlayerConnection {
     void Register(Guid messageId, UnityAction<MessageEventArgs> callback);
 
     void Unregister(Guid messageId, UnityAction<MessageEventArgs> callback);
@@ -53,5 +45,5 @@ public interface IEditorPlayerConnection
 
     void Send(Guid messageId, byte[] data);
     bool TrySend(Guid messageId, byte[] data);
-}
+  }
 }

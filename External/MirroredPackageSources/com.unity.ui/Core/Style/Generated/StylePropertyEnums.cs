@@ -7,17 +7,10 @@
 /******************************************************************************/
 using static UnityEngine.UIElements.StyleSheets.StylePropertyUtil;
 
-namespace UnityEngine.UIElements.StyleSheets
-{
-internal enum StylePropertyGroup
-{
-    Inherited,
-    NonInherited,
-    Shorthand
-}
+namespace UnityEngine.UIElements.StyleSheets {
+  internal enum StylePropertyGroup { Inherited, NonInherited, Shorthand }
 
-internal enum StyleEnumType
-{
+  internal enum StyleEnumType {
     Align,
     DisplayStyle,
     FlexDirection,
@@ -34,10 +27,9 @@ internal enum StyleEnumType
     Visibility,
     WhiteSpace,
     Wrap
-}
+  }
 
-internal enum StylePropertyId
-{
+  internal enum StylePropertyId {
     Unknown = -1,
     Custom = -2,
     AlignContent = StylePropertyGroup.NonInherited << k_GroupOffset | 0,
@@ -46,8 +38,10 @@ internal enum StylePropertyId
     BackgroundColor = StylePropertyGroup.NonInherited << k_GroupOffset | 3,
     BackgroundImage = StylePropertyGroup.NonInherited << k_GroupOffset | 4,
     BorderBottomColor = StylePropertyGroup.NonInherited << k_GroupOffset | 5,
-    BorderBottomLeftRadius = StylePropertyGroup.NonInherited << k_GroupOffset | 6,
-    BorderBottomRightRadius = StylePropertyGroup.NonInherited << k_GroupOffset | 7,
+    BorderBottomLeftRadius =
+        StylePropertyGroup.NonInherited << k_GroupOffset | 6,
+    BorderBottomRightRadius =
+        StylePropertyGroup.NonInherited << k_GroupOffset | 7,
     BorderBottomWidth = StylePropertyGroup.NonInherited << k_GroupOffset | 8,
     BorderColor = StylePropertyGroup.Shorthand << k_GroupOffset | 0,
     BorderLeftColor = StylePropertyGroup.NonInherited << k_GroupOffset | 9,
@@ -57,7 +51,8 @@ internal enum StylePropertyId
     BorderRightWidth = StylePropertyGroup.NonInherited << k_GroupOffset | 12,
     BorderTopColor = StylePropertyGroup.NonInherited << k_GroupOffset | 13,
     BorderTopLeftRadius = StylePropertyGroup.NonInherited << k_GroupOffset | 14,
-    BorderTopRightRadius = StylePropertyGroup.NonInherited << k_GroupOffset | 15,
+    BorderTopRightRadius =
+        StylePropertyGroup.NonInherited << k_GroupOffset | 15,
     BorderTopWidth = StylePropertyGroup.NonInherited << k_GroupOffset | 16,
     BorderWidth = StylePropertyGroup.Shorthand << k_GroupOffset | 2,
     Bottom = StylePropertyGroup.NonInherited << k_GroupOffset | 17,
@@ -94,19 +89,23 @@ internal enum StylePropertyId
     Right = StylePropertyGroup.NonInherited << k_GroupOffset | 43,
     TextOverflow = StylePropertyGroup.NonInherited << k_GroupOffset | 44,
     Top = StylePropertyGroup.NonInherited << k_GroupOffset | 45,
-    UnityBackgroundImageTintColor = StylePropertyGroup.NonInherited << k_GroupOffset | 46,
-    UnityBackgroundScaleMode = StylePropertyGroup.NonInherited << k_GroupOffset | 47,
+    UnityBackgroundImageTintColor =
+        StylePropertyGroup.NonInherited << k_GroupOffset | 46,
+    UnityBackgroundScaleMode =
+        StylePropertyGroup.NonInherited << k_GroupOffset | 47,
     UnityFont = StylePropertyGroup.Inherited << k_GroupOffset | 2,
     UnityFontStyleAndWeight = StylePropertyGroup.Inherited << k_GroupOffset | 3,
-    UnityOverflowClipBox = StylePropertyGroup.NonInherited << k_GroupOffset | 48,
+    UnityOverflowClipBox =
+        StylePropertyGroup.NonInherited << k_GroupOffset | 48,
     UnitySliceBottom = StylePropertyGroup.NonInherited << k_GroupOffset | 49,
     UnitySliceLeft = StylePropertyGroup.NonInherited << k_GroupOffset | 50,
     UnitySliceRight = StylePropertyGroup.NonInherited << k_GroupOffset | 51,
     UnitySliceTop = StylePropertyGroup.NonInherited << k_GroupOffset | 52,
     UnityTextAlign = StylePropertyGroup.Inherited << k_GroupOffset | 4,
-    UnityTextOverflowPosition = StylePropertyGroup.NonInherited << k_GroupOffset | 53,
+    UnityTextOverflowPosition =
+        StylePropertyGroup.NonInherited << k_GroupOffset | 53,
     Visibility = StylePropertyGroup.Inherited << k_GroupOffset | 5,
     WhiteSpace = StylePropertyGroup.Inherited << k_GroupOffset | 6,
     Width = StylePropertyGroup.NonInherited << k_GroupOffset | 54
-}
+  }
 }

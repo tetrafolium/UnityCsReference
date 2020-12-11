@@ -4,23 +4,24 @@
 
 using System;
 
-namespace UnityEngine.Rendering
-{
-public partial struct ShaderKeyword
-{
-    [Obsolete(@"GetKeywordType is deprecated. Use ShaderKeyword.GetGlobalKeywordType instead.")]
+namespace UnityEngine.Rendering {
+  public partial struct ShaderKeyword {
+    [Obsolete(
+        @"GetKeywordType is deprecated. Use ShaderKeyword.GetGlobalKeywordType instead.")]
     public ShaderKeywordType GetKeywordType() {
-        return GetGlobalKeywordType(this);
+      return GetGlobalKeywordType(this);
     }
 
-    [Obsolete(@"GetKeywordName is deprecated. Use ShaderKeyword.GetGlobalKeywordName instead.")]
+    [Obsolete(
+        @"GetKeywordName is deprecated. Use ShaderKeyword.GetGlobalKeywordName instead.")]
     public string GetKeywordName() {
-        return GetGlobalKeywordName(this);
+      return GetGlobalKeywordName(this);
     }
 
-    [Obsolete(@"GetName() has been deprecated. Use ShaderKeyword.GetGlobalKeywordName instead.")]
+    [Obsolete(
+        @"GetName() has been deprecated. Use ShaderKeyword.GetGlobalKeywordName instead.")]
     public string GetName() {
-        return GetKeywordName();
+      return GetKeywordName();
     }
-}
+  }
 }

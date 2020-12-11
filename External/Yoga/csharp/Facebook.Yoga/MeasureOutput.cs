@@ -7,13 +7,10 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-namespace UnityEngine.Yoga
-{
-internal class MeasureOutput
-{
-    public static YogaSize Make(float width, float height)
-    {
-        return new YogaSize { width = width, height = height};
+namespace UnityEngine.Yoga {
+  internal class MeasureOutput {
+    public static YogaSize Make(float width, float height) {
+      return new YogaSize{width = width, height = height};
     }
-}
+  }
 }

@@ -1,18 +1,13 @@
 using System;
 using UnityEngine.UIElements.Experimental;
 
-namespace UnityEngine.UIElements.Experimental
-{
-internal interface IValueAnimationUpdate
-{
-    void Tick(long currentTimeMs);
-}
+namespace UnityEngine.UIElements.Experimental {
+  internal interface IValueAnimationUpdate { void Tick(long currentTimeMs); }
 
-/// <summary>
-/// Base interface for transition animations.
-/// </summary>
-public interface IValueAnimation
-{
+  /// <summary>
+  /// Base interface for transition animations.
+  /// </summary>
+  public interface IValueAnimation {
     /// <summary>
     /// Starts the animation using this object's values.
     /// </summary>
@@ -25,29 +20,28 @@ public interface IValueAnimation
     /// Returns this animation object into its object pool.
     /// </summary>
     /// <remarks>
-    /// Keeping a reference to the animation object afterwards could lead to unspecified behaviour.
+    /// Keeping a reference to the animation object afterwards could lead to
+    /// unspecified behaviour.
     /// </remarks>
     void Recycle();
     /// <summary>
     /// Tells if the animation is currently active.
     /// </summary>
-    bool isRunning {
-        get;
-    }
+    bool isRunning { get; }
     /// <summary>
     /// Duration of the transition in milliseconds.
     /// </summary>
     int durationMs {
-        get;
-        set;
+      get;
+      set;
     }
-}
+  }
 
-/// <summary>
-/// Implementation object for transition animations.
-/// </summary>
-public sealed class ValueAnimation<T> : IValueAnimationUpdate, IValueAnimation
-{
+  /// <summary>
+  /// Implementation object for transition animations.
+  /// </summary>
+  public sealed class ValueAnimation<T> : IValueAnimationUpdate,
+                                          IValueAnimation {
     const int k_DefaultDurationMs = 400;
     const int k_DefaultMaxPoolSize = 100;
 
@@ -56,82 +50,81 @@ public sealed class ValueAnimation<T> : IValueAnimationUpdate, IValueAnimation
     /// <summary>
     /// Duration of the animation in milliseconds.
     /// </summary>
-    public int durationMs
-    {
-        get {
-            return m_DurationMs;
+    public int durationMs {
+      get { return m_DurationMs; }
+      set {
+        if (value < 1) {
+          value = 1;
         }
-        set
-        {
-            if (value < 1)
-            {
-                value = 1;
-            }
-            m_DurationMs = value;
-        }
+        m_DurationMs = value;
+      }
     }
 
     /// <summary>
-    /// Smoothing function related to this animation. Default value is <see cref="Easing.OutQuad"/>.
+    /// Smoothing function related to this animation. Default value is <see
+    /// cref="Easing.OutQuad"/>.
     /// </summary>
     public Func<float, float> easingCurve {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Tells if the animation is currently active.
     /// </summary>
     public bool isRunning {
-        get;
-        private set;
+      get;
+      private set;
     }
 
     /// <summary>
     /// Callback invoked when this animation has completed.
     /// </summary>
     public Action onAnimationCompleted {
-        get;
-        set;
+      get;
+      set;
     }
 
     /// <summary>
-    /// Returns true if this animation object will be automatically returned to the instance pool after the animation has completed.
+    /// Returns true if this animation object will be automatically returned to
+    /// the instance pool after the animation has completed.
     /// </summary>
     public bool autoRecycle {
-        get;
-        set;
+      get;
+      set;
     }
     private bool recycled {
-        get;
-        set;
+      get;
+      set;
     }
-    static ObjectPool<ValueAnimation<T>> sObjectPool = new ObjectPool<ValueAnimation<T>>(k_DefaultMaxPoolSize);
+    static ObjectPool<ValueAnimation<T>> sObjectPool =
+        new ObjectPool<ValueAnimation<T>>(k_DefaultMaxPoolSize);
 
     private VisualElement owner {
-        get;
-        set;
+      get;
+      set;
     }
 
     /// <summary>
     /// Callback invoked after every value interpolation.
     /// </summary>
     public Action<VisualElement, T> valueUpdated {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
-    /// Callback invoked when the from field has not been set, in order to retrieve the starting state of this animation.
+    /// Callback invoked when the from field has not been set, in order to
+    /// retrieve the starting state of this animation.
     /// </summary>
     public Func<VisualElement, T> initialValue {
-        get;
-        set;
+      get;
+      set;
     }
     /// <summary>
     /// Value interpolation method.
     /// </summary>
     public Func<T, T, float, T> interpolator {
-        get;
-        set;
+      get;
+      set;
     }
 
     private T _from;
@@ -140,31 +133,26 @@ public sealed class ValueAnimation<T> : IValueAnimationUpdate, IValueAnimation
     /// <summary>
     /// The animation start value.
     /// </summary>
-    public T from
-    {
-        get
-        {
-            if (!fromValueSet)
-            {
-                if (initialValue != null)
-                {
-                    from = initialValue(owner);
-                }
-            }
-            return _from;
+    public T from {
+      get {
+        if (!fromValueSet) {
+          if (initialValue != null) {
+            from = initialValue(owner);
+          }
         }
-        set
-        {
-            fromValueSet = true;
-            _from = value;
-        }
+        return _from;
+      }
+      set {
+        fromValueSet = true;
+        _from = value;
+      }
     }
     /// <summary>
     /// The animation end value.
     /// </summary>
     public T to {
-        get;
-        set;
+      get;
+      set;
     }
 
     /// <summary>
@@ -173,24 +161,19 @@ public sealed class ValueAnimation<T> : IValueAnimationUpdate, IValueAnimation
     /// <remarks>
     /// To properly use object pooling, use the Create static function.
     /// </remarks>
-    public ValueAnimation()
-    {
-        SetDefaultValues();
-    }
+    public ValueAnimation() { SetDefaultValues(); }
 
     /// <summary>
     /// Starts the animation using this object's values.
     /// </summary>
-    public void Start()
-    {
-        CheckNotRecycled();
+    public void Start() {
+      CheckNotRecycled();
 
-        if (owner != null)
-        {
-            m_StartTimeMs = Panel.TimeSinceStartupMs();
-            Register();
-            isRunning = true;
-        }
+      if (owner != null) {
+        m_StartTimeMs = Panel.TimeSinceStartupMs();
+        Register();
+        isRunning = true;
+      }
     }
 
     /// <summary>
@@ -199,180 +182,158 @@ public sealed class ValueAnimation<T> : IValueAnimationUpdate, IValueAnimation
     /// <remarks>
     /// If set, the onAnimationCompleted callback will be called.
     /// </remarks>
-    public void Stop()
-    {
-        CheckNotRecycled();
+    public void Stop() {
+      CheckNotRecycled();
 
-        if (isRunning)
-        {
-            Unregister();
-            isRunning = false;
-            onAnimationCompleted?.Invoke();
-            if (autoRecycle)
-            {
-                if (!recycled)
-                {
-                    Recycle();
-                }
-            }
+      if (isRunning) {
+        Unregister();
+        isRunning = false;
+        onAnimationCompleted?.Invoke();
+        if (autoRecycle) {
+          if (!recycled) {
+            Recycle();
+          }
         }
+      }
     }
 
     /// <summary>
     /// Returns this animation object into its object pool.
     /// </summary>
     /// <remarks>
-    /// Keeping a reference to the animation object afterwards could lead to unspecified behaviour.
+    /// Keeping a reference to the animation object afterwards could lead to
+    /// unspecified behaviour.
     /// </remarks>
-    public void Recycle()
-    {
-        CheckNotRecycled();
+    public void Recycle() {
+      CheckNotRecycled();
 
-        //we clear all references:
-        if (isRunning)
-        {
-            if (!autoRecycle)
-            {
-                Stop();
-            }
-            else
-            {
-                Stop();
-                return;
-            }
+      // we clear all references:
+      if (isRunning) {
+        if (!autoRecycle) {
+          Stop();
+        } else {
+          Stop();
+          return;
         }
+      }
 
-        // We reset all fields
-        SetDefaultValues();
-        recycled = true;
+      // We reset all fields
+      SetDefaultValues();
+      recycled = true;
 
-        sObjectPool.Release(this);
+      sObjectPool.Release(this);
     }
 
-    void IValueAnimationUpdate.Tick(long currentTimeMs)
-    {
-        CheckNotRecycled();
+    void IValueAnimationUpdate.Tick(long currentTimeMs) {
+      CheckNotRecycled();
 
-        long interval = currentTimeMs - m_StartTimeMs;
+      long interval = currentTimeMs - m_StartTimeMs;
 
-        float progress = interval / (float)durationMs;
+      float progress = interval / (float) durationMs;
 
-        bool done = false;
-        if (progress >= 1.0f)
-        {
-            progress = 1.0f;
-            done = true;
-        }
+      bool done = false;
+      if (progress >= 1.0f) {
+        progress = 1.0f;
+        done = true;
+      }
 
-        progress = easingCurve?.Invoke(progress) ?? progress;
+      progress = easingCurve?.Invoke(progress) ?? progress;
 
-        if (interpolator != null)
-        {
-            T value = interpolator(from, to, progress);
+      if (interpolator != null) {
+        T value = interpolator(from, to, progress);
 
-            valueUpdated?.Invoke(owner, value);
-        }
+        valueUpdated?.Invoke(owner, value);
+      }
 
-        if (done)
-        {
-            Stop();
-        }
+      if (done) {
+        Stop();
+      }
     }
 
-    private void SetDefaultValues()
-    {
-        m_DurationMs = k_DefaultDurationMs;
-        autoRecycle = true;
-        owner = null;
-        m_StartTimeMs = 0;
+    private void SetDefaultValues() {
+      m_DurationMs = k_DefaultDurationMs;
+      autoRecycle = true;
+      owner = null;
+      m_StartTimeMs = 0;
 
-        onAnimationCompleted = null;
-        valueUpdated = null;
-        initialValue = null;
-        interpolator = null;
+      onAnimationCompleted = null;
+      valueUpdated = null;
+      initialValue = null;
+      interpolator = null;
 
-        to = default(T);
-        from = default(T);
-        fromValueSet = false;
-        easingCurve = Easing.OutQuad;
+      to = default(T);
+      from = default(T);
+      fromValueSet = false;
+      easingCurve = Easing.OutQuad;
     }
 
-    private void Unregister()
-    {
-        if (owner != null)
-        {
-            owner.UnregisterAnimation(this);
-        }
+    private void Unregister() {
+      if (owner != null) {
+        owner.UnregisterAnimation(this);
+      }
     }
 
-    private void Register()
-    {
-        if (owner != null)
-        {
-            owner.RegisterAnimation(this);
-        }
+    private void Register() {
+      if (owner != null) {
+        owner.RegisterAnimation(this);
+      }
     }
 
-    internal void SetOwner(VisualElement e)
-    {
-        if (isRunning)
-        {
-            Unregister();
-        }
+    internal void SetOwner(VisualElement e) {
+      if (isRunning) {
+        Unregister();
+      }
 
-        owner = e;
+      owner = e;
 
-        if (isRunning)
-        {
-            Register();
-        }
+      if (isRunning) {
+        Register();
+      }
     }
 
-    void CheckNotRecycled()
-    {
-        if (recycled)
-        {
-            throw new InvalidOperationException("Animation object has been recycled. Use KeepAlive() to keep a reference to an animation after it has been stopped.");
-        }
+    void CheckNotRecycled() {
+      if (recycled) {
+        throw new InvalidOperationException(
+            "Animation object has been recycled. Use KeepAlive() to keep a reference to an animation after it has been stopped.");
+      }
     }
 
     /// <summary>
-    /// Creates a new ValueAnimation object or returns an available one from it's instance pool.
+    /// Creates a new ValueAnimation object or returns an available one from
+    /// it's instance pool.
     /// </summary>
-    public static ValueAnimation<T> Create(VisualElement e, Func<T, T, float, T> interpolator)
-    {
-        var result = sObjectPool.Get();
-        result.recycled = false;
-        result.SetOwner(e);
-        result.interpolator = interpolator;
-        return result;
+    public static ValueAnimation<T> Create(VisualElement e,
+                                           Func<T, T, float, T> interpolator) {
+      var result = sObjectPool.Get();
+      result.recycled = false;
+      result.SetOwner(e);
+      result.interpolator = interpolator;
+      return result;
     }
 
     /// <summary>
     /// Sets the easing function.
     /// </summary>
-    public ValueAnimation<T> Ease(Func<float, float> easing)
-    {
-        easingCurve = easing;
-        return this;
+    public ValueAnimation<T> Ease(Func<float, float> easing) {
+      easingCurve = easing;
+      return this;
     }
 
     /// <summary>
     /// Sets a callback invoked when this animation has completed.
     /// </summary>
-    public ValueAnimation<T> OnCompleted(Action callback)
-    {
-        onAnimationCompleted = callback;
-        return this;
+    public ValueAnimation<T> OnCompleted(Action callback) {
+      onAnimationCompleted = callback;
+      return this;
     }
 
     /// <summary>
-    /// Will not return the object to the instance pool when the animation has completed.
+    /// Will not return the object to the instance pool when the animation has
+    /// completed.
     /// </summary>
-    public ValueAnimation<T> KeepAlive()
-    {
-        autoRecycle = false;
-        return this;
+    public ValueAnimation<T> KeepAlive() {
+      autoRecycle = false;
+      return this;
     }
-}
+  }
 }

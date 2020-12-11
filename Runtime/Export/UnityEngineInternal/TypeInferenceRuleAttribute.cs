@@ -4,29 +4,27 @@
 
 using System;
 
-namespace UnityEngineInternal
-{
-public enum TypeInferenceRules
-{
-    /// <summary>
-    /// (typeof(T)) as T
-    /// </summary>
-    TypeReferencedByFirstArgument,
+namespace UnityEngineInternal {
+public enum TypeInferenceRules {
+  /// <summary>
+  /// (typeof(T)) as T
+  /// </summary>
+  TypeReferencedByFirstArgument,
 
-    /// <summary>
-    /// (, typeof(T)) as T
-    /// </summary>
-    TypeReferencedBySecondArgument,
+  /// <summary>
+  /// (, typeof(T)) as T
+  /// </summary>
+  TypeReferencedBySecondArgument,
 
-    /// <summary>
-    /// (typeof(T)) as (T)
-    /// </summary>
-    ArrayOfTypeReferencedByFirstArgument,
+  /// <summary>
+  /// (typeof(T)) as (T)
+  /// </summary>
+  ArrayOfTypeReferencedByFirstArgument,
 
-    /// <summary>
-    /// (T) as T
-    /// </summary>
-    TypeOfFirstArgument,
+  /// <summary>
+  /// (T) as T
+  /// </summary>
+  TypeOfFirstArgument,
 }
 
 /// <summary>
@@ -34,23 +32,14 @@ public enum TypeInferenceRules
 /// </summary>
 [Serializable]
 [AttributeUsage(AttributeTargets.Method)]
-public class TypeInferenceRuleAttribute : Attribute
-{
-    private readonly string _rule;
+public class TypeInferenceRuleAttribute : Attribute {
+  private readonly string _rule;
 
-    public TypeInferenceRuleAttribute(TypeInferenceRules rule)
-        : this(rule.ToString())
-    {
-    }
+  public TypeInferenceRuleAttribute(TypeInferenceRules rule)
+      : this(rule.ToString()) {}
 
-    public TypeInferenceRuleAttribute(string rule)
-    {
-        _rule = rule;
-    }
+  public TypeInferenceRuleAttribute(string rule) { _rule = rule; }
 
-    public override string ToString()
-    {
-        return _rule;
-    }
+  public override string ToString() { return _rule; }
 }
 }

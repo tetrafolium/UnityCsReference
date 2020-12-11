@@ -7,209 +7,178 @@ using System.Collections;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace UnityEngine
-{
+namespace UnityEngine {
 [UsedByNativeCode]
 [NativeHeader("Runtime/Graphics/DisplayManager.h")]
-public class Display
-{
-    internal IntPtr  nativeDisplay;
-    internal Display()
-    {
-        this.nativeDisplay = new IntPtr(0);
+public class Display {
+  internal IntPtr nativeDisplay;
+  internal Display() { this.nativeDisplay = new IntPtr(0); }
+
+  internal Display(IntPtr nativeDisplay) { this.nativeDisplay = nativeDisplay; }
+
+  public int renderingWidth {
+    get {
+      int w = 0, h = 0;
+      GetRenderingExtImpl(nativeDisplay, out w, out h);
+      return w;
     }
-
-    internal Display(IntPtr nativeDisplay)   {
-        this.nativeDisplay = nativeDisplay;
+  }
+  public int renderingHeight {
+    get {
+      int w = 0, h = 0;
+      GetRenderingExtImpl(nativeDisplay, out w, out h);
+      return h;
     }
+  }
 
-    public int    renderingWidth
-    {
-        get
-        {
-            int w = 0, h = 0;
-            GetRenderingExtImpl(nativeDisplay, out w, out h);
-            return w;
-        }
+  public int systemWidth {
+    get {
+      int w = 0, h = 0;
+      GetSystemExtImpl(nativeDisplay, out w, out h);
+      return w;
     }
-    public int    renderingHeight
-    {
-        get
-        {
-            int w = 0, h = 0;
-            GetRenderingExtImpl(nativeDisplay, out w, out h);
-            return h;
-        }
+  }
+  public int systemHeight {
+    get {
+      int w = 0, h = 0;
+      GetSystemExtImpl(nativeDisplay, out w, out h);
+      return h;
     }
+  }
 
-    public int    systemWidth
-    {
-        get
-        {
-            int w = 0, h = 0;
-            GetSystemExtImpl(nativeDisplay, out w, out h);
-            return w;
-        }
+  public RenderBuffer colorBuffer {
+    get {
+      RenderBuffer color, depth;
+      GetRenderingBuffersImpl(nativeDisplay, out color, out depth);
+      return color;
     }
-    public int    systemHeight
-    {
-        get
-        {
-            int w = 0, h = 0;
-            GetSystemExtImpl(nativeDisplay, out w, out h);
-            return h;
-        }
+  }
+
+  public RenderBuffer depthBuffer {
+    get {
+      RenderBuffer color, depth;
+      GetRenderingBuffersImpl(nativeDisplay, out color, out depth);
+      return depth;
     }
+  }
 
-    public RenderBuffer colorBuffer
-    {
-        get
-        {
-            RenderBuffer color, depth;
-            GetRenderingBuffersImpl(nativeDisplay, out color, out depth);
-            return color;
-        }
+  public bool active {
+    get { return GetActiveImpl(nativeDisplay); }
+  }
+
+  public bool requiresBlitToBackbuffer {
+    get {
+      int displayIndex = nativeDisplay.ToInt32();
+      if (displayIndex < HDROutputSettings.displays.Length) {
+        bool active = HDROutputSettings.displays[displayIndex].available &&
+                      HDROutputSettings.displays[displayIndex].active;
+        if (active)
+          return true;
+      }
+      return RequiresBlitToBackbufferImpl(nativeDisplay);
     }
+  }
 
-    public RenderBuffer depthBuffer
-    {
-        get
-        {
-            RenderBuffer color, depth;
-            GetRenderingBuffersImpl(nativeDisplay, out color, out depth);
-            return depth;
-        }
-    }
+  public bool requiresSrgbBlitToBackbuffer {
+    get { return RequiresSrgbBlitToBackbufferImpl(nativeDisplay); }
+  }
 
-    public bool active
-    {
-        get
-        {
-            return GetActiveImpl(nativeDisplay);
-        }
-    }
+  public void Activate() { ActivateDisplayImpl(nativeDisplay, 0, 0, 60); }
 
-    public bool requiresBlitToBackbuffer
-    {
-        get
-        {
-            int displayIndex = nativeDisplay.ToInt32();
-            if (displayIndex < HDROutputSettings.displays.Length)
-            {
-                bool active = HDROutputSettings.displays[displayIndex].available && HDROutputSettings.displays[displayIndex].active;
-                if (active)
-                    return true;
-            }
-            return RequiresBlitToBackbufferImpl(nativeDisplay);
-        }
-    }
+  public void Activate(int width, int height, int refreshRate) {
+    ActivateDisplayImpl(nativeDisplay, width, height, refreshRate);
+  }
 
-    public bool requiresSrgbBlitToBackbuffer
-    {
-        get
-        {
-            return RequiresSrgbBlitToBackbufferImpl(nativeDisplay);
-        }
-    }
+  public void SetParams(int width, int height, int x, int y) {
+    SetParamsImpl(nativeDisplay, width, height, x, y);
+  }
 
-    public void Activate()
-    {
-        ActivateDisplayImpl(nativeDisplay, 0, 0, 60);
-    }
+  public void SetRenderingResolution(int w, int h) {
+    SetRenderingResolutionImpl(nativeDisplay, w, h);
+  }
 
-    public void Activate(int width, int height, int refreshRate)
-    {
-        ActivateDisplayImpl(nativeDisplay, width, height, refreshRate);
-    }
+  [System.Obsolete("MultiDisplayLicense has been deprecated.", false)]
+  public static bool MultiDisplayLicense() {
+    return true;
+  }
 
-    public void SetParams(int width, int height, int x, int y)
-    {
-        SetParamsImpl(nativeDisplay, width, height, x, y);
-    }
+  public static Vector3 RelativeMouseAt(Vector3 inputMouseCoordinates) {
+    Vector3 vec;
+    int rx = 0, ry = 0;
+    int x = (int) inputMouseCoordinates.x;
+    int y = (int) inputMouseCoordinates.y;
+    vec.z = (int) RelativeMouseAtImpl(x, y, out rx, out ry);
+    vec.x = rx;
+    vec.y = ry;
+    return vec;
+  }
 
-    public void SetRenderingResolution(int w, int h)
-    {
-        SetRenderingResolutionImpl(nativeDisplay, w, h);
-    }
+  public static Display[] displays = new Display[1]{new Display()};
+  private static Display _mainDisplay = displays[0];
+  public static Display main {
+    get { return _mainDisplay; }
+  }
 
-    [System.Obsolete("MultiDisplayLicense has been deprecated.", false)]
-    public static bool MultiDisplayLicense()
-    {
-        return true;
-    }
+  [RequiredByNativeCode]
+  private static void RecreateDisplayList(IntPtr[] nativeDisplay) {
+    if (nativeDisplay.Length == 0) // case 1017288
+      return;
 
-    public static Vector3 RelativeMouseAt(Vector3 inputMouseCoordinates)
-    {
-        Vector3 vec;
-        int rx = 0, ry = 0;
-        int x = (int)inputMouseCoordinates.x;
-        int y = (int)inputMouseCoordinates.y;
-        vec.z = (int)RelativeMouseAtImpl(x, y, out rx, out ry);
-        vec.x = rx;
-        vec.y = ry;
-        return vec;
-    }
+    Display.displays = new Display[nativeDisplay.Length];
+    for (int i = 0; i < nativeDisplay.Length; ++i)
+      Display.displays[i] = new Display(nativeDisplay[i]);
 
-    public static Display[] displays    = new Display[1] { new Display() };
-    private static Display _mainDisplay = displays[0];
-    public static Display   main        {
-        get {
-            return _mainDisplay;
-        }
-    }
+    _mainDisplay = displays[0];
+  }
 
-    [RequiredByNativeCode]
-    private static void RecreateDisplayList(IntPtr[] nativeDisplay)
-    {
-        if (nativeDisplay.Length == 0) // case 1017288
-            return;
+  [RequiredByNativeCode]
+  private static void FireDisplaysUpdated() {
+    if (onDisplaysUpdated != null)
+      onDisplaysUpdated();
+  }
 
-        Display.displays = new Display[nativeDisplay.Length];
-        for (int i = 0; i < nativeDisplay.Length; ++i)
-            Display.displays[i] = new Display(nativeDisplay[i]);
+  public delegate void DisplaysUpdatedDelegate();
+  public static event DisplaysUpdatedDelegate onDisplaysUpdated = null;
 
-        _mainDisplay = displays[0];
-    }
+  [FreeFunction(
+      "UnityDisplayManager_DisplaySystemResolution")] extern private static void
+  GetSystemExtImpl(IntPtr nativeDisplay, out int w, out int h);
 
-    [RequiredByNativeCode]
-    private static void FireDisplaysUpdated()
-    {
-        if (onDisplaysUpdated != null)
-            onDisplaysUpdated();
-    }
+  [FreeFunction(
+      "UnityDisplayManager_DisplayRenderingResolution")] extern private static void
+  GetRenderingExtImpl(IntPtr nativeDisplay, out int w, out int h);
 
-    public delegate void DisplaysUpdatedDelegate();
-    public static event DisplaysUpdatedDelegate onDisplaysUpdated = null;
+  [FreeFunction(
+      "UnityDisplayManager_GetRenderingBuffersWrapper")] extern private static void
+  GetRenderingBuffersImpl(IntPtr nativeDisplay, out RenderBuffer color,
+                          out RenderBuffer depth);
 
+  [FreeFunction(
+      "UnityDisplayManager_SetRenderingResolution")] extern private static void
+  SetRenderingResolutionImpl(IntPtr nativeDisplay, int w, int h);
 
-    [FreeFunction("UnityDisplayManager_DisplaySystemResolution")]
-    extern private static void GetSystemExtImpl(IntPtr nativeDisplay, out int w, out int h);
+  [FreeFunction(
+      "UnityDisplayManager_ActivateDisplay")] extern private static void
+  ActivateDisplayImpl(IntPtr nativeDisplay, int width, int height,
+                      int refreshRate);
 
-    [FreeFunction("UnityDisplayManager_DisplayRenderingResolution")]
-    extern private static void GetRenderingExtImpl(IntPtr nativeDisplay, out int w, out int h);
+  [FreeFunction(
+      "UnityDisplayManager_SetDisplayParam")] extern private static void
+  SetParamsImpl(IntPtr nativeDisplay, int width, int height, int x, int y);
 
-    [FreeFunction("UnityDisplayManager_GetRenderingBuffersWrapper")]
-    extern private static void GetRenderingBuffersImpl(IntPtr nativeDisplay, out RenderBuffer color, out RenderBuffer depth);
+  [FreeFunction(
+      "UnityDisplayManager_RelativeMouseAt")] extern private static int
+  RelativeMouseAtImpl(int x, int y, out int rx, out int ry);
 
-    [FreeFunction("UnityDisplayManager_SetRenderingResolution")]
-    extern private static void SetRenderingResolutionImpl(IntPtr nativeDisplay, int w, int h);
+  [FreeFunction("UnityDisplayManager_DisplayActive")] extern private static bool
+  GetActiveImpl(IntPtr nativeDisplay);
 
-    [FreeFunction("UnityDisplayManager_ActivateDisplay")]
-    extern private static void ActivateDisplayImpl(IntPtr nativeDisplay, int width, int height, int refreshRate);
+  [FreeFunction(
+      "UnityDisplayManager_RequiresBlitToBackbuffer")] extern private static bool
+  RequiresBlitToBackbufferImpl(IntPtr nativeDisplay);
 
-    [FreeFunction("UnityDisplayManager_SetDisplayParam")]
-    extern private static void SetParamsImpl(IntPtr nativeDisplay, int width, int height, int x, int y);
-
-    [FreeFunction("UnityDisplayManager_RelativeMouseAt")]
-    extern private static int RelativeMouseAtImpl(int x, int y, out int rx, out int ry);
-
-    [FreeFunction("UnityDisplayManager_DisplayActive")]
-    extern private static bool GetActiveImpl(IntPtr nativeDisplay);
-
-    [FreeFunction("UnityDisplayManager_RequiresBlitToBackbuffer")]
-    extern private static bool RequiresBlitToBackbufferImpl(IntPtr nativeDisplay);
-
-    [FreeFunction("UnityDisplayManager_RequiresSRGBBlitToBackbuffer")]
-    extern private static bool RequiresSrgbBlitToBackbufferImpl(IntPtr nativeDisplay);
+  [FreeFunction(
+      "UnityDisplayManager_RequiresSRGBBlitToBackbuffer")] extern private static bool
+  RequiresSrgbBlitToBackbufferImpl(IntPtr nativeDisplay);
 }
 }

@@ -7,34 +7,35 @@ using UnityEngine.Bindings;
 using System.Reflection;
 using UnityEngine;
 
-namespace Unity.Burst.LowLevel
-{
-[NativeHeader("Runtime/Burst/Burst.h")]
-[NativeHeader("Runtime/Burst/BurstDelegateCache.h")]
-[StaticAccessor("BurstCompilerService::Get()", StaticAccessorType.Arrow)]
-internal static partial class BurstCompilerService
-{
+namespace Unity.Burst.LowLevel {
+  [NativeHeader("Runtime/Burst/Burst.h")]
+  [NativeHeader("Runtime/Burst/BurstDelegateCache.h")]
+  [StaticAccessor("BurstCompilerService::Get()", StaticAccessorType.Arrow)]
+  internal static partial class BurstCompilerService {
     [NativeMethod("Initialize")]
-    static extern string InitializeInternal(string path, ExtractCompilerFlags extractCompilerFlags);
+    static extern string
+    InitializeInternal(string path, ExtractCompilerFlags extractCompilerFlags);
 
     [ThreadSafe]
-    public static extern string GetDisassembly(MethodInfo m, string compilerOptions);
+    public static extern string GetDisassembly(MethodInfo m,
+                                               string compilerOptions);
 
     [FreeFunction]
-    public static extern int CompileAsyncDelegateMethod(object delegateMethod, string compilerOptions);
+    public static extern int CompileAsyncDelegateMethod(object delegateMethod,
+                                                        string compilerOptions);
 
     [FreeFunction]
-    public static extern unsafe void* GetAsyncCompiledAsyncDelegateMethod(int userID);
+    public static extern unsafe void *
+    GetAsyncCompiledAsyncDelegateMethod(int userID);
 
     [ThreadSafe]
-    public static extern unsafe void* GetOrCreateSharedMemory(ref Hash128 key, uint size_of, uint alignment);
+    public static extern unsafe void *
+    GetOrCreateSharedMemory(ref Hash128 key, uint size_of, uint alignment);
 
     [ThreadSafe]
     public static extern string GetMethodSignature(MethodInfo method);
 
-    public static extern bool IsInitialized {
-        get;
-    }
+    public static extern bool IsInitialized { get; }
 
     [ThreadSafe]
     public static extern void SetCurrentExecutionMode(uint environment);
@@ -42,7 +43,10 @@ internal static partial class BurstCompilerService
     [ThreadSafe]
     public static extern uint GetCurrentExecutionMode();
 
-    [FreeFunction("DefaultBurstLogCallback", isThreadSafe: true)]
-    public static extern unsafe void Log(void* userData, BurstLogType logType, byte* message, byte* filename, int lineNumber);
-}
+    [FreeFunction("DefaultBurstLogCallback", isThreadSafe
+                  : true)]
+    public static extern unsafe void Log(void *userData, BurstLogType logType,
+                                         byte *message, byte *filename,
+                                         int lineNumber);
+  }
 }
