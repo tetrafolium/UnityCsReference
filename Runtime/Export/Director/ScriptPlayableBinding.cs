@@ -8,16 +8,16 @@ using UnityEngine.Bindings;
 using UnityEngine.Playables;
 
 namespace UnityEngine.Playables {
-  public static class ScriptPlayableBinding {
-    public static PlayableBinding Create(string name, UnityEngine.Object key,
-                                         System.Type type) {
-      return PlayableBinding.CreateInternal(name, key, type,
-                                            CreateScriptOutput);
-    }
+public static class ScriptPlayableBinding {
+public static PlayableBinding Create(string name, UnityEngine.Object key,
+                                     System.Type type) {
+	return PlayableBinding.CreateInternal(name, key, type,
+	                                      CreateScriptOutput);
+}
 
-    private static PlayableOutput CreateScriptOutput(PlayableGraph graph,
-                                                     string name) {
-      return (PlayableOutput) ScriptPlayableOutput.Create(graph, name);
-    }
-  }
+private static PlayableOutput CreateScriptOutput(PlayableGraph graph,
+                                                 string name) {
+	return (PlayableOutput) ScriptPlayableOutput.Create(graph, name);
+}
+}
 }

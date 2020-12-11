@@ -6,24 +6,30 @@ using System;
 
 namespace UnityEngine {
 internal class ApplicationShimBase : IDisposable {
-  public void Dispose() { ShimManager.RemoveShim(this); }
+public void Dispose() {
+	ShimManager.RemoveShim(this);
+}
 
-  public bool IsActive() { return ShimManager.IsShimActive(this); }
+public bool IsActive() {
+	return ShimManager.IsShimActive(this);
+}
 
-  public void OnLowMemory() { Application.CallLowMemory(); }
+public void OnLowMemory() {
+	Application.CallLowMemory();
+}
 
-  public virtual bool isEditor => ApplicationEditor.isEditor;
+public virtual bool isEditor => ApplicationEditor.isEditor;
 
-  public virtual RuntimePlatform platform => ApplicationEditor.platform;
+public virtual RuntimePlatform platform => ApplicationEditor.platform;
 
-  public virtual bool isMobilePlatform => ApplicationEditor.isMobilePlatform;
+public virtual bool isMobilePlatform => ApplicationEditor.isMobilePlatform;
 
-  public virtual bool isConsolePlatform => ApplicationEditor.isConsolePlatform;
+public virtual bool isConsolePlatform => ApplicationEditor.isConsolePlatform;
 
-  public virtual SystemLanguage systemLanguage => ApplicationEditor
-                                                      .systemLanguage;
+public virtual SystemLanguage systemLanguage => ApplicationEditor
+.systemLanguage;
 
-  public virtual NetworkReachability
-      internetReachability => ApplicationEditor.internetReachability;
+public virtual NetworkReachability
+        internetReachability => ApplicationEditor.internetReachability;
 }
 }

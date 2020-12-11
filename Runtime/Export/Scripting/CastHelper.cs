@@ -11,7 +11,7 @@ namespace UnityEngine {
 // below to get a cast done without any checks in that case, which gets us a
 // performance increase.
 internal struct CastHelper<T> {
-  public T t;
-  public System.IntPtr onePointerFurtherThanT;
+	public T t;
+	public System.IntPtr onePointerFurtherThanT;
 }
 }

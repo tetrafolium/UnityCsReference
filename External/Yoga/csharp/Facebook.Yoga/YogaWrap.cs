@@ -8,9 +8,9 @@
  */
 
 namespace UnityEngine.Yoga {
-  internal enum YogaWrap {
-    NoWrap,
-    Wrap,
-    WrapReverse,
-  }
+internal enum YogaWrap {
+	NoWrap,
+	Wrap,
+	WrapReverse,
+}
 }

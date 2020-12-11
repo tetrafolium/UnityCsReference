@@ -12,149 +12,157 @@ namespace UnityEngine {
 [NativeHeader("Runtime/Graphics/Billboard/BillboardAsset.h")]
 [NativeHeader("Runtime/Export/Graphics/BillboardRenderer.bindings.h")]
 public sealed class BillboardAsset : Object {
-  public BillboardAsset() { Internal_Create(this); }
+public BillboardAsset() {
+	Internal_Create(this);
+}
 
-  [FreeFunction(
-      Name =
-          "BillboardRenderer_Bindings::Internal_Create")] extern private static void
-  Internal_Create([ Writable ] BillboardAsset obj);
+[FreeFunction(
+	 Name =
+		 "BillboardRenderer_Bindings::Internal_Create")] extern private static void
+Internal_Create([ Writable ] BillboardAsset obj);
 
-  extern public float width {
-    get;
-    set;
-  }
-  extern public float height {
-    get;
-    set;
-  }
-  extern public float bottom {
-    get;
-    set;
-  }
+extern public float width {
+	get;
+	set;
+}
+extern public float height {
+	get;
+	set;
+}
+extern public float bottom {
+	get;
+	set;
+}
 
-  extern public int imageCount { [NativeMethod("GetNumImages")] get; }
+extern public int imageCount {
+	[NativeMethod("GetNumImages")] get;
+}
 
-  extern public int vertexCount { [NativeMethod("GetNumVertices")] get; }
+extern public int vertexCount {
+	[NativeMethod("GetNumVertices")] get;
+}
 
-  extern public int indexCount { [NativeMethod("GetNumIndices")] get; }
+extern public int indexCount {
+	[NativeMethod("GetNumIndices")] get;
+}
 
-  extern public Material material {
-    get;
-    set;
-  }
+extern public Material material {
+	get;
+	set;
+}
 
-  // List<T> version
-  public void GetImageTexCoords(List<Vector4> imageTexCoords) {
-    if (imageTexCoords == null)
-      throw new ArgumentNullException("imageTexCoords");
+// List<T> version
+public void GetImageTexCoords(List<Vector4> imageTexCoords) {
+	if (imageTexCoords == null)
+		throw new ArgumentNullException("imageTexCoords");
 
-    GetImageTexCoordsInternal(imageTexCoords);
-  }
+	GetImageTexCoordsInternal(imageTexCoords);
+}
 
-  // T[] version
-  [NativeMethod(
-      "GetBillboardDataReadonly().GetImageTexCoords")] extern public Vector4
-      [] GetImageTexCoords();
+// T[] version
+[NativeMethod(
+	 "GetBillboardDataReadonly().GetImageTexCoords")] extern public Vector4
+[] GetImageTexCoords();
 
-  [FreeFunction(Name = "BillboardRenderer_Bindings::GetImageTexCoordsInternal",
-                HasExplicitThis = true)] extern internal void
-  GetImageTexCoordsInternal(object list);
+[FreeFunction(Name = "BillboardRenderer_Bindings::GetImageTexCoordsInternal",
+              HasExplicitThis = true)] extern internal void
+GetImageTexCoordsInternal(object list);
 
-  // List<T> version
-  public void SetImageTexCoords(List<Vector4> imageTexCoords) {
-    if (imageTexCoords == null)
-      throw new ArgumentNullException("imageTexCoords");
+// List<T> version
+public void SetImageTexCoords(List<Vector4> imageTexCoords) {
+	if (imageTexCoords == null)
+		throw new ArgumentNullException("imageTexCoords");
 
-    SetImageTexCoordsInternalList(imageTexCoords);
-  }
+	SetImageTexCoordsInternalList(imageTexCoords);
+}
 
-  // T[] version
-  [FreeFunction(Name = "BillboardRenderer_Bindings::SetImageTexCoords",
-                HasExplicitThis = true)] extern public void
-      SetImageTexCoords([ NotNull ] Vector4[] imageTexCoords);
+// T[] version
+[FreeFunction(Name = "BillboardRenderer_Bindings::SetImageTexCoords",
+              HasExplicitThis = true)] extern public void
+SetImageTexCoords([ NotNull ] Vector4[] imageTexCoords);
 
-  [FreeFunction(
-      Name = "BillboardRenderer_Bindings::SetImageTexCoordsInternalList",
-      HasExplicitThis = true)] extern internal void
-  SetImageTexCoordsInternalList(object list);
+[FreeFunction(
+	 Name = "BillboardRenderer_Bindings::SetImageTexCoordsInternalList",
+	 HasExplicitThis = true)] extern internal void
+SetImageTexCoordsInternalList(object list);
 
-  // List<T> version
-  public void GetVertices(List<Vector2> vertices) {
-    if (vertices == null)
-      throw new ArgumentNullException("vertices");
+// List<T> version
+public void GetVertices(List<Vector2> vertices) {
+	if (vertices == null)
+		throw new ArgumentNullException("vertices");
 
-    GetVerticesInternal(vertices);
-  }
+	GetVerticesInternal(vertices);
+}
 
-  // T[] version
-  [NativeMethod("GetBillboardDataReadonly().GetVertices")] extern public Vector2
-      [] GetVertices();
+// T[] version
+[NativeMethod("GetBillboardDataReadonly().GetVertices")] extern public Vector2
+[] GetVertices();
 
-  [FreeFunction(Name = "BillboardRenderer_Bindings::GetVerticesInternal",
-                HasExplicitThis = true)] extern internal void
-  GetVerticesInternal(object list);
+[FreeFunction(Name = "BillboardRenderer_Bindings::GetVerticesInternal",
+              HasExplicitThis = true)] extern internal void
+GetVerticesInternal(object list);
 
-  // List<T> version
-  public void SetVertices(List<Vector2> vertices) {
-    if (vertices == null)
-      throw new ArgumentNullException("vertices");
+// List<T> version
+public void SetVertices(List<Vector2> vertices) {
+	if (vertices == null)
+		throw new ArgumentNullException("vertices");
 
-    SetVerticesInternalList(vertices);
-  }
+	SetVerticesInternalList(vertices);
+}
 
-  // T[] version
-  [FreeFunction(Name = "BillboardRenderer_Bindings::SetVertices",
-                HasExplicitThis = true)] extern public void
-      SetVertices([ NotNull ] Vector2[] vertices);
+// T[] version
+[FreeFunction(Name = "BillboardRenderer_Bindings::SetVertices",
+              HasExplicitThis = true)] extern public void
+SetVertices([ NotNull ] Vector2[] vertices);
 
-  [FreeFunction(Name = "BillboardRenderer_Bindings::SetVerticesInternalList",
-                HasExplicitThis = true)] extern internal void
-  SetVerticesInternalList(object list);
+[FreeFunction(Name = "BillboardRenderer_Bindings::SetVerticesInternalList",
+              HasExplicitThis = true)] extern internal void
+SetVerticesInternalList(object list);
 
-  // List<T> version
-  public void GetIndices(List<UInt16> indices) {
-    if (indices == null)
-      throw new ArgumentNullException("indices");
+// List<T> version
+public void GetIndices(List<UInt16> indices) {
+	if (indices == null)
+		throw new ArgumentNullException("indices");
 
-    GetIndicesInternal(indices);
-  }
+	GetIndicesInternal(indices);
+}
 
-  // T[] version
-  [NativeMethod("GetBillboardDataReadonly().GetIndices")] extern public UInt16
-      [] GetIndices();
+// T[] version
+[NativeMethod("GetBillboardDataReadonly().GetIndices")] extern public UInt16
+[] GetIndices();
 
-  [FreeFunction(Name = "BillboardRenderer_Bindings::GetIndicesInternal",
-                HasExplicitThis = true)] extern internal void
-  GetIndicesInternal(object list);
+[FreeFunction(Name = "BillboardRenderer_Bindings::GetIndicesInternal",
+              HasExplicitThis = true)] extern internal void
+GetIndicesInternal(object list);
 
-  // List<T> version
-  public void SetIndices(List<UInt16> indices) {
-    if (indices == null)
-      throw new ArgumentNullException("indices");
+// List<T> version
+public void SetIndices(List<UInt16> indices) {
+	if (indices == null)
+		throw new ArgumentNullException("indices");
 
-    SetIndicesInternalList(indices);
-  }
+	SetIndicesInternalList(indices);
+}
 
-  // T[] version
-  [FreeFunction(Name = "BillboardRenderer_Bindings::SetIndices",
-                HasExplicitThis = true)] extern public void
-      SetIndices([ NotNull ] UInt16[] indices);
+// T[] version
+[FreeFunction(Name = "BillboardRenderer_Bindings::SetIndices",
+              HasExplicitThis = true)] extern public void
+SetIndices([ NotNull ] UInt16[] indices);
 
-  [FreeFunction(Name = "BillboardRenderer_Bindings::SetIndicesInternalList",
-                HasExplicitThis = true)] extern internal void
-  SetIndicesInternalList(object list);
+[FreeFunction(Name = "BillboardRenderer_Bindings::SetIndicesInternalList",
+              HasExplicitThis = true)] extern internal void
+SetIndicesInternalList(object list);
 
-  [FreeFunction(Name = "BillboardRenderer_Bindings::MakeMaterialProperties",
-                HasExplicitThis = true)] extern internal void
-  MakeMaterialProperties(MaterialPropertyBlock properties, Camera camera);
+[FreeFunction(Name = "BillboardRenderer_Bindings::MakeMaterialProperties",
+              HasExplicitThis = true)] extern internal void
+MakeMaterialProperties(MaterialPropertyBlock properties, Camera camera);
 }
 
 /// Renders a billboard.
 [NativeHeader("Runtime/Graphics/Billboard/BillboardRenderer.h")]
 public sealed class BillboardRenderer : Renderer {
-  extern public BillboardAsset billboard {
-    get;
-    set;
-  }
+extern public BillboardAsset billboard {
+	get;
+	set;
+}
 }
 }

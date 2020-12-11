@@ -10,49 +10,49 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine {
 public sealed partial class Security {
-  static readonly string kSignatureExtension = ".signature";
+static readonly string kSignatureExtension = ".signature";
 
-  [RequiredByNativeCode]
-  internal static bool VerifySignature(string file, byte[] publicKey) {
-    try {
-      string signature = file + kSignatureExtension;
-      if (!File.Exists(signature))
-        return false;
+[RequiredByNativeCode]
+internal static bool VerifySignature(string file, byte[] publicKey) {
+	try {
+		string signature = file + kSignatureExtension;
+		if (!File.Exists(signature))
+			return false;
 
-      using(var provider = new RSACryptoServiceProvider()) {
-        provider.ImportCspBlob(publicKey);
-        using(var sha1 = new SHA1CryptoServiceProvider()) return provider
-            .VerifyData(File.ReadAllBytes(file), sha1,
-                        File.ReadAllBytes(signature));
-      }
-    } catch (Exception e) {
-      Debug.LogException(e);
-    }
-    return false;
-  }
+		using (var provider = new RSACryptoServiceProvider()) {
+			provider.ImportCspBlob(publicKey);
+			using (var sha1 = new SHA1CryptoServiceProvider()) return provider
+				       .VerifyData(File.ReadAllBytes(file), sha1,
+				                   File.ReadAllBytes(signature));
+		}
+	} catch (Exception e) {
+		Debug.LogException(e);
+	}
+	return false;
+}
 
-  [System.ComponentModel.EditorBrowsable(
-      System.ComponentModel.EditorBrowsableState.Never)]
-  [Obsolete("This was an internal method which is no longer used", true)]
-  public static Assembly LoadAndVerifyAssembly(byte[] assemblyData,
-                                               string authorizationKey) {
-    return null;
-  }
+[System.ComponentModel.EditorBrowsable(
+	 System.ComponentModel.EditorBrowsableState.Never)]
+[Obsolete("This was an internal method which is no longer used", true)]
+public static Assembly LoadAndVerifyAssembly(byte[] assemblyData,
+                                             string authorizationKey) {
+	return null;
+}
 
-  [System.ComponentModel.EditorBrowsable(
-      System.ComponentModel.EditorBrowsableState.Never)]
-  [Obsolete("This was an internal method which is no longer used", true)]
-  public static Assembly LoadAndVerifyAssembly(byte[] assemblyData) {
-    return null;
-  }
+[System.ComponentModel.EditorBrowsable(
+	 System.ComponentModel.EditorBrowsableState.Never)]
+[Obsolete("This was an internal method which is no longer used", true)]
+public static Assembly LoadAndVerifyAssembly(byte[] assemblyData) {
+	return null;
+}
 }
 
 public static class Types {
-  [System.ComponentModel.EditorBrowsable(
-      System.ComponentModel.EditorBrowsableState.Never)]
-  [Obsolete("This was an internal method which is no longer used", true)]
-  public static Type GetType(string typeName, string assemblyName) {
-    return null;
-  }
+[System.ComponentModel.EditorBrowsable(
+	 System.ComponentModel.EditorBrowsableState.Never)]
+[Obsolete("This was an internal method which is no longer used", true)]
+public static Type GetType(string typeName, string assemblyName) {
+	return null;
+}
 }
 }

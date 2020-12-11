@@ -7,61 +7,67 @@ using System.Runtime.InteropServices;
 using System;
 
 namespace UnityEngine.Rendering {
-  [StructLayout(LayoutKind.Sequential)]
-  [UsedByNativeCode] unsafe public struct ShaderKeywordSet {
-    private void ComputeSliceAndMask(ShaderKeyword keyword, out uint slice,
-                                     out uint mask) {
-      int index = keyword.index;
-      slice = (uint)(index / k_SizeInBits);
-      mask = (uint)(1 << (index % k_SizeInBits));
-    }
+[StructLayout(LayoutKind.Sequential)]
+[UsedByNativeCode] unsafe public struct ShaderKeywordSet {
+	private void ComputeSliceAndMask(ShaderKeyword keyword, out uint slice,
+	                                 out uint mask) {
+		int index = keyword.index;
+		slice = (uint)(index / k_SizeInBits);
+		mask = (uint)(1 << (index % k_SizeInBits));
+	}
 
-    public bool IsEnabled(ShaderKeyword keyword) {
-      if (!keyword.IsValid())
-        return false;
+	public bool IsEnabled(ShaderKeyword keyword) {
+		if (!keyword.IsValid())
+			return false;
 
-      uint slice, mask;
-      ComputeSliceAndMask(keyword, out slice, out mask);
-      fixed(uint *bits = m_Bits) { return (bits[slice] & mask) != 0; }
-    }
+		uint slice, mask;
+		ComputeSliceAndMask(keyword, out slice, out mask);
+		fixed(uint *bits = m_Bits) {
+			return (bits[slice] & mask) != 0;
+		}
+	}
 
-    public void Enable(ShaderKeyword keyword) {
-      if (!keyword.IsValid())
-        return;
+	public void Enable(ShaderKeyword keyword) {
+		if (!keyword.IsValid())
+			return;
 
-      uint slice, mask;
-      ComputeSliceAndMask(keyword, out slice, out mask);
-      fixed(uint *bits = m_Bits) { bits[slice] |= mask; }
-    }
+		uint slice, mask;
+		ComputeSliceAndMask(keyword, out slice, out mask);
+		fixed(uint *bits = m_Bits) {
+			bits[slice] |= mask;
+		}
+	}
 
-    public void Disable(ShaderKeyword keyword) {
-      if (!keyword.IsValid())
-        return;
+	public void Disable(ShaderKeyword keyword) {
+		if (!keyword.IsValid())
+			return;
 
-      uint slice, mask;
-      ComputeSliceAndMask(keyword, out slice, out mask);
-      fixed(uint *bits = m_Bits) { bits[slice] &= ~mask; }
-    }
+		uint slice, mask;
+		ComputeSliceAndMask(keyword, out slice, out mask);
+		fixed(uint *bits = m_Bits) {
+			bits[slice] &= ~mask;
+		}
+	}
 
-    public ShaderKeyword[] GetShaderKeywords() {
-      ShaderKeyword[] shaderKeywords =
-          new ShaderKeyword[ShaderKeyword.k_MaxShaderKeywords];
+	public ShaderKeyword[] GetShaderKeywords() {
+		ShaderKeyword[] shaderKeywords =
+			new ShaderKeyword[ShaderKeyword.k_MaxShaderKeywords];
 
-      int keywordCount = 0;
-      for (int keywordIndex = 0;
-           keywordIndex < ShaderKeyword.k_MaxShaderKeywords; ++keywordIndex) {
-        ShaderKeyword keyword = new ShaderKeyword(keywordIndex);
-        if (IsEnabled(keyword)) {
-          shaderKeywords[keywordCount] = keyword;
-          ++keywordCount;
-        }
-      }
+		int keywordCount = 0;
+		for (int keywordIndex = 0;
+		     keywordIndex < ShaderKeyword.k_MaxShaderKeywords; ++keywordIndex) {
+			ShaderKeyword keyword = new ShaderKeyword(keywordIndex);
+			if (IsEnabled(keyword)) {
+				shaderKeywords[keywordCount] = keyword;
+				++keywordCount;
+			}
+		}
 
-      Array.Resize<ShaderKeyword>(ref shaderKeywords, keywordCount);
-      return shaderKeywords;
-    }
+		Array.Resize<ShaderKeyword>(ref shaderKeywords, keywordCount);
+		return shaderKeywords;
+	}
 
-    const int k_SizeInBits = sizeof(uint) * 8;
-    internal fixed uint m_Bits[10];
-  }
+	const int k_SizeInBits = sizeof(uint) * 8;
+	internal fixed uint m_Bits[10];
+}
 }

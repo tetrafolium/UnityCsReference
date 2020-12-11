@@ -5,13 +5,13 @@
 using System;
 
 namespace UnityEngine.iOS {
-  [Flags]
-  public enum SystemGestureDeferMode : uint {
-    None = 0,
-    TopEdge = 1 << 0,
-    LeftEdge = 1 << 1,
-    BottomEdge = 1 << 2,
-    RightEdge = 1 << 3,
-    All = TopEdge | LeftEdge | BottomEdge | RightEdge
-  }
+[Flags]
+public enum SystemGestureDeferMode : uint {
+	None = 0,
+	TopEdge = 1 << 0,
+	LeftEdge = 1 << 1,
+	BottomEdge = 1 << 2,
+	RightEdge = 1 << 3,
+	All = TopEdge | LeftEdge | BottomEdge | RightEdge
+}
 }

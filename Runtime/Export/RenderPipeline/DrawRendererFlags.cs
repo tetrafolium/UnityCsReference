@@ -5,9 +5,9 @@
 using System;
 
 namespace UnityEngine.Rendering {
-  [Flags] enum DrawRendererFlags {
-    None = 0,
-    EnableDynamicBatching = (1 << 0),
-    EnableInstancing = (1 << 1),
-  }
+[Flags] enum DrawRendererFlags {
+	None = 0,
+	EnableDynamicBatching = (1 << 0),
+	EnableInstancing = (1 << 1),
+}
 }

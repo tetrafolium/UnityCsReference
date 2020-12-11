@@ -3,7 +3,9 @@
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
 namespace UnityEngine.Playables {
-  public interface INotification {
-    PropertyName id { get; }
-  }
+public interface INotification {
+PropertyName id {
+	get;
+}
+}
 }

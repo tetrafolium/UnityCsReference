@@ -7,33 +7,33 @@ using System.Diagnostics;
 using UnityEngine;
 
 namespace UnityEngine.Assertions.Must {
-  public static partial class MustExtensions {
-    [Conditional(Assert.UNITY_ASSERTIONS)]
-    [Obsolete(
-        "Must extensions are deprecated. Use UnityEngine.Assertions.Assert instead")]
-    public static void MustBeTrue(this bool value) {
-      Assert.IsTrue(value);
-    }
+public static partial class MustExtensions {
+[Conditional(Assert.UNITY_ASSERTIONS)]
+[Obsolete(
+	 "Must extensions are deprecated. Use UnityEngine.Assertions.Assert instead")]
+public static void MustBeTrue(this bool value) {
+	Assert.IsTrue(value);
+}
 
-    [Conditional(Assert.UNITY_ASSERTIONS)]
-    [Obsolete(
-        "Must extensions are deprecated. Use UnityEngine.Assertions.Assert instead")]
-    public static void MustBeTrue(this bool value, string message) {
-      Assert.IsTrue(value, message);
-    }
+[Conditional(Assert.UNITY_ASSERTIONS)]
+[Obsolete(
+	 "Must extensions are deprecated. Use UnityEngine.Assertions.Assert instead")]
+public static void MustBeTrue(this bool value, string message) {
+	Assert.IsTrue(value, message);
+}
 
-    [Conditional(Assert.UNITY_ASSERTIONS)]
-    [Obsolete(
-        "Must extensions are deprecated. Use UnityEngine.Assertions.Assert instead")]
-    public static void MustBeFalse(this bool value) {
-      Assert.IsFalse(value);
-    }
+[Conditional(Assert.UNITY_ASSERTIONS)]
+[Obsolete(
+	 "Must extensions are deprecated. Use UnityEngine.Assertions.Assert instead")]
+public static void MustBeFalse(this bool value) {
+	Assert.IsFalse(value);
+}
 
-    [Conditional(Assert.UNITY_ASSERTIONS)]
-    [Obsolete(
-        "Must extensions are deprecated. Use UnityEngine.Assertions.Assert instead")]
-    public static void MustBeFalse(this bool value, string message) {
-      Assert.IsFalse(value, message);
-    }
-  }
+[Conditional(Assert.UNITY_ASSERTIONS)]
+[Obsolete(
+	 "Must extensions are deprecated. Use UnityEngine.Assertions.Assert instead")]
+public static void MustBeFalse(this bool value, string message) {
+	Assert.IsFalse(value, message);
+}
+}
 }

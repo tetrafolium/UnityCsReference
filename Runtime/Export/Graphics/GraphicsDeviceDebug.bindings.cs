@@ -15,16 +15,16 @@ using UnityEngine.Scripting;
 namespace UnityEngineInternal {
 [StructLayout(LayoutKind.Sequential)]
 internal struct GraphicsDeviceDebugSettings {
-  public float sleepAtStartOfGraphicsJobs;
-  public float sleepBeforeTextureUpload;
+	public float sleepAtStartOfGraphicsJobs;
+	public float sleepBeforeTextureUpload;
 }
 
 [NativeHeader("Runtime/Export/Graphics/GraphicsDeviceDebug.bindings.h")]
 [StaticAccessor("GraphicsDeviceDebug", StaticAccessorType.DoubleColon)]
 internal static class GraphicsDeviceDebug {
-  extern internal static GraphicsDeviceDebugSettings settings {
-    get;
-    set;
-  }
+extern internal static GraphicsDeviceDebugSettings settings {
+	get;
+	set;
+}
 }
 }

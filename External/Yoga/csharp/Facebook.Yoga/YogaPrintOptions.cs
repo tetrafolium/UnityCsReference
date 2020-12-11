@@ -8,10 +8,10 @@
  */
 
 namespace UnityEngine.Yoga {
-  [System.Flags]
-  internal enum YogaPrintOptions {
-    Layout = 1,
-    Style = 2,
-    Children = 4,
-  }
+[System.Flags]
+internal enum YogaPrintOptions {
+	Layout = 1,
+	Style = 2,
+	Children = 4,
+}
 }

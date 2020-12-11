@@ -6,13 +6,13 @@ using UnityEngine.Bindings;
 using UnityEngine.Scripting.APIUpdating;
 
 namespace UnityEngine.U2D {
-  [MovedFrom("UnityEngine.Experimental.U2D")]
-  [NativeHeader("Runtime/2D/Common/PixelSnapping.h")]
-  public static class PixelPerfectRendering {
-    extern static public float pixelSnapSpacing {
-      [FreeFunction("GetPixelSnapSpacing")] get;
+[MovedFrom("UnityEngine.Experimental.U2D")]
+[NativeHeader("Runtime/2D/Common/PixelSnapping.h")]
+public static class PixelPerfectRendering {
+extern static public float pixelSnapSpacing {
+	[FreeFunction("GetPixelSnapSpacing")] get;
 
-      [FreeFunction("SetPixelSnapSpacing")] set;
-    }
-  }
+	[FreeFunction("SetPixelSnapSpacing")] set;
+}
+}
 }

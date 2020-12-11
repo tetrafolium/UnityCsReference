@@ -5,26 +5,26 @@
 using System;
 
 namespace UnityEngine.Rendering {
-  [Flags]
-  public enum SortingCriteria {
-    None = 0,
+[Flags]
+public enum SortingCriteria {
+	None = 0,
 
-    SortingLayer = (1 << 0), // by global sorting layer
-    RenderQueue = (1 << 1),  // by material render queue
-    BackToFront =
-        (1 << 2), // distance back to front, sorting group order, same distance
-                  // sort priority, material index on renderer
-    QuantizedFrontToBack = (1 << 3), // front to back by quantized distance
-    OptimizeStateChanges =
-        (1 << 4), // combination of: static batching, lightmaps, material sort
-                  // key, geometry ID
-    CanvasOrder = (1 << 5), // same distance sort priority (used in Canvas)
-    RendererPriority =
-        (1 << 6), // by renderer priority (if render queues are not equal)
+	SortingLayer = (1 << 0), // by global sorting layer
+	RenderQueue = (1 << 1), // by material render queue
+	BackToFront =
+		(1 << 2), // distance back to front, sorting group order, same distance
+	                  // sort priority, material index on renderer
+	QuantizedFrontToBack = (1 << 3), // front to back by quantized distance
+	OptimizeStateChanges =
+		(1 << 4), // combination of: static batching, lightmaps, material sort
+	                  // key, geometry ID
+	CanvasOrder = (1 << 5), // same distance sort priority (used in Canvas)
+	RendererPriority =
+		(1 << 6), // by renderer priority (if render queues are not equal)
 
-    CommonOpaque = SortingLayer | RenderQueue | QuantizedFrontToBack |
-                   OptimizeStateChanges | CanvasOrder,
-    CommonTransparent =
-        SortingLayer | RenderQueue | BackToFront | OptimizeStateChanges,
-  }
+	CommonOpaque = SortingLayer | RenderQueue | QuantizedFrontToBack |
+	               OptimizeStateChanges | CanvasOrder,
+	CommonTransparent =
+		SortingLayer | RenderQueue | BackToFront | OptimizeStateChanges,
+}
 }

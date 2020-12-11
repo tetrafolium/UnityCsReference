@@ -9,6 +9,6 @@ namespace UnityEngine {
 [NativeHeader("Runtime/Export/Scripting/ScriptingRuntime.h")]
 [VisibleToOtherModules]
 internal partial class ScriptingRuntime {
-  public static extern string[] GetAllUserAssemblies();
+public static extern string[] GetAllUserAssemblies();
 }
 }

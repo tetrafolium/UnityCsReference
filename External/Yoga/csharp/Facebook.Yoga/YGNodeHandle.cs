@@ -11,6 +11,6 @@ using System;
 using System.Runtime.InteropServices;
 
 namespace UnityEngine.Yoga {
-  // BEGIN_UNITY @jonathanma Remove usage of YGNodeHandle (less allocation)
-  // END_UNITY
+// BEGIN_UNITY @jonathanma Remove usage of YGNodeHandle (less allocation)
+// END_UNITY
 }

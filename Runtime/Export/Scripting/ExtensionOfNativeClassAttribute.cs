@@ -10,5 +10,5 @@ namespace UnityEngine {
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface,
                 Inherited = true)]
 [RequiredByNativeCode] sealed class ExtensionOfNativeClassAttribute
-    : Attribute {}
+	: Attribute {}
 }

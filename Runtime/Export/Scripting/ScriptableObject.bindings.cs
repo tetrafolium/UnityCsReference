@@ -16,40 +16,42 @@ namespace UnityEngine {
 [NativeClass(null)]
 [NativeHeader("Runtime/Mono/MonoBehaviour.h")]
 public class ScriptableObject : Object {
-  public ScriptableObject() { CreateScriptableObject(this); }
+public ScriptableObject() {
+	CreateScriptableObject(this);
+}
 
-  [NativeConditional("ENABLE_MONO")]
-  [Obsolete("Use EditorUtility.SetDirty instead")]
-  public extern void SetDirty();
+[NativeConditional("ENABLE_MONO")]
+[Obsolete("Use EditorUtility.SetDirty instead")]
+public extern void SetDirty();
 
-  // Creates an instance of a scriptable object with /className/.
-  public static ScriptableObject CreateInstance(string className) {
-    return CreateScriptableObjectInstanceFromName(className);
-  }
+// Creates an instance of a scriptable object with /className/.
+public static ScriptableObject CreateInstance(string className) {
+	return CreateScriptableObjectInstanceFromName(className);
+}
 
-  // Creates an instance of a scriptable object with /type/.
-  public static ScriptableObject CreateInstance(Type type) {
-    return CreateScriptableObjectInstanceFromType(type, true);
-  }
+// Creates an instance of a scriptable object with /type/.
+public static ScriptableObject CreateInstance(Type type) {
+	return CreateScriptableObjectInstanceFromType(type, true);
+}
 
-  // Creates an instance of a scriptable object with /T/.
-  public static T CreateInstance<T>() where T : ScriptableObject {
-    return (T) CreateInstance(typeof(T));
-  }
+// Creates an instance of a scriptable object with /T/.
+public static T CreateInstance<T>() where T : ScriptableObject {
+	return (T) CreateInstance(typeof(T));
+}
 
-  [NativeMethod(IsThreadSafe = true)] extern static void
-  CreateScriptableObject([ Writable ] ScriptableObject self);
+[NativeMethod(IsThreadSafe = true)] extern static void
+CreateScriptableObject([ Writable ] ScriptableObject self);
 
-  [FreeFunction(
-      "Scripting::CreateScriptableObject")] extern static ScriptableObject
-  CreateScriptableObjectInstanceFromName(string className);
+[FreeFunction(
+	 "Scripting::CreateScriptableObject")] extern static ScriptableObject
+CreateScriptableObjectInstanceFromName(string className);
 
-  [FreeFunction(
-      "Scripting::CreateScriptableObjectWithType")] extern internal static ScriptableObject
-  CreateScriptableObjectInstanceFromType(Type type, bool applyDefaultsAndReset);
+[FreeFunction(
+	 "Scripting::CreateScriptableObjectWithType")] extern internal static ScriptableObject
+CreateScriptableObjectInstanceFromType(Type type, bool applyDefaultsAndReset);
 
-  [FreeFunction(
-      "Scripting::ResetAndApplyDefaultInstances")] extern internal static void
-  ResetAndApplyDefaultInstances(Object obj);
+[FreeFunction(
+	 "Scripting::ResetAndApplyDefaultInstances")] extern internal static void
+ResetAndApplyDefaultInstances(Object obj);
 }
 }

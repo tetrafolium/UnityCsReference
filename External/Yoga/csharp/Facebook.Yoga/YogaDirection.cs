@@ -8,9 +8,9 @@
  */
 
 namespace UnityEngine.Yoga {
-  internal enum YogaDirection {
-    Inherit,
-    LTR,
-    RTL,
-  }
+internal enum YogaDirection {
+	Inherit,
+	LTR,
+	RTL,
+}
 }

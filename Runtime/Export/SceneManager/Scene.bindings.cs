@@ -7,67 +7,67 @@ using System.Runtime.InteropServices;
 using UnityEngine.Bindings;
 
 namespace UnityEngine.SceneManagement {
-  [NativeHeader("Runtime/Export/SceneManager/Scene.bindings.h")]
-  [StructLayout(LayoutKind.Sequential)]
-  public partial struct Scene {
-    [StaticAccessor("SceneBindings",
-                    StaticAccessorType.DoubleColon)] extern private static bool
-    IsValidInternal(int sceneHandle);
+[NativeHeader("Runtime/Export/SceneManager/Scene.bindings.h")]
+[StructLayout(LayoutKind.Sequential)]
+public partial struct Scene {
+	[StaticAccessor("SceneBindings",
+	                StaticAccessorType.DoubleColon)] extern private static bool
+	IsValidInternal(int sceneHandle);
 
-    [StaticAccessor(
-        "SceneBindings",
-        StaticAccessorType.DoubleColon)] extern private static string
-    GetPathInternal(int sceneHandle);
+	[StaticAccessor(
+		 "SceneBindings",
+		 StaticAccessorType.DoubleColon)] extern private static string
+	GetPathInternal(int sceneHandle);
 
-    [StaticAccessor(
-        "SceneBindings",
-        StaticAccessorType.DoubleColon)] extern private static string
-    GetNameInternal(int sceneHandle);
+	[StaticAccessor(
+		 "SceneBindings",
+		 StaticAccessorType.DoubleColon)] extern private static string
+	GetNameInternal(int sceneHandle);
 
-    [NativeThrows]
-    [StaticAccessor("SceneBindings",
-                    StaticAccessorType.DoubleColon)] extern private static void
-    SetNameInternal(int sceneHandle, string name);
+	[NativeThrows]
+	[StaticAccessor("SceneBindings",
+	                StaticAccessorType.DoubleColon)] extern private static void
+	SetNameInternal(int sceneHandle, string name);
 
-    [StaticAccessor(
-        "SceneBindings",
-        StaticAccessorType.DoubleColon)] extern private static string
-    GetGUIDInternal(int sceneHandle);
+	[StaticAccessor(
+		 "SceneBindings",
+		 StaticAccessorType.DoubleColon)] extern private static string
+	GetGUIDInternal(int sceneHandle);
 
-    [StaticAccessor("SceneBindings",
-                    StaticAccessorType.DoubleColon)] extern private static bool
-    IsSubScene(int sceneHandle);
+	[StaticAccessor("SceneBindings",
+	                StaticAccessorType.DoubleColon)] extern private static bool
+	IsSubScene(int sceneHandle);
 
-    [StaticAccessor("SceneBindings",
-                    StaticAccessorType.DoubleColon)] extern private static void
-    SetIsSubScene(int sceneHandle, bool value);
+	[StaticAccessor("SceneBindings",
+	                StaticAccessorType.DoubleColon)] extern private static void
+	SetIsSubScene(int sceneHandle, bool value);
 
-    [StaticAccessor("SceneBindings",
-                    StaticAccessorType.DoubleColon)] extern private static bool
-    GetIsLoadedInternal(int sceneHandle);
+	[StaticAccessor("SceneBindings",
+	                StaticAccessorType.DoubleColon)] extern private static bool
+	GetIsLoadedInternal(int sceneHandle);
 
-    [StaticAccessor("SceneBindings",
-                    StaticAccessorType.DoubleColon)] extern private static Scene
-        .LoadingState GetLoadingStateInternal(int sceneHandle);
+	[StaticAccessor("SceneBindings",
+	                StaticAccessorType.DoubleColon)] extern private static Scene
+	.LoadingState GetLoadingStateInternal(int sceneHandle);
 
-    [StaticAccessor("SceneBindings",
-                    StaticAccessorType.DoubleColon)] extern private static bool
-    GetIsDirtyInternal(int sceneHandle);
+	[StaticAccessor("SceneBindings",
+	                StaticAccessorType.DoubleColon)] extern private static bool
+	GetIsDirtyInternal(int sceneHandle);
 
-    [StaticAccessor("SceneBindings",
-                    StaticAccessorType.DoubleColon)] extern private static int
-    GetDirtyID(int sceneHandle);
+	[StaticAccessor("SceneBindings",
+	                StaticAccessorType.DoubleColon)] extern private static int
+	GetDirtyID(int sceneHandle);
 
-    [StaticAccessor("SceneBindings",
-                    StaticAccessorType.DoubleColon)] extern private static int
-    GetBuildIndexInternal(int sceneHandle);
+	[StaticAccessor("SceneBindings",
+	                StaticAccessorType.DoubleColon)] extern private static int
+	GetBuildIndexInternal(int sceneHandle);
 
-    [StaticAccessor("SceneBindings",
-                    StaticAccessorType.DoubleColon)] extern private static int
-    GetRootCountInternal(int sceneHandle);
+	[StaticAccessor("SceneBindings",
+	                StaticAccessorType.DoubleColon)] extern private static int
+	GetRootCountInternal(int sceneHandle);
 
-    [StaticAccessor("SceneBindings",
-                    StaticAccessorType.DoubleColon)] extern private static void
-    GetRootGameObjectsInternal(int sceneHandle, object resultRootList);
-  }
+	[StaticAccessor("SceneBindings",
+	                StaticAccessorType.DoubleColon)] extern private static void
+	GetRootGameObjectsInternal(int sceneHandle, object resultRootList);
+}
 }

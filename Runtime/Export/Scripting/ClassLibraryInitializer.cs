@@ -6,9 +6,9 @@ using UnityEngine.Scripting;
 
 namespace UnityEngine {
 internal static class ClassLibraryInitializer {
-  [RequiredByNativeCode]
-  static void Init() {
-    UnityLogWriter.Init();
-  }
+[RequiredByNativeCode]
+static void Init() {
+	UnityLogWriter.Init();
+}
 }
 }

@@ -8,10 +8,10 @@
  */
 
 namespace UnityEngine.Yoga {
-  internal enum YogaFlexDirection {
-    Column,
-    ColumnReverse,
-    Row,
-    RowReverse,
-  }
+internal enum YogaFlexDirection {
+	Column,
+	ColumnReverse,
+	Row,
+	RowReverse,
+}
 }

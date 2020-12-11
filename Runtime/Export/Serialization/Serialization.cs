@@ -5,9 +5,9 @@
 using scm = System.ComponentModel;
 using uei = UnityEngine.Internal;
 using RequiredByNativeCodeAttribute =
-    UnityEngine.Scripting.RequiredByNativeCodeAttribute;
+	      UnityEngine.Scripting.RequiredByNativeCodeAttribute;
 using UsedByNativeCodeAttribute =
-    UnityEngine.Scripting.UsedByNativeCodeAttribute;
+	      UnityEngine.Scripting.UsedByNativeCodeAttribute;
 
 using System;
 namespace UnityEngine {
@@ -28,8 +28,9 @@ public sealed partial class SerializeField : Attribute {}
 [RequiredByNativeCode]
 [AttributeUsage(AttributeTargets.Field)]
 public sealed partial class SerializeReference : Attribute {
-  [UnityEngine.Internal.ExcludeFromDocs]
-  public SerializeReference() {}
+[UnityEngine.Internal.ExcludeFromDocs]
+public SerializeReference() {
+}
 }
 
 [RequiredByNativeCode]
@@ -38,10 +39,10 @@ public sealed class PreferBinarySerialization : Attribute {}
 
 [RequiredByNativeCode]
 public interface ISerializationCallbackReceiver {
-  [RequiredByNativeCode]
-  void OnBeforeSerialize();
+[RequiredByNativeCode]
+void OnBeforeSerialize();
 
-  [RequiredByNativeCode]
-  void OnAfterDeserialize();
+[RequiredByNativeCode]
+void OnAfterDeserialize();
 }
 }

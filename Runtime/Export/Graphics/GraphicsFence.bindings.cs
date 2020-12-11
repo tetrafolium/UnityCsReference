@@ -12,89 +12,91 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace UnityEngine.Rendering {
-  public enum SynchronisationStageFlags {
-    VertexProcessing = 1,
-    PixelProcessing = 2,
-    ComputeProcessing = 4,
-    AllGPUOperations = VertexProcessing | PixelProcessing | ComputeProcessing,
-  }
+public enum SynchronisationStageFlags {
+	VertexProcessing = 1,
+	PixelProcessing = 2,
+	ComputeProcessing = 4,
+	AllGPUOperations = VertexProcessing | PixelProcessing | ComputeProcessing,
+}
 
-  // The type of GraphicsFence to create. CPUSynchronization one can only be
-  // used to check whether the GPU has passed the fence.
-  // AsyncQueueSynchronisation can be used to synchronise between the main
-  // thread and the async queue
-  public enum GraphicsFenceType {
-    AsyncQueueSynchronisation = 0,
-    CPUSynchronisation = 1,
-  }
+// The type of GraphicsFence to create. CPUSynchronization one can only be
+// used to check whether the GPU has passed the fence.
+// AsyncQueueSynchronisation can be used to synchronise between the main
+// thread and the async queue
+public enum GraphicsFenceType {
+	AsyncQueueSynchronisation = 0,
+	CPUSynchronisation = 1,
+}
 
-  [NativeHeader("Runtime/Graphics/GPUFence.h")]
-  [UsedByNativeCode]
-  public struct GraphicsFence {
-    internal IntPtr m_Ptr;
-    internal int m_Version;
-    internal GraphicsFenceType m_FenceType;
+[NativeHeader("Runtime/Graphics/GPUFence.h")]
+[UsedByNativeCode]
+public struct GraphicsFence {
+	internal IntPtr m_Ptr;
+	internal int m_Version;
+	internal GraphicsFenceType m_FenceType;
 
-    internal static SynchronisationStageFlags
-    TranslateSynchronizationStageToFlags(SynchronisationStage s) {
-      return s ==
-             SynchronisationStage.VertexProcessing ? SynchronisationStageFlags
-                 .VertexProcessing : SynchronisationStageFlags.PixelProcessing;
-    }
+	internal static SynchronisationStageFlags
+	TranslateSynchronizationStageToFlags(SynchronisationStage s) {
+		return s ==
+		       SynchronisationStage.VertexProcessing ? SynchronisationStageFlags
+		       .VertexProcessing : SynchronisationStageFlags.PixelProcessing;
+	}
 
-    public bool passed {
-      get {
-        Validate();
+	public bool passed {
+		get {
+			Validate();
 
-        if (!SystemInfo.supportsGraphicsFence ||
-            (m_FenceType == GraphicsFenceType.AsyncQueueSynchronisation &&
-             !SystemInfo.supportsAsyncCompute))
-          throw new System.NotSupportedException(
-              "Cannot determine if this GraphicsFence has passed as this platform has not implemented GraphicsFences.");
+			if (!SystemInfo.supportsGraphicsFence ||
+			    (m_FenceType == GraphicsFenceType.AsyncQueueSynchronisation &&
+			     !SystemInfo.supportsAsyncCompute))
+				throw new System.NotSupportedException(
+					      "Cannot determine if this GraphicsFence has passed as this platform has not implemented GraphicsFences.");
 
-        if (!IsFencePending())
-          return true;
+			if (!IsFencePending())
+				return true;
 
-        return HasFencePassed_Internal(m_Ptr);
-      }
-    }
+			return HasFencePassed_Internal(m_Ptr);
+		}
+	}
 
-    [FreeFunction(
-        "GPUFenceInternals::HasFencePassed_Internal")] extern private static bool
-    HasFencePassed_Internal(IntPtr fencePtr);
+	[FreeFunction(
+		 "GPUFenceInternals::HasFencePassed_Internal")] extern private static bool
+	HasFencePassed_Internal(IntPtr fencePtr);
 
-    internal void InitPostAllocation() {
-      if (m_Ptr == IntPtr.Zero) {
-        if (SystemInfo.supportsGraphicsFence) {
-          throw new System.NullReferenceException(
-              "The internal fence ptr is null, this should not be possible for fences that have been correctly constructed using Graphics.CreateGraphicsFence() or CommandBuffer.CreateGraphicsFence()");
-        }
-        m_Version = GetPlatformNotSupportedVersion();
-        return;
-      }
+	internal void InitPostAllocation() {
+		if (m_Ptr == IntPtr.Zero) {
+			if (SystemInfo.supportsGraphicsFence) {
+				throw new System.NullReferenceException(
+					      "The internal fence ptr is null, this should not be possible for fences that have been correctly constructed using Graphics.CreateGraphicsFence() or CommandBuffer.CreateGraphicsFence()");
+			}
+			m_Version = GetPlatformNotSupportedVersion();
+			return;
+		}
 
-      m_Version = GetVersionNumber(m_Ptr);
-    }
+		m_Version = GetVersionNumber(m_Ptr);
+	}
 
-    internal bool IsFencePending() {
-      if (m_Ptr == IntPtr.Zero)
-        return false;
+	internal bool IsFencePending() {
+		if (m_Ptr == IntPtr.Zero)
+			return false;
 
-      return m_Version == GetVersionNumber(m_Ptr);
-    }
+		return m_Version == GetVersionNumber(m_Ptr);
+	}
 
-    internal void Validate() {
-      if (m_Version == 0 || (SystemInfo.supportsGraphicsFence &&
-                             m_Version == GetPlatformNotSupportedVersion()))
-        throw new System.InvalidOperationException(
-            "This GraphicsFence object has not been correctly constructed see Graphics.CreateGraphicsFence() or CommandBuffer.CreateGraphicsFence()");
-    }
+	internal void Validate() {
+		if (m_Version == 0 || (SystemInfo.supportsGraphicsFence &&
+		                       m_Version == GetPlatformNotSupportedVersion()))
+			throw new System.InvalidOperationException(
+				      "This GraphicsFence object has not been correctly constructed see Graphics.CreateGraphicsFence() or CommandBuffer.CreateGraphicsFence()");
+	}
 
-    private int GetPlatformNotSupportedVersion() { return -1; }
+	private int GetPlatformNotSupportedVersion() {
+		return -1;
+	}
 
-    [NativeThrows]
-    [FreeFunction(
-        "GPUFenceInternals::GetVersionNumber")] extern private static int
-    GetVersionNumber(IntPtr fencePtr);
-  }
+	[NativeThrows]
+	[FreeFunction(
+		 "GPUFenceInternals::GetVersionNumber")] extern private static int
+	GetVersionNumber(IntPtr fencePtr);
+}
 }

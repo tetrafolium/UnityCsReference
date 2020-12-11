@@ -14,41 +14,41 @@ using System.Runtime.CompilerServices;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 
-[assembly:InternalsVisibleTo("Unity.2D.Hybrid")] namespace UnityEngine
-    .Experimental.U2D {
-  [RequiredByNativeCode]
-  [StructLayout(LayoutKind.Sequential)]
-  [NativeHeader("Runtime/2D/Renderer/SpriteRendererGroup.h")]
-  internal struct SpriteIntermediateRendererInfo {
-    public int SpriteID;
-    public int TextureID;
-    public int MaterialID;
-    public Color Color;
-    public Matrix4x4 Transform;
-    public Bounds Bounds;
-    public int Layer;
-    public int SortingLayer;
-    public int SortingOrder;
-    public ulong SceneCullingMask;
-    public IntPtr IndexData;
-    public IntPtr VertexData;
-    public int IndexCount;
-    public int VertexCount;
-    public int ShaderChannelMask;
-  }
+[assembly: InternalsVisibleTo("Unity.2D.Hybrid")] namespace UnityEngine
+.Experimental.U2D {
+[RequiredByNativeCode]
+[StructLayout(LayoutKind.Sequential)]
+[NativeHeader("Runtime/2D/Renderer/SpriteRendererGroup.h")]
+internal struct SpriteIntermediateRendererInfo {
+	public int SpriteID;
+	public int TextureID;
+	public int MaterialID;
+	public Color Color;
+	public Matrix4x4 Transform;
+	public Bounds Bounds;
+	public int Layer;
+	public int SortingLayer;
+	public int SortingOrder;
+	public ulong SceneCullingMask;
+	public IntPtr IndexData;
+	public IntPtr VertexData;
+	public int IndexCount;
+	public int VertexCount;
+	public int ShaderChannelMask;
+}
 
-  [NativeHeader("Runtime/2D/Renderer/SpriteRendererGroup.h")]
-  [RequiredByNativeCode]
-  [StructLayout(LayoutKind.Sequential)]
-  internal class SpriteRendererGroup {
-    public static void
-    AddRenderers(NativeArray<SpriteIntermediateRendererInfo> renderers) {
-      unsafe {
-        AddRenderers(renderers.GetUnsafeReadOnlyPtr(), renderers.Length);
-      }
-    }
+[NativeHeader("Runtime/2D/Renderer/SpriteRendererGroup.h")]
+[RequiredByNativeCode]
+[StructLayout(LayoutKind.Sequential)]
+internal class SpriteRendererGroup {
+public static void
+AddRenderers(NativeArray<SpriteIntermediateRendererInfo> renderers) {
+	unsafe {
+		AddRenderers(renderers.GetUnsafeReadOnlyPtr(), renderers.Length);
+	}
+}
 
-    unsafe extern static void AddRenderers(void *renderers, int count);
-    public extern static void Clear();
-  }
+unsafe extern static void AddRenderers(void *renderers, int count);
+public extern static void Clear();
+}
 }

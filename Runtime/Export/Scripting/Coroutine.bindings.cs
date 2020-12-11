@@ -15,12 +15,15 @@ namespace UnityEngine {
 [StructLayout(LayoutKind.Sequential)]
 [RequiredByNativeCode]
 public sealed class Coroutine : YieldInstruction {
-  internal IntPtr m_Ptr;
-  Coroutine() {}
+internal IntPtr m_Ptr;
+Coroutine() {
+}
 
-  ~Coroutine() { ReleaseCoroutine(m_Ptr); }
+~Coroutine() {
+	ReleaseCoroutine(m_Ptr);
+}
 
-  [FreeFunction("Coroutine::CleanupCoroutineGC", true)] extern static void
-  ReleaseCoroutine(IntPtr ptr);
+[FreeFunction("Coroutine::CleanupCoroutineGC", true)] extern static void
+ReleaseCoroutine(IntPtr ptr);
 }
 }

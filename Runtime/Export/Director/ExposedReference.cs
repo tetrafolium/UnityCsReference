@@ -11,21 +11,21 @@ namespace UnityEngine {
 [UsedByNativeCode(Name = "ExposedReference")]
 [StructLayout(LayoutKind.Sequential)]
 public struct ExposedReference<T> where T : UnityEngine.Object {
-  [SerializeField]
-  public PropertyName exposedName;
+	[SerializeField]
+	public PropertyName exposedName;
 
-  [SerializeField]
-  public UnityEngine.Object defaultValue;
+	[SerializeField]
+	public UnityEngine.Object defaultValue;
 
-  public T Resolve(IExposedPropertyTable resolver) {
-    if (resolver != null) {
-      bool isValid;
-      Object result = resolver.GetReferenceValue(exposedName, out isValid);
-      if (isValid)
-        return result as T;
-    }
+	public T Resolve(IExposedPropertyTable resolver) {
+		if (resolver != null) {
+			bool isValid;
+			Object result = resolver.GetReferenceValue(exposedName, out isValid);
+			if (isValid)
+				return result as T;
+		}
 
-    return defaultValue as T;
-  }
+		return defaultValue as T;
+	}
 }
 }

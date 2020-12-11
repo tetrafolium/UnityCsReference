@@ -5,10 +5,10 @@
 using UnityEngine.Bindings;
 
 namespace UnityEngine.WSA {
-  [NativeConditional("PLATFORM_WINRT")]
-  [NativeHeader("PlatformDependent/MetroPlayer/MetroCursor.h")]
-  public static class Cursor {
-    [FreeFunction("Cursors::SetHardwareCursor")]
-    public static extern void SetCustomCursor(uint id);
-  }
+[NativeConditional("PLATFORM_WINRT")]
+[NativeHeader("PlatformDependent/MetroPlayer/MetroCursor.h")]
+public static class Cursor {
+[FreeFunction("Cursors::SetHardwareCursor")]
+public static extern void SetCustomCursor(uint id);
+}
 }

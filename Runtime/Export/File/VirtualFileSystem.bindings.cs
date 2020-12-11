@@ -6,11 +6,11 @@ using UnityEngine.Bindings;
 using System.Runtime.InteropServices;
 
 namespace Unity.IO.LowLevel.Unsafe {
-  [NativeHeader("Runtime/VirtualFileSystem/VirtualFileSystem.h")]
-  public static class VirtualFileSystem {
-    [FreeFunction(IsThreadSafe = true)]
-    public extern static bool
-    GetLocalFileSystemName(string vfsFileName, out string localFileName,
-                           out ulong localFileOffset, out ulong localFileSize);
-  }
+[NativeHeader("Runtime/VirtualFileSystem/VirtualFileSystem.h")]
+public static class VirtualFileSystem {
+[FreeFunction(IsThreadSafe = true)]
+public extern static bool
+GetLocalFileSystemName(string vfsFileName, out string localFileName,
+                       out ulong localFileOffset, out ulong localFileSize);
+}
 }

@@ -12,21 +12,21 @@ using System.Runtime.CompilerServices;
 // module.
 
 // needed for UnityEngine.Playables internal methods
-[assembly : InternalsVisibleTo("UnityEngine.AudioModule")]
-[assembly : InternalsVisibleTo("UnityEngine.AnimationModule")]
-[assembly:InternalsVisibleTo("UnityEngine.VideoModule")]
+[assembly: InternalsVisibleTo("UnityEngine.AudioModule")]
+[assembly: InternalsVisibleTo("UnityEngine.AnimationModule")]
+[assembly: InternalsVisibleTo("UnityEngine.VideoModule")]
 
-    // needed for Graphics.Internal_DrawTexture
-    [assembly:InternalsVisibleTo("UnityEngine.IMGUIModule")]
+// needed for Graphics.Internal_DrawTexture
+[assembly: InternalsVisibleTo("UnityEngine.IMGUIModule")]
 
-    // needed for External/CSSLayout (this probably should not live in Core
-    // module!)
-    [assembly:InternalsVisibleTo("UnityEngine.UIElementsModule")]
+// needed for External/CSSLayout (this probably should not live in Core
+// module!)
+[assembly: InternalsVisibleTo("UnityEngine.UIElementsModule")]
 
-    // needed for UnityEngine.UnsafeUtility (this probably should not live in
-    // Core module!)
-    [assembly:InternalsVisibleTo("UnityEngine.InputModule")]
+// needed for UnityEngine.UnsafeUtility (this probably should not live in
+// Core module!)
+[assembly: InternalsVisibleTo("UnityEngine.InputModule")]
 
-    // needed for UnityEngine.UnsafeUtility and Object.FindObjectFromInstanceID.
-    [assembly : InternalsVisibleTo("UnityEngine.Physics2DModule")]
-    [assembly:InternalsVisibleTo("UnityEngine.PhysicsModule")]
+// needed for UnityEngine.UnsafeUtility and Object.FindObjectFromInstanceID.
+[assembly: InternalsVisibleTo("UnityEngine.Physics2DModule")]
+[assembly: InternalsVisibleTo("UnityEngine.PhysicsModule")]

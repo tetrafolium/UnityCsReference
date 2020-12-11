@@ -5,13 +5,13 @@
 using UnityEngine.Bindings;
 
 namespace UnityEngine.Windows {
-  public static class Crypto {
-    [NativeHeader(
-        "PlatformDependent/MetroPlayer/Bindings/WindowsCryptoBindings.h")]
-    public extern static byte[] ComputeMD5Hash(byte[] buffer);
+public static class Crypto {
+[NativeHeader(
+	 "PlatformDependent/MetroPlayer/Bindings/WindowsCryptoBindings.h")]
+public extern static byte[] ComputeMD5Hash(byte[] buffer);
 
-    [NativeHeader(
-        "PlatformDependent/MetroPlayer/Bindings/WindowsCryptoBindings.h")]
-    public extern static byte[] ComputeSHA1Hash(byte[] buffer);
-  }
+[NativeHeader(
+	 "PlatformDependent/MetroPlayer/Bindings/WindowsCryptoBindings.h")]
+public extern static byte[] ComputeSHA1Hash(byte[] buffer);
+}
 }

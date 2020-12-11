@@ -6,5 +6,5 @@ using System;
 using System.Runtime.InteropServices;
 
 namespace UnityEngine.Rendering {
-  public enum GizmoSubset { PreImageEffects = 0, PostImageEffects = 1 }
+public enum GizmoSubset { PreImageEffects = 0, PostImageEffects = 1 }
 }

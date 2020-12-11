@@ -6,5 +6,5 @@ using System;
 using UnityEngine;
 
 namespace UnityEngine.Playables {
-  public interface IPlayableOutput { PlayableOutputHandle GetHandle(); }
+public interface IPlayableOutput { PlayableOutputHandle GetHandle(); }
 }

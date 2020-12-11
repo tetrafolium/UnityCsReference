@@ -5,17 +5,17 @@
 using System;
 
 namespace UnityEngine.Lumin {
-  [System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple = true)]
-  public sealed class UsesLuminPrivilegeAttribute : System.Attribute {
-    private readonly string m_Privilege;
+[System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple = true)]
+public sealed class UsesLuminPrivilegeAttribute : System.Attribute {
+private readonly string m_Privilege;
 
-    // This is a positional argument
-    public UsesLuminPrivilegeAttribute(string privilege) {
-      this.m_Privilege = privilege;
-    }
+// This is a positional argument
+public UsesLuminPrivilegeAttribute(string privilege) {
+	this.m_Privilege = privilege;
+}
 
-    public string privilege {
-      get { return m_Privilege; }
-    }
-  }
+public string privilege {
+	get { return m_Privilege; }
+}
+}
 }

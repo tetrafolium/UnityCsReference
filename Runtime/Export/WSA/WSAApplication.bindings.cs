@@ -7,76 +7,76 @@ using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
 namespace UnityEngine.WSA {
-  public delegate void AppCallbackItem();
+public delegate void AppCallbackItem();
 
-  public delegate void WindowSizeChanged(int width, int height);
+public delegate void WindowSizeChanged(int width, int height);
 
-  public enum WindowActivationState {
-    CodeActivated = 0,
-    Deactivated = 1,
-    PointerActivated = 2
-  }
+public enum WindowActivationState {
+	CodeActivated = 0,
+	Deactivated = 1,
+	PointerActivated = 2
+}
 
-  public delegate void WindowActivated(WindowActivationState state);
+public delegate void WindowActivated(WindowActivationState state);
 
-  [NativeHeader("Runtime/Export/WSA/WSAApplication.bindings.h")]
-  [StaticAccessor("WSAApplicationBindings", StaticAccessorType.DoubleColon)]
-  public sealed class Application {
-    public static event WindowSizeChanged windowSizeChanged;
-    public static event WindowActivated windowActivated;
+[NativeHeader("Runtime/Export/WSA/WSAApplication.bindings.h")]
+[StaticAccessor("WSAApplicationBindings", StaticAccessorType.DoubleColon)]
+public sealed class Application {
+public static event WindowSizeChanged windowSizeChanged;
+public static event WindowActivated windowActivated;
 
-    public static string arguments {
-      get { return GetAppArguments(); }
-    }
+public static string arguments {
+	get { return GetAppArguments(); }
+}
 
-    public static string advertisingIdentifier {
-      get {
-        string advertisingId = GetAdvertisingIdentifier();
-        UnityEngine.Application.InvokeOnAdvertisingIdentifierCallback(
-            advertisingId, true);
-        return advertisingId;
-      }
-    }
+public static string advertisingIdentifier {
+	get {
+		string advertisingId = GetAdvertisingIdentifier();
+		UnityEngine.Application.InvokeOnAdvertisingIdentifierCallback(
+			advertisingId, true);
+		return advertisingId;
+	}
+}
 
-    private static extern string GetAdvertisingIdentifier();
+private static extern string GetAdvertisingIdentifier();
 
-    private static extern string GetAppArguments();
+private static extern string GetAppArguments();
 
-    [RequiredByNativeCode]
-    internal static void InvokeWindowSizeChangedEvent(int width, int height) {
-      if (windowSizeChanged != null)
-        windowSizeChanged.Invoke(width, height);
-    }
+[RequiredByNativeCode]
+internal static void InvokeWindowSizeChangedEvent(int width, int height) {
+	if (windowSizeChanged != null)
+		windowSizeChanged.Invoke(width, height);
+}
 
-    [RequiredByNativeCode]
-    internal static void
-    InvokeWindowActivatedEvent(WindowActivationState state) {
-      if (windowActivated != null)
-        windowActivated.Invoke(state);
-    }
+[RequiredByNativeCode]
+internal static void
+InvokeWindowActivatedEvent(WindowActivationState state) {
+	if (windowActivated != null)
+		windowActivated.Invoke(state);
+}
 
-    public static void InvokeOnAppThread(AppCallbackItem item,
-                                         bool waitUntilDone) {
-      item();
-    }
+public static void InvokeOnAppThread(AppCallbackItem item,
+                                     bool waitUntilDone) {
+	item();
+}
 
-    public static void InvokeOnUIThread(AppCallbackItem item,
-                                        bool waitUntilDone) {
-      item();
-    }
+public static void InvokeOnUIThread(AppCallbackItem item,
+                                    bool waitUntilDone) {
+	item();
+}
 
-    [ThreadAndSerializationSafe]
-    internal static extern void InternalInvokeOnAppThread(object item,
-                                                          bool waitUntilDone);
+[ThreadAndSerializationSafe]
+internal static extern void InternalInvokeOnAppThread(object item,
+                                                      bool waitUntilDone);
 
-    [ThreadAndSerializationSafe]
-    internal static extern void InternalInvokeOnUIThread(object item,
-                                                         bool waitUntilDone);
+[ThreadAndSerializationSafe]
+internal static extern void InternalInvokeOnUIThread(object item,
+                                                     bool waitUntilDone);
 
-    [ThreadAndSerializationSafe]
-    public static extern bool RunningOnAppThread();
+[ThreadAndSerializationSafe]
+public static extern bool RunningOnAppThread();
 
-    [ThreadAndSerializationSafe]
-    public static extern bool RunningOnUIThread();
-  }
+[ThreadAndSerializationSafe]
+public static extern bool RunningOnUIThread();
+}
 }

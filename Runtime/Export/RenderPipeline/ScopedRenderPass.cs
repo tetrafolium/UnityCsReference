@@ -6,39 +6,39 @@ using UnityEngine.Rendering;
 using System;
 
 namespace UnityEngine.Rendering {
-  public struct ScopedRenderPass : IDisposable {
-    ScriptableRenderContext m_Context;
+public struct ScopedRenderPass : IDisposable {
+	ScriptableRenderContext m_Context;
 
-    internal ScopedRenderPass(ScriptableRenderContext context) {
-      m_Context = context;
-    }
+	internal ScopedRenderPass(ScriptableRenderContext context) {
+		m_Context = context;
+	}
 
-    public void Dispose() {
-      try {
-        m_Context.EndRenderPass();
-      } catch (Exception e) {
-        throw new InvalidOperationException(
-            $"The {nameof(ScopedRenderPass)} instance is not valid. This can happen if it was constructed using the default constructor.",
-            e);
-      }
-    }
-  }
+	public void Dispose() {
+		try {
+			m_Context.EndRenderPass();
+		} catch (Exception e) {
+			throw new InvalidOperationException(
+				      $"The {nameof(ScopedRenderPass)} instance is not valid. This can happen if it was constructed using the default constructor.",
+				      e);
+		}
+	}
+}
 
-  public struct ScopedSubPass : IDisposable {
-    ScriptableRenderContext m_Context;
+public struct ScopedSubPass : IDisposable {
+	ScriptableRenderContext m_Context;
 
-    internal ScopedSubPass(ScriptableRenderContext context) {
-      m_Context = context;
-    }
+	internal ScopedSubPass(ScriptableRenderContext context) {
+		m_Context = context;
+	}
 
-    public void Dispose() {
-      try {
-        m_Context.EndSubPass();
-      } catch (Exception e) {
-        throw new InvalidOperationException(
-            $"The {nameof(ScopedSubPass)} instance is not valid. This can happen if it was constructed using the default constructor.",
-            e);
-      }
-    }
-  }
+	public void Dispose() {
+		try {
+			m_Context.EndSubPass();
+		} catch (Exception e) {
+			throw new InvalidOperationException(
+				      $"The {nameof(ScopedSubPass)} instance is not valid. This can happen if it was constructed using the default constructor.",
+				      e);
+		}
+	}
+}
 }

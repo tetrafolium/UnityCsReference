@@ -7,10 +7,10 @@ using System;
 namespace UnityEngine {
 
 public partial class Caching {
-  [System.Obsolete(
-      "This function is obsolete. Please use ClearCache.  (UnityUpgradable) -> ClearCache()")]
-  public static bool CleanCache() {
-    return ClearCache();
-  }
+[System.Obsolete(
+	 "This function is obsolete. Please use ClearCache.  (UnityUpgradable) -> ClearCache()")]
+public static bool CleanCache() {
+	return ClearCache();
+}
 }
 }

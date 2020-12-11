@@ -13,15 +13,18 @@ using UnityEngine.Scripting;
 using UnityEngine.U2D;
 
 namespace UnityEditor.
-U2D{// SpriteAtlas Importer lets you modify [[SpriteAtlas]]
-    [NativeHeader("Editor/Src/2D/SpriteAtlas/SpriteAtlasAsset.h")]
-    [NativeType(Header = "Editor/Src/2D/SpriteAtlas/SpriteAtlasAsset.h")]
-    public class SpriteAtlasAsset : UnityEngine.Object{
-                     public SpriteAtlasAsset(){Internal_Create(this);
+U2D {// SpriteAtlas Importer lets you modify [[SpriteAtlas]]
+[NativeHeader("Editor/Src/2D/SpriteAtlas/SpriteAtlasAsset.h")]
+[NativeType(Header = "Editor/Src/2D/SpriteAtlas/SpriteAtlasAsset.h")]
+public class SpriteAtlasAsset : UnityEngine.Object {
+public SpriteAtlasAsset(){
+	Internal_Create(this);
 }
 extern private static void Internal_Create([ Writable ] SpriteAtlasAsset self);
 
-extern public bool isVariant { [NativeMethod("GetIsVariant")] get; }
+extern public bool isVariant {
+	[NativeMethod("GetIsVariant")] get;
+}
 extern public void SetIsVariant(bool value);
 extern public void SetMasterAtlas(SpriteAtlas atlas);
 extern public void SetIncludeInBuild(bool value);

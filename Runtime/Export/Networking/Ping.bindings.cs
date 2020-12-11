@@ -8,41 +8,49 @@ using UnityEngine.Bindings;
 namespace UnityEngine {
 [NativeHeader("Runtime/Export/Networking/Ping.bindings.h")]
 public sealed partial class Ping {
-  internal IntPtr m_Ptr;
+internal IntPtr m_Ptr;
 
-  public Ping(string address) { m_Ptr = Internal_Create(address); }
+public Ping(string address) {
+	m_Ptr = Internal_Create(address);
+}
 
-  ~Ping() { DestroyPing(); }
+~Ping() {
+	DestroyPing();
+}
 
-  [ThreadAndSerializationSafe]
-  public void DestroyPing() {
-    if (m_Ptr == IntPtr.Zero) {
-      return;
-    }
-    Internal_Destroy(m_Ptr);
-    m_Ptr = IntPtr.Zero;
-  }
+[ThreadAndSerializationSafe]
+public void DestroyPing() {
+	if (m_Ptr == IntPtr.Zero) {
+		return;
+	}
+	Internal_Destroy(m_Ptr);
+	m_Ptr = IntPtr.Zero;
+}
 
-  [FreeFunction("DestroyPing", IsThreadSafe = true)]
-  private static extern void Internal_Destroy(IntPtr ptr);
-  [FreeFunction("CreatePing")]
-  private static extern IntPtr Internal_Create(string address);
+[FreeFunction("DestroyPing", IsThreadSafe = true)]
+private static extern void Internal_Destroy(IntPtr ptr);
+[FreeFunction("CreatePing")]
+private static extern IntPtr Internal_Create(string address);
 
-  public bool isDone {
-    get {
-      if (m_Ptr == IntPtr.Zero)
-        return false;
+public bool isDone {
+	get {
+		if (m_Ptr == IntPtr.Zero)
+			return false;
 
-      return Internal_IsDone();
-    }
-  }
+		return Internal_IsDone();
+	}
+}
 
-  [NativeName("GetIsDone")]
-  private extern bool Internal_IsDone();
+[NativeName("GetIsDone")]
+private extern bool Internal_IsDone();
 
-  public extern int time { get; }
+public extern int time {
+	get;
+}
 
-  public extern string ip { [NativeName("GetIP")] get; }
+public extern string ip {
+	[NativeName("GetIP")] get;
+}
 }
 
 }

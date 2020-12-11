@@ -8,8 +8,8 @@
  */
 
 namespace UnityEngine.Yoga {
-  internal enum YogaDimension {
-    Width,
-    Height,
-  }
+internal enum YogaDimension {
+	Width,
+	Height,
+}
 }

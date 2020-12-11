@@ -18,6 +18,7 @@ namespace UnityEngine {
 [NativeClass(null)]
 [ExcludeFromObjectFactory]
 class FailedToLoadScriptObject : Object {
-  private FailedToLoadScriptObject() {}
+private FailedToLoadScriptObject() {
+}
 }
 }
