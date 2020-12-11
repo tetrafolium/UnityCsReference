@@ -6,22 +6,24 @@ using System;
 using UnityEngine;
 using System.Reflection;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 /// <summary>
-/// What is this : helper class that provides functionality for dealing with managed types that actually are extensions of Native types (MonoBehaviour for example)
-/// Motivation(s): is some rare cases, managed code needs to handle differently types that are a combination of both Native anf Managed code.
+/// What is this : helper class that provides functionality for dealing with
+/// managed types that actually are extensions of Native types (MonoBehaviour
+/// for example) Motivation(s): is some rare cases, managed code needs to handle
+/// differently types that are a combination of both Native anf Managed code.
 /// </summary>
 class NativeClassExtensionUtilities // ScriptingRuntime
 {
-    public static bool ExtendsANativeType(Type type)
-    {
-        return type.GetCustomAttributes(typeof(ExtensionOfNativeClassAttribute), true).Length != 0;
-    }
+  public static bool ExtendsANativeType(Type type) {
+    return type.GetCustomAttributes(typeof(ExtensionOfNativeClassAttribute),
+                                    true)
+               .Length != 0;
+  }
 
-    public static bool ExtendsANativeType(UnityEngine.Object obj)
-    {
-        return !object.ReferenceEquals(null, obj) && ExtendsANativeType(obj.GetType());
-    }
+  public static bool ExtendsANativeType(UnityEngine.Object obj) {
+    return !object.ReferenceEquals(null, obj) &&
+           ExtendsANativeType(obj.GetType());
+  }
 }
 }

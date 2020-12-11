@@ -5,40 +5,36 @@
 using UnityEngine;
 using UnityEngine.Bindings;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [NativeHeader("Editor/Src/Highlighter/HighlighterCore.bindings.h")]
-public sealed partial class Highlighter
-{
-    // Internal API
+public sealed partial class Highlighter {
+  // Internal API
 
-    [NativeProperty("s_SearchMode", false, TargetType.Field)]
-    internal static extern HighlightSearchMode searchMode {
-        get;
-        set;
-    }
+  [NativeProperty("s_SearchMode", false, TargetType.Field)]
+  internal static extern HighlightSearchMode searchMode {
+    get;
+    set;
+  }
 
-    [FreeFunction("Internal_Handle")]
-    internal static extern void Handle(Rect position, string text);
+  [FreeFunction("Internal_Handle")]
+  internal static extern void Handle(Rect position, string text);
 
-    public static extern string activeText
-    {
-        [FreeFunction]
-        get;
-        [FreeFunction]
-        private set;
-    }
+  public static extern string activeText {
+    [FreeFunction] get;
+    [FreeFunction]
+    private set;
+  }
 
-    [NativeProperty("s_ActiveRect", false, TargetType.Field)]
-    public static extern Rect activeRect {
-        get;
-        private set;
-    }
+  [NativeProperty("s_ActiveRect", false, TargetType.Field)]
+  public static extern Rect activeRect {
+    get;
+    private set;
+  }
 
-    [NativeProperty("s_ActiveVisible", false, TargetType.Field)]
-    public static extern bool activeVisible {
-        get;
-        private set;
-    }
+  [NativeProperty("s_ActiveVisible", false, TargetType.Field)]
+  public static extern bool activeVisible {
+    get;
+    private set;
+  }
 }
 }

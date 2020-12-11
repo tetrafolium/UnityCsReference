@@ -4,17 +4,13 @@
 
 using System;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [Obsolete("[PreferenceItem] is deprecated. Use [SettingsProvider] instead.")]
 [AttributeUsage(AttributeTargets.Method)]
-public sealed partial class PreferenceItem : Attribute
-{
-    public PreferenceItem(string name) {
-        this.name = name;
-    }
-    public string name;
-    [RequiredSignature]
-    private static void signature() {}
+public sealed partial class PreferenceItem : Attribute {
+  public PreferenceItem(string name) { this.name = name; }
+  public string name;
+  [RequiredSignature]
+  private static void signature() {}
 }
 }

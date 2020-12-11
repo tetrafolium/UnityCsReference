@@ -5,93 +5,89 @@
 using UnityEngine;
 using System.Linq;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [CustomEditor(typeof(PolygonCollider2D))]
 [CanEditMultipleObjects]
-internal class PolygonCollider2DEditor : Collider2DEditorBase
-{
-    SerializedProperty m_Points;
+internal class PolygonCollider2DEditor : Collider2DEditorBase {
+  SerializedProperty m_Points;
 
-    public override void OnEnable()
-    {
-        base.OnEnable();
+  public override void OnEnable() {
+    base.OnEnable();
 
-        m_Points = serializedObject.FindProperty("m_Points");
-        m_AutoTiling = serializedObject.FindProperty("m_AutoTiling");
-        m_Points.isExpanded = false;
+    m_Points = serializedObject.FindProperty("m_Points");
+    m_AutoTiling = serializedObject.FindProperty("m_AutoTiling");
+    m_Points.isExpanded = false;
+  }
+
+  public override void OnInspectorGUI() {
+    bool disableEditCollider = !CanEditCollider();
+
+    if (disableEditCollider) {
+      EditorGUILayout.HelpBox(Styles.s_ColliderEditDisableHelp.text,
+                              MessageType.Info);
+      if (EditorTools.EditorTools.activeToolType ==
+          typeof(PolygonCollider2DTool))
+        EditorTools.EditorTools.RestorePreviousPersistentTool();
+    } else {
+      BeginColliderInspector();
     }
 
-    public override void OnInspectorGUI()
-    {
-        bool disableEditCollider = !CanEditCollider();
+    // Grab this as the offset to the top of the drag target.
+    base.OnInspectorGUI();
 
-        if (disableEditCollider)
-        {
-            EditorGUILayout.HelpBox(Styles.s_ColliderEditDisableHelp.text, MessageType.Info);
-            if (EditorTools.EditorTools.activeToolType == typeof(PolygonCollider2DTool))
-                EditorTools.EditorTools.RestorePreviousPersistentTool();
-        }
-        else
-        {
-            BeginColliderInspector();
-        }
-
-        // Grab this as the offset to the top of the drag target.
-        base.OnInspectorGUI();
-
-        if (targets.Length == 1)
-        {
-            EditorGUI.BeginDisabledGroup(editingCollider);
-            EditorGUILayout.PropertyField(m_Points, true);
-            EditorGUI.EndDisabledGroup();
-        }
-
-        EndColliderInspector();
-
-        FinalizeInspectorGUI();
-
-        HandleDragAndDrop(GUILayoutUtility.GetLastRect());
+    if (targets.Length == 1) {
+      EditorGUI.BeginDisabledGroup(editingCollider);
+      EditorGUILayout.PropertyField(m_Points, true);
+      EditorGUI.EndDisabledGroup();
     }
 
-    // Copy collider from sprite if it is drag&dropped to the inspector
-    private void HandleDragAndDrop(Rect targetRect)
-    {
-        if (Event.current.type != EventType.DragPerform && Event.current.type != EventType.DragUpdated)
-            return;
+    EndColliderInspector();
 
-        // Check we're dropping onto the polygon collider editor.
-        if (!targetRect.Contains(Event.current.mousePosition))
-            return;
+    FinalizeInspectorGUI();
 
-        foreach (var obj in DragAndDrop.objectReferences.Where(obj => obj is Sprite || obj is Texture2D))
-        {
-            DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+    HandleDragAndDrop(GUILayoutUtility.GetLastRect());
+  }
 
-            if (Event.current.type == EventType.DragPerform)
-            {
-                var sprite = obj is Sprite ? obj as Sprite : SpriteUtility.TextureToSprite(obj as Texture2D);
+  // Copy collider from sprite if it is drag&dropped to the inspector
+  private void HandleDragAndDrop(Rect targetRect) {
+    if (Event.current.type != EventType.DragPerform &&
+        Event.current.type != EventType.DragUpdated)
+      return;
 
-                // Copy collider to all selected components
-                foreach (var collider in targets.Select(target => target as PolygonCollider2D))
-                {
-                    Vector2[][] paths;
-                    UnityEditor.Sprites.SpriteUtility.GenerateOutlineFromSprite(sprite, 0.25f, 200, true, out paths);
-                    collider.pathCount = paths.Length;
-                    for (int i = 0; i < paths.Length; ++i)
-                        collider.SetPath(i, paths[i]);
+    // Check we're dropping onto the polygon collider editor.
+    if (!targetRect.Contains(Event.current.mousePosition))
+      return;
 
-                    DragAndDrop.AcceptDrag();
-                }
+    foreach (var obj in DragAndDrop.objectReferences.Where(
+                 obj => obj is Sprite || obj is Texture2D)) {
+      DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
 
-                if (EditorTools.EditorTools.activeToolType == typeof(PolygonCollider2DTool))
-                    EditorTools.EditorTools.RestorePreviousPersistentTool();
-            }
+      if (Event.current.type == EventType.DragPerform) {
+        var sprite = obj is Sprite ? obj as Sprite
+            : SpriteUtility.TextureToSprite(obj as Texture2D);
 
-            return;
+        // Copy collider to all selected components
+        foreach (var collider in targets.Select(
+                     target => target as PolygonCollider2D)) {
+          Vector2[][] paths;
+          UnityEditor.Sprites.SpriteUtility.GenerateOutlineFromSprite(
+              sprite, 0.25f, 200, true, out paths);
+          collider.pathCount = paths.Length;
+          for (int i = 0; i < paths.Length; ++i)
+            collider.SetPath(i, paths[i]);
+
+          DragAndDrop.AcceptDrag();
         }
 
-        DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
+        if (EditorTools.EditorTools.activeToolType ==
+            typeof(PolygonCollider2DTool))
+          EditorTools.EditorTools.RestorePreviousPersistentTool();
+      }
+
+      return;
     }
+
+    DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
+  }
 }
 }

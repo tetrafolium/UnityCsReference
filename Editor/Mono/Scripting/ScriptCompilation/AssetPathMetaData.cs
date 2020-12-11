@@ -8,18 +8,16 @@ using System.Runtime.InteropServices;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace UnityEditor.Scripting.ScriptCompilation
-{
-[NativeAsStruct]
-[StructLayout(LayoutKind.Sequential)]
-[RequiredByNativeCode(GenerateProxy = true)]
-[NativeHeader("Runtime/Scripting/ScriptingManagedProxySupport.h")]
-[NativeHeader("Runtime/ScriptingBackend/ScriptingNativeTypes.h")]
-[DebuggerDisplay("{DirectoryPath}")]
-class AssetPathMetaData
-{
+namespace UnityEditor.Scripting.ScriptCompilation {
+  [NativeAsStruct]
+  [StructLayout(LayoutKind.Sequential)]
+  [RequiredByNativeCode(GenerateProxy = true)]
+  [NativeHeader("Runtime/Scripting/ScriptingManagedProxySupport.h")]
+  [NativeHeader("Runtime/ScriptingBackend/ScriptingNativeTypes.h")]
+  [DebuggerDisplay("{DirectoryPath}")]
+  class AssetPathMetaData {
     public string DirectoryPath;
     public bool IsTestable;
     public AssetPathVersionMetaData[] VersionMetaDatas;
-}
+  }
 }

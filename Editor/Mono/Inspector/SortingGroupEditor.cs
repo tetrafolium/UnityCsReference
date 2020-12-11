@@ -6,27 +6,24 @@ using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [CustomEditor(typeof(UnityEngine.Rendering.SortingGroup))]
 [CanEditMultipleObjects]
-internal class SortingGroupEditor : Editor
-{
-    private SerializedProperty m_SortingOrder;
-    private SerializedProperty m_SortingLayerID;
+internal class SortingGroupEditor : Editor {
+  private SerializedProperty m_SortingOrder;
+  private SerializedProperty m_SortingLayerID;
 
-    public virtual void OnEnable()
-    {
-        alwaysAllowExpansion = true;
-        m_SortingOrder = serializedObject.FindProperty("m_SortingOrder");
-        m_SortingLayerID = serializedObject.FindProperty("m_SortingLayerID");
-    }
+  public virtual void OnEnable() {
+    alwaysAllowExpansion = true;
+    m_SortingOrder = serializedObject.FindProperty("m_SortingOrder");
+    m_SortingLayerID = serializedObject.FindProperty("m_SortingLayerID");
+  }
 
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
-        SortingLayerEditorUtility.RenderSortingLayerFields(m_SortingOrder, m_SortingLayerID);
-        serializedObject.ApplyModifiedProperties();
-    }
+  public override void OnInspectorGUI() {
+    serializedObject.Update();
+    SortingLayerEditorUtility.RenderSortingLayerFields(m_SortingOrder,
+                                                       m_SortingLayerID);
+    serializedObject.ApplyModifiedProperties();
+  }
 }
 }

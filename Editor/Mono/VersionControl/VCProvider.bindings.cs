@@ -8,113 +8,79 @@ using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 using System.Runtime.InteropServices;
 
-namespace UnityEditor.VersionControl
-{
-// This MUST be kept synchronized with the VCS_PROVIDER_UNSET_IDENTIFIER enum in VCProvider.cpp
-enum VCSProviderIdentifier
-{
-    UnsetIdentifier = -1
-}
+namespace UnityEditor.VersionControl {
+  // This MUST be kept synchronized with the VCS_PROVIDER_UNSET_IDENTIFIER enum
+  // in VCProvider.cpp
+  enum VCSProviderIdentifier { UnsetIdentifier = -1 }
 
-// Keep internal and undocumented until we expose more functionality
-[NativeHeader("Editor/Src/VersionControl/VC_bindings.h")]
-[NativeHeader("Editor/Src/VersionControl/VCProvider.h")]
-[NativeHeader("Editor/Src/VersionControl/VCPlugin.h")]
-[NativeHeader("Editor/Src/VersionControl/VCTask.h")]
-[NativeHeader("Editor/Src/VersionControl/VCCache.h")]
-public partial class Provider
-{
+  // Keep internal and undocumented until we expose more functionality
+  [NativeHeader("Editor/Src/VersionControl/VC_bindings.h")]
+  [NativeHeader("Editor/Src/VersionControl/VCProvider.h")]
+  [NativeHeader("Editor/Src/VersionControl/VCPlugin.h")]
+  [NativeHeader("Editor/Src/VersionControl/VCTask.h")]
+  [NativeHeader("Editor/Src/VersionControl/VCCache.h")]
+  public partial class Provider {
     [StaticAccessor("GetVCProvider()", StaticAccessorType.Dot)]
-    public static extern bool enabled
-    {
-        [NativeMethod("Enabled")]
-        get;
+    public static extern bool enabled {
+      [NativeMethod("Enabled")] get;
     }
 
     [StaticAccessor("GetVCProvider()", StaticAccessorType.Dot)]
-    public static extern bool isActive
-    {
-        [NativeMethod("IsActive")]
-        get;
+    public static extern bool isActive {
+      [NativeMethod("IsActive")] get;
     }
 
     [UsedByNativeCode]
     [StructLayout(LayoutKind.Sequential)]
-    private struct Traits
-    {
-        public bool requiresNetwork;
-        public bool enablesCheckout;
-        public bool enablesVersioningFolders;
-        public bool enablesChangelists;
-        public bool enablesLocking;
+    private struct Traits {
+      public bool requiresNetwork;
+      public bool enablesCheckout;
+      public bool enablesVersioningFolders;
+      public bool enablesChangelists;
+      public bool enablesLocking;
     }
 
-    private static extern Traits activeTraits
-    {
-        [FreeFunction("VersionControlBindings::VCProvider::GetActiveTraits")]
-        get;
+    private static extern Traits activeTraits {
+      [FreeFunction("VersionControlBindings::VCProvider::GetActiveTraits")] get;
     }
 
-    public static bool requiresNetwork
-    {
-        get {
-            return activeTraits.requiresNetwork;
-        }
+    public static bool requiresNetwork {
+      get { return activeTraits.requiresNetwork; }
     }
 
-    public static bool hasChangelistSupport
-    {
-        get {
-            return activeTraits.enablesChangelists;
-        }
+    public static bool hasChangelistSupport {
+      get { return activeTraits.enablesChangelists; }
     }
 
-    public static bool hasCheckoutSupport
-    {
-        get {
-            return activeTraits.enablesCheckout;
-        }
+    public static bool hasCheckoutSupport {
+      get { return activeTraits.enablesCheckout; }
     }
 
-    public static bool hasLockingSupport
-    {
-        get {
-            return activeTraits.enablesLocking;
-        }
+    public static bool hasLockingSupport {
+      get { return activeTraits.enablesLocking; }
     }
 
-    public static bool isVersioningFolders
-    {
-        get {
-            return activeTraits.enablesVersioningFolders;
-        }
+    public static bool isVersioningFolders {
+      get { return activeTraits.enablesVersioningFolders; }
     }
 
     [StaticAccessor("GetVCProvider()", StaticAccessorType.Dot)]
-    public static extern OnlineState onlineState
-    {
-        [NativeMethod("GetOnlineState")]
-        get;
+    public static extern OnlineState onlineState {
+      [NativeMethod("GetOnlineState")] get;
     }
 
     [StaticAccessor("GetVCProvider()", StaticAccessorType.Dot)]
-    public static extern string offlineReason
-    {
-        [NativeMethod("OfflineReason")]
-        get;
+    public static extern string offlineReason {
+      [NativeMethod("OfflineReason")] get;
     }
 
-    public static extern Task activeTask
-    {
-        [FreeFunction("VersionControlBindings::VCProvider::GetActiveTask")]
-        get;
+    public static extern Task activeTask {
+      [FreeFunction("VersionControlBindings::VCProvider::GetActiveTask")] get;
     }
 
     [StaticAccessor("GetVCProvider()", StaticAccessorType.Dot)]
-    internal static extern Texture2D overlayAtlas
-    {
-        [NativeMethod("GetOverlayAtlas")]
-        get;
+    internal static extern Texture2D overlayAtlas {
+      [NativeMethod("GetOverlayAtlas")] get;
     }
 
     [FreeFunction("VersionControlBindings::VCProvider::GetAtlasRectForState")]
@@ -130,10 +96,8 @@ public partial class Provider
     internal static extern bool IsCustomCommandEnabled(string name);
 
     [StaticAccessor("GetVCProvider()", StaticAccessorType.Dot)]
-    internal static extern CustomCommand[] customCommands
-    {
-        [NativeMethod("GetMonoCustomCommands")]
-        get;
+    internal static extern CustomCommand[] customCommands {
+      [NativeMethod("GetMonoCustomCommands")] get;
     }
 
     [StaticAccessor("GetVCProvider()", StaticAccessorType.Dot)]
@@ -144,34 +108,45 @@ public partial class Provider
 
     [NativeThrows]
     [FreeFunction("VersionControlBindings::VCProvider::Internal_Status")]
-    private static extern Task Internal_Status(Asset[] assets, bool recursively);
+    private static extern Task Internal_Status(Asset[] assets,
+                                               bool recursively);
 
     [FreeFunction("VersionControlBindings::VCProvider::Internal_StatusStrings")]
-    private static extern Task Internal_StatusStrings(string[] assetsProjectPaths, bool recursively);
+    private static extern Task
+    Internal_StatusStrings(string[] assetsProjectPaths, bool recursively);
 
-    [FreeFunction("VersionControlBindings::VCProvider::Internal_StatusAbsolutePath")]
+    [FreeFunction(
+        "VersionControlBindings::VCProvider::Internal_StatusAbsolutePath")]
     private static extern Task Internal_StatusAbsolutePath(string assetPath);
 
     [NativeThrows]
-    [FreeFunction("VersionControlBindings::VCProvider::Internal_CheckoutIsValid")]
-    private static extern bool Internal_CheckoutIsValid(Asset[] assets, CheckoutMode mode);
+    [FreeFunction(
+        "VersionControlBindings::VCProvider::Internal_CheckoutIsValid")]
+    private static extern bool Internal_CheckoutIsValid(Asset[] assets,
+                                                        CheckoutMode mode);
 
     [NativeThrows]
     [FreeFunction("VersionControlBindings::VCProvider::Internal_Checkout")]
-    private static extern Task Internal_Checkout(Asset[] assets, CheckoutMode mode, ChangeSet changeset);
+    private static extern Task
+    Internal_Checkout(Asset[] assets, CheckoutMode mode, ChangeSet changeset);
 
     [FreeFunction("VersionControlBindings::VCProvider::MakeEditable")]
-    internal static extern bool MakeEditableImpl(string[] assets, string prompt, ChangeSet changeSet, object outNotEditablePathsList);
+    internal static extern bool
+    MakeEditableImpl(string[] assets, string prompt, ChangeSet changeSet,
+                     object outNotEditablePathsList);
 
     [NativeThrows]
     [FreeFunction("VersionControlBindings::VCProvider::Internal_Delete")]
     private static extern Task Internal_Delete(Asset[] assets);
 
-    [FreeFunction("VersionControlBindings::VCProvider::Internal_DeleteAtProjectPath")]
-    private static extern Task Internal_DeleteAtProjectPath([NotNull] string assetProjectPath);
+    [FreeFunction(
+        "VersionControlBindings::VCProvider::Internal_DeleteAtProjectPath")]
+    private static extern Task
+    Internal_DeleteAtProjectPath([ NotNull ] string assetProjectPath);
 
     [FreeFunction("VersionControlBindings::VCProvider::Internal_MoveAsStrings")]
-    private static extern Task Internal_MoveAsStrings([NotNull] string from, [NotNull] string to);
+    private static extern Task Internal_MoveAsStrings([ NotNull ] string from,
+                                                      [ NotNull ] string to);
 
     [NativeThrows]
     [FreeFunction("VersionControlBindings::VCProvider::Internal_AddIsValid")]
@@ -182,24 +157,33 @@ public partial class Provider
     private static extern Task Internal_Add(Asset[] assets, bool recursive);
 
     [NativeThrows]
-    [FreeFunction("VersionControlBindings::VCProvider::Internal_DeleteChangeSetsIsValid")]
-    private static extern bool Internal_DeleteChangeSetsIsValid(ChangeSet[] changesets);
+    [FreeFunction(
+        "VersionControlBindings::VCProvider::Internal_DeleteChangeSetsIsValid")]
+    private static extern bool
+        Internal_DeleteChangeSetsIsValid(ChangeSet[] changesets);
 
     [NativeThrows]
-    [FreeFunction("VersionControlBindings::VCProvider::Internal_DeleteChangeSets")]
-    private static extern Task Internal_DeleteChangeSets(ChangeSet[] changesets);
+    [FreeFunction(
+        "VersionControlBindings::VCProvider::Internal_DeleteChangeSets")]
+    private static extern Task
+        Internal_DeleteChangeSets(ChangeSet[] changesets);
 
     [NativeThrows]
-    [FreeFunction("VersionControlBindings::VCProvider::Internal_RevertChangeSets")]
-    private static extern Task Internal_RevertChangeSets(ChangeSet[] changesets, RevertMode mode);
+    [FreeFunction(
+        "VersionControlBindings::VCProvider::Internal_RevertChangeSets")]
+    private static extern Task Internal_RevertChangeSets(ChangeSet[] changesets,
+                                                         RevertMode mode);
 
     [NativeThrows]
     [FreeFunction("VersionControlBindings::VCProvider::Internal_SubmitIsValid")]
-    private static extern bool Internal_SubmitIsValid(ChangeSet changeset, Asset[] assets);
+    private static extern bool Internal_SubmitIsValid(ChangeSet changeset,
+                                                      Asset[] assets);
 
     [NativeThrows]
     [FreeFunction("VersionControlBindings::VCProvider::Internal_Submit")]
-    private static extern Task Internal_Submit(ChangeSet changeset, Asset[] assets, string description, bool saveOnly);
+    private static extern Task
+    Internal_Submit(ChangeSet changeset, Asset[] assets, string description,
+                    bool saveOnly);
 
     [NativeThrows]
     [FreeFunction("VersionControlBindings::VCProvider::Internal_DiffIsValid")]
@@ -207,15 +191,18 @@ public partial class Provider
 
     [NativeThrows]
     [FreeFunction("VersionControlBindings::VCProvider::Internal_DiffHead")]
-    private static extern Task Internal_DiffHead(Asset[] assets, bool includingMetaFiles);
+    private static extern Task Internal_DiffHead(Asset[] assets,
+                                                 bool includingMetaFiles);
 
     [NativeThrows]
-    [FreeFunction("VersionControlBindings::VCProvider::Internal_ResolveIsValid")]
+    [FreeFunction(
+        "VersionControlBindings::VCProvider::Internal_ResolveIsValid")]
     private static extern bool Internal_ResolveIsValid(Asset[] assets);
 
     [NativeThrows]
     [FreeFunction("VersionControlBindings::VCProvider::Internal_Resolve")]
-    private static extern Task Internal_Resolve(Asset[] assets, ResolveMethod resolveMethod);
+    private static extern Task Internal_Resolve(Asset[] assets,
+                                                ResolveMethod resolveMethod);
 
     [NativeThrows]
     [FreeFunction("VersionControlBindings::VCProvider::Internal_Merge")]
@@ -235,14 +222,17 @@ public partial class Provider
 
     [NativeThrows]
     [FreeFunction("VersionControlBindings::VCProvider::Internal_RevertIsValid")]
-    private static extern bool Internal_RevertIsValid(Asset[] assets, RevertMode revertMode);
+    private static extern bool Internal_RevertIsValid(Asset[] assets,
+                                                      RevertMode revertMode);
 
     [NativeThrows]
     [FreeFunction("VersionControlBindings::VCProvider::Internal_Revert")]
-    private static extern Task Internal_Revert(Asset[] assets, RevertMode revertMode);
+    private static extern Task Internal_Revert(Asset[] assets,
+                                               RevertMode revertMode);
 
     [NativeThrows]
-    [FreeFunction("VersionControlBindings::VCProvider::Internal_GetLatestIsValid")]
+    [FreeFunction(
+        "VersionControlBindings::VCProvider::Internal_GetLatestIsValid")]
     private static extern bool Internal_GetLatestIsValid(Asset[] assets);
 
     [NativeThrows]
@@ -251,29 +241,39 @@ public partial class Provider
 
     [NativeThrows]
     [FreeFunction("VersionControlBindings::VCProvider::Internal_SetFileMode")]
-    private static extern Task Internal_SetFileMode(Asset[] assets, FileMode fileMode);
+    private static extern Task Internal_SetFileMode(Asset[] assets,
+                                                    FileMode fileMode);
 
-    [FreeFunction("VersionControlBindings::VCProvider::Internal_SetFileModeStrings")]
-    private static extern Task Internal_SetFileModeStrings(string[] assets, FileMode fileMode);
+    [FreeFunction(
+        "VersionControlBindings::VCProvider::Internal_SetFileModeStrings")]
+    private static extern Task Internal_SetFileModeStrings(string[] assets,
+                                                           FileMode fileMode);
 
-    [FreeFunction("VersionControlBindings::VCProvider::Internal_ChangeSetDescription")]
-    private static extern Task Internal_ChangeSetDescription([NotNull] ChangeSet changeset);
+    [FreeFunction(
+        "VersionControlBindings::VCProvider::Internal_ChangeSetDescription")]
+    private static extern Task
+    Internal_ChangeSetDescription([ NotNull ] ChangeSet changeset);
 
-    [FreeFunction("VersionControlBindings::VCProvider::Internal_ChangeSetStatus")]
-    private static extern Task Internal_ChangeSetStatus([NotNull] ChangeSet changeset);
+    [FreeFunction(
+        "VersionControlBindings::VCProvider::Internal_ChangeSetStatus")]
+    private static extern Task
+    Internal_ChangeSetStatus([ NotNull ] ChangeSet changeset);
 
     [FreeFunction("VersionControlBindings::VCProvider::ChangeSets")]
     public static extern Task ChangeSets();
 
     [NativeThrows]
     [FreeFunction("VersionControlBindings::VCProvider::Internal_ChangeSetMove")]
-    private static extern Task Internal_ChangeSetMove(Asset[] assets, [NotNull] ChangeSet target);
+    private static extern Task
+    Internal_ChangeSetMove(Asset[] assets, [ NotNull ] ChangeSet target);
 
     [FreeFunction("VersionControlBindings::VCProvider::Incoming")]
     public static extern Task Incoming();
 
-    [FreeFunction("VersionControlBindings::VCProvider::Internal_IncomingChangeSetAssets")]
-    private static extern Task Internal_IncomingChangeSetAssets([NotNull] ChangeSet changeset);
+    [FreeFunction(
+        "VersionControlBindings::VCProvider::Internal_IncomingChangeSetAssets")]
+    private static extern Task
+    Internal_IncomingChangeSetAssets([ NotNull ] ChangeSet changeset);
 
     [FreeFunction("VersionControlBindings::VCProvider::UpdateSettings")]
     public static extern Task UpdateSettings();
@@ -284,11 +284,12 @@ public partial class Provider
     [FreeFunction("VersionControlBindings::VCProvider::GetAssetByGUID")]
     public static extern Asset GetAssetByGUID(string guid);
 
-    [FreeFunction("VersionControlBindings::VCProvider::Internal_GetAssetArrayFromSelection")]
+    [FreeFunction(
+        "VersionControlBindings::VCProvider::Internal_GetAssetArrayFromSelection")]
     private static extern Asset[] Internal_GetAssetArrayFromSelection();
 
     [FreeFunction("VersionControlBindings::VCProvider::IsOpenForEdit")]
-    public static extern bool IsOpenForEdit([NotNull] Asset asset);
+    public static extern bool IsOpenForEdit([ NotNull ] Asset asset);
 
     [StaticAccessor("GetVCProvider()", StaticAccessorType.Dot)]
     internal static extern int GenerateID();
@@ -301,16 +302,19 @@ public partial class Provider
     [NativeMethod("Invalidate")]
     internal static extern void InvalidateCache();
 
+    [FreeFunction(
+        "VersionControlBindings::VCProvider::Internal_CreateWarningTask")]
+    public static extern Task Internal_WarningTask([ NotNull ] string message);
 
-    [FreeFunction("VersionControlBindings::VCProvider::Internal_CreateWarningTask")]
-    public static extern Task Internal_WarningTask([NotNull] string message);
-
-    [FreeFunction("VersionControlBindings::VCProvider::Internal_CreateErrorTask")]
-    public static extern Task Internal_ErrorTask([NotNull] string message);
+    [FreeFunction(
+        "VersionControlBindings::VCProvider::Internal_CreateErrorTask")]
+    public static extern Task Internal_ErrorTask([ NotNull ] string message);
 
     [NativeThrows]
-    [FreeFunction("VersionControlBindings::VCProvider::Internal_ConsolidateAssetList")]
-    private static extern Asset[] Internal_ConsolidateAssetList(Asset[] assets, CheckoutMode mode);
+    [FreeFunction(
+        "VersionControlBindings::VCProvider::Internal_ConsolidateAssetList")]
+    private static extern Asset[] Internal_ConsolidateAssetList(
+        Asset[] assets, CheckoutMode mode);
 
     [StaticAccessor("VCProvider", StaticAccessorType.DoubleColon)]
     [NativeMethod("ShouldAddMetaFile")]
@@ -319,5 +323,5 @@ public partial class Provider
     [StaticAccessor("VCProvider", StaticAccessorType.DoubleColon)]
     [NativeMethod("ShouldPathBeVersioned")]
     static internal extern bool PathIsVersioned(string path);
-}
+  }
 }

@@ -4,32 +4,27 @@
 
 using UnityEngine;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 // Built-in DecoratorDrawers. See matching attributes in PropertyAttribute.cs
 
 [CustomPropertyDrawer(typeof(SpaceAttribute))]
-internal sealed class SpaceDrawer : DecoratorDrawer
-{
-    public override float GetHeight()
-    {
-        return (attribute as SpaceAttribute).height;
-    }
+internal sealed class SpaceDrawer : DecoratorDrawer {
+  public override float GetHeight() {
+    return (attribute as SpaceAttribute).height;
+  }
 }
 
 [CustomPropertyDrawer(typeof(HeaderAttribute))]
-internal sealed class HeaderDrawer : DecoratorDrawer
-{
-    public override void OnGUI(Rect position)
-    {
-        position.yMin += EditorGUIUtility.singleLineHeight * 0.5f;
-        position = EditorGUI.IndentedRect(position);
-        GUI.Label(position, (attribute as HeaderAttribute).header, EditorStyles.boldLabel);
-    }
+internal sealed class HeaderDrawer : DecoratorDrawer {
+  public override void OnGUI(Rect position) {
+    position.yMin += EditorGUIUtility.singleLineHeight * 0.5f;
+    position = EditorGUI.IndentedRect(position);
+    GUI.Label(position, (attribute as HeaderAttribute).header,
+              EditorStyles.boldLabel);
+  }
 
-    public override float GetHeight()
-    {
-        return EditorGUIUtility.singleLineHeight * 1.5f;
-    }
+  public override float GetHeight() {
+    return EditorGUIUtility.singleLineHeight * 1.5f;
+  }
 }
 }

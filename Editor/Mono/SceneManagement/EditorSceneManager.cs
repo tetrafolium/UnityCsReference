@@ -10,11 +10,11 @@ using UnityEngine.Assertions;
 using UnityEngine.Scripting;
 using UnityEngine.SceneManagement;
 
-namespace UnityEditor.SceneManagement
-{
-public sealed partial class EditorSceneManager
-{
-    public delegate void NewSceneCreatedCallback(Scene scene, NewSceneSetup setup, NewSceneMode mode);
+namespace UnityEditor.SceneManagement {
+  public sealed partial class EditorSceneManager {
+    public delegate void NewSceneCreatedCallback(Scene scene,
+                                                 NewSceneSetup setup,
+                                                 NewSceneMode mode);
     public delegate void SceneOpeningCallback(string path, OpenSceneMode mode);
     public delegate void SceneOpenedCallback(Scene scene, OpenSceneMode mode);
     public delegate void SceneClosingCallback(Scene scene, bool removingScene);
@@ -33,69 +33,62 @@ public sealed partial class EditorSceneManager
     public static event SceneDirtiedCallback sceneDirtied;
 
     [RequiredByNativeCode]
-    private static void Internal_NewSceneCreated(Scene scene, NewSceneSetup setup, NewSceneMode mode)
-    {
-        if (newSceneCreated != null)
-            newSceneCreated(scene, setup, mode);
+    private static void Internal_NewSceneCreated(Scene scene,
+                                                 NewSceneSetup setup,
+                                                 NewSceneMode mode) {
+      if (newSceneCreated != null)
+        newSceneCreated(scene, setup, mode);
     }
 
     [RequiredByNativeCode]
-    private static void Internal_SceneOpening(string path, OpenSceneMode mode)
-    {
-        if (sceneOpening != null)
-            sceneOpening(path, mode);
+    private static void Internal_SceneOpening(string path, OpenSceneMode mode) {
+      if (sceneOpening != null)
+        sceneOpening(path, mode);
     }
 
     [RequiredByNativeCode]
-    private static void Internal_SceneOpened(Scene scene, OpenSceneMode mode)
-    {
-        if (sceneOpened != null)
-            sceneOpened(scene, mode);
+    private static void Internal_SceneOpened(Scene scene, OpenSceneMode mode) {
+      if (sceneOpened != null)
+        sceneOpened(scene, mode);
     }
 
     [RequiredByNativeCode]
-    private static void Internal_SceneClosing(Scene scene, bool removingScene)
-    {
-        if (sceneClosing != null)
-            sceneClosing(scene, removingScene);
+    private static void Internal_SceneClosing(Scene scene, bool removingScene) {
+      if (sceneClosing != null)
+        sceneClosing(scene, removingScene);
     }
 
     [RequiredByNativeCode]
-    private static void Internal_SceneClosed(Scene scene)
-    {
-        if (sceneClosed != null)
-            sceneClosed(scene);
+    private static void Internal_SceneClosed(Scene scene) {
+      if (sceneClosed != null)
+        sceneClosed(scene);
     }
 
     [RequiredByNativeCode]
-    private static void Internal_SceneSaving(Scene scene, string path)
-    {
-        if (sceneSaving != null)
-            sceneSaving(scene, path);
+    private static void Internal_SceneSaving(Scene scene, string path) {
+      if (sceneSaving != null)
+        sceneSaving(scene, path);
     }
 
     [RequiredByNativeCode]
-    private static void Internal_SceneSaved(Scene scene)
-    {
-        if (sceneSaved != null)
-            sceneSaved(scene);
+    private static void Internal_SceneSaved(Scene scene) {
+      if (sceneSaved != null)
+        sceneSaved(scene);
     }
 
     [RequiredByNativeCode]
-    private static void Internal_SceneDirtied(Scene scene)
-    {
-        if (sceneDirtied != null)
-            sceneDirtied(scene);
+    private static void Internal_SceneDirtied(Scene scene) {
+      if (sceneDirtied != null)
+        sceneDirtied(scene);
     }
 
     [RequiredByNativeCode]
-    private static Transform Internal_GetParentTransformForNewGameObjects()
-    {
-        var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
-        if (prefabStage != null)
-            return prefabStage.prefabContentsRoot.transform;
+    private static Transform Internal_GetParentTransformForNewGameObjects() {
+      var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+      if (prefabStage != null)
+        return prefabStage.prefabContentsRoot.transform;
 
-        return null;
+      return null;
     }
-}
+  }
 }

@@ -12,11 +12,9 @@ using UnityEditor;
 using UnityEngine.Bindings;
 using UnityEngine.Scripting;
 
-namespace UnityEditor.Sprites
-{
-[StructLayout(LayoutKind.Sequential)]
-public struct AtlasSettings
-{
+namespace UnityEditor.Sprites {
+  [StructLayout(LayoutKind.Sequential)]
+  public struct AtlasSettings {
     public TextureFormat format;
     public ColorSpace colorSpace;
     public int compressionQuality;
@@ -28,44 +26,44 @@ public struct AtlasSettings
     public bool generateMipMaps;
     public bool enableRotation;
     public bool allowsAlphaSplitting;
-}
+  }
 
-[NativeHeader("Editor/Src/SpritePacker/SpritePacker.h")]
-public sealed class PackerJob
-{
-    internal PackerJob()
-    {
-    }
+  [NativeHeader("Editor/Src/SpritePacker/SpritePacker.h")]
+  public sealed class PackerJob {
+    internal PackerJob() {}
 
     [FreeFunction("SpritePacker::ActiveJob_AddAtlas", ThrowsException = true)]
-    private static extern void Internal_AddAtlas(string atlasName, AtlasSettings settings);
-    [FreeFunction("SpritePacker::ActiveJob_AssignToAtlas", ThrowsException = true)]
-    private static extern void Internal_AssignToAtlas(string atlasName, Sprite sprite, SpritePackingMode packingMode, SpritePackingRotation packingRotation);
+    private static extern void Internal_AddAtlas(string atlasName,
+                                                 AtlasSettings settings);
+    [FreeFunction("SpritePacker::ActiveJob_AssignToAtlas",
+                  ThrowsException = true)]
+    private static extern void
+    Internal_AssignToAtlas(string atlasName, Sprite sprite,
+                           SpritePackingMode packingMode,
+                           SpritePackingRotation packingRotation);
 
-    public void AddAtlas(string atlasName, AtlasSettings settings)
-    {
-        Internal_AddAtlas(atlasName, settings);
+    public void AddAtlas(string atlasName, AtlasSettings settings) {
+      Internal_AddAtlas(atlasName, settings);
     }
 
-    public void AssignToAtlas(string atlasName, Sprite sprite, SpritePackingMode packingMode, SpritePackingRotation packingRotation)
-    {
-        Internal_AssignToAtlas(atlasName, sprite, packingMode, packingRotation);
+    public void AssignToAtlas(string atlasName, Sprite sprite,
+                              SpritePackingMode packingMode,
+                              SpritePackingRotation packingRotation) {
+      Internal_AssignToAtlas(atlasName, sprite, packingMode, packingRotation);
     }
-}
+  }
 
-[NativeHeader("Editor/Src/SpritePacker/SpritePacker.h")]
-public sealed partial class Packer
-{
-    public extern static string[] atlasNames
-    {
-        [FreeFunction("SpritePacker::GetAvailableAtlases")]
-        get;
+  [NativeHeader("Editor/Src/SpritePacker/SpritePacker.h")]
+  public sealed partial class Packer {
+    public extern static string[] atlasNames {
+      [FreeFunction("SpritePacker::GetAvailableAtlases")] get;
     }
 
     [FreeFunction("SpritePacker::GetAtlasNameForSprite")]
     private static extern string Internal_GetAtlasNameForSprite(Sprite sprite);
     [FreeFunction("SpritePacker::GetAtlasTextureSprite")]
-    private static extern Texture2D Internal_GetAtlasTextureSprite(Sprite sprite);
+    private static extern Texture2D
+    Internal_GetAtlasTextureSprite(Sprite sprite);
 
     [FreeFunction("SpritePacker::GetTexturesForAtlas")]
     public static extern Texture2D[] GetTexturesForAtlas(string atlasName);
@@ -74,28 +72,34 @@ public sealed partial class Packer
     public static extern Texture2D[] GetAlphaTexturesForAtlas(string atlasName);
 
     [FreeFunction("SpritePacker::RebuildAtlasCacheIfNeededFromScript")]
-    internal static extern void RebuildAtlasCacheIfNeededInternal(BuildTarget target, bool displayProgressBar, Execution execution);
+    internal static extern void RebuildAtlasCacheIfNeededInternal(
+        BuildTarget target, bool displayProgressBar, Execution execution);
 
-    [Obsolete("Sprite Packing Tags are deprecated. Please use Sprite Atlas asset.")]
+    [Obsolete(
+        "Sprite Packing Tags are deprecated. Please use Sprite Atlas asset.")]
     [FreeFunction("SpritePacker::RebuildAtlasCacheIfNeededFromScript")]
-    public static extern void RebuildAtlasCacheIfNeeded(BuildTarget target, bool displayProgressBar, Execution execution);
+    public static extern void RebuildAtlasCacheIfNeeded(BuildTarget target,
+                                                        bool displayProgressBar,
+                                                        Execution execution);
 
-    [Obsolete("Sprite Packing Tags are deprecated. Please use Sprite Atlas asset.")]
-    public static void RebuildAtlasCacheIfNeeded(BuildTarget target, bool displayProgressBar)
-    {
-        RebuildAtlasCacheIfNeeded(target, displayProgressBar, Execution.Normal);
+    [Obsolete(
+        "Sprite Packing Tags are deprecated. Please use Sprite Atlas asset.")]
+    public static void RebuildAtlasCacheIfNeeded(BuildTarget target,
+                                                 bool displayProgressBar) {
+      RebuildAtlasCacheIfNeeded(target, displayProgressBar, Execution.Normal);
     }
 
-    [Obsolete("Sprite Packing Tags are deprecated. Please use Sprite Atlas asset.")]
-    public static void RebuildAtlasCacheIfNeeded(BuildTarget target)
-    {
-        RebuildAtlasCacheIfNeeded(target, false, Execution.Normal);
+    [Obsolete(
+        "Sprite Packing Tags are deprecated. Please use Sprite Atlas asset.")]
+    public static void RebuildAtlasCacheIfNeeded(BuildTarget target) {
+      RebuildAtlasCacheIfNeeded(target, false, Execution.Normal);
     }
 
-    public static void GetAtlasDataForSprite(Sprite sprite, out string atlasName, out Texture2D atlasTexture)
-    {
-        atlasName = Internal_GetAtlasNameForSprite(sprite);
-        atlasTexture = Internal_GetAtlasTextureSprite(sprite);
+    public static void GetAtlasDataForSprite(Sprite sprite,
+                                             out string atlasName,
+                                             out Texture2D atlasTexture) {
+      atlasName = Internal_GetAtlasNameForSprite(sprite);
+      atlasTexture = Internal_GetAtlasTextureSprite(sprite);
     }
-}
+  }
 }

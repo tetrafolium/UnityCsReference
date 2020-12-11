@@ -4,21 +4,19 @@
 
 using UnityEngine;
 using System;
-using RequiredByNativeCodeAttribute = UnityEngine.Scripting.RequiredByNativeCodeAttribute;
+using RequiredByNativeCodeAttribute =
+    UnityEngine.Scripting.RequiredByNativeCodeAttribute;
 
-namespace UnityEditor
-{
-public partial class Undo
-{
-    internal enum UndoRedoType { Undo, Redo }
+namespace UnityEditor {
+public partial class Undo {
+  internal enum UndoRedoType { Undo, Redo }
 
-    [RequiredByNativeCode]
-    static void OnSelectionUndo(bool redo)
-    {
-        if (selectionUndoRedoPerformed != null)
-            selectionUndoRedoPerformed(redo ? UndoRedoType.Redo : UndoRedoType.Undo);
-    }
+  [RequiredByNativeCode]
+  static void OnSelectionUndo(bool redo) {
+    if (selectionUndoRedoPerformed != null)
+      selectionUndoRedoPerformed(redo ? UndoRedoType.Redo : UndoRedoType.Undo);
+  }
 
-    internal static event Action<UndoRedoType> selectionUndoRedoPerformed;
+  internal static event Action<UndoRedoType> selectionUndoRedoPerformed;
 }
 }

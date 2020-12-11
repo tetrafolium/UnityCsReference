@@ -7,204 +7,195 @@ using UnityEngine.Bindings;
 using System;
 using Object = UnityEngine.Object;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [NativeHeader("Editor/Src/Utility/SerializedProperty.h")]
 [NativeHeader("Editor/Src/Utility/SerializedObject.bindings.h")]
 [NativeHeader("Editor/Src/Utility/SerializedObjectCache.h")]
 
-// SerializedObject and [[SerializedProperty]] are classes for editing properties on objects in a completely generic way that automatically handles undo and styling UI for prefabs.
+    // SerializedObject and [[SerializedProperty]] are classes for editing
+    // properties on objects in a completely generic way that automatically
+    // handles undo and styling UI for prefabs.
 
-public class SerializedObject : IDisposable
-{
+    public class SerializedObject : IDisposable {
 #pragma warning disable 414
-    internal IntPtr m_NativeObjectPtr;
+  internal IntPtr m_NativeObjectPtr;
 
-    // Create SerializedObject for inspected object.
-    public SerializedObject(Object obj)
-    {
-        m_NativeObjectPtr = InternalCreate(new Object[] {obj}, null);
+  // Create SerializedObject for inspected object.
+  public SerializedObject(Object obj) {
+    m_NativeObjectPtr = InternalCreate(new Object[]{obj}, null);
+  }
+
+  public SerializedObject(Object obj, Object context) {
+    m_NativeObjectPtr = InternalCreate(new Object[]{obj}, context);
+  }
+
+  // Create SerializedObject for inspected object.
+  public SerializedObject(Object[] objs) {
+    m_NativeObjectPtr = InternalCreate(objs, null);
+  }
+
+  public SerializedObject(Object[] objs, Object context) {
+    m_NativeObjectPtr = InternalCreate(objs, context);
+  }
+
+  ~SerializedObject() { Dispose(); }
+
+  [ThreadAndSerializationSafe()]
+  public void Dispose() {
+    if (m_NativeObjectPtr != IntPtr.Zero) {
+      Internal_Destroy(m_NativeObjectPtr);
+      m_NativeObjectPtr = IntPtr.Zero;
     }
+  }
 
-    public SerializedObject(Object obj, Object context)
-    {
-        m_NativeObjectPtr = InternalCreate(new Object[] {obj}, context);
-    }
+  [FreeFunction("SerializedObjectBindings::Internal_Destroy",
+                IsThreadSafe = true)]
+  private static extern void Internal_Destroy(IntPtr ptr);
 
-    // Create SerializedObject for inspected object.
-    public SerializedObject(Object[] objs)
-    {
-        m_NativeObjectPtr = InternalCreate(objs, null);
-    }
+  // Get the first serialized property.
+  public SerializedProperty GetIterator() {
+    SerializedProperty i = GetIterator_Internal();
+    // This is so the garbage collector won't clean up SerializedObject behind
+    // the scenes, when we are still iterating properties
+    i.m_SerializedObject = this;
+    return i;
+  }
 
-    public SerializedObject(Object[] objs, Object context)
-    {
-        m_NativeObjectPtr = InternalCreate(objs, context);
-    }
+  // Find serialized property by name.
+  public SerializedProperty FindProperty(string propertyPath) {
+    SerializedProperty i = GetIterator_Internal();
+    // This is so the garbage collector won't clean up SerializedObject behind
+    // the scenes, when we are still iterating properties
+    i.m_SerializedObject = this;
+    if (i.FindPropertyInternal(propertyPath))
+      return i;
+    else
+      return null;
+  }
 
-    ~SerializedObject() {
-        Dispose();
-    }
+  extern public bool ApplyModifiedProperties();
 
-    [ThreadAndSerializationSafe()]
-    public void Dispose()
-    {
-        if (m_NativeObjectPtr != IntPtr.Zero)
-        {
-            Internal_Destroy(m_NativeObjectPtr);
-            m_NativeObjectPtr = IntPtr.Zero;
-        }
-    }
+  // Update /hasMultipleDifferentValues/ cache on the next /Update()/ call.
+  extern public void SetIsDifferentCacheDirty();
 
-    [FreeFunction("SerializedObjectBindings::Internal_Destroy", IsThreadSafe = true)]
-    private static extern void Internal_Destroy(IntPtr ptr);
+  [FreeFunction(Name = "SerializedObjectBindings::GetIteratorInternal",
+                HasExplicitThis = true)] extern private SerializedProperty
+  GetIterator_Internal();
 
-    // Get the first serialized property.
-    public SerializedProperty GetIterator()
-    {
-        SerializedProperty i = GetIterator_Internal();
-        // This is so the garbage collector won't clean up SerializedObject behind the scenes,
-        // when we are still iterating properties
-        i.m_SerializedObject = this;
-        return i;
-    }
+  // Update serialized object's representation.
+  extern public void Update();
 
-    // Find serialized property by name.
-    public SerializedProperty FindProperty(string propertyPath)
-    {
-        SerializedProperty i = GetIterator_Internal();
-        // This is so the garbage collector won't clean up SerializedObject behind the scenes,
-        // when we are still iterating properties
-        i.m_SerializedObject = this;
-        if (i.FindPropertyInternal(propertyPath))
-            return i;
-        else
-            return null;
-    }
+  // Update serialized object's representation, only if the object has been
+  // modified since the last call to Update or if it is a script.
+  [Obsolete(
+      "UpdateIfDirtyOrScript has been deprecated. Use UpdateIfRequiredOrScript instead.",
+      false)]
+  [NativeName("UpdateIfRequiredOrScript")] extern public void
+  UpdateIfDirtyOrScript();
 
-    extern public bool ApplyModifiedProperties();
+  // Update serialized object's representation, only if the object has been
+  // modified since the last call to Update or if it is a script.
+  extern public bool UpdateIfRequiredOrScript();
 
-    // Update /hasMultipleDifferentValues/ cache on the next /Update()/ call.
-    extern public void SetIsDifferentCacheDirty();
+  // Updates this serialized object's isExpanded value to the global inspector's
+  // expanded state for this object
+  extern internal void UpdateExpandedState();
 
-    [FreeFunction(Name = "SerializedObjectBindings::GetIteratorInternal", HasExplicitThis = true)]
-    extern private SerializedProperty GetIterator_Internal();
+  [NativeMethod(Name = "SerializedObjectBindings::InternalCreate",
+                IsFreeFunction = true,
+                ThrowsException = true)] extern static IntPtr
+  InternalCreate(Object[] monoObjs, Object context);
 
-    // Update serialized object's representation.
-    extern public void Update();
+  internal
+      PropertyModification ExtractPropertyModification(string propertyPath) {
+    return InternalExtractPropertyModification(propertyPath)
+        as PropertyModification;
+  }
 
-    // Update serialized object's representation, only if the object has been modified since the last call to Update or if it is a script.
-    [Obsolete("UpdateIfDirtyOrScript has been deprecated. Use UpdateIfRequiredOrScript instead.", false)]
-    [NativeName("UpdateIfRequiredOrScript")]
-    extern public void UpdateIfDirtyOrScript();
+  [FreeFunction("SerializedObjectBindings::ExtractPropertyModification",
+                HasExplicitThis = true)] extern private object
+  InternalExtractPropertyModification(string propertyPath);
 
-    // Update serialized object's representation, only if the object has been modified since the last call to Update or if it is a script.
-    extern public bool UpdateIfRequiredOrScript();
+  // The inspected object (RO).
+  public extern Object targetObject { get; }
 
-    // Updates this serialized object's isExpanded value to the global inspector's expanded state for this object
-    extern internal void UpdateExpandedState();
+  // The inspected objects (RO).
+  public extern Object[] targetObjects { get; }
 
-    [NativeMethod(Name = "SerializedObjectBindings::InternalCreate", IsFreeFunction = true, ThrowsException = true)]
-    extern static IntPtr InternalCreate(Object[] monoObjs, Object context);
+  // The inspected objects (RO).
+  internal extern int targetObjectsCount { get; }
 
-    internal PropertyModification ExtractPropertyModification(string propertyPath)
-    {
-        return InternalExtractPropertyModification(propertyPath) as PropertyModification;
-    }
+  // The context object (used to resolve scene references via
+  // ExposedReference<>)
+  [NativeProperty("ContextObject")]
+  public extern Object context {
+    get;
+  }
 
-    [FreeFunction("SerializedObjectBindings::ExtractPropertyModification", HasExplicitThis = true)]
-    extern private object InternalExtractPropertyModification(string propertyPath);
+  internal void Cache(int instanceID) {
+    CacheInternal(instanceID);
+    m_NativeObjectPtr = IntPtr.Zero;
+  }
 
-    // The inspected object (RO).
-    public extern Object targetObject {
-        get;
-    }
+  [FreeFunction("SerializedObjectCache::SaveToCache", HasExplicitThis = true)]
+  private extern void CacheInternal(int instanceID);
 
-    // The inspected objects (RO).
-    public extern Object[] targetObjects {
-        get;
-    }
+  [FreeFunction("SerializedObjectCache::LoadFromCache")]
+  internal extern static SerializedObject LoadFromCache(int instanceID);
 
-    // The inspected objects (RO).
-    internal extern int targetObjectsCount {
-        get;
-    }
+  public extern bool ApplyModifiedPropertiesWithoutUndo();
 
-    // The context object (used to resolve scene references via ExposedReference<>)
-    [NativeProperty("ContextObject")]
-    public extern Object context {
-        get;
-    }
+  // Copies a value from a SerializedProperty to the same serialized property on
+  // this serialized object.
+  public void CopyFromSerializedProperty(SerializedProperty prop) {
+    if (prop == null)
+      throw new ArgumentNullException("prop");
 
-    internal void Cache(int instanceID)
-    {
-        CacheInternal(instanceID);
-        m_NativeObjectPtr = IntPtr.Zero;
-    }
+    prop.Verify(SerializedProperty.VerifyFlags.IteratorNotAtEnd);
+    CopyFromSerializedPropertyInternal(prop);
+  }
 
-    [FreeFunction("SerializedObjectCache::SaveToCache", HasExplicitThis = true)]
-    private extern void CacheInternal(int instanceID);
+  [FreeFunction("SerializedObjectBindings::CopyFromSerializedPropertyInternal",
+                HasExplicitThis = true)]
+  private extern void
+  CopyFromSerializedPropertyInternal(SerializedProperty prop);
 
-    [FreeFunction("SerializedObjectCache::LoadFromCache")]
-    internal extern static SerializedObject LoadFromCache(int instanceID);
+  // Copies a value from a SerializedProperty to the same serialized property on
+  // this serialized object.
+  public bool CopyFromSerializedPropertyIfDifferent(SerializedProperty prop) {
+    if (prop == null)
+      throw new ArgumentNullException("prop");
 
-    public extern bool ApplyModifiedPropertiesWithoutUndo();
+    prop.Verify(SerializedProperty.VerifyFlags.IteratorNotAtEnd);
+    return CopyFromSerializedPropertyIfDifferentInternal(prop);
+  }
 
-    // Copies a value from a SerializedProperty to the same serialized property on this serialized object.
-    public void CopyFromSerializedProperty(SerializedProperty prop)
-    {
-        if (prop == null)
-            throw new ArgumentNullException("prop");
+  [FreeFunction(
+      "SerializedObjectBindings::CopyFromSerializedPropertyIfDifferentInternal",
+      HasExplicitThis = true)]
+  private extern bool
+  CopyFromSerializedPropertyIfDifferentInternal(SerializedProperty prop);
 
-        prop.Verify(SerializedProperty.VerifyFlags.IteratorNotAtEnd);
-        CopyFromSerializedPropertyInternal(prop);
-    }
+  public extern bool hasModifiedProperties {
+    [NativeMethod("HasModifiedProperties")] get;
+  }
 
-    [FreeFunction("SerializedObjectBindings::CopyFromSerializedPropertyInternal", HasExplicitThis = true)]
-    private extern void CopyFromSerializedPropertyInternal(SerializedProperty prop);
+  internal extern InspectorMode inspectorMode {
+    get;
+    set;
+  }
 
-    // Copies a value from a SerializedProperty to the same serialized property on this serialized object.
-    public bool CopyFromSerializedPropertyIfDifferent(SerializedProperty prop)
-    {
-        if (prop == null)
-            throw new ArgumentNullException("prop");
+  // Does the serialized object represents multiple objects due to multi-object
+  // editing? (RO)
+  public extern bool isEditingMultipleObjects {
+    [NativeMethod("IsEditingMultipleObjects")] get;
+  }
 
-        prop.Verify(SerializedProperty.VerifyFlags.IteratorNotAtEnd);
-        return CopyFromSerializedPropertyIfDifferentInternal(prop);
-    }
+  public extern int maxArraySizeForMultiEditing {
+    get;
+    set;
+  }
 
-    [FreeFunction("SerializedObjectBindings::CopyFromSerializedPropertyIfDifferentInternal", HasExplicitThis = true)]
-    private extern bool CopyFromSerializedPropertyIfDifferentInternal(SerializedProperty prop);
-
-    public extern bool hasModifiedProperties
-    {
-        [NativeMethod("HasModifiedProperties")]
-        get;
-    }
-
-    internal extern InspectorMode inspectorMode
-    {
-        get;
-        set;
-    }
-
-    // Does the serialized object represents multiple objects due to multi-object editing? (RO)
-    public extern bool isEditingMultipleObjects
-    {
-        [NativeMethod("IsEditingMultipleObjects")]
-        get;
-    }
-
-    public extern int maxArraySizeForMultiEditing
-    {
-        get;
-        set;
-    }
-
-    internal extern bool isValid
-    {
-        [NativeMethod("IsValid")]
-        get;
-    }
+  internal extern bool isValid { [NativeMethod("IsValid")] get; }
 }
 }

@@ -8,12 +8,10 @@ using UnityEngine;
 
 // The setup information for a scene in the SceneManager.
 
-namespace UnityEditor.SceneManagement
-{
-[StructLayout(LayoutKind.Sequential)]
-[Serializable]
-public class SceneSetup
-{
+namespace UnityEditor.SceneManagement {
+  [StructLayout(LayoutKind.Sequential)]
+  [Serializable]
+  public class SceneSetup {
     [SerializeField]
     private string m_Path = null;
     [SerializeField]
@@ -23,44 +21,24 @@ public class SceneSetup
     [SerializeField]
     private bool m_IsSubScene = false;
 
-    public string path
-    {
-        get {
-            return m_Path;
-        }
-        set {
-            m_Path = value;
-        }
+    public string path {
+      get { return m_Path; }
+      set { m_Path = value; }
     }
 
-    public bool isLoaded
-    {
-        get {
-            return m_IsLoaded;
-        }
-        set {
-            m_IsLoaded = value;
-        }
+    public bool isLoaded {
+      get { return m_IsLoaded; }
+      set { m_IsLoaded = value; }
     }
 
-    public bool isActive
-    {
-        get {
-            return m_IsActive;
-        }
-        set {
-            m_IsActive = value;
-        }
+    public bool isActive {
+      get { return m_IsActive; }
+      set { m_IsActive = value; }
     }
 
-    public bool isSubScene
-    {
-        get {
-            return m_IsSubScene;
-        }
-        set {
-            m_IsSubScene = value;
-        }
+    public bool isSubScene {
+      get { return m_IsSubScene; }
+      set { m_IsSubScene = value; }
     }
-}
+  }
 }

@@ -6,29 +6,25 @@ using System;
 using System.Runtime.CompilerServices;
 using UnityEngine.Bindings;
 
-[assembly: InternalsVisibleTo("Unity.PerformanceTracking.Editor")]
+[assembly:InternalsVisibleTo("Unity.PerformanceTracking.Editor")]
 
-namespace UnityEditor.Profiling
-{
-[NativeHeader("Editor/Src/Utility/Performance.h"),
- StaticAccessor("Performance::Bindings", StaticAccessorType.DoubleColon)]
-internal struct EditorPerformanceTracker : IDisposable
-{
+    namespace UnityEditor.Profiling {
+  [NativeHeader("Editor/Src/Utility/Performance.h"),
+   StaticAccessor("Performance::Bindings", StaticAccessorType.DoubleColon)]
+  internal struct EditorPerformanceTracker : IDisposable {
     private bool m_Disposed;
     private readonly int m_WatchHandle;
 
-    public EditorPerformanceTracker(string name)
-    {
-        m_Disposed = false;
-        m_WatchHandle = StartTracker(name);
+    public EditorPerformanceTracker(string name) {
+      m_Disposed = false;
+      m_WatchHandle = StartTracker(name);
     }
 
-    public void Dispose()
-    {
-        if (m_Disposed)
-            return;
-        m_Disposed = true;
-        StopTracker(m_WatchHandle);
+    public void Dispose() {
+      if (m_Disposed)
+        return;
+      m_Disposed = true;
+      StopTracker(m_WatchHandle);
     }
 
     public static extern string[] GetAvailableTrackers();
@@ -42,10 +38,11 @@ internal struct EditorPerformanceTracker : IDisposable
     public static extern double GetTotalUsage(string trackerName);
     public static extern double GetTimestamp(string trackerName);
     public static extern void LogCallstack(string trackerName);
-    public static extern void GetCallstack(string trackerName, Action<string> onCallstackCaptured);
+    public static extern void GetCallstack(string trackerName,
+                                           Action<string> onCallstackCaptured);
 
     internal static extern int StartTracker(string trackerName);
     internal static extern void StopTracker(int trackerToken);
     internal static extern bool IsTrackerActive(int trackerToken);
-}
+  }
 }

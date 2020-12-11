@@ -5,12 +5,9 @@
 using System;
 using UnityEngine.Bindings;
 
-namespace UnityEditor.Scripting.ScriptCompilation
-{
-// Keep in sync with ManagedAssemblyFlags in C++
-[Flags]
-enum AssemblyFlags
-{
+namespace UnityEditor.Scripting.ScriptCompilation {
+  // Keep in sync with ManagedAssemblyFlags in C++
+  [Flags] enum AssemblyFlags {
     None = 0,
     EditorOnly = (1 << 0),
     UseForMono = (1 << 1),
@@ -25,5 +22,5 @@ enum AssemblyFlags
     SuppressCompilerWarnings = (1 << 10),
     UserOverride = (1 << 11),
     UserOverrideCandidate = (1 << 12)
-}
+  }
 }

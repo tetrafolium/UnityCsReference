@@ -4,14 +4,11 @@
 
 using System;
 
-namespace UnityEditor.Scripting.ScriptCompilation
-{
-internal class ExpressionNotValidException : Exception
-{
-    public ExpressionNotValidException(string expression)
-        : base(expression) {}
+namespace UnityEditor.Scripting.ScriptCompilation {
+  internal class ExpressionNotValidException : Exception {
+    public ExpressionNotValidException(string expression) : base(expression) {}
 
     public ExpressionNotValidException(string message, string expression)
         : base($"{message} : {expression}") {}
-}
+  }
 }

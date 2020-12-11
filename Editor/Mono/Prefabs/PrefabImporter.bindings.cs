@@ -7,11 +7,8 @@ using Object = UnityEngine.Object;
 using System;
 using UnityEngine.Bindings;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [NativeHeader("Editor/Src/AssetPipeline/PrefabImporter.h")]
 [ExcludeFromPreset]
-internal class PrefabImporter : AssetImporter
-{
-}
+internal class PrefabImporter : AssetImporter {}
 }

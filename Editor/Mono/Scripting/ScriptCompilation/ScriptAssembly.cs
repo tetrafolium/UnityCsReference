@@ -10,225 +10,211 @@ using UnityEditor.Scripting.Compilers;
 using UnityEditor.Compilation;
 using UnityEditor.Modules;
 
-namespace UnityEditor.Scripting.ScriptCompilation
-{
-// Settings that would be common for a group of ScriptAssembly's created for the same build target.
-class ScriptAssemblySettings
-{
+namespace UnityEditor.Scripting.ScriptCompilation {
+  // Settings that would be common for a group of ScriptAssembly's created for
+  // the same build target.
+  class ScriptAssemblySettings {
     public BuildTarget BuildTarget {
-        get;
-        set;
+      get;
+      set;
     }
     public BuildTargetGroup BuildTargetGroup {
-        get;
-        set;
+      get;
+      set;
     }
     public string OutputDirectory {
-        get;
-        set;
+      get;
+      set;
     }
     public EditorScriptCompilationOptions CompilationOptions {
-        get;
-        set;
+      get;
+      set;
     }
     public ScriptCompilerOptions PredefinedAssembliesCompilerOptions {
-        get;
-        set;
+      get;
+      set;
     }
     public string[] ExtraGeneralDefines {
-        get;
-        set;
+      get;
+      set;
     }
     public ICompilationExtension CompilationExtension {
-        get;
-        set;
+      get;
+      set;
     }
     public string ProjectRootNamespace {
-        get;
-        set;
+      get;
+      set;
     }
 
     public CodeOptimization EditorCodeOptimization {
-        get;
-        set;
+      get;
+      set;
     }
 
-    public ScriptAssemblySettings()
-    {
-        BuildTarget = BuildTarget.NoTarget;
-        BuildTargetGroup = BuildTargetGroup.Unknown;
-        PredefinedAssembliesCompilerOptions = new ScriptCompilerOptions();
-        ExtraGeneralDefines = new string[0];
+    public ScriptAssemblySettings() {
+      BuildTarget = BuildTarget.NoTarget;
+      BuildTargetGroup = BuildTargetGroup.Unknown;
+      PredefinedAssembliesCompilerOptions = new ScriptCompilerOptions();
+      ExtraGeneralDefines = new string[0];
     }
 
-    public bool BuildingForEditor
-    {
-        get {
-            return (CompilationOptions & EditorScriptCompilationOptions.BuildingForEditor) == EditorScriptCompilationOptions.BuildingForEditor;
-        }
+    public bool BuildingForEditor {
+      get {
+        return (CompilationOptions &
+                EditorScriptCompilationOptions.BuildingForEditor) ==
+               EditorScriptCompilationOptions.BuildingForEditor;
+      }
     }
 
-    public bool BuildingDevelopmentBuild
-    {
-        get {
-            return (CompilationOptions & EditorScriptCompilationOptions.BuildingDevelopmentBuild) == EditorScriptCompilationOptions.BuildingDevelopmentBuild;
-        }
+    public bool BuildingDevelopmentBuild {
+      get {
+        return (CompilationOptions &
+                EditorScriptCompilationOptions.BuildingDevelopmentBuild) ==
+               EditorScriptCompilationOptions.BuildingDevelopmentBuild;
+      }
     }
-}
+  }
 
-[DebuggerDisplay("{Filename}")]
-class ScriptAssembly
-{
+  [DebuggerDisplay("{Filename}")]
+  class ScriptAssembly {
     public string OriginPath {
-        get;
-        set;
+      get;
+      set;
     }
     public AssemblyFlags Flags {
-        get;
-        set;
+      get;
+      set;
     }
     public BuildTarget BuildTarget {
-        get;
-        set;
+      get;
+      set;
     }
     public SupportedLanguage Language {
-        get;
-        set;
+      get;
+      set;
     }
     public string Filename {
-        get;
-        set;
+      get;
+      set;
     }
 
-    public string PdbFilename
-    {
-        get
-        {
-            return $"{AssetPath.GetAssemblyNameWithoutExtension(Filename)}.pdb";
-        }
+    public string PdbFilename {
+      get {
+        return $"{AssetPath.GetAssemblyNameWithoutExtension(Filename)}.pdb";
+      }
     }
     public string OutputDirectory {
-        get;
-        set;
+      get;
+      set;
     }
 
     /// <summary>
     /// References to dependencies that will be built.
     /// </summary>
     public ScriptAssembly[] ScriptAssemblyReferences {
-        get;
-        set;
+      get;
+      set;
     }
 
     /// <summary>
-    ///References to dependencies that that will *not* be built.
+    /// References to dependencies that that will *not* be built.
     /// </summary>
     public string[] References {
-        get;
-        set;
+      get;
+      set;
     }
     public string[] Defines {
-        get;
-        set;
+      get;
+      set;
     }
     public string[] Files {
-        get;
-        set;
+      get;
+      set;
     }
     public string RootNamespace {
-        get;
-        set;
+      get;
+      set;
     }
     public bool CallOnBeforeCompilationStarted {
-        get;
-        set;
+      get;
+      set;
     }
     public ScriptCompilerOptions CompilerOptions {
-        get;
-        set;
+      get;
+      set;
     }
     public string GeneratedResponseFile {
-        get;
-        set;
+      get;
+      set;
     }
     public DirtySource DirtySource {
-        get;
-        set;
+      get;
+      set;
     }
     // Indicates whether the assembly had compile errors on last compilation
     public bool HasCompileErrors {
-        get;
-        set;
+      get;
+      set;
     }
 
-    public ScriptAssembly()
-    {
-        DirtySource = DirtySource.None;
-    }
+    public ScriptAssembly() { DirtySource = DirtySource.None; }
 
     public string FullPath {
-        get {
-            return AssetPath.Combine(OutputDirectory, Filename);
-        }
+      get { return AssetPath.Combine(OutputDirectory, Filename); }
     }
     public string PdbFullPath {
-        get {
-            return AssetPath.Combine(OutputDirectory, PdbFilename);
-        }
+      get { return AssetPath.Combine(OutputDirectory, PdbFilename); }
     }
 
-    public string ReferenceAssemblyFilename
-    {
-        get
-        {
-            return $"{Filename}.ref";
-        }
+    public string ReferenceAssemblyFilename {
+      get { return $"{Filename}.ref"; }
     }
 
-    public string[] GetAllReferences()
-    {
-        return References.Concat(ScriptAssemblyReferences.Select(a => a.FullPath)).ToArray();
+    public string[] GetAllReferences() {
+      return References.Concat(ScriptAssemblyReferences.Select(a => a.FullPath))
+          .ToArray();
     }
 
-    public MonoIsland ToMonoIsland(EditorScriptCompilationOptions options, string buildOutputDirectory, string projectPath = null)
-    {
-        bool buildingForEditor = (options & EditorScriptCompilationOptions.BuildingForEditor) == EditorScriptCompilationOptions.BuildingForEditor;
-        bool developmentBuild = (options & EditorScriptCompilationOptions.BuildingDevelopmentBuild) == EditorScriptCompilationOptions.BuildingDevelopmentBuild;
+    public MonoIsland ToMonoIsland(EditorScriptCompilationOptions options,
+                                   string buildOutputDirectory,
+                                   string projectPath = null) {
+      bool buildingForEditor =
+          (options & EditorScriptCompilationOptions.BuildingForEditor) ==
+          EditorScriptCompilationOptions.BuildingForEditor;
+      bool developmentBuild =
+          (options & EditorScriptCompilationOptions.BuildingDevelopmentBuild) ==
+          EditorScriptCompilationOptions.BuildingDevelopmentBuild;
 
-        var references = ScriptAssemblyReferences.Select(a => AssetPath.Combine(a.OutputDirectory, a.Filename));
+      var references = ScriptAssemblyReferences.Select(
+          a => AssetPath.Combine(a.OutputDirectory, a.Filename));
 
-        var referencesArray = references.Concat(References).ToArray();
+      var referencesArray = references.Concat(References).ToArray();
 
-        var responseFileProvider = Language?.CreateResponseFileProvider();
-        if (!string.IsNullOrEmpty(projectPath) && responseFileProvider != null)
-        {
-            responseFileProvider.ProjectPath = projectPath;
-        }
+      var responseFileProvider = Language?.CreateResponseFileProvider();
+      if (!string.IsNullOrEmpty(projectPath) && responseFileProvider != null) {
+        responseFileProvider.ProjectPath = projectPath;
+      }
 
-        List<string> reposeFiles = responseFileProvider?.Get(OriginPath) ?? new List<string>();
+      List<string> reposeFiles =
+          responseFileProvider?.Get(OriginPath) ?? new List<string>();
 
-        var outputPath = AssetPath.Combine(buildOutputDirectory, Filename);
+      var outputPath = AssetPath.Combine(buildOutputDirectory, Filename);
 
-        return new MonoIsland(BuildTarget,
-                              buildingForEditor,
-                              developmentBuild,
-                              CompilerOptions.AllowUnsafeCode,
-                              CompilerOptions.ApiCompatibilityLevel,
-                              Files,
-                              referencesArray,
-                              Defines,
-                              outputPath,
-                              reposeFiles.ToArray());
+      return new MonoIsland(BuildTarget, buildingForEditor, developmentBuild,
+                            CompilerOptions.AllowUnsafeCode,
+                            CompilerOptions.ApiCompatibilityLevel, Files,
+                            referencesArray, Defines, outputPath,
+                            reposeFiles.ToArray());
     }
 
-    public string[] GetResponseFiles()
-    {
-        if (Language == null)
-        {
-            throw new ArgumentException("Language: not set on ScriptAssembly. Cannot resolve responsefiles");
-        }
-        var responseFileProvider = Language.CreateResponseFileProvider();
-        return responseFileProvider.Get(OriginPath).ToArray();
+    public string[] GetResponseFiles() {
+      if (Language == null) {
+        throw new ArgumentException(
+            "Language: not set on ScriptAssembly. Cannot resolve responsefiles");
+      }
+      var responseFileProvider = Language.CreateResponseFileProvider();
+      return responseFileProvider.Get(OriginPath).ToArray();
     }
-}
+  }
 }

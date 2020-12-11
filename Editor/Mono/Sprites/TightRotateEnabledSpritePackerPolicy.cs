@@ -7,25 +7,19 @@ using System.Linq;
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace UnityEditor.Sprites
-{
-// TightRotateEnabledSpritePackerPolicy will tightly pack non-rectangle Sprites unless their packing tag contains "[RECT]" with rotation and flipping for optimal packing.
-internal class TightRotateEnabledSpritePackerPolicy : DefaultPackerPolicy
-{
+namespace UnityEditor.Sprites {
+  // TightRotateEnabledSpritePackerPolicy will tightly pack non-rectangle
+  // Sprites unless their packing tag contains "[RECT]" with rotation and
+  // flipping for optimal packing.
+  internal class TightRotateEnabledSpritePackerPolicy : DefaultPackerPolicy {
     protected override string TagPrefix {
-        get {
-            return "[RECT]";
-        }
+      get { return "[RECT]"; }
     }
     protected override bool AllowTightWhenTagged {
-        get {
-            return false;
-        }
+      get { return false; }
     }
     protected override bool AllowRotationFlipping {
-        get {
-            return true;
-        }
+      get { return true; }
     }
-}
+  }
 }

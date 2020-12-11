@@ -4,10 +4,6 @@
 
 using UnityEditor;
 
-namespace UnityEditor
-{
-public interface IHasCustomMenu
-{
-    void AddItemsToMenu(GenericMenu menu);
-}
+namespace UnityEditor {
+public interface IHasCustomMenu { void AddItemsToMenu(GenericMenu menu); }
 }

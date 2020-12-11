@@ -6,45 +6,42 @@ using System;
 using UnityEngine;
 using UnityEngine.Bindings;
 
-namespace UnityEditor
-{
-internal struct LODVisualizationInformation
-{
-    public int triangleCount;
-    public int vertexCount;
-    public int rendererCount;
-    public int submeshCount;
+namespace UnityEditor {
+internal struct LODVisualizationInformation {
+  public int triangleCount;
+  public int vertexCount;
+  public int rendererCount;
+  public int submeshCount;
 
-    public int activeLODLevel;
-    public float activeLODFade;
-    public float activeDistance;
-    public float activeRelativeScreenSize;
-    public float activePixelSize;
-    public float worldSpaceSize;
+  public int activeLODLevel;
+  public float activeLODFade;
+  public float activeDistance;
+  public float activeRelativeScreenSize;
+  public float activePixelSize;
+  public float worldSpaceSize;
 }
 
 [NativeHeader("Editor/Mono/LODUtility.bindings.h")]
-public sealed class LODUtility
-{
-    [FreeFunction("LODUtilityBindings::CalculateVisualizationData")]
-    extern internal static LODVisualizationInformation CalculateVisualizationData(Camera camera, LODGroup group, int lodLevel);
+public sealed class LODUtility {
+  [FreeFunction(
+      "LODUtilityBindings::CalculateVisualizationData")] extern internal static LODVisualizationInformation
+  CalculateVisualizationData(Camera camera, LODGroup group, int lodLevel);
 
-    [FreeFunction("LODUtilityBindings::CalculateDistance")]
-    extern internal static float CalculateDistance(Camera camera, float relativeScreenHeight, LODGroup group);
+  [FreeFunction(
+      "LODUtilityBindings::CalculateDistance")] extern internal static float
+  CalculateDistance(Camera camera, float relativeScreenHeight, LODGroup group);
 
-    internal static Vector3 CalculateWorldReferencePoint(LODGroup group)
-    {
-        return group.worldReferencePoint;
-    }
+  internal static Vector3 CalculateWorldReferencePoint(LODGroup group) {
+    return group.worldReferencePoint;
+  }
 
-    [FreeFunction]
-    extern internal static bool NeedUpdateLODGroupBoundingBox(LODGroup group);
+  [FreeFunction] extern internal static bool
+  NeedUpdateLODGroupBoundingBox(LODGroup group);
 
-    public static void CalculateLODGroupBoundingBox(LODGroup group)
-    {
-        if (group == null)
-            throw new ArgumentNullException("group");
-        group.RecalculateBounds();
-    }
+  public static void CalculateLODGroupBoundingBox(LODGroup group) {
+    if (group == null)
+      throw new ArgumentNullException("group");
+    group.RecalculateBounds();
+  }
 }
 }

@@ -8,28 +8,28 @@ using UnityEngine;
 using UnityEngine.Scripting;
 using Object = UnityEngine.Object;
 
-namespace UnityEditor
-{
-// Used to extract the context for a [[MenuItem]]. MenuCommand objects are passed to custom menu item functions defined using the [[MenuItem]] attribute.
-// Keep in sync with MenuCommandBinding in Runtime\Scripting\ManagedAttributeManager.h
+namespace UnityEditor {
+// Used to extract the context for a [[MenuItem]]. MenuCommand objects are
+// passed to custom menu item functions defined using the [[MenuItem]]
+// attribute. Keep in sync with MenuCommandBinding in
+// Runtime\Scripting\ManagedAttributeManager.h
 [StructLayout(LayoutKind.Sequential)]
 [RequiredByNativeCode]
-public sealed class MenuCommand
-{
-    // Context is the object that is the target of a menu command.
-    public Object context;
-    // An integer for passing custom information to a menu item.
-    public int    userData;
+public sealed class MenuCommand {
+  // Context is the object that is the target of a menu command.
+  public Object context;
+  // An integer for passing custom information to a menu item.
+  public int userData;
 
-    // Creates a new MenuCommand object.
-    public MenuCommand(Object inContext, int inUserData) {
-        context = inContext;
-        userData = inUserData;
-    }
-    // Creates a new MenuCommand object.
-    public MenuCommand(Object inContext) {
-        context = inContext;
-        userData = 0;
-    }
+  // Creates a new MenuCommand object.
+  public MenuCommand(Object inContext, int inUserData) {
+    context = inContext;
+    userData = inUserData;
+  }
+  // Creates a new MenuCommand object.
+  public MenuCommand(Object inContext) {
+    context = inContext;
+    userData = 0;
+  }
 }
 }

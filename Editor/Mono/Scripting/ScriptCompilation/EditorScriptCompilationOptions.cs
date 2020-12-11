@@ -4,12 +4,9 @@
 
 using System;
 
-namespace UnityEditor.Scripting.ScriptCompilation
-{
-// Keep in sync with EditorScriptCompilationOptions in native
-[Flags]
-enum EditorScriptCompilationOptions
-{
+namespace UnityEditor.Scripting.ScriptCompilation {
+  // Keep in sync with EditorScriptCompilationOptions in native
+  [Flags] enum EditorScriptCompilationOptions {
     BuildingEmpty = 0,
     BuildingDevelopmentBuild = 1 << 0,
     BuildingForEditor = 1 << 1,
@@ -21,5 +18,5 @@ enum EditorScriptCompilationOptions
     BuildingForHeadlessPlayer = 1 << 7,
     BuildingUseReferenceAssemblies = 1 << 8,
     BuildingUseDeterministicCompilation = 1 << 9,
-}
+  }
 }

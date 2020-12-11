@@ -6,66 +6,61 @@ using UnityEditor.EditorTools;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [CustomEditor(typeof(CircleCollider2D))]
 [CanEditMultipleObjects]
-class CircleCollider2DEditor : Collider2DEditorBase
-{
-    SerializedProperty m_Radius;
+class CircleCollider2DEditor : Collider2DEditorBase {
+  SerializedProperty m_Radius;
 
-    public override void OnEnable()
-    {
-        base.OnEnable();
-        m_Radius = serializedObject.FindProperty("m_Radius");
-    }
+  public override void OnEnable() {
+    base.OnEnable();
+    m_Radius = serializedObject.FindProperty("m_Radius");
+  }
 
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
+  public override void OnInspectorGUI() {
+    serializedObject.Update();
 
-        EditorGUILayout.EditorToolbarForTarget(EditorGUIUtility.TrTempContent("Edit Collider"), target);
+    EditorGUILayout.EditorToolbarForTarget(
+        EditorGUIUtility.TrTempContent("Edit Collider"), target);
 
-        base.OnInspectorGUI();
+    base.OnInspectorGUI();
 
-        EditorGUILayout.PropertyField(m_Radius);
+    EditorGUILayout.PropertyField(m_Radius);
 
-        serializedObject.ApplyModifiedProperties();
+    serializedObject.ApplyModifiedProperties();
 
-        FinalizeInspectorGUI();
-    }
+    FinalizeInspectorGUI();
+  }
 }
 
 [EditorTool("Edit Circle Collider 2D", typeof(CircleCollider2D))]
-class CircleCollider2DTool : PrimitiveCollider2DTool<CircleCollider2D>
-{
-    readonly SphereBoundsHandle m_BoundsHandle = new SphereBoundsHandle();
+class CircleCollider2DTool : PrimitiveCollider2DTool<CircleCollider2D> {
+  readonly SphereBoundsHandle m_BoundsHandle = new SphereBoundsHandle();
 
-    protected override PrimitiveBoundsHandle boundsHandle {
-        get {
-            return m_BoundsHandle;
-        }
-    }
+  protected override PrimitiveBoundsHandle boundsHandle {
+    get { return m_BoundsHandle; }
+  }
 
-    protected override void CopyColliderSizeToHandle(CircleCollider2D collider)
-    {
-        m_BoundsHandle.radius = collider.radius * GetRadiusScaleFactor(collider);
-    }
+  protected override void CopyColliderSizeToHandle(CircleCollider2D collider) {
+    m_BoundsHandle.radius = collider.radius * GetRadiusScaleFactor(collider);
+  }
 
-    protected override bool CopyHandleSizeToCollider(CircleCollider2D collider)
-    {
-        float oldRadius = collider.radius;
-        float scaleFactor = GetRadiusScaleFactor(collider);
-        collider.radius = Mathf.Approximately(scaleFactor, 0f) ? 0f : m_BoundsHandle.radius / GetRadiusScaleFactor(collider);
+  protected override bool CopyHandleSizeToCollider(CircleCollider2D collider) {
+    float oldRadius = collider.radius;
+    float scaleFactor = GetRadiusScaleFactor(collider);
+    collider.radius =
+        Mathf.Approximately(scaleFactor, 0f)
+            ? 0f
+            : m_BoundsHandle.radius / GetRadiusScaleFactor(collider);
 
-        // test for size change after using property setter in case input data was sanitized
-        return collider.radius != oldRadius;
-    }
+    // test for size change after using property setter in case input data was
+    // sanitized
+    return collider.radius != oldRadius;
+  }
 
-    static float GetRadiusScaleFactor(CircleCollider2D collider)
-    {
-        Vector3 lossyScale = collider.transform.lossyScale;
-        return Mathf.Max(Mathf.Abs(lossyScale.x), Mathf.Abs(lossyScale.y));
-    }
+  static float GetRadiusScaleFactor(CircleCollider2D collider) {
+    Vector3 lossyScale = collider.transform.lossyScale;
+    return Mathf.Max(Mathf.Abs(lossyScale.x), Mathf.Abs(lossyScale.y));
+  }
 }
 }

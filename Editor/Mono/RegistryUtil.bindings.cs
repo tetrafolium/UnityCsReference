@@ -4,22 +4,25 @@
 
 using UnityEngine.Bindings;
 
-namespace UnityEditorInternal
-{
+namespace UnityEditorInternal {
 //*undocumented*
-public enum RegistryView
-{
-    Default = 0,
-    _32 = 1,
-    _64 = 2,
+public enum RegistryView {
+  Default = 0,
+  _32 = 1,
+  _64 = 2,
 }
 
 //*undocumented*
 [NativeType(Header = "Editor/Mono/RegistryUtil.bindings.h")]
-public class RegistryUtil
-{
-    public static extern uint GetRegistryUInt32Value(string subKey, string valueName, uint defaultValue, RegistryView view);
+public class RegistryUtil {
+  public static extern uint GetRegistryUInt32Value(string subKey,
+                                                   string valueName,
+                                                   uint defaultValue,
+                                                   RegistryView view);
 
-    public static extern string GetRegistryStringValue(string subKey, string valueName, string defaultValue, RegistryView view);
+  public static extern string GetRegistryStringValue(string subKey,
+                                                     string valueName,
+                                                     string defaultValue,
+                                                     RegistryView view);
 }
 }

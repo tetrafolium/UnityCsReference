@@ -5,23 +5,22 @@
 using UnityEngine;
 using UnityEngine.Bindings;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [NativeHeader("Editor/Mono/InternalMeshUtil.bindings.h")]
-internal static class InternalMeshUtil
-{
-    public static extern int GetPrimitiveCount(Mesh mesh);
+internal static class InternalMeshUtil {
+  public static extern int GetPrimitiveCount(Mesh mesh);
 
-    public static extern int CalcTriangleCount(Mesh mesh);
+  public static extern int CalcTriangleCount(Mesh mesh);
 
-    public static extern bool HasSupportedTopologyForGI(Mesh mesh);
+  public static extern bool HasSupportedTopologyForGI(Mesh mesh);
 
-    public static extern bool HasVertices(Mesh mesh);
+  public static extern bool HasVertices(Mesh mesh);
 
-    public static extern bool HasNormals(Mesh mesh);
+  public static extern bool HasNormals(Mesh mesh);
 
-    public static extern string GetVertexFormat(Mesh mesh);
+  public static extern string GetVertexFormat(Mesh mesh);
 
-    public static extern float GetCachedMeshSurfaceArea(MeshRenderer meshRenderer);
+  public static extern float
+  GetCachedMeshSurfaceArea(MeshRenderer meshRenderer);
 }
 }

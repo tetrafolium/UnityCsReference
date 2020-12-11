@@ -5,18 +5,14 @@
 using UnityEngine;
 using UnityEngine.Bindings;
 
-namespace UnityEditor.Web
-{
-[NativeHeader("Editor/Src/UnityConnect/Services/EditorProjectAccess.h")]
-internal partial class EditorProjectAccess : Object
-{
-    public EditorProjectAccess()
-    {
-        Internal_Create(this);
-    }
+namespace UnityEditor.Web {
+  [NativeHeader("Editor/Src/UnityConnect/Services/EditorProjectAccess.h")]
+  internal partial class EditorProjectAccess : Object {
+    public EditorProjectAccess() { Internal_Create(this); }
 
-    extern private static void Internal_Create([Writable] EditorProjectAccess self);
+    extern private static void
+    Internal_Create([ Writable ] EditorProjectAccess self);
     extern public string GetProjectEditorVersion();
     extern public string GetRESTServiceURI();
-}
+  }
 }

@@ -4,13 +4,9 @@
 
 using UnityEngine.Playables;
 
-namespace UnityEditor.Playables
-{
-public static class PlayableOutputEditorExtensions
-{
-    public static string GetEditorName<U>(this U output) where U : struct, IPlayableOutput
-    {
-        return output.GetHandle().GetEditorName();
-    }
-}
+namespace UnityEditor.Playables {
+  public static class PlayableOutputEditorExtensions {
+    public static string GetEditorName<U>(this U output) where U : struct
+    , IPlayableOutput { return output.GetHandle().GetEditorName(); }
+  }
 }

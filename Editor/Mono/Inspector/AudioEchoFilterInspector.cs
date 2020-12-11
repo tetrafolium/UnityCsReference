@@ -5,10 +5,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [CustomEditor(typeof(AudioEchoFilter))]
-class AudioEchoFilterEditor : Editor
-{
-}
+class AudioEchoFilterEditor : Editor {}
 }

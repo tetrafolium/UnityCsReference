@@ -5,10 +5,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [CustomEditor(typeof(AudioDistortionFilter))]
-class AudioDistortionFilterEditor : Editor
-{
-}
+class AudioDistortionFilterEditor : Editor {}
 }

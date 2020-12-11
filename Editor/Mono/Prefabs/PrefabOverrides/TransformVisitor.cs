@@ -6,87 +6,102 @@ using System;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace UnityEditor.SceneManagement
-{
-class TransformVisitor
-{
-    public void VisitAll(Transform transform, Action<Transform, object> visitorFunc, object userData)
-    {
-        Assert.IsNotNull(transform, "Please provide a valid transform");
-        Assert.IsNotNull(visitorFunc, "Please provide a valid visitorFunc");
+namespace UnityEditor.SceneManagement {
+  class TransformVisitor {
+    public void VisitAll(Transform transform,
+                         Action<Transform, object> visitorFunc,
+                         object userData) {
+      Assert.IsNotNull(transform, "Please provide a valid transform");
+      Assert.IsNotNull(visitorFunc, "Please provide a valid visitorFunc");
 
-        VisitAllRecursively(transform, visitorFunc, userData);
+      VisitAllRecursively(transform, visitorFunc, userData);
     }
 
-    static void VisitAllRecursively(Transform transform, Action<Transform, object> visitorFunc, object userData)
-    {
-        visitorFunc(transform, userData);
-        for (int i = 0; i < transform.childCount; ++i)
-            VisitAllRecursively(transform.GetChild(i), visitorFunc, userData);
+    static void VisitAllRecursively(Transform transform,
+                                    Action<Transform, object> visitorFunc,
+                                    object userData) {
+      visitorFunc(transform, userData);
+      for (int i = 0; i < transform.childCount; ++i)
+        VisitAllRecursively(transform.GetChild(i), visitorFunc, userData);
     }
 
     // Let visitorFunc return true for continue visiting, false for early out.
-    public void VisitAndAllowEarlyOut(Transform transform, Func<Transform, object, bool> visitorFunc, object userData)
-    {
-        Assert.IsNotNull(transform, "Please provide a valid transform");
-        Assert.IsNotNull(visitorFunc, "Please provide a valid visitorFunc");
+    public void VisitAndAllowEarlyOut(Transform transform,
+                                      Func<Transform, object, bool> visitorFunc,
+                                      object userData) {
+      Assert.IsNotNull(transform, "Please provide a valid transform");
+      Assert.IsNotNull(visitorFunc, "Please provide a valid visitorFunc");
 
-        VisitAndAllowEarlyOutRecursively(transform, visitorFunc, userData);
+      VisitAndAllowEarlyOutRecursively(transform, visitorFunc, userData);
     }
 
-    static bool VisitAndAllowEarlyOutRecursively(Transform transform, Func<Transform, object, bool> visitorFunc, object userData)
-    {
-        if (!visitorFunc(transform, userData))
-            return false;
+    static bool
+    VisitAndAllowEarlyOutRecursively(Transform transform,
+                                     Func<Transform, object, bool> visitorFunc,
+                                     object userData) {
+      if (!visitorFunc(transform, userData))
+        return false;
 
-        for (int i = 0; i < transform.childCount; ++i)
-        {
-            if (!VisitAndAllowEarlyOutRecursively(transform.GetChild(i), visitorFunc, userData))
-                return false;
-        }
-        return true;
+      for (int i = 0; i < transform.childCount; ++i) {
+        if (!VisitAndAllowEarlyOutRecursively(transform.GetChild(i),
+                                              visitorFunc, userData))
+          return false;
+      }
+      return true;
     }
 
-    // Let visitorFunc return true for entering children, false for skipping them.
-    public void VisitAndConditionallyEnterChildren(Transform transform, Func<Transform, object, bool> visitorFunc, object userData)
-    {
-        Assert.IsNotNull(transform, "Please provide a valid transform");
-        Assert.IsNotNull(visitorFunc, "Please provide a valid visitorFunc");
+    // Let visitorFunc return true for entering children, false for skipping
+    // them.
+    public void VisitAndConditionallyEnterChildren(
+        Transform transform, Func<Transform, object, bool> visitorFunc,
+        object userData) {
+      Assert.IsNotNull(transform, "Please provide a valid transform");
+      Assert.IsNotNull(visitorFunc, "Please provide a valid visitorFunc");
 
-        VisitAndConditionallyEnterChildrenRecursively(transform, visitorFunc, userData);
+      VisitAndConditionallyEnterChildrenRecursively(transform, visitorFunc,
+                                                    userData);
     }
 
-    static void VisitAndConditionallyEnterChildrenRecursively(Transform transform, Func<Transform, object, bool> visitorFunc, object userData)
-    {
-        if (!visitorFunc(transform, userData))
-            return;
+    static void VisitAndConditionallyEnterChildrenRecursively(
+        Transform transform, Func<Transform, object, bool> visitorFunc,
+        object userData) {
+      if (!visitorFunc(transform, userData))
+        return;
 
-        for (int i = 0; i < transform.childCount; ++i)
-            VisitAndConditionallyEnterChildrenRecursively(transform.GetChild(i), visitorFunc, userData);
+      for (int i = 0; i < transform.childCount; ++i)
+        VisitAndConditionallyEnterChildrenRecursively(transform.GetChild(i),
+                                                      visitorFunc, userData);
     }
 
     // Only visit transforms under the same PrefabInstance
-    public void VisitPrefabInstanceTransforms(Transform transform, Func<Transform, object, bool> visitorFunc, object userData)
-    {
-        Assert.IsNotNull(transform, "Please provide a valid transform");
-        Assert.IsNotNull(visitorFunc, "Please provide a valid visitorFunc");
-        Assert.IsNotNull(PrefabUtility.GetPrefabInstanceHandle(transform), "Please provide a Prefab instance");
+    public void
+    VisitPrefabInstanceTransforms(Transform transform,
+                                  Func<Transform, object, bool> visitorFunc,
+                                  object userData) {
+      Assert.IsNotNull(transform, "Please provide a valid transform");
+      Assert.IsNotNull(visitorFunc, "Please provide a valid visitorFunc");
+      Assert.IsNotNull(PrefabUtility.GetPrefabInstanceHandle(transform),
+                       "Please provide a Prefab instance");
 
-        VisitPrefabInstanceTransformsRecursively(transform, visitorFunc, userData);
+      VisitPrefabInstanceTransformsRecursively(transform, visitorFunc,
+                                               userData);
     }
 
-    static void VisitPrefabInstanceTransformsRecursively(Transform transform, Func<Transform, object, bool> visitorFunc, object userData)
-    {
-        if (!visitorFunc(transform, userData))
-            return;
+    static void VisitPrefabInstanceTransformsRecursively(
+        Transform transform, Func<Transform, object, bool> visitorFunc,
+        object userData) {
+      if (!visitorFunc(transform, userData))
+        return;
 
-        var prefabInstanceHandle = PrefabUtility.GetPrefabInstanceHandle(transform);
-        for (int i = 0; i < transform.childCount; ++i)
-        {
-            var child = transform.GetChild(i);
-            if (PrefabUtility.GetPrefabInstanceHandle(child) == prefabInstanceHandle)
-                VisitPrefabInstanceTransformsRecursively(child, visitorFunc, userData);
-        }
+      var prefabInstanceHandle =
+          PrefabUtility.GetPrefabInstanceHandle(transform);
+      for (int i = 0; i < transform.childCount; ++i) {
+        var child = transform.GetChild(i);
+        if (PrefabUtility.GetPrefabInstanceHandle(child) ==
+            prefabInstanceHandle)
+          VisitPrefabInstanceTransformsRecursively(child, visitorFunc,
+                                                   userData);
+      }
     }
-}
+  }
 }

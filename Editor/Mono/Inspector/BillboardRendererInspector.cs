@@ -5,36 +5,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityEditor
-{
+namespace UnityEditor {
 [CustomEditor(typeof(BillboardRenderer))]
 [CanEditMultipleObjects]
-internal class BillboardRendererInspector : RendererEditorBase
-{
-    class Styles
-    {
-        public static readonly GUIContent billboard = EditorGUIUtility.TrTextContent("Billboard");
-    }
+internal class BillboardRendererInspector : RendererEditorBase {
+  class Styles {
+    public static readonly GUIContent billboard =
+        EditorGUIUtility.TrTextContent("Billboard");
+  }
 
-    private SerializedProperty m_Billboard;
+  private SerializedProperty m_Billboard;
 
-    public override void OnEnable()
-    {
-        base.OnEnable();
+  public override void OnEnable() {
+    base.OnEnable();
 
-        m_Billboard = serializedObject.FindProperty("m_Billboard");
-    }
+    m_Billboard = serializedObject.FindProperty("m_Billboard");
+  }
 
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
+  public override void OnInspectorGUI() {
+    serializedObject.Update();
 
-        EditorGUILayout.PropertyField(m_Billboard, Styles.billboard);
+    EditorGUILayout.PropertyField(m_Billboard, Styles.billboard);
 
-        LightingSettingsGUI(false);
-        OtherSettingsGUI(true);
+    LightingSettingsGUI(false);
+    OtherSettingsGUI(true);
 
-        serializedObject.ApplyModifiedProperties();
-    }
+    serializedObject.ApplyModifiedProperties();
+  }
 }
 }

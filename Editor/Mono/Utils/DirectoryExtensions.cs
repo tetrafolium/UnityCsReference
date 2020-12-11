@@ -4,13 +4,10 @@
 
 using System.IO;
 
-namespace UnityEditor.Utils
-{
-static class DirectoryExtensions
-{
-    public static void DeleteRecursive(this string directoryPath)
-    {
-        Directory.Delete(directoryPath, true);
+namespace UnityEditor.Utils {
+  static class DirectoryExtensions {
+    public static void DeleteRecursive(this string directoryPath) {
+      Directory.Delete(directoryPath, true);
     }
-}
+  }
 }

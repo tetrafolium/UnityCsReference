@@ -5,19 +5,14 @@
 using System;
 using UnityEditor.SceneManagement;
 
-namespace UnityEditor.Experimental.SceneManagement
-{
-public sealed partial class PrefabStage : PreviewSceneStage
-{
-    // Not using API Updater for now since it doesn't support updating to a virtual property,
-    // and this caused API Updader tests to fail.
+namespace UnityEditor.Experimental.SceneManagement {
+  public sealed partial class PrefabStage : PreviewSceneStage {
+    // Not using API Updater for now since it doesn't support updating to a
+    // virtual property, and this caused API Updader tests to fail.
     // (UnityUpgradable) -> assetPath
     [Obsolete("prefabAssetPath has been deprecated. Use assetPath instead.")]
-    public string prefabAssetPath
-    {
-        get {
-            return m_PrefabAssetPath;
-        }
+    public string prefabAssetPath {
+      get { return m_PrefabAssetPath; }
     }
-}
+  }
 }
