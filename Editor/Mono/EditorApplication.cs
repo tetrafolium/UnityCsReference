@@ -16,442 +16,450 @@ using UnityEngine.Profiling;
 
 namespace UnityEditor {
 public enum PlayModeStateChange {
-  EnteredEditMode,
-  ExitingEditMode,
-  EnteredPlayMode,
-  ExitingPlayMode,
+	EnteredEditMode,
+	ExitingEditMode,
+	EnteredPlayMode,
+	ExitingPlayMode,
 }
 
 // Must be kept in sync with enum in ScriptCompilationPipeline.h
 internal enum ScriptChangesDuringPlayOptions {
-  RecompileAndContinuePlaying = 0,
-  RecompileAfterFinishedPlaying = 1,
-  StopPlayingAndRecompile = 2
+	RecompileAndContinuePlaying = 0,
+	RecompileAfterFinishedPlaying = 1,
+	StopPlayingAndRecompile = 2
 }
 
 public enum PauseState {
-  Paused,
-  Unpaused,
+	Paused,
+	Unpaused,
 }
 
 internal class ApplicationTitleDescriptor {
-  public ApplicationTitleDescriptor(string projectName, string unityVersion,
-                                    string activeSceneName, string licenseType,
-                                    bool previewPackageInUse, string targetName,
-                                    bool codeCoverageEnabled) {
-    title = "";
-    this.projectName = projectName;
-    this.unityVersion = unityVersion;
-    this.activeSceneName = activeSceneName;
-    this.licenseType = licenseType;
-    this.previewPackageInUse = previewPackageInUse;
-    this.targetName = targetName;
-    this.codeCoverageEnabled = codeCoverageEnabled;
-  }
+public ApplicationTitleDescriptor(string projectName, string unityVersion,
+                                  string activeSceneName, string licenseType,
+                                  bool previewPackageInUse, string targetName,
+                                  bool codeCoverageEnabled) {
+	title = "";
+	this.projectName = projectName;
+	this.unityVersion = unityVersion;
+	this.activeSceneName = activeSceneName;
+	this.licenseType = licenseType;
+	this.previewPackageInUse = previewPackageInUse;
+	this.targetName = targetName;
+	this.codeCoverageEnabled = codeCoverageEnabled;
+}
 
-  public string title;
-  public string projectName {
-    get;
-    private set;
-  }
-  public string unityVersion {
-    get;
-    private set;
-  }
-  public string activeSceneName {
-    get;
-    private set;
-  }
-  public string licenseType {
-    get;
-    private set;
-  }
-  public bool previewPackageInUse {
-    get;
-    private set;
-  }
-  public string targetName {
-    get;
-    private set;
-  }
-  public bool codeCoverageEnabled {
-    get;
-    private set;
-  }
+public string title;
+public string projectName {
+	get;
+	private set;
+}
+public string unityVersion {
+	get;
+	private set;
+}
+public string activeSceneName {
+	get;
+	private set;
+}
+public string licenseType {
+	get;
+	private set;
+}
+public bool previewPackageInUse {
+	get;
+	private set;
+}
+public string targetName {
+	get;
+	private set;
+}
+public bool codeCoverageEnabled {
+	get;
+	private set;
+}
 }
 
 public sealed partial class EditorApplication {
-  internal static UnityAction projectWasLoaded;
-  internal static UnityAction editorApplicationQuit;
+internal static UnityAction projectWasLoaded;
+internal static UnityAction editorApplicationQuit;
 
-  static void Internal_ProjectWasLoaded() { projectWasLoaded?.Invoke(); }
+static void Internal_ProjectWasLoaded() {
+	projectWasLoaded?.Invoke();
+}
 
-  [RequiredByNativeCode]
-  static bool Internal_EditorApplicationWantsToQuit() {
-    if (wantsToQuit == null)
-      return true;
+[RequiredByNativeCode]
+static bool Internal_EditorApplicationWantsToQuit() {
+	if (wantsToQuit == null)
+		return true;
 
-    foreach (Func<bool> continueQuit in wantsToQuit.GetInvocationList()) {
-      try {
-        if (!continueQuit())
-          return false;
-      } catch (Exception exception) {
-        Debug.LogWarningFormat(
-            "EditorApplication.wantsToQuit: Exception raised during quit event." +
-            Environment.NewLine +
-            "Check the exception error's callstack to find out which event handler threw the exception.");
-        Debug.LogException(exception);
+	foreach (Func<bool> continueQuit in wantsToQuit.GetInvocationList()) {
+		try {
+			if (!continueQuit())
+				return false;
+		} catch (Exception exception) {
+			Debug.LogWarningFormat(
+				"EditorApplication.wantsToQuit: Exception raised during quit event." +
+				Environment.NewLine +
+				"Check the exception error's callstack to find out which event handler threw the exception.");
+			Debug.LogException(exception);
 
-        if (InternalEditorUtility.isHumanControllingUs) {
-          string st = exception.StackTrace;
-          StringBuilder dialogText =
-              new StringBuilder("An exception was thrown here:");
-          dialogText.AppendLine(Environment.NewLine);
-          dialogText.AppendLine(
-              st.Substring(0, st.IndexOf(Environment.NewLine)));
+			if (InternalEditorUtility.isHumanControllingUs) {
+				string st = exception.StackTrace;
+				StringBuilder dialogText =
+					new StringBuilder("An exception was thrown here:");
+				dialogText.AppendLine(Environment.NewLine);
+				dialogText.AppendLine(
+					st.Substring(0, st.IndexOf(Environment.NewLine)));
 
-          bool abortQuit = !EditorUtility.DisplayDialog(
-              "Error while quitting", dialogText.ToString(), "Ignore",
-              "Cancel Quit");
+				bool abortQuit = !EditorUtility.DisplayDialog(
+					"Error while quitting", dialogText.ToString(), "Ignore",
+					"Cancel Quit");
 
-          if (abortQuit)
-            return false;
-        }
-      }
-    }
+				if (abortQuit)
+					return false;
+			}
+		}
+	}
 
-    return true;
-  }
+	return true;
+}
 
-  static void Internal_EditorApplicationQuit() {
-    quitting?.Invoke();
-    editorApplicationQuit?.Invoke();
-  }
+static void Internal_EditorApplicationQuit() {
+	quitting?.Invoke();
+	editorApplicationQuit?.Invoke();
+}
 
-  // Delegate to be called for every visible list item in the ProjectWindow on
-  // every OnGUI event.
-  public delegate void ProjectWindowItemCallback(string guid,
+// Delegate to be called for every visible list item in the ProjectWindow on
+// every OnGUI event.
+public delegate void ProjectWindowItemCallback(string guid,
+                                               Rect selectionRect);
+
+// Delegate for OnGUI events for every visible list item in the ProjectWindow.
+public static ProjectWindowItemCallback projectWindowItemOnGUI;
+
+// Can be used to ensure repaint of the ProjectWindow.
+public static void RepaintProjectWindow() {
+	foreach (ProjectBrowser pb in ProjectBrowser.GetAllProjectBrowsers())
+		pb.Repaint();
+}
+
+// Can be used to ensure repaint of AnimationWindow
+public static void RepaintAnimationWindow() {
+	foreach (AnimEditor animEditor in AnimEditor.GetAllAnimationWindows())
+		animEditor.Repaint();
+}
+
+// Delegate to be called for every visible list item in the HierarchyWindow on
+// every OnGUI event.
+public delegate void HierarchyWindowItemCallback(int instanceID,
                                                  Rect selectionRect);
 
-  // Delegate for OnGUI events for every visible list item in the ProjectWindow.
-  public static ProjectWindowItemCallback projectWindowItemOnGUI;
+// Delegate for OnGUI events for every visible list item in the
+// HierarchyWindow.
+public static HierarchyWindowItemCallback hierarchyWindowItemOnGUI;
 
-  // Can be used to ensure repaint of the ProjectWindow.
-  public static void RepaintProjectWindow() {
-    foreach (ProjectBrowser pb in ProjectBrowser.GetAllProjectBrowsers())
-      pb.Repaint();
-  }
+// Delegate for refreshing hierarchies.
+internal static CallbackFunction refreshHierarchy;
 
-  // Can be used to ensure repaint of AnimationWindow
-  public static void RepaintAnimationWindow() {
-    foreach (AnimEditor animEditor in AnimEditor.GetAllAnimationWindows())
-      animEditor.Repaint();
-  }
+// Can be used to ensure repaint of the HierarchyWindow.
+public static void RepaintHierarchyWindow() {
+	refreshHierarchy?.Invoke();
+}
 
-  // Delegate to be called for every visible list item in the HierarchyWindow on
-  // every OnGUI event.
-  public delegate void HierarchyWindowItemCallback(int instanceID,
-                                                   Rect selectionRect);
+// Delegate for dirtying hierarchy sorting.
+internal static CallbackFunction dirtyHierarchySorting;
 
-  // Delegate for OnGUI events for every visible list item in the
-  // HierarchyWindow.
-  public static HierarchyWindowItemCallback hierarchyWindowItemOnGUI;
+public static void DirtyHierarchyWindowSorting() {
+	dirtyHierarchySorting?.Invoke();
+}
 
-  // Delegate for refreshing hierarchies.
-  internal static CallbackFunction refreshHierarchy;
+// Delegate to be called from [[EditorApplication]] callbacks.
+public delegate void CallbackFunction();
 
-  // Can be used to ensure repaint of the HierarchyWindow.
-  public static void RepaintHierarchyWindow() { refreshHierarchy?.Invoke(); }
+// Delegate to be called from [[EditorApplication]] contextual inspector
+// callbacks.
+public delegate void
+SerializedPropertyCallbackFunction(GenericMenu menu,
+                                   SerializedProperty property);
 
-  // Delegate for dirtying hierarchy sorting.
-  internal static CallbackFunction dirtyHierarchySorting;
+// Delegate for generic updates.
+public static CallbackFunction update;
 
-  public static void DirtyHierarchyWindowSorting() {
-    dirtyHierarchySorting?.Invoke();
-  }
+public static event Func<bool> wantsToQuit;
 
-  // Delegate to be called from [[EditorApplication]] callbacks.
-  public delegate void CallbackFunction();
+public static event Action quitting;
 
-  // Delegate to be called from [[EditorApplication]] contextual inspector
-  // callbacks.
-  public delegate void
-  SerializedPropertyCallbackFunction(GenericMenu menu,
-                                     SerializedProperty property);
+public static CallbackFunction delayCall;
 
-  // Delegate for generic updates.
-  public static CallbackFunction update;
+internal static Action CallDelayed(CallbackFunction action,
+                                   double delaySeconds = 0.0f) {
+	var startTime = DateTime.Now;
+	CallbackFunction delayedHandler = null;
+	delayedHandler = new CallbackFunction(() => {
+				if ((DateTime.Now - startTime).TotalSeconds < delaySeconds)
+					return;
+				update -= delayedHandler;
+				action();
+			});
+	update += delayedHandler;
+	if (delaySeconds == 0f)
+		SignalTick();
 
-  public static event Func<bool> wantsToQuit;
+	return () => update -= delayedHandler;
+}
 
-  public static event Action quitting;
+// Each time an object is (or a group of objects are) created, renamed,
+// parented, unparented or destroyed this callback is raised.
+public static event Action hierarchyChanged;
 
-  public static CallbackFunction delayCall;
+[Obsolete("Use EditorApplication.hierarchyChanged")]
+public static CallbackFunction hierarchyWindowChanged;
 
-  internal static Action CallDelayed(CallbackFunction action,
-                                     double delaySeconds = 0.0f) {
-    var startTime = DateTime.Now;
-    CallbackFunction delayedHandler = null;
-    delayedHandler = new CallbackFunction(() => {
-      if ((DateTime.Now - startTime).TotalSeconds < delaySeconds)
-        return;
-      update -= delayedHandler;
-      action();
-    });
-    update += delayedHandler;
-    if (delaySeconds == 0f)
-      SignalTick();
+public static event Action projectChanged;
 
-    return () => update -= delayedHandler;
-  }
+[Obsolete("Use EditorApplication.projectChanged")]
+public static CallbackFunction projectWindowChanged;
 
-  // Each time an object is (or a group of objects are) created, renamed,
-  // parented, unparented or destroyed this callback is raised.
-  public static event Action hierarchyChanged;
+public static CallbackFunction searchChanged;
 
-  [Obsolete("Use EditorApplication.hierarchyChanged")]
-  public static CallbackFunction hierarchyWindowChanged;
+internal static CallbackFunction assetLabelsChanged;
 
-  public static event Action projectChanged;
+internal static CallbackFunction assetBundleNameChanged;
 
-  [Obsolete("Use EditorApplication.projectChanged")]
-  public static CallbackFunction projectWindowChanged;
+// Delegate for changed keyboard modifier keys.
+public static CallbackFunction modifierKeysChanged;
 
-  public static CallbackFunction searchChanged;
+public static event Action<PauseState> pauseStateChanged;
 
-  internal static CallbackFunction assetLabelsChanged;
+public static event Action<PlayModeStateChange> playModeStateChanged;
 
-  internal static CallbackFunction assetBundleNameChanged;
+[Obsolete(
+	 "Use EditorApplication.playModeStateChanged and/or EditorApplication.pauseStateChanged")]
+public static CallbackFunction playmodeStateChanged;
 
-  // Delegate for changed keyboard modifier keys.
-  public static CallbackFunction modifierKeysChanged;
+// Global key up/down event that was not handled by anyone
+internal static CallbackFunction globalEventHandler;
 
-  public static event Action<PauseState> pauseStateChanged;
+// Returns true when the pressed keys are defined in the Trigger
+internal static Func<bool> doPressedKeysTriggerAnyShortcut;
 
-  public static event Action<PlayModeStateChange> playModeStateChanged;
+internal static event Action<bool> focusChanged;
 
-  [Obsolete(
-      "Use EditorApplication.playModeStateChanged and/or EditorApplication.pauseStateChanged")]
-  public static CallbackFunction playmodeStateChanged;
+// Windows were reordered
+internal static CallbackFunction windowsReordered;
 
-  // Global key up/down event that was not handled by anyone
-  internal static CallbackFunction globalEventHandler;
+// Global contextual menus for inspector values
+public static SerializedPropertyCallbackFunction contextualPropertyMenu;
 
-  // Returns true when the pressed keys are defined in the Trigger
-  internal static Func<bool> doPressedKeysTriggerAnyShortcut;
+internal static event Action<ApplicationTitleDescriptor>
+updateMainWindowTitle;
 
-  internal static event Action<bool> focusChanged;
+internal static string
+GetDefaultMainWindowTitle(ApplicationTitleDescriptor desc) {
+	// de facto dev tool window title conventions:
+	// https://unity.slack.com/archives/C06TQ0QMQ/p1550046908037800
+	//
+	// _windows_ & _linux_
+	//
+	//   <Project> - <ThingImEditing> [- <MaybeSomeBuildConfigStuff>] -
+	//   <AppName> [<ProbablyVersionToo>]
+	//
+	//   this is done to keep the most important data at the front to deal with
+	//   truncation that happens in various interfaces like alt-tab and hover
+	//   taskbar icon.
+	//
+	// _mac_
+	//
+	//   <ThingImEditing> - <Project> [- <MaybeSomeBuildConfigStuff>] -
+	//   <AppName> [<ProbablyVersionToo>]
+	//
+	//   most macOS apps show the icon of "ThingImEditing" in front of the
+	//   title, so it makes sense for the icon to be next to what it represents.
+	//   (Unity does not currently show the icon though.)
+	//
 
-  // Windows were reordered
-  internal static CallbackFunction windowsReordered;
+	var title =
+		Application.platform == RuntimePlatform.OSXEditor
+		    ?
+		$"{desc.activeSceneName} - {desc.projectName}"
+	: $"{desc.projectName} - {desc.activeSceneName}";
 
-  // Global contextual menus for inspector values
-  public static SerializedPropertyCallbackFunction contextualPropertyMenu;
+	// FUTURE: [PREVIEW PACKAGES IN USE], [CODE COVERAGE] and the build target
+	// info do not belong in the title bar. they are there now because we want
+	// them to be always-visible to user, which normally would be a) buildconfig
+	// bar or b) status bar, but we don't have a) and our b) needs work to
+	// support such a thing.
 
-  internal static event Action<ApplicationTitleDescriptor>
-      updateMainWindowTitle;
+	if (!string.IsNullOrEmpty(desc.targetName)) {
+		title += $" - {desc.targetName}";
+	}
 
-  internal static string
-  GetDefaultMainWindowTitle(ApplicationTitleDescriptor desc) {
-    // de facto dev tool window title conventions:
-    // https://unity.slack.com/archives/C06TQ0QMQ/p1550046908037800
-    //
-    // _windows_ & _linux_
-    //
-    //   <Project> - <ThingImEditing> [- <MaybeSomeBuildConfigStuff>] -
-    //   <AppName> [<ProbablyVersionToo>]
-    //
-    //   this is done to keep the most important data at the front to deal with
-    //   truncation that happens in various interfaces like alt-tab and hover
-    //   taskbar icon.
-    //
-    // _mac_
-    //
-    //   <ThingImEditing> - <Project> [- <MaybeSomeBuildConfigStuff>] -
-    //   <AppName> [<ProbablyVersionToo>]
-    //
-    //   most macOS apps show the icon of "ThingImEditing" in front of the
-    //   title, so it makes sense for the icon to be next to what it represents.
-    //   (Unity does not currently show the icon though.)
-    //
+	title += $" - Unity {desc.unityVersion}";
+	if (!string.IsNullOrEmpty(desc.licenseType)) {
+		title += $" {desc.licenseType}";
+	}
 
-    var title =
-        Application.platform == RuntimePlatform.OSXEditor
-                    ?
-                                $"{desc.activeSceneName} - {desc.projectName}"
-        : $"{desc.projectName} - {desc.activeSceneName}";
+	if (desc.previewPackageInUse) {
+		title += " " + L10n.Tr("[PREVIEW PACKAGES IN USE]");
+	}
 
-    // FUTURE: [PREVIEW PACKAGES IN USE], [CODE COVERAGE] and the build target
-    // info do not belong in the title bar. they are there now because we want
-    // them to be always-visible to user, which normally would be a) buildconfig
-    // bar or b) status bar, but we don't have a) and our b) needs work to
-    // support such a thing.
+	if (desc.codeCoverageEnabled) {
+		title += " " + L10n.Tr("[CODE COVERAGE]");
+	}
 
-    if (!string.IsNullOrEmpty(desc.targetName)) {
-      title += $" - {desc.targetName}";
-    }
+	return title;
+}
 
-    title += $" - Unity {desc.unityVersion}";
-    if (!string.IsNullOrEmpty(desc.licenseType)) {
-      title += $" {desc.licenseType}";
-    }
+[RequiredByNativeCode]
+internal static string BuildMainWindowTitle() {
+	var activeSceneName = L10n.Tr("Untitled");
+	if (!string.IsNullOrEmpty(SceneManager.GetActiveScene().path)) {
+		activeSceneName =
+			Path.GetFileNameWithoutExtension(SceneManager.GetActiveScene().path);
+	}
 
-    if (desc.previewPackageInUse) {
-      title += " " + L10n.Tr("[PREVIEW PACKAGES IN USE]");
-    }
+	var desc = new ApplicationTitleDescriptor(
+		isTemporaryProject ? PlayerSettings.productName
+	: Path.GetFileName(Path.GetDirectoryName(Application.dataPath)),
+		InternalEditorUtility.GetUnityDisplayVersion(), activeSceneName,
+		GetLicenseType(), isPreviewPackageInUse,
+		BuildPipeline.GetBuildTargetGroupDisplayName(
+			BuildPipeline.GetBuildTargetGroup(
+				EditorUserBuildSettings.activeBuildTarget)),
+		Coverage.enabled);
 
-    if (desc.codeCoverageEnabled) {
-      title += " " + L10n.Tr("[CODE COVERAGE]");
-    }
+	desc.title = GetDefaultMainWindowTitle(desc);
 
-    return title;
-  }
+	updateMainWindowTitle?.Invoke(desc);
 
-  [RequiredByNativeCode]
-  internal static string BuildMainWindowTitle() {
-    var activeSceneName = L10n.Tr("Untitled");
-    if (!string.IsNullOrEmpty(SceneManager.GetActiveScene().path)) {
-      activeSceneName =
-          Path.GetFileNameWithoutExtension(SceneManager.GetActiveScene().path);
-    }
+	return desc.title;
+}
 
-    var desc = new ApplicationTitleDescriptor(
-        isTemporaryProject ? PlayerSettings.productName
-        : Path.GetFileName(Path.GetDirectoryName(Application.dataPath)),
-          InternalEditorUtility.GetUnityDisplayVersion(), activeSceneName,
-          GetLicenseType(), isPreviewPackageInUse,
-          BuildPipeline.GetBuildTargetGroupDisplayName(
-              BuildPipeline.GetBuildTargetGroup(
-                  EditorUserBuildSettings.activeBuildTarget)),
-          Coverage.enabled);
+static int m_UpdateHash;
+static Delegate[] m_UpdateInvocationList;
 
-    desc.title = GetDefaultMainWindowTitle(desc);
+[RequiredByNativeCode]
+static void Internal_CallUpdateFunctions() {
+	if (update == null)
+		return;
+	if (Profiler.enabled && !ProfilerDriver.deepProfiling) {
+		var currentUpdateHash = update.GetHashCode();
+		if (currentUpdateHash != m_UpdateHash) {
+			m_UpdateInvocationList = update.GetInvocationList();
+			m_UpdateHash = currentUpdateHash;
+		}
+		foreach (var cb in m_UpdateInvocationList) {
+			var marker = new ProfilerMarker(cb.Method.Name);
+			marker.Begin();
+			cb.DynamicInvoke(null);
+			marker.End();
+		}
+	} else {
+		update.Invoke();
+	}
+}
 
-    updateMainWindowTitle?.Invoke(desc);
+[RequiredByNativeCode]
+static void Internal_CallDelayFunctions() {
+	CallbackFunction delay = delayCall;
+	delayCall = null;
+	delay?.Invoke();
+}
 
-    return desc.title;
-  }
+static void Internal_SwitchSkin() {
+	EditorGUIUtility.Internal_SwitchSkin();
+}
 
-  static int m_UpdateHash;
-  static Delegate[] m_UpdateInvocationList;
+internal static void RequestRepaintAllViews() {
+	foreach (GUIView view in Resources.FindObjectsOfTypeAll(typeof(GUIView)))
+		view.Repaint();
+}
 
-  [RequiredByNativeCode]
-  static void Internal_CallUpdateFunctions() {
-    if (update == null)
-      return;
-    if (Profiler.enabled && !ProfilerDriver.deepProfiling) {
-      var currentUpdateHash = update.GetHashCode();
-      if (currentUpdateHash != m_UpdateHash) {
-        m_UpdateInvocationList = update.GetInvocationList();
-        m_UpdateHash = currentUpdateHash;
-      }
-      foreach (var cb in m_UpdateInvocationList) {
-        var marker = new ProfilerMarker(cb.Method.Name);
-        marker.Begin();
-        cb.DynamicInvoke(null);
-        marker.End();
-      }
-    } else {
-      update.Invoke();
-    }
-  }
-
-  [RequiredByNativeCode]
-  static void Internal_CallDelayFunctions() {
-    CallbackFunction delay = delayCall;
-    delayCall = null;
-    delay?.Invoke();
-  }
-
-  static void Internal_SwitchSkin() { EditorGUIUtility.Internal_SwitchSkin(); }
-
-  internal static void RequestRepaintAllViews() {
-    foreach (GUIView view in Resources.FindObjectsOfTypeAll(typeof(GUIView)))
-      view.Repaint();
-  }
-
-  static void Internal_CallHierarchyHasChanged() {
+static void Internal_CallHierarchyHasChanged() {
 #pragma warning disable 618
-    hierarchyWindowChanged?.Invoke();
+	hierarchyWindowChanged?.Invoke();
 #pragma warning restore 618
 
-    hierarchyChanged?.Invoke();
-  }
+	hierarchyChanged?.Invoke();
+}
 
-  static void Internal_CallProjectHasChanged() {
+static void Internal_CallProjectHasChanged() {
 #pragma warning disable 618
-    projectWindowChanged?.Invoke();
+	projectWindowChanged?.Invoke();
 #pragma warning restore 618
 
-    projectChanged?.Invoke();
-  }
+	projectChanged?.Invoke();
+}
 
-  internal static void Internal_CallSearchHasChanged() {
-    searchChanged?.Invoke();
-  }
+internal static void Internal_CallSearchHasChanged() {
+	searchChanged?.Invoke();
+}
 
-  internal static void Internal_CallAssetLabelsHaveChanged() {
-    assetLabelsChanged?.Invoke();
-  }
+internal static void Internal_CallAssetLabelsHaveChanged() {
+	assetLabelsChanged?.Invoke();
+}
 
-  internal static void Internal_CallAssetBundleNameChanged() {
-    assetBundleNameChanged?.Invoke();
-  }
+internal static void Internal_CallAssetBundleNameChanged() {
+	assetBundleNameChanged?.Invoke();
+}
 
-  static void Internal_PauseStateChanged(PauseState state) {
+static void Internal_PauseStateChanged(PauseState state) {
 #pragma warning disable 618
-    playmodeStateChanged?.Invoke();
+	playmodeStateChanged?.Invoke();
 #pragma warning restore 618
 
-    pauseStateChanged?.Invoke(state);
-  }
+	pauseStateChanged?.Invoke(state);
+}
 
-  static void Internal_PlayModeStateChanged(PlayModeStateChange state) {
+static void Internal_PlayModeStateChanged(PlayModeStateChange state) {
 #pragma warning disable 618
-    playmodeStateChanged?.Invoke();
+	playmodeStateChanged?.Invoke();
 #pragma warning restore 618
 
-    playModeStateChanged?.Invoke(state);
-  }
+	playModeStateChanged?.Invoke(state);
+}
 
-  static void Internal_CallKeyboardModifiersChanged() {
-    modifierKeysChanged?.Invoke();
-  }
+static void Internal_CallKeyboardModifiersChanged() {
+	modifierKeysChanged?.Invoke();
+}
 
-  static void Internal_CallWindowsReordered() { windowsReordered?.Invoke(); }
+static void Internal_CallWindowsReordered() {
+	windowsReordered?.Invoke();
+}
 
-  [RequiredByNativeCode]
-  static bool DoPressedKeysTriggerAnyShortcutHandler() {
-    if (doPressedKeysTriggerAnyShortcut != null)
-      return doPressedKeysTriggerAnyShortcut();
-    return false;
-  }
+[RequiredByNativeCode]
+static bool DoPressedKeysTriggerAnyShortcutHandler() {
+	if (doPressedKeysTriggerAnyShortcut != null)
+		return doPressedKeysTriggerAnyShortcut();
+	return false;
+}
 
-  [RequiredByNativeCode]
-  static void Internal_CallGlobalEventHandler() {
-    globalEventHandler?.Invoke();
+[RequiredByNativeCode]
+static void Internal_CallGlobalEventHandler() {
+	globalEventHandler?.Invoke();
 
-    // Ensure this is called last in order to make sure no null current events
-    // are passed to other handlers
-    WindowLayout.MaximizeGestureHandler();
+	// Ensure this is called last in order to make sure no null current events
+	// are passed to other handlers
+	WindowLayout.MaximizeGestureHandler();
 
-    Event.current = null;
-  }
+	Event.current = null;
+}
 
-  [RequiredByNativeCode]
-  static void Internal_FocusChanged(bool isFocused) {
-    focusChanged?.Invoke(isFocused);
-  }
+[RequiredByNativeCode]
+static void Internal_FocusChanged(bool isFocused) {
+	focusChanged?.Invoke(isFocused);
+}
 
-  [MenuItem("File/New Scene %n", priority = 150)]
-  static void FireFileMenuNewScene() {
-    if (!ModeService.Execute("file_new_scene"))
-      FileMenuNewScene();
-  }
+[MenuItem("File/New Scene %n", priority = 150)]
+static void FireFileMenuNewScene() {
+	if (!ModeService.Execute("file_new_scene"))
+		FileMenuNewScene();
+}
 
-  internal static void TogglePlaying() {
-    isPlaying = !isPlaying;
-    InternalEditorUtility.RepaintAllViews();
-  }
+internal static void TogglePlaying() {
+	isPlaying = !isPlaying;
+	InternalEditorUtility.RepaintAllViews();
+}
 }
 }

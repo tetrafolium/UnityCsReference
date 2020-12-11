@@ -8,12 +8,12 @@ namespace UnityEditorInternal {
 // Keep internal and undocumented until we expose more functionality
 //*undocumented*
 public sealed class AssetStore {
-  //*undocumented*
-  public static void Open(string assetStoreURL) {
-    if (assetStoreURL != "")
-      AssetStoreWindow.OpenURL(assetStoreURL);
-    else
-      AssetStoreWindow.Init();
-  }
+//*undocumented*
+public static void Open(string assetStoreURL) {
+	if (assetStoreURL != "")
+		AssetStoreWindow.OpenURL(assetStoreURL);
+	else
+		AssetStoreWindow.Init();
+}
 }
 }

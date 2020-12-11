@@ -9,10 +9,15 @@ namespace UnityEditor {
 [NativeHeader("Editor/Src/GI/Enlighten/LightingDataAsset.h")]
 [ExcludeFromPreset]
 public sealed partial class LightingDataAsset : Object {
-  private LightingDataAsset() {}
+private LightingDataAsset() {
+}
 
-  internal extern bool isValid { [NativeName("IsValid")] get; }
+internal extern bool isValid {
+	[NativeName("IsValid")] get;
+}
 
-  internal extern string validityErrorMessage { get; }
+internal extern string validityErrorMessage {
+	get;
+}
 }
 }

@@ -10,116 +10,116 @@ using UnityEngine.Scripting;
 using static UnityEditor.AttributeHelper;
 
 namespace UnityEditor.Experimental.AssetImporters {
-  [RequiredByNativeCode]
-  [AttributeUsage(AttributeTargets.Method, Inherited = false,
-                  AllowMultiple = true)]
-  public class CollectImportedDependenciesAttribute : Attribute {
-    private Type m_ImporterType;
-    private uint m_Version;
+[RequiredByNativeCode]
+[AttributeUsage(AttributeTargets.Method, Inherited = false,
+                AllowMultiple = true)]
+public class CollectImportedDependenciesAttribute : Attribute {
+private Type m_ImporterType;
+private uint m_Version;
 
-    public CollectImportedDependenciesAttribute(Type importerType,
-                                                uint version) {
-      m_ImporterType = importerType;
-      m_Version = version;
-    }
+public CollectImportedDependenciesAttribute(Type importerType,
+                                            uint version) {
+	m_ImporterType = importerType;
+	m_Version = version;
+}
 
-    public Type importerType {
-      get { return m_ImporterType; }
-    }
-    public uint version {
-      get { return m_Version; }
-    }
+public Type importerType {
+	get { return m_ImporterType; }
+}
+public uint version {
+	get { return m_Version; }
+}
 
-    [RequiredSignature]
-    static string[] CollectImportedDependenciesSignature(string assetPath) {
-      throw new InvalidOperationException();
-    }
-  }
+[RequiredSignature]
+static string[] CollectImportedDependenciesSignature(string assetPath) {
+	throw new InvalidOperationException();
+}
+}
 
-  static class ImportedDependenciesApi {
-    static Dictionary<Type, string> s_ImportDependenciesHashStringMap = null;
-    static Dictionary<Type, MethodWithAttribute[]>
-        s_ImportDependencyCallbackTypeMap = null;
+static class ImportedDependenciesApi {
+static Dictionary<Type, string> s_ImportDependenciesHashStringMap = null;
+static Dictionary<Type, MethodWithAttribute[]>
+s_ImportDependencyCallbackTypeMap = null;
 
-    private static IEnumerable<MethodWithAttribute>
-    GetImportedDependenciesCallbacksAndAttributesForImporter(
-        Type importerType) {
-      if (s_ImportDependencyCallbackTypeMap != null &&
-          s_ImportDependencyCallbackTypeMap.ContainsKey(importerType))
-        return s_ImportDependencyCallbackTypeMap[importerType];
+private static IEnumerable<MethodWithAttribute>
+GetImportedDependenciesCallbacksAndAttributesForImporter(
+	Type importerType) {
+	if (s_ImportDependencyCallbackTypeMap != null &&
+	    s_ImportDependencyCallbackTypeMap.ContainsKey(importerType))
+		return s_ImportDependencyCallbackTypeMap[importerType];
 
-      if (s_ImportDependencyCallbackTypeMap == null)
-        s_ImportDependencyCallbackTypeMap =
-            new Dictionary<Type, MethodWithAttribute[]>();
+	if (s_ImportDependencyCallbackTypeMap == null)
+		s_ImportDependencyCallbackTypeMap =
+			new Dictionary<Type, MethodWithAttribute[]>();
 
-      Func<CollectImportedDependenciesAttribute, bool> filter = (a) =>
-          a.importerType.IsAssignableFrom(importerType);
-      s_ImportDependencyCallbackTypeMap[importerType] =
-          AttributeHelper
-              .GetMethodsWithAttribute<CollectImportedDependenciesAttribute>(
-                  BindingFlags.Static | BindingFlags.Public |
-                  BindingFlags.NonPublic)
-              .methodsWithAttributes
-              .Where(x => filter((CollectImportedDependenciesAttribute)
-                                     x.attribute))
-              .ToArray();
+	Func<CollectImportedDependenciesAttribute, bool> filter = (a) =>
+	                                                          a.importerType.IsAssignableFrom(importerType);
+	s_ImportDependencyCallbackTypeMap[importerType] =
+		AttributeHelper
+		.GetMethodsWithAttribute<CollectImportedDependenciesAttribute>(
+			BindingFlags.Static | BindingFlags.Public |
+			BindingFlags.NonPublic)
+		.methodsWithAttributes
+		.Where(x => filter((CollectImportedDependenciesAttribute)
+		                   x.attribute))
+		.ToArray();
 
-      return s_ImportDependencyCallbackTypeMap[importerType];
-    }
+	return s_ImportDependencyCallbackTypeMap[importerType];
+}
 
-    [RequiredByNativeCode]
-    private static MethodInfo[] GetImportedDependenciesCallbacks(
-        Type importerType) {
-      return GetImportedDependenciesCallbacksAndAttributesForImporter(
-                 importerType)
-          .Select(x => x.info)
-          .ToArray();
-    }
+[RequiredByNativeCode]
+private static MethodInfo[] GetImportedDependenciesCallbacks(
+	Type importerType) {
+	return GetImportedDependenciesCallbacksAndAttributesForImporter(
+		importerType)
+	       .Select(x => x.info)
+	       .ToArray();
+}
 
-    private static string BuildHashString(SortedList<string, uint> list) {
-      var hashStr = "";
-      foreach (var pair in list) {
-        hashStr += pair.Key;
-        hashStr += '.';
-        hashStr += pair.Value;
-        hashStr += '|';
-      }
+private static string BuildHashString(SortedList<string, uint> list) {
+	var hashStr = "";
+	foreach (var pair in list) {
+		hashStr += pair.Key;
+		hashStr += '.';
+		hashStr += pair.Value;
+		hashStr += '|';
+	}
 
-      return hashStr;
-    }
+	return hashStr;
+}
 
-    [RequiredByNativeCode]
-    static string
-    GetImportedDependenciesCallbacksHashString(Type importerType) {
-      if (s_ImportDependenciesHashStringMap != null &&
-          s_ImportDependenciesHashStringMap.ContainsKey(importerType))
-        return s_ImportDependenciesHashStringMap[importerType];
+[RequiredByNativeCode]
+static string
+GetImportedDependenciesCallbacksHashString(Type importerType) {
+	if (s_ImportDependenciesHashStringMap != null &&
+	    s_ImportDependenciesHashStringMap.ContainsKey(importerType))
+		return s_ImportDependenciesHashStringMap[importerType];
 
-      if (s_ImportDependenciesHashStringMap == null)
-        s_ImportDependenciesHashStringMap = new Dictionary<Type, string>();
+	if (s_ImportDependenciesHashStringMap == null)
+		s_ImportDependenciesHashStringMap = new Dictionary<Type, string>();
 
-      var versionsByType = new SortedList<string, uint>();
+	var versionsByType = new SortedList<string, uint>();
 
-      var methodsWithAttribute =
-          GetImportedDependenciesCallbacksAndAttributesForImporter(
-              importerType);
+	var methodsWithAttribute =
+		GetImportedDependenciesCallbacksAndAttributesForImporter(
+			importerType);
 
-      foreach (var method in methodsWithAttribute) {
-        var attribute = (CollectImportedDependenciesAttribute) method.attribute;
-        var version = attribute.version;
-        string methodName = method.info.Name;
-        string className = method.info.ReflectedType.FullName;
+	foreach (var method in methodsWithAttribute) {
+		var attribute = (CollectImportedDependenciesAttribute) method.attribute;
+		var version = attribute.version;
+		string methodName = method.info.Name;
+		string className = method.info.ReflectedType.FullName;
 
-        string fullMethodName = className + "." + methodName;
+		string fullMethodName = className + "." + methodName;
 
-        if (version != 0) {
-          versionsByType.Add(fullMethodName, version);
-        }
-      }
+		if (version != 0) {
+			versionsByType.Add(fullMethodName, version);
+		}
+	}
 
-      s_ImportDependenciesHashStringMap [importerType]
-      = BuildHashString(versionsByType);
-      return s_ImportDependenciesHashStringMap[importerType];
-    }
-  }
+	s_ImportDependenciesHashStringMap [importerType]
+	        = BuildHashString(versionsByType);
+	return s_ImportDependenciesHashStringMap[importerType];
+}
+}
 }

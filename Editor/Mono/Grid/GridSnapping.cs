@@ -7,17 +7,17 @@ using UnityEngine;
 
 namespace UnityEditor {
 internal static class GridSnapping {
-  public static Func<Vector3, Vector3> snapPosition = null;
-  public static Func<bool> activeFunc = null;
+public static Func<Vector3, Vector3> snapPosition = null;
+public static Func<bool> activeFunc = null;
 
-  public static bool active {
-    get { return (activeFunc != null ? activeFunc() : false); }
-  }
+public static bool active {
+	get { return (activeFunc != null ? activeFunc() : false); }
+}
 
-  public static Vector3 Snap(Vector3 position) {
-    if (snapPosition != null)
-      return snapPosition(position);
-    return position;
-  }
+public static Vector3 Snap(Vector3 position) {
+	if (snapPosition != null)
+		return snapPosition(position);
+	return position;
+}
 }
 }

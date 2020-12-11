@@ -7,6 +7,6 @@ using UnityEngine.Bindings;
 namespace UnityEditor {
 [NativeHeader("Editor/Src/Commands/AssetsMenuUtility.h")]
 internal static class AssetsMenuUtility {
-  public static extern bool SelectionHasImmutable();
+public static extern bool SelectionHasImmutable();
 }
 }

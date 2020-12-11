@@ -8,27 +8,27 @@ using UnityEditor.Audio;
 
 namespace UnityEditor {
 internal class AudioMixerUtility {
-  static public void RepaintAudioMixerAndInspectors() {
-    InspectorWindow.RepaintAllInspectors();
-    AudioMixerWindow.RepaintAudioMixerWindow();
-  }
+static public void RepaintAudioMixerAndInspectors() {
+	InspectorWindow.RepaintAllInspectors();
+	AudioMixerWindow.RepaintAudioMixerWindow();
+}
 
-  public class VisitorFetchInstanceIDs {
-    public List<int> instanceIDs = new List<int>();
-    public void Visitor(AudioMixerGroupController group) {
-      instanceIDs.Add(group.GetInstanceID());
-    }
-  }
+public class VisitorFetchInstanceIDs {
+public List<int> instanceIDs = new List<int>();
+public void Visitor(AudioMixerGroupController group) {
+	instanceIDs.Add(group.GetInstanceID());
+}
+}
 
-  public static void
-  VisitGroupsRecursivly(AudioMixerGroupController group,
-                        Action<AudioMixerGroupController> visitorCallback) {
-    foreach (var child in group.children)
-      VisitGroupsRecursivly(child, visitorCallback);
+public static void
+VisitGroupsRecursivly(AudioMixerGroupController group,
+                      Action<AudioMixerGroupController> visitorCallback) {
+	foreach (var child in group.children)
+		VisitGroupsRecursivly(child, visitorCallback);
 
-    if (visitorCallback != null)
-      visitorCallback(group);
-  }
+	if (visitorCallback != null)
+		visitorCallback(group);
+}
 }
 }
 // namespace

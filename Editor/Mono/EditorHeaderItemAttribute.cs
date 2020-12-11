@@ -10,17 +10,17 @@ using UnityEngine.Scripting;
 namespace UnityEditor {
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 internal sealed partial class EditorHeaderItemAttribute
-    : CallbackOrderAttribute {
-  public EditorHeaderItemAttribute(Type targetType, int priority = 1) {
-    TargetType = targetType;
-    m_CallbackOrder = priority;
-  }
+	: CallbackOrderAttribute {
+public EditorHeaderItemAttribute(Type targetType, int priority = 1) {
+	TargetType = targetType;
+	m_CallbackOrder = priority;
+}
 
-  public Type TargetType;
+public Type TargetType;
 
-  [RequiredSignature]
-  static bool SignatureBool(Rect rectangle, UnityEngine.Object[] targetObjets) {
-    throw new InvalidOperationException();
-  }
+[RequiredSignature]
+static bool SignatureBool(Rect rectangle, UnityEngine.Object[] targetObjets) {
+	throw new InvalidOperationException();
+}
 }
 }

@@ -23,383 +23,395 @@ namespace UnityEditor {
 
 [System.Serializable]
 internal class RenameOverlay {
-  [SerializeField] bool m_UserAcceptedRename;
-  [SerializeField] string m_Name;
-  [SerializeField] string m_OriginalName;
-  [SerializeField] Rect m_EditFieldRect;
-  [SerializeField] int m_UserData;
-  [SerializeField] bool m_IsWaitingForDelay;
-  [SerializeField] bool m_IsRenaming = false;
-  [SerializeField] EventType m_OriginalEventType = EventType.Ignore;
-  [SerializeField] bool m_IsRenamingFilename = false;
-  [SerializeField] GUIView m_ClientGUIView;
+[SerializeField] bool m_UserAcceptedRename;
+[SerializeField] string m_Name;
+[SerializeField] string m_OriginalName;
+[SerializeField] Rect m_EditFieldRect;
+[SerializeField] int m_UserData;
+[SerializeField] bool m_IsWaitingForDelay;
+[SerializeField] bool m_IsRenaming = false;
+[SerializeField] EventType m_OriginalEventType = EventType.Ignore;
+[SerializeField] bool m_IsRenamingFilename = false;
+[SerializeField] GUIView m_ClientGUIView;
 
-  [System.NonSerialized] Rect m_LastScreenPosition;
-  [System.NonSerialized] bool m_UndoRedoWasPerformed;
+[System.NonSerialized] Rect m_LastScreenPosition;
+[System.NonSerialized] bool m_UndoRedoWasPerformed;
 
-  string k_RenameOverlayFocusName = "RenameOverlayField";
+string k_RenameOverlayFocusName = "RenameOverlayField";
 
-  // property interface
-  public string name {
-    get { return m_Name; }
-    internal set { m_Name = value; }
-  }
-  public string originalName {
-    get { return m_OriginalName; }
-  }
-  public bool userAcceptedRename {
-    get { return m_UserAcceptedRename; }
-  }
-  public int userData {
-    get { return m_UserData; }
-  }
-  public bool isWaitingForDelay {
-    get { return m_IsWaitingForDelay; }
-  }
-  public Rect editFieldRect {
-    get { return m_EditFieldRect; }
-    set { m_EditFieldRect = value; }
-  }
-  public bool isRenamingFilename {
-    get { return m_IsRenamingFilename; }
-    set { m_IsRenamingFilename = value; }
-  }
+// property interface
+public string name {
+	get { return m_Name; }
+	internal set { m_Name = value; }
+}
+public string originalName {
+	get { return m_OriginalName; }
+}
+public bool userAcceptedRename {
+	get { return m_UserAcceptedRename; }
+}
+public int userData {
+	get { return m_UserData; }
+}
+public bool isWaitingForDelay {
+	get { return m_IsWaitingForDelay; }
+}
+public Rect editFieldRect {
+	get { return m_EditFieldRect; }
+	set { m_EditFieldRect = value; }
+}
+public bool isRenamingFilename {
+	get { return m_IsRenamingFilename; }
+	set { m_IsRenamingFilename = value; }
+}
 
-  private static GUIStyle s_DefaultTextFieldStyle = null;
-  private static int s_TextFieldHash = "RenameFieldTextField".GetHashCode();
-  private int m_TextFieldControlID;
+private static GUIStyle s_DefaultTextFieldStyle = null;
+private static int s_TextFieldHash = "RenameFieldTextField".GetHashCode();
+private int m_TextFieldControlID;
 
-  // Returns true if started renaming
-  public bool BeginRename(string name, int userData, float delay) {
-    if (m_IsRenaming) {
-      return false;
-    }
+// Returns true if started renaming
+public bool BeginRename(string name, int userData, float delay) {
+	if (m_IsRenaming) {
+		return false;
+	}
 
-    m_Name = name;
-    m_OriginalName = name;
-    m_UserData = userData;
-    m_UserAcceptedRename = false;
-    m_IsWaitingForDelay = delay > 0f;
-    m_IsRenaming = true;
-    m_EditFieldRect = new Rect(0, 0, 0, 0);
-    m_ClientGUIView = GUIView.current;
+	m_Name = name;
+	m_OriginalName = name;
+	m_UserData = userData;
+	m_UserAcceptedRename = false;
+	m_IsWaitingForDelay = delay > 0f;
+	m_IsRenaming = true;
+	m_EditFieldRect = new Rect(0, 0, 0, 0);
+	m_ClientGUIView = GUIView.current;
 
-    if (delay > 0f)
-      EditorApplication.CallDelayed(BeginRenameInternalCallback, delay);
-    else
-      BeginRenameInternalCallback();
-    return true;
-  }
+	if (delay > 0f)
+		EditorApplication.CallDelayed(BeginRenameInternalCallback, delay);
+	else
+		BeginRenameInternalCallback();
+	return true;
+}
 
-  void BeginRenameInternalCallback() {
-    EditorGUI.s_RecycledEditor.text = m_Name;
-    EditorGUI.s_RecycledEditor.SelectAll();
-    RepaintClientView();
+void BeginRenameInternalCallback() {
+	EditorGUI.s_RecycledEditor.text = m_Name;
+	EditorGUI.s_RecycledEditor.SelectAll();
+	RepaintClientView();
 
-    m_IsWaitingForDelay = false;
+	m_IsWaitingForDelay = false;
 
-    Undo.undoRedoPerformed -= UndoRedoWasPerformed;
-    Undo.undoRedoPerformed += UndoRedoWasPerformed;
-  }
+	Undo.undoRedoPerformed -= UndoRedoWasPerformed;
+	Undo.undoRedoPerformed += UndoRedoWasPerformed;
+}
 
-  public void EndRename(bool acceptChanges) {
-    EditorGUIUtility.editingTextField = false;
-    if (!m_IsRenaming)
-      return;
+public void EndRename(bool acceptChanges) {
+	EditorGUIUtility.editingTextField = false;
+	if (!m_IsRenaming)
+		return;
 
-    Undo.undoRedoPerformed -= UndoRedoWasPerformed;
-    EditorApplication.update -= BeginRenameInternalCallback;
+	Undo.undoRedoPerformed -= UndoRedoWasPerformed;
+	EditorApplication.update -= BeginRenameInternalCallback;
 
-    RemoveMessage();
+	RemoveMessage();
 
-    if (isRenamingFilename)
-      m_Name =
-          InternalEditorUtility.RemoveInvalidCharsFromFileName(m_Name, true);
+	if (isRenamingFilename)
+		m_Name =
+			InternalEditorUtility.RemoveInvalidCharsFromFileName(m_Name, true);
 
-    m_IsRenaming = false;
-    m_IsWaitingForDelay = false;
-    m_UserAcceptedRename = acceptChanges;
+	m_IsRenaming = false;
+	m_IsWaitingForDelay = false;
+	m_UserAcceptedRename = acceptChanges;
 
-    // For issuing event for client to react on end of rename
-    RepaintClientView();
-  }
+	// For issuing event for client to react on end of rename
+	RepaintClientView();
+}
 
-  private void RepaintClientView() {
-    if (m_ClientGUIView != null)
-      m_ClientGUIView.Repaint();
-  }
+private void RepaintClientView() {
+	if (m_ClientGUIView != null)
+		m_ClientGUIView.Repaint();
+}
 
-  public void Clear() {
-    m_IsRenaming = false;
-    m_UserAcceptedRename = false;
-    m_Name = "";
-    m_OriginalName = "";
-    m_EditFieldRect = new Rect();
-    m_UserData = 0;
-    m_IsWaitingForDelay = false;
-    m_OriginalEventType = EventType.Ignore;
-    Undo.undoRedoPerformed -= UndoRedoWasPerformed;
+public void Clear() {
+	m_IsRenaming = false;
+	m_UserAcceptedRename = false;
+	m_Name = "";
+	m_OriginalName = "";
+	m_EditFieldRect = new Rect();
+	m_UserData = 0;
+	m_IsWaitingForDelay = false;
+	m_OriginalEventType = EventType.Ignore;
+	Undo.undoRedoPerformed -= UndoRedoWasPerformed;
 
-    // m_IsRenamingFilename = false; // Only clear temp data used for renaming
-    // not state that we want to persist
-  }
+	// m_IsRenamingFilename = false; // Only clear temp data used for renaming
+	// not state that we want to persist
+}
 
-  void UndoRedoWasPerformed() {
-    // If undo/redo was performed then close the rename overlay as it does not
-    // support undo/redo We need to delay the EndRename until next OnGUI as
-    // clients poll the state of the rename overlay state there
-    m_UndoRedoWasPerformed = true;
-  }
+void UndoRedoWasPerformed() {
+	// If undo/redo was performed then close the rename overlay as it does not
+	// support undo/redo We need to delay the EndRename until next OnGUI as
+	// clients poll the state of the rename overlay state there
+	m_UndoRedoWasPerformed = true;
+}
 
-  public bool HasKeyboardFocus() {
-    return (GUI.GetNameOfFocusedControl() == k_RenameOverlayFocusName);
-  }
+public bool HasKeyboardFocus() {
+	return (GUI.GetNameOfFocusedControl() == k_RenameOverlayFocusName);
+}
 
-  public bool IsRenaming() { return m_IsRenaming; }
+public bool IsRenaming() {
+	return m_IsRenaming;
+}
 
-  // Should be called as early as possible in an EditorWindow using this
-  // RenameOverlay Returns: false if rename was ended due to input while waiting
-  // for delay
-  public bool OnEvent() {
-    if (!m_IsRenaming)
-      return true;
+// Should be called as early as possible in an EditorWindow using this
+// RenameOverlay Returns: false if rename was ended due to input while waiting
+// for delay
+public bool OnEvent() {
+	if (!m_IsRenaming)
+		return true;
 
-    if (!m_IsWaitingForDelay) {
-      // We get control ID separate from OnGUI because we want to call OnGUI
-      // early and late: handle input first but render on top
-      GUIUtility.GetControlID(84895748, FocusType.Passive);
-      GUI.SetNextControlName(k_RenameOverlayFocusName);
-      EditorGUI.FocusTextInControl(k_RenameOverlayFocusName);
-      m_TextFieldControlID = GUIUtility.GetControlID(
-          s_TextFieldHash, FocusType.Keyboard, m_EditFieldRect);
-    }
+	if (!m_IsWaitingForDelay) {
+		// We get control ID separate from OnGUI because we want to call OnGUI
+		// early and late: handle input first but render on top
+		GUIUtility.GetControlID(84895748, FocusType.Passive);
+		GUI.SetNextControlName(k_RenameOverlayFocusName);
+		EditorGUI.FocusTextInControl(k_RenameOverlayFocusName);
+		m_TextFieldControlID = GUIUtility.GetControlID(
+			s_TextFieldHash, FocusType.Keyboard, m_EditFieldRect);
+	}
 
-    // Workaround for Event not having the original eventType stored
-    m_OriginalEventType = Event.current.type;
+	// Workaround for Event not having the original eventType stored
+	m_OriginalEventType = Event.current.type;
 
-    // Clear state if necessary while waiting for rename (0.5 second)
-    if (m_IsWaitingForDelay && (m_OriginalEventType == EventType.MouseDown ||
-                                m_OriginalEventType == EventType.KeyDown)) {
-      EndRename(false);
-      return false;
-    }
+	// Clear state if necessary while waiting for rename (0.5 second)
+	if (m_IsWaitingForDelay && (m_OriginalEventType == EventType.MouseDown ||
+	                            m_OriginalEventType == EventType.KeyDown)) {
+		EndRename(false);
+		return false;
+	}
 
-    return true;
-  }
+	return true;
+}
 
-  public bool OnGUI() { return OnGUI(null); }
+public bool OnGUI() {
+	return OnGUI(null);
+}
 
-  // Should be called when IsRenaming () returns true to draw the overlay and
-  // handle events. Returns true if renaming is still active, false if not (user
-  // canceled, accepted, clicked outside edit rect etc). If textFieldStyle ==
-  // null then a default style is used.
-  public bool OnGUI(GUIStyle textFieldStyle) {
-    if (m_IsWaitingForDelay) {
-      // Delayed start
-      return true;
-    }
+// Should be called when IsRenaming () returns true to draw the overlay and
+// handle events. Returns true if renaming is still active, false if not (user
+// canceled, accepted, clicked outside edit rect etc). If textFieldStyle ==
+// null then a default style is used.
+public bool OnGUI(GUIStyle textFieldStyle) {
+	if (m_IsWaitingForDelay) {
+		// Delayed start
+		return true;
+	}
 
-    // Ended from outside
-    if (!m_IsRenaming) {
-      return false;
-    }
+	// Ended from outside
+	if (!m_IsRenaming) {
+		return false;
+	}
 
-    if (m_UndoRedoWasPerformed) {
-      m_UndoRedoWasPerformed = false;
-      EndRename(false);
-      return false;
-    }
+	if (m_UndoRedoWasPerformed) {
+		m_UndoRedoWasPerformed = false;
+		EndRename(false);
+		return false;
+	}
 
-    if (m_EditFieldRect.width <= 0 || m_EditFieldRect.height <= 0 ||
-        m_TextFieldControlID == 0) {
-      // Due to call order dependency we might not have a valid rect to render
-      // yet or have called OnEvent when renaming was active and therefore
-      // controlID can be uninitialzied so we ensure to issue repaints until
-      // these states are valid
-      HandleUtility.Repaint();
-      return true;
-    }
+	if (m_EditFieldRect.width <= 0 || m_EditFieldRect.height <= 0 ||
+	    m_TextFieldControlID == 0) {
+		// Due to call order dependency we might not have a valid rect to render
+		// yet or have called OnEvent when renaming was active and therefore
+		// controlID can be uninitialzied so we ensure to issue repaints until
+		// these states are valid
+		HandleUtility.Repaint();
+		return true;
+	}
 
-    Event evt = Event.current;
-    if (evt.type == EventType.KeyDown) {
-      if (evt.keyCode == KeyCode.Escape) {
-        evt.Use();
-        EndRename(false);
-        return false;
-      }
-      if (evt.keyCode == KeyCode.Return || evt.keyCode == KeyCode.KeypadEnter) {
-        evt.Use();
-        EndRename(true);
-        return false;
-      }
-    }
+	Event evt = Event.current;
+	if (evt.type == EventType.KeyDown) {
+		if (evt.keyCode == KeyCode.Escape) {
+			evt.Use();
+			EndRename(false);
+			return false;
+		}
+		if (evt.keyCode == KeyCode.Return || evt.keyCode == KeyCode.KeypadEnter) {
+			evt.Use();
+			EndRename(true);
+			return false;
+		}
+	}
 
-    // Detect if we clicked outside the text field (must be before text field
-    // below which steals keyboard control)
-    if (m_OriginalEventType == EventType.MouseDown &&
-        !m_EditFieldRect.Contains(Event.current.mousePosition)) {
-      EndRename(true);
-      return false;
-    }
+	// Detect if we clicked outside the text field (must be before text field
+	// below which steals keyboard control)
+	if (m_OriginalEventType == EventType.MouseDown &&
+	    !m_EditFieldRect.Contains(Event.current.mousePosition)) {
+		EndRename(true);
+		return false;
+	}
 
-    m_Name = DoTextField(m_Name, textFieldStyle);
+	m_Name = DoTextField(m_Name, textFieldStyle);
 
-    if (evt.type == EventType.ScrollWheel)
-      evt.Use();
+	if (evt.type == EventType.ScrollWheel)
+		evt.Use();
 
-    return true;
-  }
+	return true;
+}
 
-  string DoTextField(string text, GUIStyle textFieldStyle) {
-    if (m_TextFieldControlID == 0)
-      Debug.LogError(
-          "RenameOverlay: Ensure to call OnEvent() as early as possible in the OnGUI of the current EditorWindow!");
+string DoTextField(string text, GUIStyle textFieldStyle) {
+	if (m_TextFieldControlID == 0)
+		Debug.LogError(
+			"RenameOverlay: Ensure to call OnEvent() as early as possible in the OnGUI of the current EditorWindow!");
 
-    if (s_DefaultTextFieldStyle == null)
-      s_DefaultTextFieldStyle = "PR TextField";
+	if (s_DefaultTextFieldStyle == null)
+		s_DefaultTextFieldStyle = "PR TextField";
 
-    if (isRenamingFilename)
-      EatInvalidChars();
+	if (isRenamingFilename)
+		EatInvalidChars();
 
-    GUI.changed = false;
-    bool dummy;
+	GUI.changed = false;
+	bool dummy;
 
-    // Ensure the rename textfield has keyboardcontrol (Could have been stolen
-    // previously in this OnGUI)
-    if (GUIUtility.keyboardControl != m_TextFieldControlID)
-      GUIUtility.keyboardControl = m_TextFieldControlID;
+	// Ensure the rename textfield has keyboardcontrol (Could have been stolen
+	// previously in this OnGUI)
+	if (GUIUtility.keyboardControl != m_TextFieldControlID)
+		GUIUtility.keyboardControl = m_TextFieldControlID;
 
-    GUIStyle style = textFieldStyle ?? s_DefaultTextFieldStyle;
-    Rect rect = EditorGUI.IndentedRect(m_EditFieldRect);
-    rect.xMin -=
-        style.padding.left; // Adjust rect so rename text matches client text
+	GUIStyle style = textFieldStyle ?? s_DefaultTextFieldStyle;
+	Rect rect = EditorGUI.IndentedRect(m_EditFieldRect);
+	rect.xMin -=
+		style.padding.left; // Adjust rect so rename text matches client text
 
-    return EditorGUI.DoTextField(EditorGUI.s_RecycledEditor,
-                                 m_TextFieldControlID, rect, text, style, null,
-                                 out dummy, false, false, false);
-  }
+	return EditorGUI.DoTextField(EditorGUI.s_RecycledEditor,
+	                             m_TextFieldControlID, rect, text, style, null,
+	                             out dummy, false, false, false);
+}
 
-  void EatInvalidChars() {
-    if (isRenamingFilename) {
-      Event evt = Event.current;
-      if (GUIUtility.keyboardControl == m_TextFieldControlID &&
-          evt.GetTypeForControl(m_TextFieldControlID) == EventType.KeyDown) {
-        string errorMsg = "";
+void EatInvalidChars() {
+	if (isRenamingFilename) {
+		Event evt = Event.current;
+		if (GUIUtility.keyboardControl == m_TextFieldControlID &&
+		    evt.GetTypeForControl(m_TextFieldControlID) == EventType.KeyDown) {
+			string errorMsg = "";
 
-        string invalidChars = EditorUtility.GetInvalidFilenameChars();
-        if (invalidChars.IndexOf(evt.character) > -1)
-          errorMsg =
-              "A file name can't contain any of the following characters:\t" +
-              invalidChars;
+			string invalidChars = EditorUtility.GetInvalidFilenameChars();
+			if (invalidChars.IndexOf(evt.character) > -1)
+				errorMsg =
+					"A file name can't contain any of the following characters:\t" +
+					invalidChars;
 
-        if (errorMsg != "") {
-          evt.Use(); // Eat character: prevents the textfield from inputting
-                     // this evt.character
-          ShowMessage(errorMsg);
-        } else {
-          RemoveMessage();
-        }
-      }
+			if (errorMsg != "") {
+				evt.Use(); // Eat character: prevents the textfield from inputting
+				           // this evt.character
+				ShowMessage(errorMsg);
+			} else {
+				RemoveMessage();
+			}
+		}
 
-      // Remove tooltip if screenpos of overlay has changed (handles the case
-      // where the main window is being moved or docked window is resized)
-      if (evt.type == EventType.Repaint) {
-        Rect screenPos = GetScreenRect();
-        if (!Mathf.Approximately(m_LastScreenPosition.x, screenPos.x) ||
-            !Mathf.Approximately(m_LastScreenPosition.y, screenPos.y)) {
-          RemoveMessage();
-        }
-        m_LastScreenPosition = screenPos;
-      }
-    }
-  }
+		// Remove tooltip if screenpos of overlay has changed (handles the case
+		// where the main window is being moved or docked window is resized)
+		if (evt.type == EventType.Repaint) {
+			Rect screenPos = GetScreenRect();
+			if (!Mathf.Approximately(m_LastScreenPosition.x, screenPos.x) ||
+			    !Mathf.Approximately(m_LastScreenPosition.y, screenPos.y)) {
+				RemoveMessage();
+			}
+			m_LastScreenPosition = screenPos;
+		}
+	}
+}
 
-  Rect GetScreenRect() { return GUIUtility.GUIToScreenRect(m_EditFieldRect); }
+Rect GetScreenRect() {
+	return GUIUtility.GUIToScreenRect(m_EditFieldRect);
+}
 
-  void ShowMessage(string msg) { TooltipView.Show(msg, GetScreenRect(), null); }
+void ShowMessage(string msg) {
+	TooltipView.Show(msg, GetScreenRect(), null);
+}
 
-  void RemoveMessage() { TooltipView.Close(); }
+void RemoveMessage() {
+	TooltipView.Close();
+}
 }
 
 [Serializable]
 internal class SerializableDelayedCallback : ScriptableObject {
-  [SerializeField]
-  private long m_CallbackTicks;
+[SerializeField]
+private long m_CallbackTicks;
 
-  [SerializeField]
-  private UnityEvent m_Callback;
+[SerializeField]
+private UnityEvent m_Callback;
 
-  protected SerializableDelayedCallback() {
-    m_Callback = new UnityEvent();
-    EditorApplication.update += Update;
-  }
+protected SerializableDelayedCallback() {
+	m_Callback = new UnityEvent();
+	EditorApplication.update += Update;
+}
 
-  public static SerializableDelayedCallback
-  SubscribeCallback(UnityAction action, TimeSpan delayUntilCallback) {
-    var serializableDelayedCallback =
-        ScriptableObject.CreateInstance<SerializableDelayedCallback>();
-    serializableDelayedCallback.m_CallbackTicks =
-        DateTime.UtcNow.Add(delayUntilCallback).Ticks;
-    serializableDelayedCallback.m_Callback.AddPersistentListener(
-        action, UnityEventCallState.EditorAndRuntime);
-    return serializableDelayedCallback;
-  }
+public static SerializableDelayedCallback
+SubscribeCallback(UnityAction action, TimeSpan delayUntilCallback) {
+	var serializableDelayedCallback =
+		ScriptableObject.CreateInstance<SerializableDelayedCallback>();
+	serializableDelayedCallback.m_CallbackTicks =
+		DateTime.UtcNow.Add(delayUntilCallback).Ticks;
+	serializableDelayedCallback.m_Callback.AddPersistentListener(
+		action, UnityEventCallState.EditorAndRuntime);
+	return serializableDelayedCallback;
+}
 
-  public void Cancel() { EditorApplication.update -= Update; }
+public void Cancel() {
+	EditorApplication.update -= Update;
+}
 
-  private void Update() {
-    var utcNowTicks = DateTime.UtcNow.Ticks;
-    if (utcNowTicks >= m_CallbackTicks) {
-      EditorApplication.update -= Update;
-      m_Callback.Invoke();
-    }
-  }
+private void Update() {
+	var utcNowTicks = DateTime.UtcNow.Ticks;
+	if (utcNowTicks >= m_CallbackTicks) {
+		EditorApplication.update -= Update;
+		m_Callback.Invoke();
+	}
+}
 }
 
 // [Obsolete("Use EditorApplication.CallDelayed or EditorApplication.delayCall
 // instead.")]
 internal interface IDelayedCallback {
-  void Clear();
-  void Reset();
+void Clear();
+void Reset();
 }
 
 // [Obsolete("Use EditorApplication.CallDelayed or EditorApplication.delayCall
 // instead.")]
 internal class DelayedCallback : IDelayedCallback {
-  private System.Action m_Callback;
-  private double m_CallbackTime;
-  private double m_Delay;
+private System.Action m_Callback;
+private double m_CallbackTime;
+private double m_Delay;
 
-  public DelayedCallback(System.Action function, double timeFromNow) {
-    Assert.IsTrue(function != null);
+public DelayedCallback(System.Action function, double timeFromNow) {
+	Assert.IsTrue(function != null);
 
-    m_Callback = function;
-    m_CallbackTime = EditorApplication.timeSinceStartup + timeFromNow;
-    m_Delay = timeFromNow;
-    EditorApplication.update += Update;
-  }
+	m_Callback = function;
+	m_CallbackTime = EditorApplication.timeSinceStartup + timeFromNow;
+	m_Delay = timeFromNow;
+	EditorApplication.update += Update;
+}
 
-  public void Clear() {
-    EditorApplication.update -= Update;
-    m_CallbackTime = 0.0;
-    m_Callback = null;
-  }
+public void Clear() {
+	EditorApplication.update -= Update;
+	m_CallbackTime = 0.0;
+	m_Callback = null;
+}
 
-  void Update() {
-    if (EditorApplication.timeSinceStartup > m_CallbackTime) {
-      // Clear state before firing callback to ensure reset (callback could call
-      // ExitGUI)
-      var callback = m_Callback;
-      Clear();
+void Update() {
+	if (EditorApplication.timeSinceStartup > m_CallbackTime) {
+		// Clear state before firing callback to ensure reset (callback could call
+		// ExitGUI)
+		var callback = m_Callback;
+		Clear();
 
-      callback?.Invoke();
-    }
-  }
+		callback?.Invoke();
+	}
+}
 
-  public void Reset() {
-    if (m_Callback != null) {
-      m_CallbackTime = EditorApplication.timeSinceStartup + m_Delay;
-    }
-  }
+public void Reset() {
+	if (m_Callback != null) {
+		m_CallbackTime = EditorApplication.timeSinceStartup + m_Delay;
+	}
+}
 }
 } // end namespace UnityEditor

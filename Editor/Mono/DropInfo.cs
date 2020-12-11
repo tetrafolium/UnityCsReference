@@ -7,27 +7,29 @@ using UnityEditor;
 
 namespace UnityEditor {
 internal class DropInfo {
-  internal enum Type {
-    // The window will be inserted as a tab into dropArea
-    Tab = 0,
-    // The window will be a new pane (inside a scrollView)
-    Pane = 1,
-    // A new window should be created.
-    Window
-  }
+internal enum Type {
+	// The window will be inserted as a tab into dropArea
+	Tab = 0,
+	// The window will be a new pane (inside a scrollView)
+	Pane = 1,
+	// A new window should be created.
+	Window
+}
 
-  public DropInfo(IDropArea source) { dropArea = source; }
+public DropInfo(IDropArea source) {
+	dropArea = source;
+}
 
-  // Who claimed the drop?
-  public IDropArea dropArea;
+// Who claimed the drop?
+public IDropArea dropArea;
 
-  // Extra data for the recipient to communicate between DragOVer and
-  // PerformDrop
-  public object userData = null;
+// Extra data for the recipient to communicate between DragOVer and
+// PerformDrop
+public object userData = null;
 
-  // Which type of dropzone are we looking for?
-  public Type type = Type.Window;
-  // Where should the preview end up on screen.
-  public Rect rect;
+// Which type of dropzone are we looking for?
+public Type type = Type.Window;
+// Where should the preview end up on screen.
+public Rect rect;
 }
 }

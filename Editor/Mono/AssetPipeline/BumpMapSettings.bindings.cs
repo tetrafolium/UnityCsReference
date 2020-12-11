@@ -9,17 +9,17 @@ namespace UnityEditor {
 [StaticAccessor("BumpMapSettings::Get()", StaticAccessorType.Dot)]
 [NativeHeader("Editor/Src/AssetPipeline/TextureImporting/BumpMapSettings.h")]
 internal class BumpMapSettings {
-  public static extern bool silentMode {
-    get;
-    set;
-  }
+public static extern bool silentMode {
+	get;
+	set;
+}
 
-  public static extern void PerformBumpMapCheck(Material material);
+public static extern void PerformBumpMapCheck(Material material);
 }
 
 public static class MaterialEditorExtensions {
-  public static void PerformBumpMapCheck(this Material material) {
-    BumpMapSettings.PerformBumpMapCheck(material);
-  }
+public static void PerformBumpMapCheck(this Material material) {
+	BumpMapSettings.PerformBumpMapCheck(material);
+}
 }
 }

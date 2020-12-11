@@ -16,124 +16,130 @@ namespace UnityEditor {
 [Preserve]
 [UsedByNativeCode]
 public partial class AssetImporter : Object {
-  [NativeType(CodegenOptions.Custom, "MonoSourceAssetIdentifier")]
-  public struct SourceAssetIdentifier {
-    public SourceAssetIdentifier(Object asset) {
-      if (asset == null) {
-        throw new ArgumentNullException("asset");
-      }
+[NativeType(CodegenOptions.Custom, "MonoSourceAssetIdentifier")]
+public struct SourceAssetIdentifier {
+	public SourceAssetIdentifier(Object asset) {
+		if (asset == null) {
+			throw new ArgumentNullException("asset");
+		}
 
-      this.type = asset.GetType();
-      this.name = asset.name;
-    }
+		this.type = asset.GetType();
+		this.name = asset.name;
+	}
 
-    public SourceAssetIdentifier(Type type, string name) {
-      if (type == null) {
-        throw new ArgumentNullException("type");
-      }
+	public SourceAssetIdentifier(Type type, string name) {
+		if (type == null) {
+			throw new ArgumentNullException("type");
+		}
 
-      if (name == null) {
-        throw new ArgumentNullException("name");
-      }
+		if (name == null) {
+			throw new ArgumentNullException("name");
+		}
 
-      if (string.IsNullOrEmpty(name)) {
-        throw new ArgumentException("The name is empty", "name");
-      }
+		if (string.IsNullOrEmpty(name)) {
+			throw new ArgumentException("The name is empty", "name");
+		}
 
-      this.type = type;
-      this.name = name;
-    }
+		this.type = type;
+		this.name = name;
+	}
 
-    public Type type;
-    public string name;
-  }
+	public Type type;
+	public string name;
+}
 
-  [NativeName("AssetPathName")]
-  public extern string assetPath {
-    get;
-  }
+[NativeName("AssetPathName")]
+public extern string assetPath {
+	get;
+}
 
-  public extern bool importSettingsMissing { get; }
+public extern bool importSettingsMissing {
+	get;
+}
 
-  public extern ulong assetTimeStamp { get; }
+public extern ulong assetTimeStamp {
+	get;
+}
 
-  public extern string userData {
-    get;
-    set;
-  }
+public extern string userData {
+	get;
+	set;
+}
 
-  public extern string assetBundleName {
-    get;
-    set;
-  }
+public extern string assetBundleName {
+	get;
+	set;
+}
 
-  public extern string assetBundleVariant {
-    get;
-    set;
-  }
+public extern string assetBundleVariant {
+	get;
+	set;
+}
 
-  [NativeName("SetAssetBundleName")] extern public void
-  SetAssetBundleNameAndVariant(string assetBundleName,
-                               string assetBundleVariant);
+[NativeName("SetAssetBundleName")] extern public void
+SetAssetBundleNameAndVariant(string assetBundleName,
+                             string assetBundleVariant);
 
-  [FreeFunction(
-      "FindAssetImporterAtAssetPath")] extern public static AssetImporter
-  GetAtPath(string path);
+[FreeFunction(
+	 "FindAssetImporterAtAssetPath")] extern public static AssetImporter
+GetAtPath(string path);
 
-  public void SaveAndReimport() { AssetDatabase.ImportAsset(assetPath); }
+public void SaveAndReimport() {
+	AssetDatabase.ImportAsset(assetPath);
+}
 
-  [FreeFunction(
-      "AssetImporterBindings::LocalFileIDToClassID")] extern internal static int
-  LocalFileIDToClassID(long fileId);
+[FreeFunction(
+	 "AssetImporterBindings::LocalFileIDToClassID")] extern internal static int
+LocalFileIDToClassID(long fileId);
 
-  [FreeFunction(
-      "AssetImporterBindings::MakeLocalFileIDWithHash")] extern internal static long
-  MakeLocalFileIDWithHash(int persistentTypeId, string name, long offset);
-  extern internal long MakeInternalID(int persistentTypeId, string name);
+[FreeFunction(
+	 "AssetImporterBindings::MakeLocalFileIDWithHash")] extern internal static long
+MakeLocalFileIDWithHash(int persistentTypeId, string name, long offset);
+extern internal long MakeInternalID(int persistentTypeId, string name);
 
-  extern public void AddRemap(SourceAssetIdentifier identifier,
-                              Object externalObject);
+extern public void AddRemap(SourceAssetIdentifier identifier,
+                            Object externalObject);
 
-  extern public bool RemoveRemap(SourceAssetIdentifier identifier);
+extern public bool RemoveRemap(SourceAssetIdentifier identifier);
 
-  extern internal void RenameSubAssets(int peristentTypeId, string[] oldNames,
-                                       string[] newNames);
+extern internal void RenameSubAssets(int peristentTypeId, string[] oldNames,
+                                     string[] newNames);
 
-  [FreeFunction(
-      "AssetImporterBindings::GetIdentifiers")] extern private static SourceAssetIdentifier
-      [] GetIdentifiers(AssetImporter self);
-  [FreeFunction(
-      "AssetImporterBindings::GetExternalObjects")] extern private static Object
-      [] GetExternalObjects(AssetImporter self);
+[FreeFunction(
+	 "AssetImporterBindings::GetIdentifiers")] extern private static SourceAssetIdentifier
+[] GetIdentifiers(AssetImporter self);
+[FreeFunction(
+	 "AssetImporterBindings::GetExternalObjects")] extern private static Object
+[] GetExternalObjects(AssetImporter self);
 
-  public Dictionary<SourceAssetIdentifier, Object> GetExternalObjectMap() {
-    // bogdanc: this is not optimal - we should have only one call to get both
-    // the identifiers and the external objects. However, the new bindings do
-    // not support well output array parameters.
-    // FIXME: change this to a single call when the bindings are fixed
-    SourceAssetIdentifier[] identifiers = GetIdentifiers(this);
-    Object[] externalObjects = GetExternalObjects(this);
+public Dictionary<SourceAssetIdentifier, Object> GetExternalObjectMap() {
+	// bogdanc: this is not optimal - we should have only one call to get both
+	// the identifiers and the external objects. However, the new bindings do
+	// not support well output array parameters.
+	// FIXME: change this to a single call when the bindings are fixed
+	SourceAssetIdentifier[] identifiers = GetIdentifiers(this);
+	Object[] externalObjects = GetExternalObjects(this);
 
-    Dictionary<SourceAssetIdentifier, Object> map =
-        new Dictionary<SourceAssetIdentifier, Object>();
+	Dictionary<SourceAssetIdentifier, Object> map =
+		new Dictionary<SourceAssetIdentifier, Object>();
 
-    for (int i = 0; i < identifiers.Length; ++i) {
-      map.Add(identifiers[i], externalObjects[i]);
-    }
+	for (int i = 0; i < identifiers.Length; ++i) {
+		map.Add(identifiers[i], externalObjects[i]);
+	}
 
-    return map;
-  }
+	return map;
+}
 
-  [FreeFunction("AssetImporterBindings::RegisterImporter",
-                ThrowsException = true)] extern internal static void
-  RegisterImporter(Type importer, int importerVersion, int queuePos,
-                   string fileExt, bool supportsImportDependencyHinting,
-                   bool autoSelect, bool allowCaching);
+[FreeFunction("AssetImporterBindings::RegisterImporter",
+              ThrowsException = true)] extern internal static void
+RegisterImporter(Type importer, int importerVersion, int queuePos,
+                 string fileExt, bool supportsImportDependencyHinting,
+                 bool autoSelect, bool allowCaching);
 
-  [FreeFunction("AssetImporterBindings::SupportsRemappedAssetType",
-                HasExplicitThis = true, IsThreadSafe = true)]
-  public extern bool SupportsRemappedAssetType(Type type);
+[FreeFunction("AssetImporterBindings::SupportsRemappedAssetType",
+              HasExplicitThis = true, IsThreadSafe = true)]
+public extern bool SupportsRemappedAssetType(Type type);
 
-  internal extern double GetImportStartTime();
+internal extern double GetImportStartTime();
 }
 }

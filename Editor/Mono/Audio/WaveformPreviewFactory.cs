@@ -9,8 +9,8 @@ using UnityEngine;
 
 namespace UnityEditor {
 static class WaveformPreviewFactory {
-  public static WaveformPreview Create(int initialSize, AudioClip clip) {
-    return new StreamedAudioClipPreview(clip, initialSize);
-  }
+public static WaveformPreview Create(int initialSize, AudioClip clip) {
+	return new StreamedAudioClipPreview(clip, initialSize);
+}
 }
 }

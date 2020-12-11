@@ -8,10 +8,10 @@ using UnityEngine.Bindings;
 namespace UnityEditor {
 [NativeHeader("Editor/Src/AssetPipeline/ComputeShaderImporter.h")]
 public sealed partial class ComputeShaderImporter : AssetImporter {
-  [NativeProperty("PreprocessorOverride")] extern public PreprocessorOverride
-      preprocessorOverride {
-    get;
-    set;
-  }
+[NativeProperty("PreprocessorOverride")] extern public PreprocessorOverride
+preprocessorOverride {
+	get;
+	set;
+}
 }
 }

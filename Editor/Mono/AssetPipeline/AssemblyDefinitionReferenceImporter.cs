@@ -8,11 +8,13 @@ using UnityEngine;
 namespace UnityEditorInternal {
 [ExcludeFromPreset]
 public sealed partial class AssemblyDefinitionReferenceImporter
-    : AssetImporter {}
+	: AssetImporter {}
 
 public sealed partial class AssemblyDefinitionReferenceAsset : TextAsset {
-  private AssemblyDefinitionReferenceAsset() {}
+private AssemblyDefinitionReferenceAsset() {
+}
 
-  private AssemblyDefinitionReferenceAsset(string text) {}
+private AssemblyDefinitionReferenceAsset(string text) {
+}
 }
 }

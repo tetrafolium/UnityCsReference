@@ -14,21 +14,21 @@ namespace UnityEditor {
 //----------------------------------------------------------------------------------------------------------------------
 [CustomPropertyDrawer(typeof(LazyLoadReference<>))]
 internal sealed class LazyLoadedReferenceField : PropertyDrawer {
-  public override void OnGUI(Rect position, SerializedProperty property,
-                             GUIContent label) {
-    System.Type fieldType;
-    ScriptAttributeUtility.GetFieldInfoFromProperty(property, out fieldType);
+public override void OnGUI(Rect position, SerializedProperty property,
+                           GUIContent label) {
+	System.Type fieldType;
+	ScriptAttributeUtility.GetFieldInfoFromProperty(property, out fieldType);
 
-    EditorGUI.BeginChangeCheck();
+	EditorGUI.BeginChangeCheck();
 
-    var value = property.objectReferenceValue;
+	var value = property.objectReferenceValue;
 
-    position = EditorGUI.PrefixLabel(position, label);
-    value = EditorGUI.ObjectField(position, value,
-                                  fieldType.GetGenericArguments()[0], false);
+	position = EditorGUI.PrefixLabel(position, label);
+	value = EditorGUI.ObjectField(position, value,
+	                              fieldType.GetGenericArguments()[0], false);
 
-    if (EditorGUI.EndChangeCheck())
-      property.objectReferenceValue = value;
-  }
+	if (EditorGUI.EndChangeCheck())
+		property.objectReferenceValue = value;
+}
 }
 }

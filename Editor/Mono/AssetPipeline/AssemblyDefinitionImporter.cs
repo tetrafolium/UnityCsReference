@@ -10,8 +10,10 @@ namespace UnityEditorInternal {
 public sealed partial class AssemblyDefinitionImporter : AssetImporter {}
 
 public sealed partial class AssemblyDefinitionAsset : TextAsset {
-  private AssemblyDefinitionAsset() {}
+private AssemblyDefinitionAsset() {
+}
 
-  private AssemblyDefinitionAsset(string text) {}
+private AssemblyDefinitionAsset(string text) {
+}
 }
 }

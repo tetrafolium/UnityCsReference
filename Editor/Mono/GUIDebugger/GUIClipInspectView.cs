@@ -8,119 +8,122 @@ using UnityEngine;
 
 namespace UnityEditor {
 class GUIClipInspectView : BaseInspectView {
-  Vector2 m_StacktraceScrollPos = new Vector2();
+Vector2 m_StacktraceScrollPos = new Vector2();
 
-  List<IMGUIClipInstruction> m_ClipList = new List<IMGUIClipInstruction>();
+List<IMGUIClipInstruction> m_ClipList = new List<IMGUIClipInstruction>();
 
-  public GUIClipInspectView(GUIViewDebuggerWindow guiViewDebuggerWindow)
-      : base(guiViewDebuggerWindow) {}
+public GUIClipInspectView(GUIViewDebuggerWindow guiViewDebuggerWindow)
+	: base(guiViewDebuggerWindow) {
+}
 
-  public override void UpdateInstructions() {
-    // TODO: find a better approach instead of getting the whole list
-    // everyframe.
-    m_ClipList.Clear();
-    GUIViewDebuggerHelper.GetClipInstructions(m_ClipList);
-  }
+public override void UpdateInstructions() {
+	// TODO: find a better approach instead of getting the whole list
+	// everyframe.
+	m_ClipList.Clear();
+	GUIViewDebuggerHelper.GetClipInstructions(m_ClipList);
+}
 
-  public override void ShowOverlay() {
-    if (!isInstructionSelected) {
-      debuggerWindow.ClearInstructionHighlighter();
-      return;
-    }
+public override void ShowOverlay() {
+	if (!isInstructionSelected) {
+		debuggerWindow.ClearInstructionHighlighter();
+		return;
+	}
 
-    var clipInstruction = m_ClipList[listViewState.row];
-    debuggerWindow.HighlightInstruction(debuggerWindow.inspected,
-                                        clipInstruction.unclippedScreenRect,
-                                        GUIStyle.none);
-  }
+	var clipInstruction = m_ClipList[listViewState.row];
+	debuggerWindow.HighlightInstruction(debuggerWindow.inspected,
+	                                    clipInstruction.unclippedScreenRect,
+	                                    GUIStyle.none);
+}
 
-  protected override int GetInstructionCount() { return m_ClipList.Count; }
+protected override int GetInstructionCount() {
+	return m_ClipList.Count;
+}
 
-  protected override void DoDrawInstruction(ListViewElement el, int id) {
-    var clipInstruction = m_ClipList[el.row];
-    var niceName = GetInstructionListName(el.row);
+protected override void DoDrawInstruction(ListViewElement el, int id) {
+	var clipInstruction = m_ClipList[el.row];
+	var niceName = GetInstructionListName(el.row);
 
-    GUIContent tempContent = GUIContent.Temp(niceName);
+	GUIContent tempContent = GUIContent.Temp(niceName);
 
-    var rect = el.position;
-    rect.xMin += clipInstruction.level * 12;
+	var rect = el.position;
+	rect.xMin += clipInstruction.level * 12;
 
-    GUIViewDebuggerWindow.Styles.listItemBackground.Draw(
-        el.position, false, false, listViewState.row == el.row, false);
-    GUIViewDebuggerWindow.Styles.listItem.Draw(rect, tempContent, id,
-                                               listViewState.row == el.row);
-  }
+	GUIViewDebuggerWindow.Styles.listItemBackground.Draw(
+		el.position, false, false, listViewState.row == el.row, false);
+	GUIViewDebuggerWindow.Styles.listItem.Draw(rect, tempContent, id,
+	                                           listViewState.row == el.row);
+}
 
-  protected override void DrawInspectedStacktrace(float availableWidth) {
-    var clipInstruction = m_ClipList[listViewState.row];
-    m_StacktraceScrollPos = EditorGUILayout.BeginScrollView(
-        m_StacktraceScrollPos,
-        GUIViewDebuggerWindow.Styles.stacktraceBackground,
-        GUILayout.ExpandHeight(false));
-    DrawStackFrameList(clipInstruction.pushStacktrace, availableWidth);
-    EditorGUILayout.EndScrollView();
-  }
+protected override void DrawInspectedStacktrace(float availableWidth) {
+	var clipInstruction = m_ClipList[listViewState.row];
+	m_StacktraceScrollPos = EditorGUILayout.BeginScrollView(
+		m_StacktraceScrollPos,
+		GUIViewDebuggerWindow.Styles.stacktraceBackground,
+		GUILayout.ExpandHeight(false));
+	DrawStackFrameList(clipInstruction.pushStacktrace, availableWidth);
+	EditorGUILayout.EndScrollView();
+}
 
-  internal override void
-  DoDrawSelectedInstructionDetails(int selectedInstructionIndex) {
-    var clipInstruction = m_ClipList[selectedInstructionIndex];
+internal override void
+DoDrawSelectedInstructionDetails(int selectedInstructionIndex) {
+	var clipInstruction = m_ClipList[selectedInstructionIndex];
 
-    DoSelectableInstructionDataField("RenderOffset",
-                                     clipInstruction.renderOffset.ToString());
-    DoSelectableInstructionDataField("ResetOffset",
-                                     clipInstruction.resetOffset.ToString());
-    DoSelectableInstructionDataField("screenRect",
-                                     clipInstruction.screenRect.ToString());
-    DoSelectableInstructionDataField("scrollOffset",
-                                     clipInstruction.scrollOffset.ToString());
-  }
+	DoSelectableInstructionDataField("RenderOffset",
+	                                 clipInstruction.renderOffset.ToString());
+	DoSelectableInstructionDataField("ResetOffset",
+	                                 clipInstruction.resetOffset.ToString());
+	DoSelectableInstructionDataField("screenRect",
+	                                 clipInstruction.screenRect.ToString());
+	DoSelectableInstructionDataField("scrollOffset",
+	                                 clipInstruction.scrollOffset.ToString());
+}
 
-  internal override string GetInstructionListName(int index) {
-    var clipInstruction = m_ClipList[index];
-    var stacktrace = clipInstruction.pushStacktrace;
+internal override string GetInstructionListName(int index) {
+	var clipInstruction = m_ClipList[index];
+	var stacktrace = clipInstruction.pushStacktrace;
 
-    if (stacktrace.Length == 0)
-      return "Empty";
+	if (stacktrace.Length == 0)
+		return "Empty";
 
-    int frameIndex = GetInterestingFrameIndex(stacktrace);
+	int frameIndex = GetInterestingFrameIndex(stacktrace);
 
-    StackFrame interestingFrame = stacktrace[frameIndex];
-    string methodName = interestingFrame.methodName;
-    return methodName;
-  }
+	StackFrame interestingFrame = stacktrace[frameIndex];
+	string methodName = interestingFrame.methodName;
+	return methodName;
+}
 
-  internal override void OnDoubleClickInstruction(int index) {
-    throw new NotImplementedException();
-  }
+internal override void OnDoubleClickInstruction(int index) {
+	throw new NotImplementedException();
+}
 
-  internal override void OnSelectedInstructionChanged(int index) {
-    listViewState.row = index;
-    ShowOverlay();
-  }
+internal override void OnSelectedInstructionChanged(int index) {
+	listViewState.row = index;
+	ShowOverlay();
+}
 
-  int GetInterestingFrameIndex(StackFrame[] stacktrace) {
-    string currentProjectPath = Application.dataPath;
+int GetInterestingFrameIndex(StackFrame[] stacktrace) {
+	string currentProjectPath = Application.dataPath;
 
-    int index = -1;
+	int index = -1;
 
-    for (int i = 0; i < stacktrace.Length; ++i) {
-      StackFrame sf = stacktrace[i];
-      if (string.IsNullOrEmpty(sf.sourceFile))
-        continue;
-      if (sf.signature.StartsWith("UnityEngine.GUIClip"))
-        continue;
+	for (int i = 0; i < stacktrace.Length; ++i) {
+		StackFrame sf = stacktrace[i];
+		if (string.IsNullOrEmpty(sf.sourceFile))
+			continue;
+		if (sf.signature.StartsWith("UnityEngine.GUIClip"))
+			continue;
 
-      if (index == -1)
-        index = i;
+		if (index == -1)
+			index = i;
 
-      if (sf.sourceFile.StartsWith(currentProjectPath))
-        return i;
-    }
+		if (sf.sourceFile.StartsWith(currentProjectPath))
+			return i;
+	}
 
-    if (index != -1)
-      return index;
+	if (index != -1)
+		return index;
 
-    return stacktrace.Length - 1;
-  }
+	return stacktrace.Length - 1;
+}
 }
 }

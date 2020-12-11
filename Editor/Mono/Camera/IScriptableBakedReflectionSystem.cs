@@ -6,15 +6,19 @@ using System;
 using UnityEngine;
 
 namespace UnityEditor.Experimental.Rendering {
-  public interface IScriptableBakedReflectionSystem : IDisposable {
-    int stageCount { get; }
-    Hash128[] stateHashes { get; }
+public interface IScriptableBakedReflectionSystem : IDisposable {
+int stageCount {
+	get;
+}
+Hash128[] stateHashes {
+	get;
+}
 
-    void Tick(SceneStateHash sceneStateHash,
-              IScriptableBakedReflectionSystemStageNotifier handle);
-    void SynchronizeReflectionProbes();
-    void Clear();
-    void Cancel();
-    bool BakeAllReflectionProbes();
-  }
+void Tick(SceneStateHash sceneStateHash,
+          IScriptableBakedReflectionSystemStageNotifier handle);
+void SynchronizeReflectionProbes();
+void Clear();
+void Cancel();
+bool BakeAllReflectionProbes();
+}
 }

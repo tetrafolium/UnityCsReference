@@ -4,10 +4,10 @@
 
 namespace UnityEditor {
 internal enum ListViewOptions {
-  wantsReordering = 1,
-  wantsExternalFiles = 2,
-  wantsToStartCustomDrag = 4,
-  wantsToAcceptCustomDrag = 8,
-  wantsRowMultiSelection = 16
+	wantsReordering = 1,
+	wantsExternalFiles = 2,
+	wantsToStartCustomDrag = 4,
+	wantsToAcceptCustomDrag = 8,
+	wantsRowMultiSelection = 16
 }
 }

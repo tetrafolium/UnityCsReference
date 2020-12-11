@@ -11,107 +11,117 @@ using UnityEngine.Scripting;
 using System.Collections.Generic;
 
 namespace UnityEditor.Experimental.Rendering {
-  [NativeHeader("Editor/Src/Camera/BuiltinBakedReflectionSystem.h")]
-  [NativeHeader("Editor/Src/Camera/SceneStateHash.h")]
-  [StructLayout(LayoutKind.Sequential)]
-  [RequiredByNativeCode]
-  class BuiltinBakedReflectionSystem : IScriptableBakedReflectionSystem {
-    IntPtr m_Ptr = IntPtr.Zero;
-    IScriptableBakedReflectionSystemStageNotifier m_Handle;
+[NativeHeader("Editor/Src/Camera/BuiltinBakedReflectionSystem.h")]
+[NativeHeader("Editor/Src/Camera/SceneStateHash.h")]
+[StructLayout(LayoutKind.Sequential)]
+[RequiredByNativeCode]
+class BuiltinBakedReflectionSystem : IScriptableBakedReflectionSystem {
+IntPtr m_Ptr = IntPtr.Zero;
+IScriptableBakedReflectionSystemStageNotifier m_Handle;
 
-    public int stageCount {
-      get { return 3; }
-    }
+public int stageCount {
+	get { return 3; }
+}
 
-    [NativeName("StateHashes")] extern public Hash128[] stateHashes { get; }
+[NativeName("StateHashes")] extern public Hash128[] stateHashes {
+	get;
+}
 
-    bool disposed {
-      get { return m_Ptr == IntPtr.Zero; }
-    }
+bool disposed {
+	get { return m_Ptr == IntPtr.Zero; }
+}
 
-    BuiltinBakedReflectionSystem() { m_Ptr = Internal_GetPtr(); }
+BuiltinBakedReflectionSystem() {
+	m_Ptr = Internal_GetPtr();
+}
 
-    ~BuiltinBakedReflectionSystem() { Dispose(false); }
+~BuiltinBakedReflectionSystem() {
+	Dispose(false);
+}
 
-    public void Tick(SceneStateHash dependencies,
-                     IScriptableBakedReflectionSystemStageNotifier handle) {
-      if (disposed)
-        throw new ObjectDisposedException("BuiltinBakedReflectionSystem");
+public void Tick(SceneStateHash dependencies,
+                 IScriptableBakedReflectionSystemStageNotifier handle) {
+	if (disposed)
+		throw new ObjectDisposedException("BuiltinBakedReflectionSystem");
 
-      m_Handle = handle;
-      Assert.IsNotNull(m_Handle);
+	m_Handle = handle;
+	Assert.IsNotNull(m_Handle);
 
-      Internal_Tick(dependencies);
-    }
+	Internal_Tick(dependencies);
+}
 
-    public void SynchronizeReflectionProbes() {
-      if (disposed)
-        throw new ObjectDisposedException("BuiltinBakedReflectionSystem");
+public void SynchronizeReflectionProbes() {
+	if (disposed)
+		throw new ObjectDisposedException("BuiltinBakedReflectionSystem");
 
-      Internal_SynchronizeReflectionProbes();
-    }
+	Internal_SynchronizeReflectionProbes();
+}
 
-    public void Clear() {
-      if (disposed)
-        throw new ObjectDisposedException("BuiltinBakedReflectionSystem");
+public void Clear() {
+	if (disposed)
+		throw new ObjectDisposedException("BuiltinBakedReflectionSystem");
 
-      Internal_Clear();
-    }
+	Internal_Clear();
+}
 
-    public bool BakeAllReflectionProbes() {
-      if (disposed)
-        throw new ObjectDisposedException("BuiltinBakedReflectionSystem");
+public bool BakeAllReflectionProbes() {
+	if (disposed)
+		throw new ObjectDisposedException("BuiltinBakedReflectionSystem");
 
-      return Internal_BakeAllReflectionProbes();
-    }
+	return Internal_BakeAllReflectionProbes();
+}
 
-    public void Cancel() {
-      // Cancel is empty on purpose
-      // We need to have this callback on the C# side as it is the only way the
-      // C# implementation is notified when the user cancelled the bake
-    }
+public void Cancel() {
+	// Cancel is empty on purpose
+	// We need to have this callback on the C# side as it is the only way the
+	// C# implementation is notified when the user cancelled the bake
+}
 
-    public void Dispose() { Dispose(true); }
+public void Dispose() {
+	Dispose(true);
+}
 
-    void Dispose(bool disposing) { m_Ptr = IntPtr.Zero; }
+void Dispose(bool disposing) {
+	m_Ptr = IntPtr.Zero;
+}
 
-    [RequiredByNativeCode]
-    static BuiltinBakedReflectionSystem
-    Internal_BuiltinBakedReflectionSystem_New() {
-      var instance = new BuiltinBakedReflectionSystem();
-      instance.Internal_SetPtr(instance);
-      return instance;
-    }
+[RequiredByNativeCode]
+static BuiltinBakedReflectionSystem
+Internal_BuiltinBakedReflectionSystem_New() {
+	var instance = new BuiltinBakedReflectionSystem();
+	instance.Internal_SetPtr(instance);
+	return instance;
+}
 
-    [RequiredByNativeCode]
-    void Internal_BuiltinBakedReflectionSystem_EnterStage(
-        int stage, string progressMessage, float progress) {
-      Assert.IsNotNull(m_Handle);
+[RequiredByNativeCode]
+void Internal_BuiltinBakedReflectionSystem_EnterStage(
+	int stage, string progressMessage, float progress) {
+	Assert.IsNotNull(m_Handle);
 
-      m_Handle.EnterStage(stage, progressMessage, progress);
-    }
+	m_Handle.EnterStage(stage, progressMessage, progress);
+}
 
-    [RequiredByNativeCode]
-    void Internal_BuiltinBakedReflectionSystem_ExitStage(int stage) {
-      Assert.IsNotNull(m_Handle);
+[RequiredByNativeCode]
+void Internal_BuiltinBakedReflectionSystem_ExitStage(int stage) {
+	Assert.IsNotNull(m_Handle);
 
-      m_Handle.ExitStage(stage);
-    }
+	m_Handle.ExitStage(stage);
+}
 
-    [RequiredByNativeCode]
-    void Internal_BuiltinBakedReflectionSystem_SetIsDone(bool isDone) {
-      Assert.IsNotNull(m_Handle);
+[RequiredByNativeCode]
+void Internal_BuiltinBakedReflectionSystem_SetIsDone(bool isDone) {
+	Assert.IsNotNull(m_Handle);
 
-      m_Handle.SetIsDone(isDone);
-    }
+	m_Handle.SetIsDone(isDone);
+}
 
-    [NativeMethod("Get")]
-    static extern IntPtr Internal_GetPtr();
+[NativeMethod("Get")]
+static extern IntPtr Internal_GetPtr();
 
-    extern void Internal_Tick(SceneStateHash dependencies);
-    extern void Internal_SynchronizeReflectionProbes();
-    extern void Internal_Clear();
-    extern void Internal_SetPtr(BuiltinBakedReflectionSystem ptr);
-    extern bool Internal_BakeAllReflectionProbes();
-  }
+extern void Internal_Tick(SceneStateHash dependencies);
+extern void Internal_SynchronizeReflectionProbes();
+extern void Internal_Clear();
+extern void Internal_SetPtr(BuiltinBakedReflectionSystem ptr);
+extern bool Internal_BakeAllReflectionProbes();
+}
 }

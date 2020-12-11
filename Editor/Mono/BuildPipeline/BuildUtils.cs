@@ -21,128 +21,132 @@ using System.Xml.XPath;
 
 namespace UnityEditorInternal {
 internal class NativeProgram : Program {
-  public NativeProgram(string executable, string arguments) {
-    var startInfo =
-        new ProcessStartInfo{Arguments = arguments,
-                             CreateNoWindow = true,
-                             FileName = executable,
-                             RedirectStandardError = true,
-                             RedirectStandardOutput = true,
-                             WorkingDirectory = Application.dataPath + "/..",
-                             UseShellExecute = false};
+public NativeProgram(string executable, string arguments) {
+	var startInfo =
+		new ProcessStartInfo {
+		Arguments = arguments,
+		CreateNoWindow = true,
+		FileName = executable,
+		RedirectStandardError = true,
+		RedirectStandardOutput = true,
+		WorkingDirectory = Application.dataPath + "/..",
+		UseShellExecute = false
+	};
 
-    _process.StartInfo = startInfo;
-  }
+	_process.StartInfo = startInfo;
+}
 }
 
 internal class Runner {
-  internal static void RunManagedProgram(string exe, string args) {
-    RunManagedProgram(exe, args, Application.dataPath + "/..", null, null);
-  }
+internal static void RunManagedProgram(string exe, string args) {
+	RunManagedProgram(exe, args, Application.dataPath + "/..", null, null);
+}
 
-  internal static void
-  RunManagedProgram(string exe, string args, string workingDirectory,
-                    CompilerOutputParserBase parser,
-                    Action<ProcessStartInfo> setupStartInfo) {
-    Program p;
+internal static void
+RunManagedProgram(string exe, string args, string workingDirectory,
+                  CompilerOutputParserBase parser,
+                  Action<ProcessStartInfo> setupStartInfo) {
+	Program p;
 
-    // Run on .NET if running on windows
-    // It's twice as fast as Mono for IL2CPP.exe
-    if (Application.platform == RuntimePlatform.WindowsEditor) {
-      var startInfo = new ProcessStartInfo(){
-          Arguments = args, CreateNoWindow = true, FileName = exe};
+	// Run on .NET if running on windows
+	// It's twice as fast as Mono for IL2CPP.exe
+	if (Application.platform == RuntimePlatform.WindowsEditor) {
+		var startInfo = new ProcessStartInfo(){
+			Arguments = args, CreateNoWindow = true, FileName = exe
+		};
 
-      if (setupStartInfo != null)
-        setupStartInfo(startInfo);
+		if (setupStartInfo != null)
+			setupStartInfo(startInfo);
 
-      p = new Program(startInfo);
-    } else {
-      p = new ManagedProgram(
-          MonoInstallationFinder.GetMonoInstallation("MonoBleedingEdge"), null,
-          exe, args, false, setupStartInfo);
-    }
+		p = new Program(startInfo);
+	} else {
+		p = new ManagedProgram(
+			MonoInstallationFinder.GetMonoInstallation("MonoBleedingEdge"), null,
+			exe, args, false, setupStartInfo);
+	}
 
-    RunProgram(p, exe, args, workingDirectory, parser);
-  }
+	RunProgram(p, exe, args, workingDirectory, parser);
+}
 
-  internal static void
-  RunNetCoreProgram(string exe, string args, string workingDirectory,
-                    CompilerOutputParserBase parser,
-                    Action<ProcessStartInfo> setupStartInfo) {
-    Program p;
+internal static void
+RunNetCoreProgram(string exe, string args, string workingDirectory,
+                  CompilerOutputParserBase parser,
+                  Action<ProcessStartInfo> setupStartInfo) {
+	Program p;
 
-    if (Path.GetExtension(exe).Equals(".dll",
-                                      StringComparison.OrdinalIgnoreCase)) {
-      p = new NetCoreProgram(exe, args, setupStartInfo);
-    } else {
-      var startInfo = new ProcessStartInfo(){
-          Arguments = args, CreateNoWindow = true, FileName = exe};
+	if (Path.GetExtension(exe).Equals(".dll",
+	                                  StringComparison.OrdinalIgnoreCase)) {
+		p = new NetCoreProgram(exe, args, setupStartInfo);
+	} else {
+		var startInfo = new ProcessStartInfo(){
+			Arguments = args, CreateNoWindow = true, FileName = exe
+		};
 
-      if (setupStartInfo != null)
-        setupStartInfo(startInfo);
+		if (setupStartInfo != null)
+			setupStartInfo(startInfo);
 
-      p = new Program(startInfo);
-    }
+		p = new Program(startInfo);
+	}
 
-    RunProgram(p, exe, args, workingDirectory, parser);
-  }
+	RunProgram(p, exe, args, workingDirectory, parser);
+}
 
-  // Used when debugging il2cpp.exe from Windows, please don't remove it
-  public static void RunNativeProgram(string exe, string args) {
-    using(var p = new NativeProgram(exe, args)) {
-      p.Start();
-      p.WaitForExit();
-      if (p.ExitCode != 0) {
-        Debug.LogError("Failed running " + exe + " " + args + "\n\n" +
-                       p.GetAllOutput());
+// Used when debugging il2cpp.exe from Windows, please don't remove it
+public static void RunNativeProgram(string exe, string args) {
+	using (var p = new NativeProgram(exe, args)) {
+		p.Start();
+		p.WaitForExit();
+		if (p.ExitCode != 0) {
+			Debug.LogError("Failed running " + exe + " " + args + "\n\n" +
+			               p.GetAllOutput());
 
-        throw new Exception(string.Format("{0} did not run properly!", exe));
-      }
-    }
-  }
+			throw new Exception(string.Format("{0} did not run properly!", exe));
+		}
+	}
+}
 
-  private static void RunProgram(Program p, string exe, string args,
-                                 string workingDirectory,
-                                 CompilerOutputParserBase parser) {
-    var stopwatch = new Stopwatch();
-    stopwatch.Start();
+private static void RunProgram(Program p, string exe, string args,
+                               string workingDirectory,
+                               CompilerOutputParserBase parser) {
+	var stopwatch = new Stopwatch();
+	stopwatch.Start();
 
-    using(p) {
-      p.GetProcessStartInfo().WorkingDirectory = workingDirectory;
-      p.Start();
-      p.WaitForExit();
+	using (p) {
+		p.GetProcessStartInfo().WorkingDirectory = workingDirectory;
+		p.Start();
+		p.WaitForExit();
 
-      stopwatch.Stop();
-      Console.WriteLine("{0} exited after {1} ms.", exe,
-                        stopwatch.ElapsedMilliseconds);
+		stopwatch.Stop();
+		Console.WriteLine("{0} exited after {1} ms.", exe,
+		                  stopwatch.ElapsedMilliseconds);
 
-      IEnumerable<CompilerMessage> messages = null;
-      if (parser != null) {
-        var errorOutput = p.GetErrorOutput();
-        var standardOutput = p.GetStandardOutput();
-        messages =
-            parser.Parse(errorOutput, standardOutput, true, "n/a (il2cpp)");
-      }
+		IEnumerable<CompilerMessage> messages = null;
+		if (parser != null) {
+			var errorOutput = p.GetErrorOutput();
+			var standardOutput = p.GetStandardOutput();
+			messages =
+				parser.Parse(errorOutput, standardOutput, true, "n/a (il2cpp)");
+		}
 
-      if (p.ExitCode != 0) {
-        if (messages != null) {
-          foreach (var message in messages)
-            Debug.LogPlayerBuildError(message.message, message.file,
-                                      message.line, message.column);
-        }
+		if (p.ExitCode != 0) {
+			if (messages != null) {
+				foreach (var message in messages)
+					Debug.LogPlayerBuildError(message.message, message.file,
+					                          message.line, message.column);
+			}
 
-        Debug.LogError("Failed running " + exe + " " + args + "\n\n" +
-                       p.GetAllOutput());
+			Debug.LogError("Failed running " + exe + " " + args + "\n\n" +
+			               p.GetAllOutput());
 
-        throw new Exception(string.Format("{0} did not run properly!", exe));
-      } else {
-        if (messages != null) {
-          foreach (var message in messages)
-            Console.WriteLine(message.message + " - " + message.file + " - " +
-                              message.line + " - " + message.column);
-        }
-      }
-    }
-  }
+			throw new Exception(string.Format("{0} did not run properly!", exe));
+		} else {
+			if (messages != null) {
+				foreach (var message in messages)
+					Console.WriteLine(message.message + " - " + message.file + " - " +
+					                  message.line + " - " + message.column);
+			}
+		}
+	}
+}
 }
 }

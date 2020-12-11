@@ -7,24 +7,24 @@ using System.Runtime.InteropServices;
 using UnityEngine.Scripting;
 
 namespace UnityEditor.Collaboration {
-  // Keep internal and undocumented until we expose more functionality
-  //*undocumented
-  [StructLayout(LayoutKind.Sequential)]
-  [UsedByNativeCode]
-  internal struct ChangeAction {
-    private string m_Path;
-    private string m_Action;
+// Keep internal and undocumented until we expose more functionality
+//*undocumented
+[StructLayout(LayoutKind.Sequential)]
+[UsedByNativeCode]
+internal struct ChangeAction {
+	private string m_Path;
+	private string m_Action;
 
-    public ChangeAction(string path = "", string action = "") {
-      m_Path = path;
-      m_Action = action;
-    }
+	public ChangeAction(string path = "", string action = "") {
+		m_Path = path;
+		m_Action = action;
+	}
 
-    public string path {
-      get { return m_Path; }
-    }
-    public string action {
-      get { return m_Action; }
-    }
-  }
+	public string path {
+		get { return m_Path; }
+	}
+	public string action {
+		get { return m_Action; }
+	}
+}
 }

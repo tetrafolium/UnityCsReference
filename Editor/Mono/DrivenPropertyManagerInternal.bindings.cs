@@ -16,10 +16,10 @@ namespace UnityEditor {
 [StaticAccessor("DrivenPropertyManagerInternal",
                 StaticAccessorType.DoubleColon)]
 internal class DrivenPropertyManagerInternal {
-  extern public static bool IsDriven(Object target, string propertyPath);
-  extern public static bool IsDriving(Object driver, Object target,
-                                      string propertyPath);
-  extern public static bool IsDrivingPartial(Object driver, Object target,
-                                             string propertyPath);
+extern public static bool IsDriven(Object target, string propertyPath);
+extern public static bool IsDriving(Object driver, Object target,
+                                    string propertyPath);
+extern public static bool IsDrivingPartial(Object driver, Object target,
+                                           string propertyPath);
 }
 }

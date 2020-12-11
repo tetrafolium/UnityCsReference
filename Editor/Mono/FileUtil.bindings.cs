@@ -14,145 +14,145 @@ namespace UnityEditor {
 [NativeHeader("Runtime/Utilities/File.h")]
 [NativeHeader("Editor/Platform/Interface/EditorUtility.h")]
 public partial class FileUtil {
-  // Deletes a file or a directory given a path.
-  [FreeFunction]
-  public static extern bool DeleteFileOrDirectory(string path);
+// Deletes a file or a directory given a path.
+[FreeFunction]
+public static extern bool DeleteFileOrDirectory(string path);
 
-  [FreeFunction("IsPathCreated")]
-  private static extern bool PathExists(string path);
+[FreeFunction("IsPathCreated")]
+private static extern bool PathExists(string path);
 
-  // Copies a file or directory.
-  public static void CopyFileOrDirectory(string source, string dest) {
-    CheckForValidSourceAndDestinationArgumentsAndRaiseAnExceptionWhenNullOrEmpty(
-        source, dest);
+// Copies a file or directory.
+public static void CopyFileOrDirectory(string source, string dest) {
+	CheckForValidSourceAndDestinationArgumentsAndRaiseAnExceptionWhenNullOrEmpty(
+		source, dest);
 
-    if (PathExists(dest)) {
-      throw new System.IO.IOException(string.Format(
-          "Failed to Copy File / Directory from '{0}' to '{1}': destination path already exists.",
-          source, dest));
-    }
+	if (PathExists(dest)) {
+		throw new System.IO.IOException(string.Format(
+							"Failed to Copy File / Directory from '{0}' to '{1}': destination path already exists.",
+							source, dest));
+	}
 
-    if (!CopyFileOrDirectoryInternal(source, dest)) {
-      throw new System.IO.IOException(
-          string.Format("Failed to Copy File / Directory from '{0}' to '{1}'.",
-                        source, dest));
-    }
-  }
+	if (!CopyFileOrDirectoryInternal(source, dest)) {
+		throw new System.IO.IOException(
+			      string.Format("Failed to Copy File / Directory from '{0}' to '{1}'.",
+			                    source, dest));
+	}
+}
 
-  [FreeFunction("CopyFileOrDirectory")]
-  private static extern bool CopyFileOrDirectoryInternal(string source,
-                                                         string dest);
+[FreeFunction("CopyFileOrDirectory")]
+private static extern bool CopyFileOrDirectoryInternal(string source,
+                                                       string dest);
 
-  // Copies the file or directory following symbolic links.
-  public static void CopyFileOrDirectoryFollowSymlinks(string source,
-                                                       string dest) {
-    CheckForValidSourceAndDestinationArgumentsAndRaiseAnExceptionWhenNullOrEmpty(
-        source, dest);
+// Copies the file or directory following symbolic links.
+public static void CopyFileOrDirectoryFollowSymlinks(string source,
+                                                     string dest) {
+	CheckForValidSourceAndDestinationArgumentsAndRaiseAnExceptionWhenNullOrEmpty(
+		source, dest);
 
-    if (PathExists(dest)) {
-      throw new System.IO.IOException(string.Format(
-          "Failed to Copy File / Directory from '{0}' to '{1}': destination path already exists.",
-          source, dest));
-    }
+	if (PathExists(dest)) {
+		throw new System.IO.IOException(string.Format(
+							"Failed to Copy File / Directory from '{0}' to '{1}': destination path already exists.",
+							source, dest));
+	}
 
-    if (!CopyFileOrDirectoryFollowSymlinksInternal(source, dest)) {
-      throw new System.IO.IOException(
-          string.Format("Failed to Copy File / Directory from '{0}' to '{1}'.",
-                        source, dest));
-    }
-  }
+	if (!CopyFileOrDirectoryFollowSymlinksInternal(source, dest)) {
+		throw new System.IO.IOException(
+			      string.Format("Failed to Copy File / Directory from '{0}' to '{1}'.",
+			                    source, dest));
+	}
+}
 
-  [FreeFunction("CopyFileOrDirectoryFollowSymlinks")]
-  private static extern bool
-  CopyFileOrDirectoryFollowSymlinksInternal(string source, string dest);
+[FreeFunction("CopyFileOrDirectoryFollowSymlinks")]
+private static extern bool
+CopyFileOrDirectoryFollowSymlinksInternal(string source, string dest);
 
-  // Moves a file or a directory from a given path to another path.
-  public static void MoveFileOrDirectory(string source, string dest) {
-    CheckForValidSourceAndDestinationArgumentsAndRaiseAnExceptionWhenNullOrEmpty(
-        source, dest);
+// Moves a file or a directory from a given path to another path.
+public static void MoveFileOrDirectory(string source, string dest) {
+	CheckForValidSourceAndDestinationArgumentsAndRaiseAnExceptionWhenNullOrEmpty(
+		source, dest);
 
-    if (PathExists(dest)) {
-      throw new System.IO.IOException(string.Format(
-          "Failed to Copy File / Directory from '{0}' to '{1}': destination path already exists.",
-          source, dest));
-    }
+	if (PathExists(dest)) {
+		throw new System.IO.IOException(string.Format(
+							"Failed to Copy File / Directory from '{0}' to '{1}': destination path already exists.",
+							source, dest));
+	}
 
-    if (!MoveFileOrDirectoryInternal(source, dest)) {
-      throw new System.IO.IOException(
-          string.Format("Failed to Move File / Directory from '{0}' to '{1}'.",
-                        source, dest));
-    }
-  }
+	if (!MoveFileOrDirectoryInternal(source, dest)) {
+		throw new System.IO.IOException(
+			      string.Format("Failed to Move File / Directory from '{0}' to '{1}'.",
+			                    source, dest));
+	}
+}
 
-  [FreeFunction("MoveFileOrDirectory")]
-  private static extern bool MoveFileOrDirectoryInternal(string source,
-                                                         string dest);
+[FreeFunction("MoveFileOrDirectory")]
+private static extern bool MoveFileOrDirectoryInternal(string source,
+                                                       string dest);
 
-  private static void
-  CheckForValidSourceAndDestinationArgumentsAndRaiseAnExceptionWhenNullOrEmpty(
-      string source, string dest) {
-    if (source == null)
-      throw new ArgumentNullException("source");
-    if (dest == null)
-      throw new ArgumentNullException("dest");
+private static void
+CheckForValidSourceAndDestinationArgumentsAndRaiseAnExceptionWhenNullOrEmpty(
+	string source, string dest) {
+	if (source == null)
+		throw new ArgumentNullException("source");
+	if (dest == null)
+		throw new ArgumentNullException("dest");
 
-    if (source == string.Empty)
-      throw new ArgumentException("source", "The source path cannot be empty.");
-    if (dest == string.Empty)
-      throw new ArgumentException("dest",
-                                  "The destination path cannot be empty.");
-  }
+	if (source == string.Empty)
+		throw new ArgumentException("source", "The source path cannot be empty.");
+	if (dest == string.Empty)
+		throw new ArgumentException("dest",
+		                            "The destination path cannot be empty.");
+}
 
-  // Returns a unique path in the Temp folder within your current project.
-  [FreeFunction]
-  public static extern string GetUniqueTempPathInProject();
+// Returns a unique path in the Temp folder within your current project.
+[FreeFunction]
+public static extern string GetUniqueTempPathInProject();
 
-  [FreeFunction("GetActualPathSlow")]
-  internal static extern string GetActualPathName(string path);
+[FreeFunction("GetActualPathSlow")]
+internal static extern string GetActualPathName(string path);
 
-  //*undocumented*
-  [FreeFunction]
-  public static extern string GetProjectRelativePath(string path);
+//*undocumented*
+[FreeFunction]
+public static extern string GetProjectRelativePath(string path);
 
-  [FreeFunction(Name = "GetLastPathNameComponentManaged")]
-  internal static extern string GetLastPathNameComponent(string path);
+[FreeFunction(Name = "GetLastPathNameComponentManaged")]
+internal static extern string GetLastPathNameComponent(string path);
 
-  [FreeFunction(Name = "DeleteLastPathNameComponentManaged")]
-  internal static extern string DeleteLastPathNameComponent(string path);
+[FreeFunction(Name = "DeleteLastPathNameComponentManaged")]
+internal static extern string DeleteLastPathNameComponent(string path);
 
-  [FreeFunction("GetPathNameExtensionManaged")]
-  internal static extern string GetPathExtension(string path);
+[FreeFunction("GetPathNameExtensionManaged")]
+internal static extern string GetPathExtension(string path);
 
-  [FreeFunction("DeletePathNameExtensionManaged")]
-  internal static extern string GetPathWithoutExtension(string path);
+[FreeFunction("DeletePathNameExtensionManaged")]
+internal static extern string GetPathWithoutExtension(string path);
 
-  [FreeFunction]
-  internal static extern string ResolveSymlinks(string path);
+[FreeFunction]
+internal static extern string ResolveSymlinks(string path);
 
-  [FreeFunction]
-  internal static extern string ResolveRedirectedPath(string path);
+[FreeFunction]
+internal static extern string ResolveRedirectedPath(string path);
 
-  [FreeFunction]
-  internal static extern bool IsSymlink(string path);
+[FreeFunction]
+internal static extern bool IsSymlink(string path);
 
-  // Replaces a file.
-  public static void ReplaceFile(string src, string dst) {
-    if (File.Exists(dst))
-      FileUtil.DeleteFileOrDirectory(dst);
+// Replaces a file.
+public static void ReplaceFile(string src, string dst) {
+	if (File.Exists(dst))
+		FileUtil.DeleteFileOrDirectory(dst);
 
-    FileUtil.CopyFileOrDirectory(src, dst);
-  }
+	FileUtil.CopyFileOrDirectory(src, dst);
+}
 
-  // Replaces a directory.
-  public static void ReplaceDirectory(string src, string dst) {
-    if (Directory.Exists(dst))
-      FileUtil.DeleteFileOrDirectory(dst);
+// Replaces a directory.
+public static void ReplaceDirectory(string src, string dst) {
+	if (Directory.Exists(dst))
+		FileUtil.DeleteFileOrDirectory(dst);
 
-    FileUtil.CopyFileOrDirectory(src, dst);
-  }
+	FileUtil.CopyFileOrDirectory(src, dst);
+}
 
-  // transform path to absolute, resolving mount points
-  [FreeFunction("PathToAbsolutePathFromScript")] extern internal static string
-  PathToAbsolutePath(string path);
+// transform path to absolute, resolving mount points
+[FreeFunction("PathToAbsolutePathFromScript")] extern internal static string
+PathToAbsolutePath(string path);
 }
 }

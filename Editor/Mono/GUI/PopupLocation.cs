@@ -4,14 +4,14 @@
 
 namespace UnityEditor {
 internal enum PopupLocation {
-  Below,
-  BelowAlignLeft = Below,
-  Above,
-  AboveAlignLeft = Above,
-  Left,
-  Right,
-  Overlay,
-  BelowAlignRight,
-  AboveAlignRight
+	Below,
+	BelowAlignLeft = Below,
+	Above,
+	AboveAlignLeft = Above,
+	Left,
+	Right,
+	Overlay,
+	BelowAlignRight,
+	AboveAlignRight
 }
 }
